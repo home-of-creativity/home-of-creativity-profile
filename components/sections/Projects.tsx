@@ -14,12 +14,13 @@ type ProjectImage = ProjectItem["images"][number];
 type FlatImage = ProjectImage & {
   categoryId: string;
 };
+const EVENTS_BACKDROP = "/photo/project-background/event-backgrond.webp";
 
 const FILTERS = ["all", ...projects.items.map((item) => item.id)] as const;
 const FILTER_PREVIEW = 6;
 const ALL_BACKDROP = "/photo/hero-section-background.webp";
 const CATEGORY_BACKDROPS: Record<string, string> = {
-  events: "/photo/projects/p10_event_stage_01.webp",
+  events:EVENTS_BACKDROP,
   identity: "/photo/projects/p21_visual_identity_application_01.webp",
   media: "/photo/projects/p32_photography_montage.webp",
   promo: "/photo/projects/p41_roadside_advertisement.webp",
@@ -34,6 +35,50 @@ const PREVIEW_SPANS: Record<string, "md" | "lg" | "half"> = {
   digital: "half",
   finance: "half",
 };
+
+
+function isEventsBackdrop(src: string) {
+  return src.includes("event-backgrond");
+}
+
+function backdropMediaClass(src: string) {
+  return cn(
+    "projects-backdrop-media",
+    isEventsBackdrop(src) ? "object-contain" : "object-cover",
+  );
+}
+
+function BackdropLayer({
+  src,
+  incoming = false,
+  onReady,
+}: {
+  src: string;
+  incoming?: boolean;
+  onReady?: () => void;
+}) {
+  const image = (
+    <Image
+      src={withBasePath(src)}
+      alt=""
+      fill
+      sizes={isEventsBackdrop(src) ? "(min-width: 768px) 780px, 68vw" : "100vw"}
+      className={cn(
+        backdropMediaClass(src),
+        incoming && "projects-backdrop-incoming",
+        incoming && isEventsBackdrop(src) && "projects-backdrop-incoming--events",
+      )}
+      onLoad={onReady}
+      onError={onReady}
+    />
+  );
+
+  if (isEventsBackdrop(src)) {
+    return <div className="projects-backdrop-events-frame relative">{image}</div>;
+  }
+
+  return image;
+}
 
 function backdropFor(filter: string) {
   if (filter === "all") return ALL_BACKDROP;
@@ -200,25 +245,12 @@ export function Projects() {
       className="relative isolate overflow-hidden bg-[var(--brand-purple-deep)] py-16 text-[var(--brand-cream)] md:py-24 lg:py-32"
     >
       <div aria-hidden className="projects-backdrop pointer-events-none absolute inset-0">
-        <Image
-          src={withBasePath(visibleBackdrop)}
-          alt=""
-          fill
-          sizes="100vw"
-          className="projects-backdrop-media object-cover"
-        />
+        <BackdropLayer src={visibleBackdrop} />
         {incomingBackdrop ? (
-          <Image
-            src={withBasePath(incomingBackdrop)}
-            alt=""
-            fill
-            sizes="100vw"
-            className="projects-backdrop-media projects-backdrop-incoming object-cover"
-            onLoad={() => {
-              setVisibleBackdrop(incomingBackdrop);
-              setIncomingBackdrop(null);
-            }}
-            onError={() => {
+          <BackdropLayer
+            src={incomingBackdrop}
+            incoming
+            onReady={() => {
               setVisibleBackdrop(incomingBackdrop);
               setIncomingBackdrop(null);
             }}

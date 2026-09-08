@@ -204,8 +204,26 @@ html[dir="rtl"] .lux-rule {
   transform: scale(1.04);
 }
 
+.projects-backdrop-events-frame {
+  position: absolute;
+  inset-inline-end: 0;
+  top: 0;
+  bottom: 0;
+  width: min(68vw, 780px);
+  height: 100%;
+}
+
+.projects-backdrop-events-frame .projects-backdrop-media {
+  object-position: 100% 50%;
+  transform: none;
+}
+
 .projects-backdrop-incoming {
   animation: projects-backdrop-in 0.7s ease both;
+}
+
+.projects-backdrop-incoming--events {
+  animation: projects-backdrop-events-in 0.7s ease both;
 }
 
 @keyframes projects-backdrop-in {
@@ -217,6 +235,16 @@ html[dir="rtl"] .lux-rule {
   to {
     opacity: 1;
     transform: scale(1.04);
+  }
+}
+
+@keyframes projects-backdrop-events-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }
 

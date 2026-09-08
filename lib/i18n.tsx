@@ -98,15 +98,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useLayoutEffect(() => {
     const stored = readStoredLocale();
-    if (stored !== locale) {
-      if (current !== stored) {
-        current = stored;
-        applyDocumentLocale(stored);
-        emit();
-      }
-      return;
+    if (current !== stored) {
+      current = stored;
+      emit();
     }
-    applyDocumentLocale(locale);
+    applyDocumentLocale(stored);
     setReady(true);
   }, [locale]);
 
