@@ -23,16 +23,16 @@ export const nav = {
 
 export const hero = {
   kicker: { en: "Ideas. People. Places.", ar: "أفكار. بشر. أماكن." },
-  accentLead: { en: "A brighter", ar: "غدٌ أكثر" },
-  accentWord: { en: "tomorrow.", ar: "إشراقاً." },
+  accentLead: { en: "A brighter", ar: "غدٌ أشدّ" },
+  accentWord: { en: "tomorrow.", ar: "إشراقًا." },
   titleLead: { en: "We architect", ar: "نُهندس" },
   titleAccent: { en: "brands.", ar: "العلامات." },
   line: {
     en: "We turn bold ideas into meaningful brands that shape people, places and a brighter tomorrow.",
-    ar: "نحوّل الأفكار الجريئة إلى علامات ذات معنى تشكّل البشر والأماكن وغدًا أكثر إشراقاً.",
+    ar: "نحوّل الأفكار الجريئة إلى علاماتٍ ذات هيبة، تُقيم الناس والأماكن وتصنع غدًا أكثر إشراقًا.",
   },
-  primary: { en: "Explore our work", ar: "استكشف أعمالنا" },
-  scroll: { en: "Scroll to explore", ar: "تصفّح لاستكشاف المزيد" },
+  primary: { en: "Explore our work", ar: "اكتشف أعمالنا" },
+  scroll: { en: "Scroll to explore", ar: "مرّر لاستكشاف المزيد" },
 };
 
 export const about = {

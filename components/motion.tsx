@@ -2,6 +2,8 @@
 
 import { useRef, type ReactNode } from "react";
 import { gsap, useGSAP } from "@/lib/gsap-client";
+import { useLanguage } from "@/lib/i18n";
+import { shouldSkipMotion } from "@/lib/visit-cache";
 import { cn } from "@/lib/cn";
 
 export function Reveal({
@@ -16,11 +18,12 @@ export function Reveal({
   y?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const { ready, locale } = useLanguage();
 
   useGSAP(
     () => {
       const el = ref.current;
-      if (!el) return;
+      if (!el || !ready) return;
 
       const mm = gsap.matchMedia();
       mm.add(
@@ -29,7 +32,7 @@ export function Reveal({
           allowMotion: "(prefers-reduced-motion: no-preference)",
         },
         (context) => {
-          if (context.conditions?.reduceMotion) {
+          if (context.conditions?.reduceMotion || shouldSkipMotion()) {
             gsap.set(el, { autoAlpha: 1, y: 0 });
             return;
           }
@@ -40,9 +43,11 @@ export function Reveal({
             duration: 0.85,
             delay,
             ease: "power3.out",
+            immediateRender: false,
             scrollTrigger: {
               trigger: el,
-              start: "top 86%",
+              start: "top 90%",
+              once: true,
               toggleActions: "play none none none",
             },
           });
@@ -51,7 +56,7 @@ export function Reveal({
 
       return () => mm.revert();
     },
-    { scope: ref, dependencies: [delay, y] },
+    { scope: ref, dependencies: [delay, y, ready, locale] },
   );
 
   return (
@@ -71,11 +76,12 @@ export function Stagger({
   delay?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const { ready, locale } = useLanguage();
 
   useGSAP(
     () => {
       const root = ref.current;
-      if (!root) return;
+      if (!root || !ready) return;
 
       const mm = gsap.matchMedia();
       mm.add(
@@ -85,7 +91,7 @@ export function Stagger({
         },
         (context) => {
           const items = gsap.utils.toArray<HTMLElement>(".gsap-stagger-item");
-          if (context.conditions?.reduceMotion) {
+          if (context.conditions?.reduceMotion || shouldSkipMotion()) {
             gsap.set(items, { autoAlpha: 1, y: 0 });
             return;
           }
@@ -97,9 +103,11 @@ export function Stagger({
             delay,
             ease: "power3.out",
             stagger: 0.08,
+            immediateRender: false,
             scrollTrigger: {
               trigger: root,
-              start: "top 82%",
+              start: "top 88%",
+              once: true,
               toggleActions: "play none none none",
             },
           });
@@ -108,7 +116,7 @@ export function Stagger({
 
       return () => mm.revert();
     },
-    { scope: ref, dependencies: [delay] },
+    { scope: ref, dependencies: [delay, ready, locale] },
   );
 
   return (
@@ -143,7 +151,7 @@ export function ParallaxFrame({
     () => {
       const root = ref.current;
       const inner = root?.querySelector<HTMLElement>(".gsap-parallax-inner");
-      if (!root || !inner) return;
+      if (!root || !inner || shouldSkipMotion()) return;
 
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {

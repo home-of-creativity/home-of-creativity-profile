@@ -7,6 +7,7 @@ import { useLanguage } from "@/lib/i18n";
 import { withBasePath } from "@/lib/base-path";
 import { cn } from "@/lib/cn";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap-client";
+import { shouldSkipMotion } from "@/lib/visit-cache";
 
 type ProjectItem = (typeof projects.items)[number];
 type ProjectImage = ProjectItem["images"][number];
@@ -169,6 +170,10 @@ export function Projects() {
       });
 
       mm.add("(prefers-reduced-motion: no-preference)", () => {
+        if (shouldSkipMotion()) {
+          gsap.set(cards, { autoAlpha: 1, y: 0 });
+          return;
+        }
         gsap.from(cards, {
           autoAlpha: 0,
           y: 22,

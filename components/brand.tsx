@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { brand } from "@/lib/content";
 import { cn } from "@/lib/cn";
 import { gsap, useGSAP } from "@/lib/gsap-client";
+import { shouldSkipMotion } from "@/lib/visit-cache";
 
 type MarkProps = {
   className?: string;
@@ -25,7 +26,7 @@ export function Hummingbird({ className, title, surface = "dark", float = false 
 
   useGSAP(
     () => {
-      if (!float) return;
+      if (!float || shouldSkipMotion()) return;
 
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {

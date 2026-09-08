@@ -66,7 +66,7 @@ export function LanguageToggle({ compact = false }: { compact?: boolean }) {
 }
 
 export function Nav() {
-  const { t, locale } = useLanguage();
+  const { t, locale, ready } = useLanguage();
   const reduce = useReducedMotion();
   const headerRef = useRef<HTMLElement>(null);
   const [scrolled, setScrolled] = useState(false);
@@ -75,6 +75,7 @@ export function Nav() {
 
   useGSAP(
     () => {
+      if (!ready) return;
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         gsap.fromTo(
@@ -95,7 +96,7 @@ export function Nav() {
       });
       return () => mm.revert();
     },
-    { scope: headerRef, dependencies: [locale] },
+    { scope: headerRef, dependencies: [locale, ready] },
   );
 
   function goTo(href: string) {

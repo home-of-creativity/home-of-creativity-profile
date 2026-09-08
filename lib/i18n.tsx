@@ -4,8 +4,9 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
+  useLayoutEffect,
   useMemo,
+  useState,
   useSyncExternalStore,
   type ReactNode,
 } from "react";
@@ -17,6 +18,7 @@ const STORAGE_KEY = "hoc-locale";
 
 type LanguageContextValue = {
   locale: Locale;
+  ready: boolean;
   dir: "ltr" | "rtl";
   setLocale: (locale: Locale) => void;
   toggleLocale: () => void;
@@ -25,14 +27,25 @@ type LanguageContextValue = {
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 
-function isLocale(value: string | null): value is Locale {
+function isLocale(value: string | null | undefined): value is Locale {
   return value === "ar" || value === "en";
+}
+
+function readCookieLocale(): Locale | null {
+  if (typeof document === "undefined") return null;
+  const match = document.cookie.match(/(?:^|; )hoc-locale=(ar|en)/);
+  return match && isLocale(match[1]) ? match[1] : null;
 }
 
 function readStoredLocale(): Locale {
   if (typeof window === "undefined") return "en";
-  const stored = window.localStorage.getItem(STORAGE_KEY);
-  return isLocale(stored) ? stored : "en";
+  try {
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+    if (isLocale(stored)) return stored;
+  } catch {
+    /* private mode */
+  }
+  return readCookieLocale() ?? "en";
 }
 
 function applyDocumentLocale(next: Locale) {
@@ -40,7 +53,18 @@ function applyDocumentLocale(next: Locale) {
   document.documentElement.lang = next;
   document.documentElement.dir = next === "ar" ? "rtl" : "ltr";
   document.documentElement.dataset.locale = next;
-  window.localStorage.setItem(STORAGE_KEY, next);
+  try {
+    window.localStorage.setItem(STORAGE_KEY, next);
+  } catch {
+    /* private mode */
+  }
+  document.cookie = `${STORAGE_KEY}=${next};path=/;max-age=31536000;samesite=lax`;
+}
+
+function markDocumentReady() {
+  if (typeof document === "undefined") return;
+  document.documentElement.setAttribute("data-i18n-ready", "1");
+  document.documentElement.removeAttribute("data-i18n-pending");
 }
 
 let current: Locale = "en";
@@ -64,20 +88,32 @@ function getServerSnapshot(): Locale {
 }
 
 if (typeof window !== "undefined") {
-  current = readStoredLocale();
+  const fromDom = document.documentElement.dataset.locale;
+  current = isLocale(fromDom) ? fromDom : readStoredLocale();
 }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const locale = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const [ready, setReady] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const stored = readStoredLocale();
-    if (stored !== current) {
-      current = stored;
-      emit();
+    if (stored !== locale) {
+      if (current !== stored) {
+        current = stored;
+        applyDocumentLocale(stored);
+        emit();
+      }
+      return;
     }
-    applyDocumentLocale(current);
-  }, []);
+    applyDocumentLocale(locale);
+    setReady(true);
+  }, [locale]);
+
+  useLayoutEffect(() => {
+    if (!ready) return;
+    markDocumentReady();
+  }, [ready]);
 
   const setLocale = useCallback((next: Locale) => {
     if (!isLocale(next) || next === current) {
@@ -98,12 +134,13 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const value = useMemo<LanguageContextValue>(
     () => ({
       locale,
+      ready,
       dir: locale === "ar" ? "rtl" : "ltr",
       setLocale,
       toggleLocale,
       t,
     }),
-    [locale, setLocale, toggleLocale, t],
+    [locale, ready, setLocale, toggleLocale, t],
   );
 
   return (

@@ -85,10 +85,10 @@ export function Services() {
                     "hover:z-10 hover:rotate-0 motion-safe:hover:scale-[1.04]",
                   )}
                 >
-                  <span className="bg-[var(--brand-purple-deep)] px-2.5 py-1.5 text-[0.68rem] leading-tight md:px-4 md:py-2.5 md:text-[0.82rem]">
+                  <span className="bg-[var(--brand-purple-deep)] px-2.5 py-1.5 text-xs leading-tight md:px-4 md:py-2.5 md:text-[0.82rem]">
                     {primary}
                   </span>
-                  <span className={cn("px-2.5 py-1.5 text-[0.68rem] leading-tight md:px-4 md:py-2.5 md:text-[0.82rem]", tones[item.tone])}>
+                  <span className={cn("px-2.5 py-1.5 text-xs leading-tight md:px-4 md:py-2.5 md:text-[0.82rem]", tones[item.tone])}>
                     {secondary}
                   </span>
                 </a>

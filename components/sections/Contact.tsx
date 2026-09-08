@@ -1,7 +1,15 @@
 "use client";
 
+import { Great_Vibes } from "next/font/google";
 import { FormEvent, useMemo, useState } from "react";
 import { contact, services } from "@/lib/content";
+
+const greatVibes = Great_Vibes({
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+  variable: "--font-great-vibes",
+});
 import { useLanguage, type Copy } from "@/lib/i18n";
 import { whatsappHref } from "@/lib/whatsapp";
 import { Hummingbird } from "../brand";
@@ -142,7 +150,7 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="bg-[var(--brand-charcoal)] pt-20 pb-8 md:pt-28 md:pb-10">
+    <section id="contact" className={cn(greatVibes.variable, "bg-[var(--brand-charcoal)] pt-20 pb-8 md:pt-28 md:pb-10")}>
       <Shell>
         <div className="relative">
           <div

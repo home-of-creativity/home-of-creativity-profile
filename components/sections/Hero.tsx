@@ -8,13 +8,15 @@ import { useLanguage } from "@/lib/i18n";
 import { withBasePath } from "@/lib/base-path";
 import { cn } from "@/lib/cn";
 import { gsap, useGSAP } from "@/lib/gsap-client";
+import { shouldSkipMotion } from "@/lib/visit-cache";
 
 export function Hero() {
-  const { t, locale } = useLanguage();
+  const { t, locale, ready } = useLanguage();
   const rootRef = useRef<HTMLElement>(null);
 
   useGSAP(
     () => {
+      if (!ready) return;
       const mm = gsap.matchMedia();
 
       mm.add(
@@ -26,7 +28,7 @@ export function Hero() {
         (context) => {
           const { reduceMotion, isDesktop } = context.conditions ?? {};
 
-          if (reduceMotion) {
+          if (reduceMotion || shouldSkipMotion()) {
             gsap.set(
               [".hero-bird-mobile", ".hero-kicker", ".hero-accent", ".hero-title", ".hero-line", ".hero-cta", ".hero-scroll"],
               { autoAlpha: 1, y: 0, x: 0 },
@@ -38,13 +40,13 @@ export function Hero() {
             defaults: { ease: "power3.out", duration: 0.85 },
           });
 
-          tl.from(".hero-bird-mobile", { autoAlpha: 0, y: 18, duration: 0.9 })
-            .from(".hero-kicker", { autoAlpha: 0, y: 16 }, "<0.12")
-            .from(".hero-accent", { autoAlpha: 0, y: 16 }, "<0.08")
-            .from(".hero-title", { autoAlpha: 0, y: 22 }, "<0.1")
-            .from(".hero-line", { autoAlpha: 0, y: 16 }, "<0.14")
-            .from(".hero-cta", { autoAlpha: 0, y: 12 }, "<0.12")
-            .from(".hero-scroll", { autoAlpha: 0 }, "-=0.25");
+          tl.from(".hero-bird-mobile", { autoAlpha: 0, y: 18, duration: 0.9, immediateRender: false })
+            .from(".hero-kicker", { autoAlpha: 0, y: 16, immediateRender: false }, "<0.12")
+            .from(".hero-accent", { autoAlpha: 0, y: 16, immediateRender: false }, "<0.08")
+            .from(".hero-title", { autoAlpha: 0, y: 22, immediateRender: false }, "<0.1")
+            .from(".hero-line", { autoAlpha: 0, y: 16, immediateRender: false }, "<0.14")
+            .from(".hero-cta", { autoAlpha: 0, y: 12, immediateRender: false }, "<0.12")
+            .from(".hero-scroll", { autoAlpha: 0, immediateRender: false }, "-=0.25");
 
           if (!isDesktop) {
             gsap.to(".hero-bird-mobile", {
@@ -78,7 +80,7 @@ export function Hero() {
 
       return () => mm.revert();
     },
-    { scope: rootRef },
+    { scope: rootRef, dependencies: [locale, ready] },
   );
 
   return (
@@ -134,23 +136,32 @@ export function Hero() {
           </div>
           <p
             className={cn(
-              "hero-kicker text-[0.72rem] uppercase text-white/85",
-              locale === "ar" ? "tracking-normal" : "tracking-[0.28em]",
+              "hero-kicker uppercase text-white/85",
+              locale === "ar"
+                ? "text-[1.08rem] tracking-normal md:text-[1.18rem]"
+                : "text-[0.72rem] tracking-[0.28em]",
             )}
           >
             {t(hero.kicker)}
           </p>
           <p
             className={cn(
-              "hero-accent mt-2 text-[0.72rem] uppercase text-white/85",
-              locale === "ar" ? "tracking-normal" : "tracking-[0.28em]",
+              "hero-accent mt-2 uppercase text-white/85",
+              locale === "ar"
+                ? "text-[1.08rem] tracking-normal md:text-[1.18rem]"
+                : "text-[0.72rem] tracking-[0.28em]",
             )}
           >
             {t(hero.accentLead)}{" "}
             <span className="text-[var(--brand-orange)]">{t(hero.accentWord)}</span>
           </p>
 
-          <h1 className="hero-title font-display mt-5 uppercase leading-[0.86] md:mt-8">
+          <h1
+            className={cn(
+              "hero-title font-display mt-5 uppercase md:mt-8",
+              locale === "ar" ? "leading-[1.05]" : "leading-[0.86]",
+            )}
+          >
             <span
               className={cn(
                 "block text-[clamp(2.35rem,11vw,6.8rem)] font-semibold text-white",
@@ -161,15 +172,22 @@ export function Hero() {
             </span>
             <span
               className={cn(
-                "mt-1 block text-[clamp(2.7rem,12vw,7.6rem)] font-semibold text-[var(--brand-orange)]",
-                locale === "ar" ? "tracking-normal" : "tracking-[-0.04em]",
+                "block text-[clamp(2.7rem,12vw,7.6rem)] font-semibold text-[var(--brand-orange)]",
+                locale === "ar" ? "mt-4 tracking-normal md:mt-6" : "mt-2 tracking-[-0.04em] md:mt-3",
               )}
             >
               {t(hero.titleAccent)}
             </span>
           </h1>
 
-          <p className="hero-line mt-5 max-w-lg text-[1.02rem] leading-relaxed text-white/80 md:mt-7 md:text-[1.05rem]">
+          <p
+            className={cn(
+              "hero-line mt-5 max-w-lg leading-relaxed text-white/80 md:mt-7",
+              locale === "ar"
+                ? "max-w-xl text-[1.22rem] leading-[1.9] md:text-[1.32rem]"
+                : "text-[1.02rem] md:text-[1.05rem]",
+            )}
+          >
             {t(hero.line)}
           </p>
 
@@ -182,8 +200,10 @@ export function Hero() {
           >
             <span
               className={cn(
-                "inline-flex items-center gap-3 rounded-full bg-[rgb(12_8_28/0.72)] px-6 py-3 text-[0.82rem] font-semibold uppercase text-[var(--brand-cream)] transition-colors hover:bg-[rgb(12_8_28/0.88)]",
-                locale === "ar" ? "tracking-normal" : "tracking-[0.16em]",
+                "inline-flex items-center gap-3 rounded-full bg-[rgb(12_8_28/0.72)] px-6 py-3 font-semibold uppercase text-[var(--brand-cream)] transition-colors hover:bg-[rgb(12_8_28/0.88)]",
+                locale === "ar"
+                  ? "px-7 py-3.5 text-[1.05rem] tracking-normal"
+                  : "text-[0.82rem] tracking-[0.16em]",
               )}
             >
               {t(hero.primary)}
@@ -195,8 +215,10 @@ export function Hero() {
         <a
           href="#about"
           className={cn(
-            "hero-scroll absolute inset-x-0 bottom-8 mx-auto inline-flex w-fit items-center gap-3 text-[0.68rem] uppercase text-white/70 transition-colors hover:text-[var(--brand-orange)]",
-            locale === "ar" ? "tracking-normal" : "tracking-[0.22em]",
+            "hero-scroll absolute inset-x-0 bottom-8 mx-auto inline-flex w-fit items-center gap-3 uppercase text-white/70 transition-colors hover:text-[var(--brand-orange)]",
+            locale === "ar"
+              ? "text-[0.95rem] tracking-normal"
+              : "text-[0.68rem] tracking-[0.22em]",
           )}
         >
           <span
