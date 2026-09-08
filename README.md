@@ -4,7 +4,7 @@ Premium bilingual (Arabic / English) company profile for **Home of Creativity (C
 
 ## Live site
 
-**https://ammarshamea.github.io/home-of-creativity-profile/**
+**https://home-of-creativity.github.io/home-of-creativity-profile/**
 
 Local `npm run dev` is at **http://localhost:3000/home-of-creativity-profile/**
 
