@@ -14,3 +14,12 @@ npm run dev
 ```
 
 Production is a static export. GitHub Actions deploys the `out/` folder to Pages.
+
+## E2E (landing)
+
+With the dev server running:
+
+```bash
+npm run e2e
+```
+

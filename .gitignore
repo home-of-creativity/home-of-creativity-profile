@@ -21,3 +21,8 @@ tsconfig.tsbuildinfo
 npm-debug.log*
 .env*
 .vercel
+
+# playwright
+/playwright-report/
+/test-results/
+/blob-report/
