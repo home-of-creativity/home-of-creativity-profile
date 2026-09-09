@@ -30,22 +30,41 @@ export function Hummingbird({ className, title, surface = "dark", float = false 
 
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
-        gsap.to(ref.current, {
-          y: -12,
-          duration: 3.4,
+        // svgOrigin is in viewBox units: the shoulder where both wing paths meet.
+        gsap.set("[data-wing]", { svgOrigin: "392 302", rotate: 7 });
+
+        gsap.to("[data-wing]", {
+          rotate: -11,
+          scaleY: 0.86,
+          duration: 0.18,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+          stagger: 0.035,
+        });
+
+        // Counter-bob on the body only, at wingbeat speed, in viewBox units.
+        gsap.to("[data-body]", {
+          y: 5,
+          duration: 0.18,
           ease: "sine.inOut",
           yoyo: true,
           repeat: -1,
         });
 
-        gsap.to("[data-wing]", {
-          scaleY: 0.92,
-          transformOrigin: "40% 70%",
-          duration: 0.85,
+        // Percentage-based so the same hover reads on the hero bird and the small marks.
+        gsap
+          .timeline({ repeat: -1, defaults: { ease: "sine.inOut" } })
+          .to(ref.current, { yPercent: -3.2, rotate: -1.6, duration: 1.8 })
+          .to(ref.current, { yPercent: -1.2, rotate: 1.1, duration: 2.1 })
+          .to(ref.current, { yPercent: 0, rotate: 0, duration: 1.6 });
+
+        gsap.to(ref.current, {
+          xPercent: 1.8,
+          duration: 4.6,
           ease: "sine.inOut",
           yoyo: true,
           repeat: -1,
-          stagger: 0.14,
         });
       });
 
@@ -75,6 +94,7 @@ export function Hummingbird({ className, title, surface = "dark", float = false 
         fill={teal}
       />
       <path
+        data-body
         d="M542.55,117.28s-17.77-18.34-63.51-24.39c-43.43-5.74-56.82,37.69-56.82,37.69l-223.4,392.21c110.59-37.16,294.28-199.74,297.71-313.91.39-12.97,3.24-25.78,8.7-37.55,15.61-33.61,40.9-37.9,40.9-37.9,11.91-2.55,194.48,4.82,194.48,4.82-23.81-11.34-198.08-20.98-198.08-20.98Z"
         fill={orange}
       />

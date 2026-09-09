@@ -6,78 +6,114 @@ import { projects } from "@/lib/content";
 import { useLanguage } from "@/lib/i18n";
 import { withBasePath } from "@/lib/base-path";
 import { cn } from "@/lib/cn";
-import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap-client";
-import { shouldSkipMotion } from "@/lib/visit-cache";
+import { gsap, useGSAP } from "@/lib/gsap-client";
 
 type ProjectItem = (typeof projects.items)[number];
 type ProjectImage = ProjectItem["images"][number];
 type FlatImage = ProjectImage & {
   categoryId: string;
 };
-const EVENTS_BACKDROP = "/photo/project-background/event-backgrond.webp";
+const EVENTS_BACKDROP = "/photo/project-background/event-stage.webp";
 
 const FILTERS = ["all", ...projects.items.map((item) => item.id)] as const;
 const FILTER_PREVIEW = 6;
-const ALL_BACKDROP = "/photo/hero-section-background.webp";
+const ALL_BACKDROP = "/photo/project-background/all-projects-cover.webp";
 const CATEGORY_BACKDROPS: Record<string, string> = {
-  events:EVENTS_BACKDROP,
-  identity: "/photo/projects/p21_visual_identity_application_01.webp",
-  media: "/photo/projects/p32_photography_montage.webp",
-  promo: "/photo/projects/p41_roadside_advertisement.webp",
-  digital: "/photo/projects/p43_website_01.png",
-  finance: "/photo/financial-analysis-growth-dashboard.webp",
-};
-const PREVIEW_SPANS: Record<string, "md" | "lg" | "half"> = {
-  events: "md",
-  identity: "lg",
-  media: "half",
-  promo: "half",
-  digital: "half",
-  finance: "half",
+  events: EVENTS_BACKDROP,
+  identity: "/photo/project-background/identity-cover.png",
+  media: "/photo/project-background/media-cover.png",
+  promo: "/photo/project-background/promo-cover.png",
+  digital: "/photo/project-background/digital-cover.png",
+  finance: "/photo/project-background/finance-cover.png",
 };
 
+function ProjectsBackdrop({ src }: { src: string }) {
+  const [current, setCurrent] = useState(src);
+  const [next, setNext] = useState<string | null>(null);
+  const [nextVisible, setNextVisible] = useState(false);
+  const transitionRef = useRef<number | null>(null);
 
-function isEventsBackdrop(src: string) {
-  return src.includes("event-backgrond");
-}
+  useEffect(() => {
+    if (src === current && !next) return;
 
-function backdropMediaClass(src: string) {
-  return cn(
-    "projects-backdrop-media",
-    isEventsBackdrop(src) ? "object-contain" : "object-cover",
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setCurrent(src);
+      setNext(null);
+      setNextVisible(false);
+      return;
+    }
+
+    if (src === current) return;
+
+    setNext(src);
+    setNextVisible(false);
+  }, [src, current, next]);
+
+  useEffect(() => {
+    return () => {
+      if (transitionRef.current !== null) {
+        window.clearTimeout(transitionRef.current);
+      }
+    };
+  }, []);
+
+  const revealNext = useCallback(() => {
+    requestAnimationFrame(() => setNextVisible(true));
+  }, []);
+
+  const commitNext = useCallback(() => {
+    if (!next) return;
+    setCurrent(next);
+    setNext(null);
+    setNextVisible(false);
+  }, [next]);
+
+  const handleNextTransitionEnd = useCallback(
+    (event: React.TransitionEvent<HTMLImageElement>) => {
+      if (event.propertyName !== "opacity" || !nextVisible || !next) return;
+      commitNext();
+    },
+    [commitNext, next, nextVisible],
   );
-}
 
-function BackdropLayer({
-  src,
-  incoming = false,
-  onReady,
-}: {
-  src: string;
-  incoming?: boolean;
-  onReady?: () => void;
-}) {
-  const image = (
-    <Image
-      src={withBasePath(src)}
-      alt=""
-      fill
-      sizes={isEventsBackdrop(src) ? "(min-width: 768px) 780px, 68vw" : "100vw"}
-      className={cn(
-        backdropMediaClass(src),
-        incoming && "projects-backdrop-incoming",
-        incoming && isEventsBackdrop(src) && "projects-backdrop-incoming--events",
-      )}
-      onLoad={onReady}
-      onError={onReady}
-    />
+  useEffect(() => {
+    if (!next || !nextVisible) return;
+
+    transitionRef.current = window.setTimeout(commitNext, 700);
+    return () => {
+      if (transitionRef.current !== null) {
+        window.clearTimeout(transitionRef.current);
+      }
+    };
+  }, [commitNext, next, nextVisible]);
+
+  return (
+    <>
+      <Image
+        src={withBasePath(current)}
+        alt=""
+        fill
+        sizes="100vw"
+        priority
+        className="projects-backdrop-media object-cover"
+      />
+      {next ? (
+        <Image
+          src={withBasePath(next)}
+          alt=""
+          fill
+          sizes="100vw"
+          className={cn(
+            "projects-backdrop-media projects-backdrop-next object-cover transition-opacity duration-500 ease-in-out",
+            nextVisible ? "opacity-100" : "opacity-0",
+          )}
+          onLoad={revealNext}
+          onError={revealNext}
+          onTransitionEnd={handleNextTransitionEnd}
+        />
+      ) : null}
+    </>
   );
-
-  if (isEventsBackdrop(src)) {
-    return <div className="projects-backdrop-events-frame relative">{image}</div>;
-  }
-
-  return image;
 }
 
 function backdropFor(filter: string) {
@@ -93,8 +129,6 @@ export function Projects() {
   const [expanded, setExpanded] = useState(false);
   const [active, setActive] = useState<number | null>(null);
   const backdropSrc = backdropFor(filter);
-  const [visibleBackdrop, setVisibleBackdrop] = useState(backdropSrc);
-  const [incomingBackdrop, setIncomingBackdrop] = useState<string | null>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const lastFocus = useRef<HTMLElement | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
@@ -123,7 +157,7 @@ export function Projects() {
       : filtered.slice(0, FILTER_PREVIEW);
 
   const visible = expanded ? filtered : preview;
-  const bento = filter === "all" && !expanded;
+  const allPreview = filter === "all" && !expanded;
   const canExpand = filtered.length > preview.length;
 
   const openAt = (src: string) => {
@@ -148,6 +182,13 @@ export function Projects() {
   );
 
   useEffect(() => {
+    [ALL_BACKDROP, ...Object.values(CATEGORY_BACKDROPS)].forEach((path) => {
+      const img = new window.Image();
+      img.src = withBasePath(path);
+    });
+  }, []);
+
+  useEffect(() => {
     const applyHash = () => {
       const hash = window.location.hash.replace("#", "");
       const match = projects.items.find((item) => hash === `project-${item.id}`);
@@ -168,22 +209,6 @@ export function Projects() {
   useEffect(() => {
     setActive(null);
   }, [filter, expanded]);
-
-  useEffect(() => {
-    if (backdropSrc === visibleBackdrop) {
-      setIncomingBackdrop(null);
-      return;
-    }
-
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduceMotion) {
-      setVisibleBackdrop(backdropSrc);
-      setIncomingBackdrop(null);
-      return;
-    }
-
-    setIncomingBackdrop(backdropSrc);
-  }, [backdropSrc, visibleBackdrop]);
 
   useEffect(() => {
     if (active === null) return;
@@ -208,28 +233,7 @@ export function Projects() {
   useGSAP(
     () => {
       const cards = gsap.utils.toArray<HTMLElement>(".project-card");
-      const mm = gsap.matchMedia();
-
-      mm.add("(prefers-reduced-motion: reduce)", () => {
-        gsap.set(cards, { autoAlpha: 1, y: 0 });
-      });
-
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        if (shouldSkipMotion()) {
-          gsap.set(cards, { autoAlpha: 1, y: 0 });
-          return;
-        }
-        gsap.from(cards, {
-          autoAlpha: 0,
-          y: 22,
-          duration: 0.5,
-          stagger: 0.04,
-          ease: "power3.out",
-          immediateRender: true,
-        });
-      });
-
-      return () => mm.revert();
+      gsap.set(cards, { autoAlpha: 1, y: 0, clearProps: "transform" });
     },
     { scope: gridRef, dependencies: [filter, expanded, visible.length], revertOnUpdate: true },
   );
@@ -245,17 +249,7 @@ export function Projects() {
       className="relative isolate overflow-hidden bg-[var(--brand-purple-deep)] py-16 text-[var(--brand-cream)] md:py-24 lg:py-32"
     >
       <div aria-hidden className="projects-backdrop pointer-events-none absolute inset-0">
-        <BackdropLayer src={visibleBackdrop} />
-        {incomingBackdrop ? (
-          <BackdropLayer
-            src={incomingBackdrop}
-            incoming
-            onReady={() => {
-              setVisibleBackdrop(incomingBackdrop);
-              setIncomingBackdrop(null);
-            }}
-          />
-        ) : null}
+        <ProjectsBackdrop src={backdropSrc} />
       </div>
       <div
         aria-hidden
@@ -323,20 +317,22 @@ export function Projects() {
           </div>
         </div>
 
-        <div ref={gridRef} className={bento ? "projects-bento" : "projects-grid"}>
+        <div
+          ref={gridRef}
+          className={cn(
+            "projects-grid transition-opacity duration-300 ease-out",
+            allPreview && "projects-grid-all",
+          )}
+        >
           {visible.map((image) => {
             const item = projects.items.find((entry) => entry.id === image.categoryId);
-            const span = PREVIEW_SPANS[image.categoryId] ?? "md";
 
             return (
               <button
-                key={image.src}
+                key={`${filter}-${image.src}`}
                 type="button"
                 onClick={() => openAt(image.src)}
-                className={cn(
-                  "project-card group text-start focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]",
-                  bento && `project-span-${span}`,
-                )}
+                className="project-card group text-start focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
               >
                 <Image
                   src={withBasePath(image.src)}
@@ -344,7 +340,6 @@ export function Projects() {
                   fill
                   sizes="(min-width: 1100px) 720px, (min-width: 768px) 50vw, 100vw"
                   className="project-card-media object-cover"
-                  onLoad={() => ScrollTrigger.refresh()}
                 />
                 <span className="absolute inset-x-0 bottom-0 z-10 p-5 [text-shadow:0_1px_10px_rgb(10_6_24/0.65)]">
                   <span className="font-display block text-[1.2rem] font-semibold leading-tight text-white">
