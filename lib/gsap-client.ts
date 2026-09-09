@@ -59,10 +59,27 @@ export function useGsapScope(
 
       const run = () => callback(bundle);
 
-      if (scope?.current) {
-        ctx = bundle.gsap.context(() => {
-          localCleanup = run();
-        }, scope);
+      const attach = (attempt = 0) => {
+        if (cancelled) return;
+
+        const element = scope?.current;
+        if (element) {
+          ctx = bundle.gsap.context(() => {
+            localCleanup = run();
+          }, element);
+          return;
+        }
+
+        if (scope && attempt < 12) {
+          requestAnimationFrame(() => attach(attempt + 1));
+          return;
+        }
+
+        localCleanup = run();
+      };
+
+      if (scope) {
+        attach();
       } else {
         localCleanup = run();
       }

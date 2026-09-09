@@ -602,6 +602,29 @@ export const pricing = {
   perMonth: { en: "per month", ar: "شهرياً" },
   oneTime: { en: "one-time", ar: "لمرة واحدة" },
   ctaDefault: { en: "Choose package", ar: "اختر الباقة" },
+  inquiry: {
+    title: { en: "Request this package", ar: "طلب الاشتراك" },
+    lead: {
+      en: "Share your details and we will open WhatsApp with a ready message.",
+      ar: "أدخل بياناتك وسنفتح واتساب برسالة جاهزة.",
+    },
+    name: { en: "Name", ar: "الاسم" },
+    phone: { en: "Phone number", ar: "رقم التواصل" },
+    company: {
+      en: "Company name or social media page",
+      ar: "اسم الشركة أو صفحة السوشيال ميديا",
+    },
+    submit: { en: "Send via WhatsApp", ar: "إرسال عبر واتساب" },
+    close: { en: "Close", ar: "إغلاق" },
+    error: {
+      en: "Please complete all fields before sending.",
+      ar: "يرجى تعبئة جميع الحقول قبل الإرسال.",
+    },
+    whatsappTemplate: {
+      en: "Hello Home of Creativity\nThis is Mr./Ms. {{name}} from {{company}}. We would like to subscribe to the {{package}}.\nMy number: {{phone}}\nThank you",
+      ar: "مرحبا home of creativity\nمعاك أ. {{name}} من شركة {{company}} حابين نشترك معكم ب{{package}}\nرقمي: {{phone}}\nشكراً لكم",
+    },
+  },
   reachLabels: {
     adBudget: { en: "Ad budget", ar: "الميزانية الإعلانية" },
     adCredit: { en: "Ad credit", ar: "الرصيد الإعلاني" },
@@ -865,12 +888,12 @@ export const pricing = {
       {
         id: "sham",
         name: { en: "Sham Cash", ar: "شام كاش" },
-        image: "/photo/payment-methods/sham-cash-logo.webp",
+        image: "/photo/payment-methods/sham-cash-clean.webp",
       },
       {
         id: "cash",
         name: { en: "Cash", ar: "نقدي" },
-        image: "/photo/payment-methods/cash.svg",
+        image: "/photo/payment-methods/cash.webp",
       },
     ],
   },

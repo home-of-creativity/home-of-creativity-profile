@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useRef } from "react";
 import { Hummingbird } from "../brand";
+import { HeroBrandWriter } from "../HeroBrandWriter";
 import { hero } from "@/lib/content";
 import { useLanguage } from "@/lib/i18n";
 import { withBasePath } from "@/lib/base-path";
@@ -41,23 +42,16 @@ export function Hero() {
               defaults: { ease: "power3.out", duration: 0.85 },
             });
 
-            tl.from(".hero-bird-mobile", { autoAlpha: 0, y: 18, duration: 0.9, immediateRender: false })
-              .from(".hero-kicker", { autoAlpha: 0, y: 16, immediateRender: false }, "<0.12")
+            if (!isDesktop) {
+              tl.from(".hero-bird-mobile", { autoAlpha: 0, y: 18, duration: 0.9, immediateRender: false });
+            }
+
+            tl.from(".hero-kicker", { autoAlpha: 0, y: 16, immediateRender: false }, isDesktop ? undefined : "<0.12")
               .from(".hero-accent", { autoAlpha: 0, y: 16, immediateRender: false }, "<0.08")
               .from(".hero-title", { autoAlpha: 0, y: 22, immediateRender: false }, "<0.1")
               .from(".hero-line", { autoAlpha: 0, y: 16, immediateRender: false }, "<0.14")
               .from(".hero-cta", { autoAlpha: 0, y: 12, immediateRender: false }, "<0.12")
               .from(".hero-scroll", { autoAlpha: 0, immediateRender: false }, "-=0.25");
-
-            if (!isDesktop) {
-              gsap.to(".hero-bird-mobile", {
-                x: 16,
-                duration: 3.2,
-                ease: "sine.inOut",
-                yoyo: true,
-                repeat: -1,
-              });
-            }
 
             if (isDesktop) {
               gsap.to(".hero-bg", {
@@ -122,19 +116,21 @@ export function Hero() {
 
       <Hummingbird
         float
+        stationary
         surface="solid"
         className="hero-bird pointer-events-none absolute top-[20%] end-[2%] z-[1] hidden h-[min(26rem,52vw)] w-[min(36rem,68vw)] opacity-100 mix-blend-normal [filter:drop-shadow(0_12px_22px_rgb(10_6_24/0.5))] md:block"
       />
 
       <div className="relative z-10 flex min-h-[100svh] w-full flex-col justify-center ps-[clamp(1rem,4.6vw,3rem)] pe-[var(--page-pad)] pt-[calc(var(--nav-height)+1.15rem)] pb-24">
         <div className="max-w-3xl text-start">
-          <div className="hero-bird-mobile mb-5 flex justify-start will-change-transform md:hidden" aria-hidden>
+          <div className="hero-bird-mobile mb-5 flex justify-start md:hidden" aria-hidden>
             <Hummingbird
               float
               surface="solid"
               className="h-[min(9.75rem,42vw)] w-[min(13.75rem,58vw)] [filter:drop-shadow(0_10px_18px_rgb(10_6_24/0.45))]"
             />
           </div>
+          <HeroBrandWriter className="hidden md:flex" />
           <p
             className={cn(
               "hero-kicker uppercase text-white/85",

@@ -231,6 +231,23 @@ html[dir="rtl"] .lux-rule {
   min-height: 0;
 }
 
+.hero-letter {
+  opacity: 0;
+  transform: scale(0.9);
+  transform-origin: 50% 100%;
+}
+
+.hero-brand-bird {
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-letter {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 .pricing-tilt {
   perspective: 1100px;
   height: 100%;

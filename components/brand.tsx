@@ -1,20 +1,25 @@
 "use client";
 
-import { useRef } from "react";
+import { forwardRef, useImperativeHandle, useRef } from "react";
 import { brand } from "@/lib/content";
 import { cn } from "@/lib/cn";
 import { useGsapScope } from "@/lib/gsap-client";
-import { shouldSkipMotion } from "@/lib/visit-cache";
 
 type MarkProps = {
   className?: string;
   title?: string;
   surface?: "dark" | "light" | "solid";
   float?: boolean;
+  /** Wingbeat only — no hover drift. Use for fixed-position hero marks on desktop. */
+  stationary?: boolean;
 };
 
-export function Hummingbird({ className, title, surface = "dark", float = false }: MarkProps) {
+export const Hummingbird = forwardRef<SVGSVGElement, MarkProps>(function Hummingbird(
+  { className, title, surface = "dark", float = false, stationary = false },
+  forwardedRef,
+) {
   const ref = useRef<SVGSVGElement>(null);
+  useImperativeHandle(forwardedRef, () => ref.current as SVGSVGElement, []);
   const wingLight =
     surface === "light"
       ? "var(--brand-purple)"
@@ -26,48 +31,48 @@ export function Hummingbird({ className, title, surface = "dark", float = false 
 
   useGsapScope(
     ({ gsap }) => {
-      if (!float || shouldSkipMotion()) return;
+      if (!float) return;
+
+      const root = ref.current;
+      if (!root) return;
 
       const mm = gsap.matchMedia();
-        mm.add("(prefers-reduced-motion: no-preference)", () => {
-          gsap.set("[data-wing]", { svgOrigin: "392 302", rotate: 7 });
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const bird = root.querySelector("[data-bird]");
+        const wings = root.querySelector("[data-wings]");
+        if (!bird || !wings) return;
 
-          gsap.to("[data-wing]", {
-            rotate: -11,
-            scaleY: 0.86,
-            duration: 0.3,
-            ease: "sine.inOut",
-            yoyo: true,
-            repeat: -1,
-            stagger: 0.055,
-          });
+        // Pivot at the shoulder where both wing paths meet the body.
+        gsap.set(wings, { svgOrigin: "388 308", rotate: 4 });
 
-          gsap.to("[data-body]", {
-            y: 5,
-            duration: 0.3,
-            ease: "sine.inOut",
-            yoyo: true,
-            repeat: -1,
-          });
+        gsap.to(wings, {
+          rotate: -7,
+          duration: 0.26,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+        });
 
+        if (!stationary) {
           gsap
             .timeline({ repeat: -1, defaults: { ease: "sine.inOut" } })
-            .to(ref.current, { yPercent: -3.2, rotate: -1.6, duration: 1.8 })
-            .to(ref.current, { yPercent: -1.2, rotate: 1.1, duration: 2.1 })
-            .to(ref.current, { yPercent: 0, rotate: 0, duration: 1.6 });
+            .to(bird, { yPercent: -3.2, rotate: -1.2, duration: 1.8 })
+            .to(bird, { yPercent: -1.2, rotate: 0.8, duration: 2.1 })
+            .to(bird, { yPercent: 0, rotate: 0, duration: 1.6 });
 
-          gsap.to(ref.current, {
+          gsap.to(bird, {
             xPercent: 1.8,
             duration: 4.6,
             ease: "sine.inOut",
             yoyo: true,
             repeat: -1,
           });
-        });
+        }
+      });
 
       return () => mm.revert();
     },
-    { scope: ref, dependencies: [float] },
+    { scope: ref, dependencies: [float, stationary] },
   );
 
   return (
@@ -80,24 +85,26 @@ export function Hummingbird({ className, title, surface = "dark", float = false 
       role={title ? "img" : "presentation"}
       aria-label={title}
     >
-      <path
-        data-wing
-        d="M377.65,312.32l65.22-111.35L99.74,0h0c52.31,225.4,277.91,312.32,277.91,312.32Z"
-        fill={wingLight}
-      />
-      <path
-        data-wing
-        d="M397.64,303.52v-129.05H0s0,0,0,0c159.06,168.06,397.64,129.05,397.64,129.05Z"
-        fill={teal}
-      />
-      <path
-        data-body
-        d="M542.55,117.28s-17.77-18.34-63.51-24.39c-43.43-5.74-56.82,37.69-56.82,37.69l-223.4,392.21c110.59-37.16,294.28-199.74,297.71-313.91.39-12.97,3.24-25.78,8.7-37.55,15.61-33.61,40.9-37.9,40.9-37.9,11.91-2.55,194.48,4.82,194.48,4.82-23.81-11.34-198.08-20.98-198.08-20.98Z"
-        fill={orange}
-      />
+      <g data-bird>
+        <g data-wings>
+          <path
+            d="M377.65,312.32l65.22-111.35L99.74,0h0c52.31,225.4,277.91,312.32,277.91,312.32Z"
+            fill={wingLight}
+          />
+          <path
+            d="M397.64,303.52v-129.05H0s0,0,0,0c159.06,168.06,397.64,129.05,397.64,129.05Z"
+            fill={teal}
+          />
+        </g>
+        <path
+          data-body
+          d="M542.55,117.28s-17.77-18.34-63.51-24.39c-43.43-5.74-56.82,37.69-56.82,37.69l-223.4,392.21c110.59-37.16,294.28-199.74,297.71-313.91.39-12.97,3.24-25.78,8.7-37.55,15.61-33.61,40.9-37.9,40.9-37.9,11.91-2.55,194.48,4.82,194.48,4.82-23.81-11.34-198.08-20.98-198.08-20.98Z"
+          fill={orange}
+        />
+      </g>
     </svg>
   );
-}
+});
 
 export function Wordmark({
   className,

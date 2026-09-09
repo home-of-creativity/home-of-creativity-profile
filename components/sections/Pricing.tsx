@@ -1,7 +1,18 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useMemo, useRef, useState, type MouseEvent, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  type FormEvent,
+  type MouseEvent,
+  type ReactNode,
+} from "react";
+import { createPortal } from "react-dom";
 import { pricing, WHATSAPP_NUMBER } from "@/lib/content";
 import { withBasePath } from "@/lib/base-path";
 import { useLanguage } from "@/lib/i18n";
@@ -75,13 +86,14 @@ function PlanCard({
   group,
   locale,
   t,
+  onChoose,
 }: {
   plan: PricingPlan;
   group: PricingGroup;
   locale: "en" | "ar";
   t: (copy: { en: string; ar: string }) => string;
+  onChoose: () => void;
 }) {
-  const planLabel = `${t(plan.name)} — ${t(plan.subtitle)}`;
   const period = "oneTime" in group && group.oneTime ? t(pricing.oneTime) : t(pricing.perMonth);
   const reach = "reach" in plan ? plan.reach : null;
 
@@ -160,17 +172,11 @@ function PlanCard({
           </ul>
         ) : null}
 
-        <a
-          href={whatsappHref(
-            locale === "ar"
-              ? `مرحباً هوم أوف كريتيفيتي، أريد الاشتراك في ${planLabel}.`
-              : `Hello Home of Creativity, I would like the ${planLabel} package.`,
-            WHATSAPP_NUMBER,
-          )}
-          target="_blank"
-          rel="noopener noreferrer"
+        <button
+          type="button"
+          onClick={onChoose}
           className={cn(
-            "mt-8 inline-flex w-full items-center justify-center rounded-full px-5 py-3 text-[0.82rem] font-semibold transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]",
+            "mt-8 inline-flex w-full cursor-pointer items-center justify-center rounded-full px-5 py-3 text-[0.82rem] font-semibold transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]",
             plan.featured
               ? "bg-[var(--brand-orange)] text-[var(--brand-purple-deep)]"
               : "border border-[var(--brand-purple-deep)] bg-transparent text-[var(--brand-purple-deep)] hover:bg-[var(--brand-purple-deep)] hover:text-[var(--brand-cream)]",
@@ -178,15 +184,186 @@ function PlanCard({
           )}
         >
           {t(pricing.ctaDefault)}
-        </a>
+        </button>
       </article>
     </PricingTiltCard>
+  );
+}
+
+type InquiryForm = {
+  name: string;
+  phone: string;
+  company: string;
+};
+
+const emptyInquiry: InquiryForm = { name: "", phone: "", company: "" };
+
+function inquiryMessage(plan: PricingPlan, form: InquiryForm, t: (copy: { en: string; ar: string }) => string) {
+  return t(pricing.inquiry.whatsappTemplate)
+    .replace("{{name}}", form.name.trim())
+    .replace("{{company}}", form.company.trim())
+    .replace("{{package}}", t(plan.subtitle))
+    .replace("{{phone}}", form.phone.trim());
+}
+
+function PackageInquiryDialog({
+  plan,
+  locale,
+  t,
+  onClose,
+}: {
+  plan: PricingPlan;
+  locale: "en" | "ar";
+  t: (copy: { en: string; ar: string }) => string;
+  onClose: () => void;
+}) {
+  const titleId = useId();
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
+  const lastFocus = useRef<HTMLElement | null>(null);
+  const [form, setForm] = useState<InquiryForm>(emptyInquiry);
+  const [error, setError] = useState(false);
+
+  const fieldClass =
+    "w-full rounded-md border border-[var(--brand-line)] bg-white px-4 py-3 text-[1rem] text-[var(--brand-ink)] outline-none transition-colors placeholder:text-[var(--brand-muted)] focus-visible:border-[var(--brand-orange)] focus-visible:ring-2 focus-visible:ring-[var(--brand-orange)]/30";
+
+  useEffect(() => {
+    lastFocus.current = document.activeElement as HTMLElement | null;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    nameRef.current?.focus();
+
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", onKey);
+      lastFocus.current?.focus();
+    };
+  }, [onClose]);
+
+  function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const valid = form.name.trim() && form.phone.trim() && form.company.trim();
+    if (!valid) {
+      setError(true);
+      return;
+    }
+    setError(false);
+    window.open(whatsappHref(inquiryMessage(plan, form, t)), "_blank", "noopener,noreferrer");
+    onClose();
+  }
+
+  return createPortal(
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={titleId}
+      className="fixed inset-0 z-[90] flex items-center justify-center bg-[rgb(10_6_24/0.82)] p-3 sm:p-4 md:p-8"
+      onClick={onClose}
+    >
+      <div
+        className="relative w-full max-w-lg overflow-hidden rounded-2xl border border-white/10 bg-[var(--brand-cream)] p-5 text-[var(--brand-ink)] shadow-[0_24px_60px_rgb(0_0_0/0.35)] sm:p-7"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="mb-5 flex items-start justify-between gap-4">
+          <div className="min-w-0 text-start">
+            <p
+              className={cn(
+                "m-0 text-[0.72rem] text-[var(--brand-orange)]",
+                locale === "en" && "tracking-[0.28em] uppercase",
+              )}
+            >
+              {t(plan.subtitle)}
+            </p>
+            <h3 id={titleId} className="font-display mt-1 text-[1.25rem] font-semibold">
+              {t(pricing.inquiry.title)}
+            </h3>
+            <p className="mt-2 m-0 text-[0.92rem] leading-relaxed text-[var(--brand-ink)]/70">
+              {t(pricing.inquiry.lead)}
+            </p>
+          </div>
+          <button
+            ref={closeRef}
+            type="button"
+            onClick={onClose}
+            className="shrink-0 rounded-full border border-[var(--brand-line)] px-4 py-2 text-[0.82rem] font-semibold hover:border-[var(--brand-orange)] hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
+          >
+            {t(pricing.inquiry.close)}
+          </button>
+        </div>
+
+        <form onSubmit={onSubmit} noValidate className="grid gap-4" dir={locale === "ar" ? "rtl" : "ltr"}>
+          <label className="grid gap-2 text-start text-[0.82rem]">
+            <span>{t(pricing.inquiry.name)}</span>
+            <input
+              ref={nameRef}
+              name="name"
+              autoComplete="name"
+              required
+              dir={locale === "ar" ? "rtl" : "ltr"}
+              value={form.name}
+              onChange={(event) => setForm((prev) => ({ ...prev, name: event.target.value }))}
+              className={cn(fieldClass, "text-start")}
+            />
+          </label>
+          <label className="grid gap-2 text-start text-[0.82rem]">
+            <span>{t(pricing.inquiry.phone)}</span>
+            <input
+              name="phone"
+              type="tel"
+              autoComplete="tel"
+              inputMode="tel"
+              required
+              dir="ltr"
+              value={form.phone}
+              onChange={(event) => setForm((prev) => ({ ...prev, phone: event.target.value }))}
+              className={cn(fieldClass, "text-start")}
+            />
+          </label>
+          <label className="grid gap-2 text-start text-[0.82rem]">
+            <span>{t(pricing.inquiry.company)}</span>
+            <input
+              name="company"
+              autoComplete="organization"
+              required
+              dir={locale === "ar" ? "rtl" : "ltr"}
+              value={form.company}
+              onChange={(event) => setForm((prev) => ({ ...prev, company: event.target.value }))}
+              className={cn(fieldClass, "text-start")}
+            />
+          </label>
+
+          {error ? (
+            <p role="alert" className="m-0 text-[0.9rem] text-[#9a2b2b]">
+              {t(pricing.inquiry.error)}
+            </p>
+          ) : null}
+
+          <button
+            type="submit"
+            className={cn(
+              "mt-1 inline-flex w-full items-center justify-center rounded-full bg-[var(--brand-orange)] px-6 py-3 text-[0.82rem] font-semibold text-[var(--brand-purple-deep)] transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]",
+              locale === "ar" ? "tracking-normal" : "tracking-[0.1em] uppercase",
+            )}
+          >
+            {t(pricing.inquiry.submit)}
+          </button>
+        </form>
+      </div>
+    </div>,
+    document.body,
   );
 }
 
 export function Pricing() {
   const { t, locale } = useLanguage();
   const [activeGroup, setActiveGroup] = useState(pricing.groups[0].id);
+  const [inquiryPlan, setInquiryPlan] = useState<PricingPlan | null>(null);
+  const closeInquiry = useCallback(() => setInquiryPlan(null), []);
 
   const group = useMemo(
     () => pricing.groups.find((entry) => entry.id === activeGroup) ?? pricing.groups[0],
@@ -302,7 +479,13 @@ export function Pricing() {
         >
           {sortedPlans.map((plan) => (
             <StaggerItem key={plan.id}>
-              <PlanCard plan={plan} group={group} locale={locale} t={t} />
+              <PlanCard
+                plan={plan}
+                group={group}
+                locale={locale}
+                t={t}
+                onChoose={() => setInquiryPlan(plan)}
+              />
             </StaggerItem>
           ))}
         </Stagger>
@@ -314,7 +497,7 @@ export function Pricing() {
           <p className="m-0 text-[0.92rem] text-[var(--brand-ink)]/72">{t(pricing.confirmNote)}</p>
         </Reveal>
 
-        <Reveal className="pricing-payment relative mt-16 overflow-hidden rounded-[2rem] border border-[var(--brand-orange)]/20 bg-[var(--brand-purple-deep)] px-5 py-10 shadow-[0_24px_70px_rgb(26_8_56/0.18)] sm:px-8 md:mt-20 md:px-12 md:py-14">
+        <Reveal className="pricing-payment relative mt-16 overflow-hidden rounded-[2rem] bg-[var(--brand-purple-deep)] px-5 py-10 shadow-[0_24px_70px_rgb(26_8_56/0.18)] sm:px-8 md:mt-20 md:px-12 md:py-14">
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgb(231_153_58/0.12),transparent_42%),radial-gradient(circle_at_80%_75%,rgb(43_181_168/0.08),transparent_35%)]"
@@ -335,7 +518,7 @@ export function Pricing() {
             {pricing.payment.methods.map((method) => (
               <li
                 key={method.id}
-                className="group relative aspect-[4/5] overflow-hidden rounded-[1.35rem] border border-[var(--brand-orange)]/35 bg-[var(--brand-charcoal)] shadow-[0_18px_38px_rgb(0_0_0/0.35)] sm:rounded-[1.75rem]"
+                className="group relative aspect-[4/5] overflow-hidden rounded-[1.35rem] bg-[var(--brand-charcoal)] shadow-[0_18px_38px_rgb(0_0_0/0.35)] sm:rounded-[1.75rem]"
               >
                 <div className="relative h-[72%] overflow-hidden">
                   <Image
@@ -351,16 +534,7 @@ export function Pricing() {
                     className="absolute inset-x-0 bottom-0 h-20 bg-[linear-gradient(180deg,transparent,var(--brand-charcoal))]"
                   />
                 </div>
-                <svg
-                  aria-hidden
-                  viewBox="0 0 48 48"
-                  className="absolute end-4 top-4 h-7 w-7 fill-none stroke-[var(--brand-orange)] opacity-80 drop-shadow-[0_0_8px_rgb(231_153_58/0.55)] sm:end-5 sm:top-5 sm:h-8 sm:w-8"
-                >
-                  <path d="M8 15h27a5 5 0 0 1 5 5v18H13a7 7 0 0 1-7-7V12a6 6 0 0 1 6-6h20" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M31 25h11v8H31a4 4 0 0 1 0-8Z" strokeWidth="2.4" strokeLinejoin="round" />
-                  <circle cx="32" cy="29" r="1.4" className="fill-[var(--brand-orange)] stroke-none" />
-                </svg>
-                <div className="absolute inset-x-0 bottom-0 flex h-[32%] flex-col items-center justify-center border-t border-[var(--brand-orange)]/20 bg-[var(--brand-charcoal)] px-3 text-center">
+                <div className="absolute inset-x-0 bottom-0 flex h-[32%] flex-col items-center justify-center bg-[var(--brand-charcoal)] px-3 text-center">
                   <p className="m-0 font-display text-[clamp(1rem,3vw,1.35rem)] font-semibold text-[var(--brand-cream)]">
                     {t(method.name)}
                   </p>
@@ -395,6 +569,10 @@ export function Pricing() {
           </div>
         </Reveal>
       </Shell>
+
+      {inquiryPlan ? (
+        <PackageInquiryDialog plan={inquiryPlan} locale={locale} t={t} onClose={closeInquiry} />
+      ) : null}
     </section>
   );
 }
