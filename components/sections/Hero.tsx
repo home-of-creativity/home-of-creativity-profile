@@ -7,76 +7,77 @@ import { hero } from "@/lib/content";
 import { useLanguage } from "@/lib/i18n";
 import { withBasePath } from "@/lib/base-path";
 import { cn } from "@/lib/cn";
-import { gsap, useGSAP } from "@/lib/gsap-client";
+import { useGsapScope } from "@/lib/gsap-client";
 import { shouldSkipMotion } from "@/lib/visit-cache";
 
 export function Hero() {
   const { t, locale, ready } = useLanguage();
   const rootRef = useRef<HTMLElement>(null);
 
-  useGSAP(
-    () => {
+  useGsapScope(
+    ({ gsap }) => {
       if (!ready) return;
+
       const mm = gsap.matchMedia();
 
-      mm.add(
-        {
-          reduceMotion: "(prefers-reduced-motion: reduce)",
-          allowMotion: "(prefers-reduced-motion: no-preference)",
-          isDesktop: "(min-width: 800px)",
-        },
-        (context) => {
-          const { reduceMotion, isDesktop } = context.conditions ?? {};
+        mm.add(
+          {
+            reduceMotion: "(prefers-reduced-motion: reduce)",
+            allowMotion: "(prefers-reduced-motion: no-preference)",
+            isDesktop: "(min-width: 800px)",
+          },
+          (context) => {
+            const { reduceMotion, isDesktop } = context.conditions ?? {};
 
-          if (reduceMotion || shouldSkipMotion()) {
-            gsap.set(
-              [".hero-bird-mobile", ".hero-kicker", ".hero-accent", ".hero-title", ".hero-line", ".hero-cta", ".hero-scroll"],
-              { autoAlpha: 1, y: 0, x: 0 },
-            );
-            return;
-          }
+            if (reduceMotion || shouldSkipMotion()) {
+              gsap.set(
+                [".hero-bird-mobile", ".hero-kicker", ".hero-accent", ".hero-title", ".hero-line", ".hero-cta", ".hero-scroll"],
+                { autoAlpha: 1, y: 0, x: 0 },
+              );
+              return;
+            }
 
-          const tl = gsap.timeline({
-            defaults: { ease: "power3.out", duration: 0.85 },
-          });
+            const tl = gsap.timeline({
+              defaults: { ease: "power3.out", duration: 0.85 },
+            });
 
-          tl.from(".hero-bird-mobile", { autoAlpha: 0, y: 18, duration: 0.9, immediateRender: false })
-            .from(".hero-kicker", { autoAlpha: 0, y: 16, immediateRender: false }, "<0.12")
-            .from(".hero-accent", { autoAlpha: 0, y: 16, immediateRender: false }, "<0.08")
-            .from(".hero-title", { autoAlpha: 0, y: 22, immediateRender: false }, "<0.1")
-            .from(".hero-line", { autoAlpha: 0, y: 16, immediateRender: false }, "<0.14")
-            .from(".hero-cta", { autoAlpha: 0, y: 12, immediateRender: false }, "<0.12")
-            .from(".hero-scroll", { autoAlpha: 0, immediateRender: false }, "-=0.25");
+            tl.from(".hero-bird-mobile", { autoAlpha: 0, y: 18, duration: 0.9, immediateRender: false })
+              .from(".hero-kicker", { autoAlpha: 0, y: 16, immediateRender: false }, "<0.12")
+              .from(".hero-accent", { autoAlpha: 0, y: 16, immediateRender: false }, "<0.08")
+              .from(".hero-title", { autoAlpha: 0, y: 22, immediateRender: false }, "<0.1")
+              .from(".hero-line", { autoAlpha: 0, y: 16, immediateRender: false }, "<0.14")
+              .from(".hero-cta", { autoAlpha: 0, y: 12, immediateRender: false }, "<0.12")
+              .from(".hero-scroll", { autoAlpha: 0, immediateRender: false }, "-=0.25");
 
-          if (!isDesktop) {
-            gsap.to(".hero-bird-mobile", {
-              x: 16,
-              duration: 3.2,
+            if (!isDesktop) {
+              gsap.to(".hero-bird-mobile", {
+                x: 16,
+                duration: 3.2,
+                ease: "sine.inOut",
+                yoyo: true,
+                repeat: -1,
+              });
+            }
+
+            if (isDesktop) {
+              gsap.to(".hero-bg", {
+                scale: 1.1,
+                duration: 28,
+                ease: "sine.inOut",
+                yoyo: true,
+                repeat: -1,
+              });
+            }
+
+            gsap.to(".hero-scroll-mark", {
+              y: 6,
+              duration: 1.15,
               ease: "sine.inOut",
               yoyo: true,
               repeat: -1,
             });
-          }
-
-          if (isDesktop) {
-            gsap.to(".hero-bg", {
-              scale: 1.1,
-              duration: 28,
-              ease: "sine.inOut",
-              yoyo: true,
-              repeat: -1,
-            });
-          }
-
-          gsap.to(".hero-scroll-mark", {
-            y: 6,
-            duration: 1.15,
-            ease: "sine.inOut",
-            yoyo: true,
-            repeat: -1,
-          });
-        },
-      );
+          },
+        );
 
       return () => mm.revert();
     },

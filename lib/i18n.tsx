@@ -87,11 +87,6 @@ function getServerSnapshot(): Locale {
   return "en";
 }
 
-if (typeof window !== "undefined") {
-  const fromDom = document.documentElement.dataset.locale;
-  current = isLocale(fromDom) ? fromDom : readStoredLocale();
-}
-
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const locale = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const [ready, setReady] = useState(false);
@@ -104,7 +99,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     }
     applyDocumentLocale(stored);
     setReady(true);
-  }, [locale]);
+  }, []);
 
   useLayoutEffect(() => {
     if (!ready) return;

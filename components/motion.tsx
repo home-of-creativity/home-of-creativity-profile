@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, type ReactNode } from "react";
-import { gsap, useGSAP } from "@/lib/gsap-client";
+import { useGsapScope } from "@/lib/gsap-client";
 import { useLanguage } from "@/lib/i18n";
 import { shouldSkipMotion } from "@/lib/visit-cache";
 import { cn } from "@/lib/cn";
@@ -20,8 +20,8 @@ export function Reveal({
   const ref = useRef<HTMLDivElement>(null);
   const { ready, locale } = useLanguage();
 
-  useGSAP(
-    () => {
+  useGsapScope(
+    ({ gsap }) => {
       const el = ref.current;
       if (!el || !ready) return;
 
@@ -78,8 +78,8 @@ export function Stagger({
   const ref = useRef<HTMLDivElement>(null);
   const { ready, locale } = useLanguage();
 
-  useGSAP(
-    () => {
+  useGsapScope(
+    ({ gsap }) => {
       const root = ref.current;
       if (!root || !ready) return;
 
@@ -147,8 +147,8 @@ export function ParallaxFrame({
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
-  useGSAP(
-    () => {
+  useGsapScope(
+    ({ gsap }) => {
       const root = ref.current;
       const inner = root?.querySelector<HTMLElement>(".gsap-parallax-inner");
       if (!root || !inner || shouldSkipMotion()) return;

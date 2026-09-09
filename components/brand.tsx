@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { brand } from "@/lib/content";
 import { cn } from "@/lib/cn";
-import { gsap, useGSAP } from "@/lib/gsap-client";
+import { useGsapScope } from "@/lib/gsap-client";
 import { shouldSkipMotion } from "@/lib/visit-cache";
 
 type MarkProps = {
@@ -24,49 +24,46 @@ export function Hummingbird({ className, title, surface = "dark", float = false 
   const teal = "#08af9b";
   const orange = "#f35c27";
 
-  useGSAP(
-    () => {
+  useGsapScope(
+    ({ gsap }) => {
       if (!float || shouldSkipMotion()) return;
 
       const mm = gsap.matchMedia();
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        // svgOrigin is in viewBox units: the shoulder where both wing paths meet.
-        gsap.set("[data-wing]", { svgOrigin: "392 302", rotate: 7 });
+        mm.add("(prefers-reduced-motion: no-preference)", () => {
+          gsap.set("[data-wing]", { svgOrigin: "392 302", rotate: 7 });
 
-        gsap.to("[data-wing]", {
-          rotate: -11,
-          scaleY: 0.86,
-          duration: 0.18,
-          ease: "sine.inOut",
-          yoyo: true,
-          repeat: -1,
-          stagger: 0.035,
+          gsap.to("[data-wing]", {
+            rotate: -11,
+            scaleY: 0.86,
+            duration: 0.3,
+            ease: "sine.inOut",
+            yoyo: true,
+            repeat: -1,
+            stagger: 0.055,
+          });
+
+          gsap.to("[data-body]", {
+            y: 5,
+            duration: 0.3,
+            ease: "sine.inOut",
+            yoyo: true,
+            repeat: -1,
+          });
+
+          gsap
+            .timeline({ repeat: -1, defaults: { ease: "sine.inOut" } })
+            .to(ref.current, { yPercent: -3.2, rotate: -1.6, duration: 1.8 })
+            .to(ref.current, { yPercent: -1.2, rotate: 1.1, duration: 2.1 })
+            .to(ref.current, { yPercent: 0, rotate: 0, duration: 1.6 });
+
+          gsap.to(ref.current, {
+            xPercent: 1.8,
+            duration: 4.6,
+            ease: "sine.inOut",
+            yoyo: true,
+            repeat: -1,
+          });
         });
-
-        // Counter-bob on the body only, at wingbeat speed, in viewBox units.
-        gsap.to("[data-body]", {
-          y: 5,
-          duration: 0.18,
-          ease: "sine.inOut",
-          yoyo: true,
-          repeat: -1,
-        });
-
-        // Percentage-based so the same hover reads on the hero bird and the small marks.
-        gsap
-          .timeline({ repeat: -1, defaults: { ease: "sine.inOut" } })
-          .to(ref.current, { yPercent: -3.2, rotate: -1.6, duration: 1.8 })
-          .to(ref.current, { yPercent: -1.2, rotate: 1.1, duration: 2.1 })
-          .to(ref.current, { yPercent: 0, rotate: 0, duration: 1.6 });
-
-        gsap.to(ref.current, {
-          xPercent: 1.8,
-          duration: 4.6,
-          ease: "sine.inOut",
-          yoyo: true,
-          repeat: -1,
-        });
-      });
 
       return () => mm.revert();
     },
@@ -118,9 +115,9 @@ export function Wordmark({
   };
 
   return (
-    <p
+    <span
       className={cn(
-        "font-display m-0 font-semibold uppercase",
+        "font-display block font-semibold uppercase",
         invert ? "text-[var(--brand-cream)]" : "text-[var(--brand-ink)]",
         sizes[size],
         className,
@@ -131,7 +128,7 @@ export function Wordmark({
         {brand.of}
       </span>{" "}
       Creativity
-    </p>
+    </span>
   );
 }
 

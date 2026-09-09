@@ -6,7 +6,7 @@ import { projects } from "@/lib/content";
 import { useLanguage } from "@/lib/i18n";
 import { withBasePath } from "@/lib/base-path";
 import { cn } from "@/lib/cn";
-import { gsap, useGSAP } from "@/lib/gsap-client";
+import { useGsapScope } from "@/lib/gsap-client";
 
 type ProjectItem = (typeof projects.items)[number];
 type ProjectImage = ProjectItem["images"][number];
@@ -26,6 +26,7 @@ const CATEGORY_BACKDROPS: Record<string, string> = {
   digital: "/photo/project-background/digital-cover.png",
   finance: "/photo/project-background/finance-cover.png",
 };
+const BACKDROP_FADE_MS = 500;
 
 function ProjectsBackdrop({ src }: { src: string }) {
   const [current, setCurrent] = useState(src);
@@ -63,6 +64,10 @@ function ProjectsBackdrop({ src }: { src: string }) {
 
   const commitNext = useCallback(() => {
     if (!next) return;
+    if (transitionRef.current !== null) {
+      window.clearTimeout(transitionRef.current);
+      transitionRef.current = null;
+    }
     setCurrent(next);
     setNext(null);
     setNextVisible(false);
@@ -79,7 +84,7 @@ function ProjectsBackdrop({ src }: { src: string }) {
   useEffect(() => {
     if (!next || !nextVisible) return;
 
-    transitionRef.current = window.setTimeout(commitNext, 700);
+    transitionRef.current = window.setTimeout(commitNext, BACKDROP_FADE_MS);
     return () => {
       if (transitionRef.current !== null) {
         window.clearTimeout(transitionRef.current);
@@ -94,7 +99,6 @@ function ProjectsBackdrop({ src }: { src: string }) {
         alt=""
         fill
         sizes="100vw"
-        priority
         className="projects-backdrop-media object-cover"
       />
       {next ? (
@@ -104,9 +108,10 @@ function ProjectsBackdrop({ src }: { src: string }) {
           fill
           sizes="100vw"
           className={cn(
-            "projects-backdrop-media projects-backdrop-next object-cover transition-opacity duration-500 ease-in-out",
+            "projects-backdrop-media projects-backdrop-next object-cover transition-opacity ease-in-out",
             nextVisible ? "opacity-100" : "opacity-0",
           )}
+          style={{ transitionDuration: `${BACKDROP_FADE_MS}ms` }}
           onLoad={revealNext}
           onError={revealNext}
           onTransitionEnd={handleNextTransitionEnd}
@@ -230,12 +235,12 @@ export function Projects() {
     };
   }, [active, close, locale, step]);
 
-  useGSAP(
-    () => {
+  useGsapScope(
+    ({ gsap }) => {
       const cards = gsap.utils.toArray<HTMLElement>(".project-card");
       gsap.set(cards, { autoAlpha: 1, y: 0, clearProps: "transform" });
     },
-    { scope: gridRef, dependencies: [filter, expanded, visible.length], revertOnUpdate: true },
+    { scope: gridRef, dependencies: [filter, expanded, visible.length] },
   );
 
   const current = active !== null ? visible[active] : null;

@@ -9,14 +9,14 @@ import { notFound } from "@/lib/content";
 import { useLanguage } from "@/lib/i18n";
 import { withBasePath } from "@/lib/base-path";
 import { cn } from "@/lib/cn";
-import { gsap, useGSAP } from "@/lib/gsap-client";
+import { useGsapScope } from "@/lib/gsap-client";
 
 export default function NotFoundPage() {
   const { t, locale } = useLanguage();
   const rootRef = useRef<HTMLElement>(null);
 
-  useGSAP(
-    () => {
+  useGsapScope(
+    ({ gsap }) => {
       const mm = gsap.matchMedia();
       mm.add(
         {

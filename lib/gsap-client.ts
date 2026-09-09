@@ -1,13 +1,80 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect, type DependencyList, type RefObject } from "react";
 
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(useGSAP, ScrollTrigger);
-  ScrollTrigger.config({ ignoreMobileResize: true });
-  void document.fonts?.ready.then(() => ScrollTrigger.refresh());
+type Gsap = typeof import("gsap").default;
+type ScrollTriggerPlugin = typeof import("gsap/ScrollTrigger").ScrollTrigger;
+
+export type GsapBundle = {
+  gsap: Gsap;
+  ScrollTrigger: ScrollTriggerPlugin;
+};
+
+let cached: GsapBundle | null = null;
+let pending: Promise<GsapBundle> | null = null;
+
+export function loadGsap(): Promise<GsapBundle> {
+  if (cached) {
+    return Promise.resolve(cached);
+  }
+
+  if (typeof window === "undefined") {
+    return Promise.reject(new Error("GSAP is client-only"));
+  }
+
+  pending ??= (async () => {
+    const [{ default: gsap }, { ScrollTrigger }] = await Promise.all([
+      import("gsap"),
+      import("gsap/ScrollTrigger"),
+    ]);
+
+    gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.config({ ignoreMobileResize: true });
+    void document.fonts?.ready.then(() => ScrollTrigger.refresh());
+
+    cached = { gsap, ScrollTrigger };
+    return cached;
+  })();
+
+  return pending;
 }
 
-export { gsap, ScrollTrigger, useGSAP };
+export function useGsapScope(
+  callback: (bundle: GsapBundle) => void | (() => void),
+  options?: {
+    scope?: RefObject<Element | null>;
+    dependencies?: DependencyList;
+  },
+) {
+  const scope = options?.scope;
+  const deps = options?.dependencies ?? [];
+
+  useEffect(() => {
+    let cancelled = false;
+    let localCleanup: void | (() => void);
+    let ctx: ReturnType<Gsap["context"]> | undefined;
+
+    void loadGsap().then((bundle) => {
+      if (cancelled) return;
+
+      const run = () => callback(bundle);
+
+      if (scope?.current) {
+        ctx = bundle.gsap.context(() => {
+          localCleanup = run();
+        }, scope);
+      } else {
+        localCleanup = run();
+      }
+    });
+
+    return () => {
+      cancelled = true;
+      ctx?.revert();
+      if (typeof localCleanup === "function") {
+        localCleanup();
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps);
+}

@@ -231,6 +231,105 @@ html[dir="rtl"] .lux-rule {
   min-height: 0;
 }
 
+.pricing-tilt {
+  perspective: 1100px;
+  height: 100%;
+}
+
+.pricing-tilt-inner {
+  position: relative;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.pricing-tilt-shine {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  background: radial-gradient(
+    circle at var(--tilt-x, 50%) var(--tilt-y, 50%),
+    rgb(255 255 255 / 0.34),
+    transparent 48%
+  );
+}
+
+.pricing-tilt-inner:hover .pricing-tilt-shine,
+.pricing-tilt-inner:focus-within .pricing-tilt-shine {
+  opacity: 1;
+}
+
+.pricing-tilt-inner > .lux-card {
+  position: relative;
+  z-index: 1;
+  backface-visibility: hidden;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .pricing-tilt-inner > .lux-card:hover {
+    transform: none;
+  }
+}
+
+.pricing-cards {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 1fr;
+  align-items: stretch;
+}
+
+.pricing-cards-3,
+.pricing-cards-5 {
+  max-width: 72rem;
+  margin-inline: auto;
+}
+
+@media (min-width: 768px) {
+  .pricing-cards-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pricing-cards-5 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pricing-cards-many {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .pricing-cards-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  /* Quintet: 3 cards top row, 2 centered on bottom row */
+  .pricing-cards-5 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .pricing-cards-5 > * {
+    grid-column: span 2;
+  }
+
+  .pricing-cards-5 > *:nth-child(4) {
+    grid-column: 2 / span 2;
+  }
+
+  .pricing-cards-5 > *:nth-child(5) {
+    grid-column: 4 / span 2;
+  }
+
+  .pricing-cards-many {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 @media (min-width: 768px) {
   :root {
     --nav-height: calc(4.5rem + env(safe-area-inset-top, 0px));

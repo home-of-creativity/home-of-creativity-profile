@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
   basePath: BASE_PATH,
   assetPrefix: BASE_PATH,
   trailingSlash: true,
+  serverExternalPackages: ["gsap", "@gsap/react"],
   images: {
     unoptimized: true,
   },

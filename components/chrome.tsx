@@ -8,12 +8,13 @@ import { contact, footer, nav } from "@/lib/content";
 import { useLanguage, type Copy } from "@/lib/i18n";
 import { cn } from "@/lib/cn";
 import { whatsappHref } from "@/lib/whatsapp";
-import { gsap, useGSAP } from "@/lib/gsap-client";
+import { useGsapScope } from "@/lib/gsap-client";
 
 const navLinks = [
   { href: "#about", label: nav.about },
   { href: "#services", label: nav.services },
   { href: "#projects", label: nav.projects },
+  { href: "#pricing", label: nav.pricing },
   { href: "#contact", label: nav.contact },
 ];
 
@@ -24,6 +25,7 @@ const footerLinks = [
   { href: "#clients", label: nav.clients },
   { href: "#projects", label: nav.projects },
   { href: "#finance", label: nav.finance },
+  { href: "#pricing", label: nav.pricing },
   { href: "#contact", label: nav.contact },
 ];
 
@@ -73,9 +75,10 @@ export function Nav() {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("#top");
 
-  useGSAP(
-    () => {
+  useGsapScope(
+    ({ gsap }) => {
       if (!ready) return;
+
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         gsap.fromTo(
@@ -118,7 +121,7 @@ export function Nav() {
   }, []);
 
   useEffect(() => {
-    const ids = ["top", "about", "philosophy", "services", "clients", "projects", "finance", "contact"];
+    const ids = ["top", "about", "philosophy", "services", "clients", "projects", "finance", "pricing", "contact"];
 
     const updateActive = () => {
       const marker = (headerRef.current?.offsetHeight ?? 72) + 24;
@@ -193,7 +196,7 @@ export function Nav() {
           </a>
 
           <nav
-            className="mx-2 hidden min-w-0 grid-cols-4 items-center lg:grid"
+            className="mx-2 hidden min-w-0 grid-cols-5 items-center lg:grid"
             aria-label={t(nav.menu)}
           >
             {navLinks.map((link) => (

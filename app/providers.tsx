@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { CacheWorker } from "@/components/CacheWorker";
 import { LanguageProvider, useLanguage } from "@/lib/i18n";
-import { ScrollTrigger } from "@/lib/gsap-client";
+import { loadGsap } from "@/lib/gsap-client";
 
 function LocaleFlash() {
   const { locale, ready } = useLanguage();
@@ -15,13 +15,13 @@ function LocaleFlash() {
     if (!ready) return;
     if (first.current) {
       first.current = false;
-      ScrollTrigger.refresh();
+      void loadGsap().then(({ ScrollTrigger }) => ScrollTrigger.refresh());
       return;
     }
     setFlash(true);
     const id = window.setTimeout(() => {
       setFlash(false);
-      ScrollTrigger.refresh();
+      void loadGsap().then(({ ScrollTrigger }) => ScrollTrigger.refresh());
     }, 420);
     return () => window.clearTimeout(id);
   }, [locale, ready]);
