@@ -23,7 +23,7 @@ export function CacheWorker() {
 
     if (!("caches" in window)) return;
 
-    void caches.open("hoc-design-v2").then((cache) =>
+    void caches.open("hoc-design-v3").then((cache) =>
       Promise.all(
         PRELOAD.map((path) => {
           const url = `${BASE_PATH}${path}`;

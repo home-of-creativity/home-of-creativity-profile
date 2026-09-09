@@ -1,4 +1,4 @@
-const CACHE = "hoc-design-v2";
+const CACHE = "hoc-design-v3";
 const BASE = "/home-of-creativity-profile";
 const PRECACHE = [
   `${BASE}/hummingbird.svg`,

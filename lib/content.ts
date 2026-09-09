@@ -37,7 +37,7 @@ export const hero = {
 };
 
 export const about = {
-  kicker: { en: "The house", ar: "البيت" },
+  kicker: { en: "House of Creativity", ar: "بيت الإبداع" },
   title: { en: "About us", ar: "من نحن" },
   body: {
     en: "Forget aesthetic fluff and sweet talk. We are not your typical agency; we are brand architects. We dissect your business, eliminate the clutter, and rebuild it into a powerhouse driven by hard numbers and defined by visual prestige. In an era of endless noise and generic content, we stand for Premium Minimalism and direct, human-centric marketing. We do not yell to be seen. We strategically position your brand so the industry leans in and listens.",
@@ -622,7 +622,7 @@ export const pricing = {
     },
     whatsappTemplate: {
       en: "Hello Home of Creativity\nThis is Mr./Ms. {{name}} from {{company}}. We would like to subscribe to the {{package}}.\nMy number: {{phone}}\nThank you",
-      ar: "مرحبا home of creativity\nمعاك أ. {{name}} من شركة {{company}} حابين نشترك معكم ب{{package}}\nرقمي: {{phone}}\nشكراً لكم",
+      ar: "مرحبا home of creativity\nمعك أ. {{name}} من شركة {{company}} حابين نشترك معكم ب{{package}}\nرقمي: {{phone}}\nشكراً لكم",
     },
   },
   reachLabels: {

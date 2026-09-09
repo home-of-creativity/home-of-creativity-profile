@@ -32,7 +32,7 @@ export function Hero() {
 
             if (reduceMotion || shouldSkipMotion()) {
               gsap.set(
-                [".hero-bird-mobile", ".hero-kicker", ".hero-accent", ".hero-title", ".hero-line", ".hero-cta", ".hero-scroll"],
+                [".hero-kicker", ".hero-accent", ".hero-title", ".hero-line", ".hero-cta", ".hero-scroll"],
                 { autoAlpha: 1, y: 0, x: 0 },
               );
               return;
@@ -42,11 +42,7 @@ export function Hero() {
               defaults: { ease: "power3.out", duration: 0.85 },
             });
 
-            if (!isDesktop) {
-              tl.from(".hero-bird-mobile", { autoAlpha: 0, y: 18, duration: 0.9, immediateRender: false });
-            }
-
-            tl.from(".hero-kicker", { autoAlpha: 0, y: 16, immediateRender: false }, isDesktop ? undefined : "<0.12")
+            tl.from(".hero-kicker", { autoAlpha: 0, y: 16, immediateRender: false })
               .from(".hero-accent", { autoAlpha: 0, y: 16, immediateRender: false }, "<0.08")
               .from(".hero-title", { autoAlpha: 0, y: 22, immediateRender: false }, "<0.1")
               .from(".hero-line", { autoAlpha: 0, y: 16, immediateRender: false }, "<0.14")
@@ -94,7 +90,9 @@ export function Hero() {
             sizes="100vw"
             className={cn(
               "object-cover",
-              locale === "ar" ? "object-[22%_72%]" : "object-[78%_68%]",
+              locale === "ar"
+                ? "object-[24%_64%] md:object-[22%_72%]"
+                : "object-[76%_64%] md:object-[78%_68%]",
             )}
           />
         </div>
@@ -123,14 +121,7 @@ export function Hero() {
 
       <div className="relative z-10 flex min-h-[100svh] w-full flex-col justify-center ps-[clamp(1rem,4.6vw,3rem)] pe-[var(--page-pad)] pt-[calc(var(--nav-height)+1.15rem)] pb-24">
         <div className="max-w-3xl text-start">
-          <div className="hero-bird-mobile mb-5 flex justify-start md:hidden" aria-hidden>
-            <Hummingbird
-              float
-              surface="solid"
-              className="h-[min(9.75rem,42vw)] w-[min(13.75rem,58vw)] [filter:drop-shadow(0_10px_18px_rgb(10_6_24/0.45))]"
-            />
-          </div>
-          <HeroBrandWriter className="hidden md:flex" />
+          <HeroBrandWriter />
           <p
             className={cn(
               "hero-kicker uppercase text-white/85",

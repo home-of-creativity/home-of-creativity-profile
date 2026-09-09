@@ -28,6 +28,13 @@ const CATEGORY_BACKDROPS: Record<string, string> = {
 };
 const BACKDROP_FADE_MS = 500;
 
+function backdropMediaClass(src: string) {
+  return cn(
+    "projects-backdrop-media object-cover",
+    src === ALL_BACKDROP && "projects-backdrop-media--all",
+  );
+}
+
 function ProjectsBackdrop({ src }: { src: string }) {
   const [current, setCurrent] = useState(src);
   const [next, setNext] = useState<string | null>(null);
@@ -99,7 +106,7 @@ function ProjectsBackdrop({ src }: { src: string }) {
         alt=""
         fill
         sizes="100vw"
-        className="projects-backdrop-media object-cover"
+        className={backdropMediaClass(current)}
       />
       {next ? (
         <Image
@@ -108,7 +115,8 @@ function ProjectsBackdrop({ src }: { src: string }) {
           fill
           sizes="100vw"
           className={cn(
-            "projects-backdrop-media projects-backdrop-next object-cover transition-opacity ease-in-out",
+            backdropMediaClass(next),
+            "projects-backdrop-next transition-opacity ease-in-out",
             nextVisible ? "opacity-100" : "opacity-0",
           )}
           style={{ transitionDuration: `${BACKDROP_FADE_MS}ms` }}

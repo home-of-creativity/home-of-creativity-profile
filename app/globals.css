@@ -205,6 +205,13 @@ html[dir="rtl"] .lux-rule {
   will-change: opacity;
 }
 
+@media (max-width: 767px) {
+  .projects-backdrop-media--all {
+    object-position: 50% 52%;
+    transform: scale(0.96);
+  }
+}
+
 .projects-backdrop-next {
   z-index: 1;
 }

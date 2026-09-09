@@ -305,33 +305,33 @@ export function HeroBrandWriter({ className }: { className?: string }) {
       ref={wrapRef}
       dir="ltr"
       className={cn(
-        "hero-brand relative mb-6 flex h-[clamp(3.2rem,8vw,5rem)] items-center pt-[clamp(2rem,5.5vw,3.2rem)] md:mb-8",
+        "hero-brand relative mb-5 flex h-[clamp(4.8rem,12vw,5rem)] items-center pt-[clamp(2rem,5.5vw,3.2rem)] md:mb-8 md:h-[clamp(3.2rem,8vw,5rem)]",
         className,
       )}
     >
       <span className="sr-only">Home of Creativity</span>
-      <div aria-hidden className="hero-brand-row relative flex items-baseline gap-x-[0.28em]">
+      <div aria-hidden className="hero-brand-row relative flex max-w-full flex-wrap items-baseline gap-x-[0.28em] gap-y-1">
         <AnimatedWord
           word="Home"
           wordKey="home"
-          className="font-display text-[clamp(1.9rem,6vw,3.4rem)] font-black uppercase leading-none tracking-[-0.02em] text-white [text-shadow:0_2px_18px_rgb(0_0_0/0.42)]"
+          className="font-display text-[clamp(1.45rem,7.2vw,3.4rem)] font-black uppercase leading-none tracking-[-0.02em] text-white [text-shadow:0_2px_18px_rgb(0_0_0/0.42)] md:text-[clamp(1.9rem,6vw,3.4rem)]"
         />
         <AnimatedWord
           word="of"
           wordKey="of"
-          className="font-display text-[clamp(1.9rem,6vw,3.4rem)] font-black lowercase leading-none tracking-[-0.02em] text-[var(--brand-orange)] [text-shadow:0_2px_18px_rgb(0_0_0/0.35)]"
+          className="font-display text-[clamp(1.45rem,7.2vw,3.4rem)] font-black lowercase leading-none tracking-[-0.02em] text-[var(--brand-orange)] [text-shadow:0_2px_18px_rgb(0_0_0/0.35)] md:text-[clamp(1.9rem,6vw,3.4rem)]"
         />
         <AnimatedWord
           word="Creativity"
           wordKey="creativity"
-          className="font-display text-[clamp(1.9rem,6vw,3.4rem)] font-black uppercase leading-none tracking-[-0.02em] text-white [text-shadow:0_2px_18px_rgb(0_0_0/0.42)]"
+          className="font-display text-[clamp(1.45rem,7.2vw,3.4rem)] font-black uppercase leading-none tracking-[-0.02em] text-white [text-shadow:0_2px_18px_rgb(0_0_0/0.42)] md:text-[clamp(1.9rem,6vw,3.4rem)]"
         />
       </div>
       <Hummingbird
         ref={birdRef}
         surface="solid"
         title="Home of Creativity"
-        className="hero-brand-bird pointer-events-none absolute left-0 top-0 z-[1] h-[clamp(2.4rem,6vw,3.7rem)] w-[clamp(3.3rem,8.4vw,5.1rem)] opacity-0 [filter:drop-shadow(0_10px_18px_rgb(10_6_24/0.5))]"
+        className="hero-brand-bird pointer-events-none absolute left-0 top-0 z-[1] h-[clamp(2rem,5.4vw,3.7rem)] w-[clamp(2.75rem,7.5vw,5.1rem)] opacity-0 [filter:drop-shadow(0_10px_18px_rgb(10_6_24/0.5))] md:h-[clamp(2.4rem,6vw,3.7rem)] md:w-[clamp(3.3rem,8.4vw,5.1rem)]"
       />
     </div>
   );
