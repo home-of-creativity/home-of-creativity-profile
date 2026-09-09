@@ -238,6 +238,25 @@ html[dir="rtl"] .lux-rule {
   min-height: 0;
 }
 
+@media (max-width: 799px) {
+  .hero-bg-media {
+    height: 100% !important;
+    width: auto !important;
+    max-width: none;
+    inset-inline-start: 50% !important;
+    inset-block-start: 0 !important;
+    inset-block-end: 0 !important;
+    inset-inline-end: auto !important;
+    transform: translateX(-50%);
+    object-fit: cover;
+    object-position: center center;
+  }
+
+  [dir="rtl"] .hero-bg-media {
+    transform: translateX(50%);
+  }
+}
+
 .hero-letter {
   opacity: 0;
   transform: scale(0.9);

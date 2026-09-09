@@ -81,7 +81,7 @@ export function Hero() {
       className="relative isolate flex min-h-[100svh] items-center overflow-hidden bg-[var(--brand-purple-deep)] text-[var(--brand-cream)]"
     >
       <div className="absolute inset-0 overflow-hidden">
-        <div className="hero-bg absolute inset-[-8%] h-[116%] w-[116%] will-change-transform">
+        <div className="hero-bg absolute inset-0 will-change-transform md:inset-[-8%] md:h-[116%] md:w-[116%]">
           <Image
             src={withBasePath("/photo/hero-section-background.webp")}
             alt=""
@@ -89,10 +89,8 @@ export function Hero() {
             priority
             sizes="100vw"
             className={cn(
-              "object-cover",
-              locale === "ar"
-                ? "object-[24%_64%] md:object-[22%_72%]"
-                : "object-[76%_64%] md:object-[78%_68%]",
+              "hero-bg-media object-cover object-[50%_42%]",
+              locale === "ar" ? "md:object-[72%_48%]" : "md:object-[28%_48%]",
             )}
           />
         </div>
@@ -102,14 +100,16 @@ export function Hero() {
         aria-hidden
         className={cn(
           "pointer-events-none absolute inset-0",
+          "bg-[linear-gradient(180deg,rgb(10_6_24/0.72)_0%,rgb(10_6_24/0.38)_38%,rgb(10_6_24/0.18)_62%,rgb(10_6_24/0.62)_100%)]",
+          "md:bg-none",
           locale === "ar"
-            ? "bg-[linear-gradient(270deg,rgb(10_6_24/0.78)_0%,rgb(10_6_24/0.32)_46%,rgb(10_6_24/0.12)_100%)]"
-            : "bg-[linear-gradient(90deg,rgb(10_6_24/0.78)_0%,rgb(10_6_24/0.32)_46%,rgb(10_6_24/0.12)_100%)]",
+            ? "md:bg-[linear-gradient(270deg,rgb(10_6_24/0.78)_0%,rgb(10_6_24/0.32)_46%,rgb(10_6_24/0.12)_100%)]"
+            : "md:bg-[linear-gradient(90deg,rgb(10_6_24/0.78)_0%,rgb(10_6_24/0.32)_46%,rgb(10_6_24/0.12)_100%)]",
         )}
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-[linear-gradient(180deg,transparent,rgb(10_6_24/0.55))]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-[linear-gradient(180deg,transparent,rgb(10_6_24/0.55))] md:h-40"
       />
 
       <Hummingbird
