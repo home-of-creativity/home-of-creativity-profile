@@ -1,8 +1,9 @@
 "use client";
 
 import { Great_Vibes } from "next/font/google";
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { contact, services } from "@/lib/content";
+import { fetchContactChannels, mergeContactChannels } from "@/lib/contact-api";
 
 const greatVibes = Great_Vibes({
   subsets: ["latin"],
@@ -13,6 +14,7 @@ const greatVibes = Great_Vibes({
 import { useLanguage, type Copy } from "@/lib/i18n";
 import { whatsappHref } from "@/lib/whatsapp";
 import { Hummingbird } from "../brand";
+import { SocialBrandIcon } from "../SocialBrandIcon";
 import { Reveal } from "../motion";
 import { Shell } from "../ui";
 import { cn } from "@/lib/cn";
@@ -71,17 +73,13 @@ function ChannelIcon({ id }: { id: (typeof contact.channels)[number]["id"] }) {
     );
   }
 
-  if (id === "landline") {
+  if (id === "social") {
     return (
       <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden fill="none">
-        <path
-          d="M8 4h8a2 2 0 0 1 2 2v2H6V6a2 2 0 0 1 2-2Z"
-          stroke="#e07a5f"
-          strokeWidth="1.7"
-        />
-        <rect x="5" y="8" width="14" height="12" rx="2" stroke="#e07a5f" strokeWidth="1.7" />
-        <circle cx="12" cy="15.5" r="2" stroke="#e07a5f" strokeWidth="1.7" />
-        <path d="M9 11h6" stroke="#e07a5f" strokeWidth="1.7" strokeLinecap="round" />
+        <circle cx="6.5" cy="12" r="2.2" stroke="#e07a5f" strokeWidth="1.7" />
+        <circle cx="17.5" cy="6.5" r="2.2" stroke="#e07a5f" strokeWidth="1.7" />
+        <circle cx="17.5" cy="17.5" r="2.2" stroke="#e07a5f" strokeWidth="1.7" />
+        <path d="M8.5 11.2 15.4 7.4M8.5 12.8 15.4 16.6" stroke="#e07a5f" strokeWidth="1.7" />
       </svg>
     );
   }
@@ -119,6 +117,17 @@ export function Contact() {
   const [form, setForm] = useState<FormState>(emptyForm);
   const [error, setError] = useState(false);
   const [sent, setSent] = useState(false);
+  const [channels, setChannels] = useState(contact.channels);
+
+  useEffect(() => {
+    let active = true;
+    fetchContactChannels().then((data) => {
+      if (active) setChannels(mergeContactChannels(data, locale));
+    });
+    return () => {
+      active = false;
+    };
+  }, [locale]);
 
   const fieldClass =
     "w-full rounded-none border border-[var(--brand-line)] bg-white/80 px-4 py-3 text-[1rem] text-[var(--brand-ink)] outline-none transition-colors placeholder:text-[var(--brand-muted)] focus-visible:border-[var(--brand-orange)] focus-visible:ring-2 focus-visible:ring-[var(--brand-orange)]/30";
@@ -188,7 +197,7 @@ export function Contact() {
 
             <Reveal>
               <ul className="relative mx-auto grid max-w-3xl list-none gap-5 p-0 sm:grid-cols-2">
-                {contact.channels.map((channel) => (
+                {channels.filter((channel) => channel.lines.length > 0).map((channel) => (
                   <li key={channel.id} className="list-none">
                     <article className="relative flex items-center">
                       <span className="relative z-10 grid h-14 w-14 shrink-0 place-items-center rounded-full border border-[var(--brand-ink)]/12 bg-white shadow-[0_8px_20px_rgb(10_6_24/0.08)]">
@@ -202,7 +211,9 @@ export function Contact() {
                         />
                         <div className="grid gap-1.5 text-start">
                           {channel.lines.map((line) => {
-                            const label = `${line.region} ${lineText(line.text, t)}`;
+                            const text = lineText("text" in line ? line.text : "", t);
+                            const platform = "platform" in line ? line.platform : undefined;
+                            const label = `${platform ?? ("region" in line ? line.region : "")} ${text}`;
                             if (channel.kind === "whatsapp" && "digits" in line && line.digits) {
                               return (
                                 <a
@@ -213,7 +224,7 @@ export function Contact() {
                                   className="text-[0.95rem] font-medium transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
                                 >
                                   <span className="text-[var(--brand-muted)]">{line.region}</span>{" "}
-                                  <span dir="ltr">{lineText(line.text, t)}</span>
+                                  <span dir="ltr">{text}</span>
                                 </a>
                               );
                             }
@@ -226,15 +237,32 @@ export function Contact() {
                                   className="text-[0.95rem] font-medium transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
                                 >
                                   <span className="text-[var(--brand-muted)]">{line.region}</span>{" "}
-                                  <span dir="ltr">{lineText(line.text, t)}</span>
+                                  <span dir="ltr">{text}</span>
+                                </a>
+                              );
+                            }
+
+                            if (channel.kind === "link" && "href" in line && line.href) {
+                              return (
+                                <a
+                                  key={label}
+                                  href={line.href}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-2 text-[0.95rem] font-medium transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
+                                >
+                                  {platform ? <SocialBrandIcon platform={platform} className="h-4 w-4 shrink-0" /> : null}
+                                  <span>{text}</span>
                                 </a>
                               );
                             }
 
                             return (
                               <p key={label} className="m-0 text-[0.95rem] font-medium">
-                                <span className="text-[var(--brand-muted)]">{line.region}</span>{" "}
-                                {lineText(line.text, t)}
+                                {"region" in line && line.region ? (
+                                  <span className="text-[var(--brand-muted)]">{line.region} </span>
+                                ) : null}
+                                {text}
                               </p>
                             );
                           })}

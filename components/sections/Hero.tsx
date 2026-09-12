@@ -96,21 +96,7 @@ export function Hero() {
         </div>
       </div>
 
-      <div
-        aria-hidden
-        className={cn(
-          "pointer-events-none absolute inset-0",
-          "bg-[linear-gradient(180deg,rgb(10_6_24/0.72)_0%,rgb(10_6_24/0.38)_38%,rgb(10_6_24/0.18)_62%,rgb(10_6_24/0.62)_100%)]",
-          "md:bg-none",
-          locale === "ar"
-            ? "md:bg-[linear-gradient(270deg,rgb(10_6_24/0.78)_0%,rgb(10_6_24/0.32)_46%,rgb(10_6_24/0.12)_100%)]"
-            : "md:bg-[linear-gradient(90deg,rgb(10_6_24/0.78)_0%,rgb(10_6_24/0.32)_46%,rgb(10_6_24/0.12)_100%)]",
-        )}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-[linear-gradient(180deg,transparent,rgb(10_6_24/0.55))] md:h-40"
-      />
+      <div aria-hidden className="hero-bg-overlay" />
 
       <Hummingbird
         float

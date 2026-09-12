@@ -1,4 +1,5 @@
 import type { Copy } from "./i18n";
+import { portfolioDriveUrl } from "./portfolio-drive-images";
 
 export const brand = {
   name: "Home of Creativity",
@@ -8,14 +9,17 @@ export const brand = {
 };
 
 export const nav = {
+  home: { en: "Home", ar: "الرئيسية" },
   about: { en: "About", ar: "من نحن" },
-  philosophy: { en: "Philosophy", ar: "فلسفتنا" },
   services: { en: "Services", ar: "خدماتنا" },
+  clientLogos: { en: "Clients", ar: "العملاء" },
   clients: { en: "Client journey", ar: "مراحل العمل" },
+  reels: { en: "Reels", ar: "الريلز" },
   projects: { en: "Projects", ar: "المشاريع" },
   finance: { en: "Finance", ar: "التحليل المالي" },
   pricing: { en: "Pricing", ar: "الأسعار" },
-  contact: { en: "Contact", ar: "تواصل" },
+  contact: { en: "Contact us", ar: "تواصل معنا" },
+  whatsapp: { en: "WhatsApp", ar: "واتساب" },
   language: { en: "Language", ar: "اللغة" },
   cta: { en: "Start a project", ar: "ابدأ مشروعاً" },
   telegram: { en: "Start on Telegram", ar: "ابدأ عبر تيليجرام" },
@@ -47,55 +51,40 @@ export const about = {
     en: "A lone figure at the far end of a vast, geometrically lit hall",
     ar: "شخص وحيد في نهاية قاعة هندسية واسعة مضاءة",
   },
-};
-
-export const philosophy = {
-  kicker: { en: "How we think", ar: "كيف نفكّر" },
-  title: { en: "Our philosophy", ar: "فلسفتنا" },
-  pillars: [
-    {
-      id: "complex",
-      label: { en: "Complexity", ar: "التعقيد" },
-      image: "/photo/mastering_the_complex.webp",
-      imageAlt: {
-        en: "A figure facing a glowing cube of data and systems",
-        ar: "شخص يواجه مكعباً مضيئاً من البيانات والأنظمة",
-      },
-      title: { en: "Mastering the Complex", ar: "إتقان التعقيد" },
-      body: {
-        en: "We thrive where others struggle. From sophisticated cloud infrastructures to rigid engineering materials, we comprehend your deepest technical nuances. We distill this complexity into powerful, strategic messaging that drives investor confidence and consumer conversion.",
-        ar: "سواء كان عملك نظاماً سحابياً معقّداً، أو تقنيات دقيقة، أو منتجات إنشائية وهندسية جافّة؛ نحن لا نعتبرها تحدياً لأننا ببساطة نفهم لغتك التقنية المعقّدة ونترجمها إلى رسائل تجارية ذكية يفهمها المستثمر ويشتريها المستهلك.",
-      },
+  vision: {
+    label: { en: "Vision", ar: "الرؤية" },
+    title: { en: "Our Vision", ar: "رؤيتنا" },
+    image: "/photo/vision-hummingbird.webp",
+    imageAlt: {
+      en: "Home of Creativity hummingbird mark hovering like a compass over a dark horizon",
+      ar: "شعار طائر بيت الإبداع كبوصلة فوق أفق داكن",
     },
-    {
-      id: "visual",
-      label: { en: "Vision", ar: "الرؤية" },
-      image: "/photo/visual_innovation_3D.webp",
-      imageAlt: {
-        en: "A figure looking through a circular window at a 3D city vision",
-        ar: "شخص ينظر من نافذة دائرية إلى رؤية مدينة ثلاثية الأبعاد",
-      },
-      title: { en: "Visual Innovation 3D", ar: "ابتكار بصري ثلاثي الأبعاد" },
-      body: {
-        en: "We do not depend on existing reality; we construct the ideal one. Leveraging advanced tech and hyper-realistic 3D simulations, we deliver cinematic visual equity that positions your brand as a futuristic industry leader.",
-        ar: "لا ننتظر الواقع لكي نُصوّر؛ نحن نصنع الواقع. ندمج أدوات الجيل القادم والمحاكاة ثلاثية الأبعاد فائقة الواقعية لإنتاج مواد بصرية سينمائية تضع علامتك التجارية في المستقبل قبل منافسيك.",
-      },
+    body: {
+      en: "Together with our partners, to be the global compass for non-conformist creativity—pioneering a new marketing era where a brand’s true worth is defined by profound impact and authentic ideas, not just digital noise.",
+      ar: "أن نكون مع شركائنا البوصلة العالمية للإبداع الذي يكسر النمطية والتقليد، مؤسسين لعصر تسويقي مُختلف تُرسم فيه قيمة العلامة التجارية بعمق التأثير وأصالة الأفكار لا بضجيج الظهور.",
     },
-    {
-      id: "precision",
-      label: { en: "Precision", ar: "الدقة" },
-      image: "/photo/precision_over_presumption.webp",
-      imageAlt: {
-        en: "A dart striking the exact center of a target",
-        ar: "سهم يصيب مركز الهدف بدقة",
-      },
-      title: { en: "Precision Over Presumption", ar: "الدقة بدل التخمين" },
-      body: {
-        en: "We do not gamble on campaigns. We tear down industry standards, forensically analyze competitors, and root our positioning in undeniable facts. By identifying unexploited market gaps, we guarantee our clients distinct competitive and commercial supremacy.",
-        ar: "لا نبني حملاتنا على التخمين، لأننا نفكّك معايير السوق ونحلّل المنافسين، ونعتمد على الحقائق الصلبة لنكشف الفجوات التسويقية لعملائنا ونمنحهم تفوّقاً فنياً وتجارياً واضحاً.",
-      },
+    accents: {
+      en: ["global compass", "profound impact", "authentic ideas"],
+      ar: ["البوصلة العالمية", "عمق التأثير", "أصالة الأفكار"],
     },
-  ],
+  },
+  mission: {
+    label: { en: "Mission", ar: "الرسالة" },
+    title: { en: "Our Mission", ar: "رسالتنا" },
+    image: "/photo/mission-hummingbird.webp",
+    imageAlt: {
+      en: "Home of Creativity hummingbird mark weaving bridges of light between distant cities",
+      ar: "شعار طائر بيت الإبداع ينسج جسور ضوء بين مدن بعيدة",
+    },
+    body: {
+      en: "At Home of Creativity, we craft digital concepts that defy the ordinary. We architect world-class ideas that elevate our partners’ global positioning, forging enduring bridges of trust and belonging that cross borders and markets. Together, we shape a more imaginative tomorrow.",
+      ar: "في بيت الإبداع، نصمم المفاهيم الرقمية التي تتحدى المألوف؛ نُهيكل الأفكار بحرفية عالمية تعزز تموضع شركائنا عالمياً، وتخلق جسوراً متينة من الثقة والانتماء العابر للحدود والأسواق، نعمل معاً من أجل غدٍ أكثر إبداعاً.",
+    },
+    accents: {
+      en: ["defy the ordinary", "world-class", "bridges of trust"],
+      ar: ["تتحدى المألوف", "حرفية عالمية", "جسوراً متينة"],
+    },
+  },
 };
 
 export const services = {
@@ -193,8 +182,26 @@ export const services = {
   ],
 };
 
+export const showcaseClients = {
+  kicker: { en: "Who we serve", ar: "من نخدم" },
+  title: { en: "Our clients", ar: "عملاؤنا" },
+  lead: {
+    en: "Brands and partners we have built with — from identity to campaigns and digital products.",
+    ar: "علامات وشركاء بنينا معهم — من الهوية إلى الحملات والمنتجات الرقمية.",
+  },
+  gridLabel: { en: "Client logos", ar: "شعارات العملاء" },
+  fallbackNames: [
+    "IZORA",
+    "Faiz Wahba",
+    "Enginety",
+    "Smart Vision",
+    "Future Line",
+    "Riva Boutique",
+  ],
+} satisfies Record<string, Copy | string[]>;
+
 export const clientJourney = {
-  kicker: { en: "Clients", ar: "العملاء" },
+  kicker: { en: "Process", ar: "العملية" },
   title: { en: "Work stages", ar: "مراحل العمل" },
   lead: {
     en: "From first message to final delivery — a clear path through Telegram, with your team always in the loop.",
@@ -253,6 +260,15 @@ export const clientJourney = {
   ],
 };
 
+export const reels = {
+  kicker: { en: "In motion", ar: "بالحركة" },
+  title: { en: "Reels & short films", ar: "ريلز وأفلام قصيرة" },
+  lead: {
+    en: "Recent vertical work — identity, events, and brand stories in motion.",
+    ar: "أعمال عمودية حديثة — هوية وفعاليات وقصص علامات بالحركة.",
+  },
+};
+
 export const projects = {
   kicker: { en: "Our work", ar: "أعمالنا" },
   title: { en: "Selected projects", ar: "مشاريع مختارة" },
@@ -266,6 +282,7 @@ export const projects = {
   close: { en: "Close", ar: "إغلاق" },
   previous: { en: "Previous", ar: "السابق" },
   next: { en: "Next", ar: "التالي" },
+  viewDetails: { en: "View details", ar: "عرض التفاصيل" },
   items: [
     {
       id: "events",
@@ -279,7 +296,7 @@ export const projects = {
       },
       images: [
         {
-          src: "/photo/projects/p10_event_stage_01.webp",
+          src: portfolioDriveUrl("p10_event_stage_01"),
           featured: true,
           span: "md" as const,
           alt: {
@@ -288,33 +305,12 @@ export const projects = {
           },
         },
         {
-          src: "/photo/projects/p11_event_stage_02.webp",
-          alt: {
-            en: "Second event stage and seating arrangement",
-            ar: "منصة فعالية ثانية وتنظيم المقاعد",
-          },
-        },
-        {
-          src: "/photo/projects/p12_exhibition_booth_design.webp",
+          src: portfolioDriveUrl("p12_exhibition_booth_design"),
           featured: true,
           span: "sm" as const,
           alt: {
             en: "Exhibition booth design",
             ar: "تصميم بوث معرض",
-          },
-        },
-        {
-          src: "/photo/projects/p13_booth_projects_01.webp",
-          alt: {
-            en: "Exhibition booth projects",
-            ar: "مشاريع بوثات المعارض",
-          },
-        },
-        {
-          src: "/photo/projects/p14_booth_projects_02.webp",
-          alt: {
-            en: "Further exhibition booth work",
-            ar: "أعمال بوثات إضافية",
           },
         },
       ],
@@ -331,7 +327,7 @@ export const projects = {
       },
       images: [
         {
-          src: "/photo/projects/p16_logos.webp",
+          src: portfolioDriveUrl("p16_logos"),
           featured: true,
           span: "lg" as const,
           alt: {
@@ -340,75 +336,12 @@ export const projects = {
           },
         },
         {
-          src: "/photo/projects/p17_company_profile_01.webp",
-          alt: {
-            en: "Company profile spread",
-            ar: "صفحات ملف تعريفي",
-          },
-        },
-        {
-          src: "/photo/projects/p18_company_profile_02.webp",
-          alt: {
-            en: "Company profile interior pages",
-            ar: "صفحات داخلية من الملف التعريفي",
-          },
-        },
-        {
-          src: "/photo/projects/p19_menu_design.webp",
-          alt: {
-            en: "Menu design",
-            ar: "تصميم قائمة",
-          },
-        },
-        {
-          src: "/photo/projects/p20_business_cards.webp",
-          alt: {
-            en: "Business card designs",
-            ar: "تصاميم بطاقات أعمال",
-          },
-        },
-        {
-          src: "/photo/projects/p21_visual_identity_application_01.webp",
+          src: portfolioDriveUrl("p21_visual_identity_application_01"),
           featured: true,
           span: "md" as const,
           alt: {
             en: "Visual identity applications, set one",
             ar: "تطبيقات الهوية البصرية، المجموعة الأولى",
-          },
-        },
-        {
-          src: "/photo/projects/p22_visual_identity_application_02.webp",
-          alt: {
-            en: "Visual identity applications, set two",
-            ar: "تطبيقات الهوية البصرية، المجموعة الثانية",
-          },
-        },
-        {
-          src: "/photo/projects/p23_visual_identity_application_03.webp",
-          alt: {
-            en: "Visual identity applications, set three",
-            ar: "تطبيقات الهوية البصرية، المجموعة الثالثة",
-          },
-        },
-        {
-          src: "/photo/projects/p24_visual_identity_application_04.webp",
-          alt: {
-            en: "Visual identity applications, set four",
-            ar: "تطبيقات الهوية البصرية، المجموعة الرابعة",
-          },
-        },
-        {
-          src: "/photo/projects/p25_packaging_01.webp",
-          alt: {
-            en: "Packaging design, set one",
-            ar: "تصميم تغليف، المجموعة الأولى",
-          },
-        },
-        {
-          src: "/photo/projects/p26_packaging_02.webp",
-          alt: {
-            en: "Packaging design, set two",
-            ar: "تصميم تغليف، المجموعة الثانية",
           },
         },
       ],
@@ -425,7 +358,7 @@ export const projects = {
       },
       images: [
         {
-          src: "/photo/projects/p28_social_posts_01.webp",
+          src: portfolioDriveUrl("p28_social_posts_01"),
           featured: true,
           span: "sm" as const,
           alt: {
@@ -434,61 +367,12 @@ export const projects = {
           },
         },
         {
-          src: "/photo/projects/p29_social_posts_02.webp",
-          alt: {
-            en: "Social media posts, set two",
-            ar: "منشورات سوشل ميديا، المجموعة الثانية",
-          },
-        },
-        {
-          src: "/photo/projects/p30_social_posts_03.webp",
-          alt: {
-            en: "Social media posts, set three",
-            ar: "منشورات سوشل ميديا، المجموعة الثالثة",
-          },
-        },
-        {
-          src: "/photo/projects/p31_motion_examples.webp",
-          alt: {
-            en: "Motion design examples",
-            ar: "أمثلة تحريك",
-          },
-        },
-        {
-          src: "/photo/projects/p32_photography_montage.webp",
+          src: portfolioDriveUrl("p32_photography_montage"),
           featured: true,
           span: "lg" as const,
           alt: {
             en: "Photography montage",
             ar: "مونتاج تصوير",
-          },
-        },
-        {
-          src: "/photo/projects/p33_photography_examples.webp",
-          alt: {
-            en: "Photography examples",
-            ar: "أمثلة تصوير",
-          },
-        },
-        {
-          src: "/photo/projects/p35_social_media_high_views.webp",
-          alt: {
-            en: "High-reach social media work",
-            ar: "أعمال سوشل عالية المشاهدة",
-          },
-        },
-        {
-          src: "/photo/projects/p36_paid_campaigns_tiktok_meta.webp",
-          alt: {
-            en: "TikTok and Meta paid campaigns",
-            ar: "حملات ممولة على تيك توك وميتا",
-          },
-        },
-        {
-          src: "/photo/projects/p37_google_ads.webp",
-          alt: {
-            en: "Google Ads work",
-            ar: "أعمال إعلانات جوجل",
           },
         },
       ],
@@ -505,7 +389,7 @@ export const projects = {
       },
       images: [
         {
-          src: "/photo/projects/p39_promotional_gifts.webp",
+          src: portfolioDriveUrl("p39_promotional_gifts"),
           featured: true,
           span: "sm" as const,
           alt: {
@@ -514,7 +398,7 @@ export const projects = {
           },
         },
         {
-          src: "/photo/projects/p41_roadside_advertisement.webp",
+          src: portfolioDriveUrl("p41_roadside_advertisement"),
           alt: {
             en: "Roadside advertisements",
             ar: "إعلانات طرقية",
@@ -534,19 +418,12 @@ export const projects = {
       },
       images: [
         {
-          src: "/photo/projects/p43_website_01.webp",
+          src: portfolioDriveUrl("p43_website_01"),
           featured: true,
           span: "lg" as const,
           alt: {
             en: "Website design, first project",
             ar: "تصميم موقع، المشروع الأول",
-          },
-        },
-        {
-          src: "/photo/projects/p44_website_02.webp",
-          alt: {
-            en: "Website design, second project",
-            ar: "تصميم موقع، المشروع الثاني",
           },
         },
       ],
@@ -563,7 +440,7 @@ export const projects = {
       },
       images: [
         {
-          src: "/photo/projects/p47_dashboard_01.webp",
+          src: portfolioDriveUrl("p47_dashboard_01"),
           featured: true,
           span: "md" as const,
           alt: {
@@ -572,7 +449,7 @@ export const projects = {
           },
         },
         {
-          src: "/photo/projects/p48_dashboard_02.webp",
+          src: portfolioDriveUrl("p48_dashboard_02"),
           alt: {
             en: "Financial analysis dashboard, second board",
             ar: "لوحة تحليل مالي، اللوحة الثانية",
@@ -581,6 +458,21 @@ export const projects = {
       ],
     },
   ],
+};
+
+export const projectDetail = {
+  back: { en: "Back to projects", ar: "العودة للمشاريع" },
+  visitWebsite: { en: "Visit website", ar: "زيارة الموقع" },
+  gallery: { en: "Gallery", ar: "معرض الصور" },
+  notFound: { en: "Project not found", ar: "المشروع غير موجود" },
+  social: {
+    instagram: { en: "Instagram", ar: "إنستغرام" },
+    facebook: { en: "Facebook", ar: "فيسبوك" },
+    linkedin: { en: "LinkedIn", ar: "لينكدإن" },
+    x: { en: "X", ar: "X" },
+    tiktok: { en: "TikTok", ar: "تيك توك" },
+    youtube: { en: "YouTube", ar: "يوتيوب" },
+  },
 };
 
 export const pricing = {
@@ -598,9 +490,33 @@ export const pricing = {
     en: "Not sure which package fits? Message us before payment — we will recommend the right scope.",
     ar: "غير متأكد من الباقة المناسبة؟ راسلنا قبل الدفع — نساعدك باختيار النطاق الصحيح.",
   },
-  chooseGroup: { en: "Package family", ar: "مجموعة الباقات" },
+  chooseCategory: { en: "Category", ar: "الفئة" },
+  chooseSubcategory: { en: "Subcategory", ar: "الفئة الفرعية" },
+  chooseBilling: { en: "Billing period", ar: "فترة الاشتراك" },
+  billing: {
+    monthly: { label: { en: "Monthly", ar: "شهري" } },
+    quarterly: {
+      label: { en: "3 months", ar: "3 شهور" },
+      discount: { en: "5% off", ar: "خصم 5%" },
+    },
+    semiannual: {
+      label: { en: "6 months", ar: "6 شهور" },
+      discount: { en: "10% off", ar: "خصم 10%" },
+    },
+    yearly: {
+      label: { en: "Yearly", ar: "سنوي" },
+      discount: { en: "20% off", ar: "خصم 20%" },
+    },
+  },
   perMonth: { en: "per month", ar: "شهرياً" },
+  perThreeMonths: { en: "for 3 months", ar: "لـ 3 شهور" },
+  perSixMonths: { en: "for 6 months", ar: "لـ 6 شهور" },
+  perYear: { en: "per year", ar: "سنوياً" },
   oneTime: { en: "one-time", ar: "لمرة واحدة" },
+  billingSave: {
+    en: "Save 5% on 3 months, 10% on 6 months, and 20% on yearly billing vs. paying month by month.",
+    ar: "وفّر 5% على 3 شهور، 10% على 6 شهور، و20% على الاشتراك السنوي مقارنة بالدفع الشهري.",
+  },
   ctaDefault: { en: "Choose package", ar: "اختر الباقة" },
   inquiry: {
     title: { en: "Request this package", ar: "طلب الاشتراك" },
@@ -609,7 +525,8 @@ export const pricing = {
       ar: "أدخل بياناتك وسنفتح واتساب برسالة جاهزة.",
     },
     name: { en: "Name", ar: "الاسم" },
-    phone: { en: "Phone number", ar: "رقم التواصل" },
+    phone: { en: "Phone (international)", ar: "رقم الهاتف (دولي)" },
+    phonePlaceholder: { en: "9XX XXX XXX", ar: "9XX XXX XXX" },
     company: {
       en: "Company name or social media page",
       ar: "اسم الشركة أو صفحة السوشيال ميديا",
@@ -621,8 +538,8 @@ export const pricing = {
       ar: "يرجى تعبئة جميع الحقول قبل الإرسال.",
     },
     whatsappTemplate: {
-      en: "Hello Home of Creativity\nThis is Mr./Ms. {{name}} from {{company}}. We would like to subscribe to the {{package}}.\nMy number: {{phone}}\nThank you",
-      ar: "مرحبا home of creativity\nمعك أ. {{name}} من شركة {{company}} حابين نشترك معكم ب{{package}}\nرقمي: {{phone}}\nشكراً لكم",
+      en: "Hello Home of Creativity\nThis is Mr./Ms. {{name}} from {{company}}. We would like to subscribe to {{package}} ({{period}}).\nMy number: {{phone}}\nThank you",
+      ar: "مرحبا home of creativity\nمعك أ. {{name}} من شركة {{company}} حابين نشترك معكم ب{{package}} ({{period}})\nرقمي: {{phone}}\nشكراً لكم",
     },
   },
   reachLabels: {
@@ -631,244 +548,14 @@ export const pricing = {
     estimatedReach: { en: "Estimated reach", ar: "الوصول المقدر" },
     goal: { en: "Goal", ar: "الهدف" },
   },
-  groups: [
-    {
-      id: "strategic",
-      name: { en: "Strategic solutions", ar: "باقات الحلول الاستراتيجية" },
-      lead: {
-        en: "Full-service retainers for startups, growing businesses, and established brands building long-term authority.",
-        ar: "اشتراكات متكاملة للمنشآت الصغيرة والمتوسطة والكبيرة التي تبني حضوراً طويل الأمد.",
-      },
-      plans: [
-        {
-          id: "startup-build",
-          name: { en: "Startup Build", ar: "Startup Build" },
-          subtitle: { en: "Small business package", ar: "باقة المنشآت الصغيرة" },
-          priceUsd: 399,
-          featured: false,
-          features: [
-            { en: "7 graphic posts", ar: "7 بوست غرافيك" },
-            { en: "2 reels (filming & editing)", ar: "2 ريلز (تصوير ومونتاج)" },
-            { en: "9 stories", ar: "9 ستوري" },
-            { en: "Highlights", ar: "هايلايت" },
-            { en: "2 social platforms managed", ar: "إدارة منصتين تواصل اجتماعي" },
-            { en: "Performance report", ar: "تقرير الأداء" },
-            { en: "2 paid ad campaigns managed", ar: "إدارة حملتين إعلان ممولة" },
-            {
-              en: "Advanced QR code for contact & services",
-              ar: "كيو آر كود متطور لعرض معلومات التواصل والخدمات",
-            },
-          ],
-        },
-        {
-          id: "business-growth",
-          name: { en: "Business Growth", ar: "Business Growth" },
-          subtitle: { en: "Mid-size business package", ar: "باقة المنشآت المتوسطة" },
-          priceUsd: 899,
-          featured: true,
-          badge: { en: "Popular", ar: "الأكثر طلباً" },
-          features: [
-            { en: "11 graphic posts", ar: "11 بوست غرافيك" },
-            { en: "4 reels (filming & editing)", ar: "4 ريلز (تصوير ومونتاج)" },
-            { en: "15 stories", ar: "15 ستوري" },
-            { en: "Highlights", ar: "هايلايت" },
-            { en: "3 social platforms managed", ar: "إدارة 3 منصات تواصل اجتماعي" },
-            { en: "Advanced reports", ar: "تقارير متقدمة" },
-            { en: "5 paid ad campaigns managed", ar: "إدارة 5 حملات إعلان ممولة" },
-            { en: "Google Maps business listing", ar: "إنشاء موقع على جوجل ماب" },
-            {
-              en: "Advanced QR code for contact & services",
-              ar: "كيو آر كود متطور لعرض معلومات التواصل والخدمات",
-            },
-            { en: "Periodic competitor study", ar: "دراسة دورية للمنافسين" },
-            { en: "Dedicated brand advisory team", ar: "فريق استشاري مخصص للعلامة" },
-          ],
-        },
-        {
-          id: "elite-authority",
-          name: { en: "Elite Authority", ar: "Elite Authority" },
-          subtitle: { en: "Enterprise package", ar: "باقة المنشآت الكبيرة" },
-          priceUsd: 1499,
-          featured: false,
-          features: [
-            { en: "22 graphic posts", ar: "22 بوست غرافيك" },
-            { en: "8 reels (filming, editing & CGI)", ar: "8 ريلز (تصوير ومونتاج وCGI)" },
-            { en: "30 stories", ar: "30 ستوري" },
-            { en: "Highlights", ar: "هايلايت" },
-            { en: "5 social platforms managed", ar: "إدارة 5 منصات تواصل اجتماعي" },
-            { en: "Unlimited paid ad campaigns", ar: "إدارة عدد مفتوح من الإعلانات الممولة" },
-            { en: "Periodic competitor study", ar: "دراسة دورية للمنافسين" },
-            { en: "Website or e-store development & management", ar: "تطوير وإدارة موقع أو متجر إلكتروني" },
-            { en: "Product photo sessions (limited)", ar: "جلسات تصوير للمنتجات (عدد محدود)" },
-            { en: "Dedicated brand advisory team", ar: "فريق استشاري مخصص للعلامة" },
-            { en: "Advanced analytics reports", ar: "تقارير تحليلية متقدمة" },
-            { en: "Advanced ROI reports", ar: "تقارير ROI متقدمة" },
-            {
-              en: "Full brand strategy incl. visual identity development",
-              ar: "استراتيجية براند كاملة تشمل تطوير الهوية البصرية",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: "production",
-      name: { en: "Flexible production", ar: "باقات الإنتاج المرن" },
-      lead: {
-        en: "Integrated content packs and reels-only plans for brands that need focused output without the full strategic layer.",
-        ar: "باقات محتوى متكاملة وباقات ريلز مخصصة للعلامات التي تحتاج إنتاجاً مركزاً دون طبقة استراتيجية كاملة.",
-      },
-      plans: [
-        {
-          id: "premium-pack",
-          name: { en: "Premium Pack", ar: "Premium Pack" },
-          subtitle: { en: "Premium package", ar: "باقة بريميوم" },
-          priceUsd: 399,
-          features: [
-            { en: "7 graphic posts", ar: "7 بوست غرافيك" },
-            { en: "2 reels (filming & editing)", ar: "2 ريلز (تصوير ومونتاج)" },
-            { en: "9 stories", ar: "9 ستوري" },
-            { en: "Highlights", ar: "هايلايت" },
-            { en: "2 social platforms managed", ar: "إدارة منصتين تواصل اجتماعي" },
-            { en: "Performance report", ar: "تقرير الأداء" },
-            { en: "2 paid ad campaigns managed", ar: "إدارة حملتين إعلان ممولة" },
-          ],
-        },
-        {
-          id: "reels-premium",
-          name: { en: "Reels Premium", ar: "Reels Premium" },
-          subtitle: { en: "Reels premium", ar: "ريلز بريميوم" },
-          priceUsd: 399,
-          features: [
-            {
-              en: "4 reels videos (filming & editing only, no graphic posts)",
-              ar: "4 فيديوهات ريلز (تصوير ومونتاج فقط) دون بوستات غرافيك",
-            },
-            { en: "4 stories", ar: "4 ستوري" },
-            { en: "Highlights", ar: "هايلايت" },
-            { en: "2 social platforms managed", ar: "إدارة منصتين تواصل اجتماعي" },
-            { en: "Performance report", ar: "تقرير الأداء" },
-            { en: "2 paid ad campaigns managed", ar: "إدارة حملتين إعلان ممولة" },
-          ],
-        },
-        {
-          id: "growth-pack",
-          name: { en: "Growth Pack", ar: "Growth Pack" },
-          subtitle: { en: "Growth package", ar: "باقة النمو" },
-          priceUsd: 599,
-          featured: true,
-          badge: { en: "Best value", ar: "الأوفر" },
-          features: [
-            { en: "11 graphic posts", ar: "11 بوست غرافيك" },
-            { en: "4 reels (filming & editing)", ar: "4 ريلز (تصوير ومونتاج)" },
-            { en: "15 stories", ar: "15 ستوري" },
-            { en: "Highlights", ar: "هايلايت" },
-            { en: "2 social platforms managed", ar: "إدارة منصتين تواصل اجتماعي" },
-            { en: "Advanced reports", ar: "تقارير متقدمة" },
-            { en: "5 paid ad campaigns managed", ar: "إدارة 5 حملات إعلان ممولة" },
-          ],
-        },
-        {
-          id: "reels-pro",
-          name: { en: "Reels Pro", ar: "Reels Pro" },
-          subtitle: { en: "Reels pro", ar: "ريلز برو" },
-          priceUsd: 699,
-          features: [
-            {
-              en: "8 reels videos (filming & editing only, no graphic posts)",
-              ar: "8 فيديوهات ريلز (تصوير ومونتاج فقط) دون بوستات غرافيك",
-            },
-            { en: "8 stories", ar: "8 ستوري" },
-            { en: "Highlights", ar: "هايلايت" },
-            { en: "Social platform management", ar: "إدارة منصات تواصل اجتماعي" },
-            { en: "Advanced analytics reports", ar: "تقارير تحليلية متقدمة" },
-            { en: "Unlimited paid ad campaigns", ar: "إدارة عدد مفتوح من الحملات الممولة" },
-          ],
-        },
-        {
-          id: "infinity-pack",
-          name: { en: "Infinity Pack", ar: "Infinity Pack" },
-          subtitle: { en: "Infinity package", ar: "باقة إنفنتي" },
-          priceUsd: 899,
-          features: [
-            { en: "22 graphic posts", ar: "22 بوست غرافيك" },
-            { en: "8 reels (filming, editing & CGI)", ar: "8 ريلز (تصوير ومونتاج وCGI)" },
-            { en: "30 stories", ar: "30 ستوري" },
-            { en: "Highlights", ar: "هايلايت" },
-            { en: "3 social platforms managed", ar: "إدارة 3 منصات تواصل اجتماعي" },
-            { en: "Advanced analytics reports", ar: "تقارير تحليلية متقدمة" },
-            { en: "Unlimited paid ad campaigns", ar: "إدارة عدد مفتوح من الإعلانات الممولة" },
-          ],
-        },
-      ],
-    },
-    {
-      id: "reach",
-      name: { en: "Paid ads & reach", ar: "باقات الإعلانات الممولة والانتشار" },
-      lead: {
-        en: "One-time campaigns for seasonal offers and multi-region targeting (e.g. Syria and Gulf together).",
-        ar: "حملات تستخدم لمرة واحدة للعروض الموسمية واستهداف مناطق متعددة (مثل سوريا ودول الخليج معاً).",
-      },
-      leadNote: {
-        en: "For clients not on a subscription plan.",
-        ar: "مخصصة للعملاء غير المشتركين بالباقات.",
-      },
-      leadInBox: true,
-      oneTime: true,
-      plans: [
-        {
-          id: "reach-package",
-          name: { en: "Reach Package", ar: "Reach Package" },
-          subtitle: { en: "Reach package", ar: "باقة الانتشار" },
-          priceUsd: 50,
-          reach: {
-            adBudgetUsd: 50,
-            adCreditUsd: 40,
-            estimatedReach: { en: "+1,200,000 people", ar: "+1,200,000 شخص" },
-            goal: {
-              en: "Make your brand a familiar name to millions.",
-              ar: "الوصول بعلامتك التجارية إلى اسم مألوف لدى الملايين.",
-            },
-          },
-          features: [],
-        },
-        {
-          id: "gold-package",
-          name: { en: "Gold Package", ar: "Gold Package" },
-          subtitle: { en: "Gold package", ar: "الباقة الذهبية" },
-          priceUsd: 100,
-          featured: true,
-          badge: { en: "Strong reach", ar: "انتشار قوي" },
-          reach: {
-            adBudgetUsd: 100,
-            adCreditUsd: 80,
-            estimatedReach: { en: "+2,200,000 people", ar: "+2,200,000 شخص" },
-            goal: {
-              en: "Clear ad dominance and million-scale visibility over competitors.",
-              ar: "سيطرة إعلانية واضحة ووصول مليوني يضمن تفوقاً ملحوظاً على المنافسين.",
-            },
-          },
-          features: [],
-        },
-        {
-          id: "diamond-package",
-          name: { en: "Diamond Package", ar: "Diamond Package" },
-          subtitle: { en: "Diamond package", ar: "الباقة الماسية" },
-          priceUsd: 200,
-          reach: {
-            adBudgetUsd: 200,
-            adCreditUsd: 160,
-            estimatedReach: { en: "+4,200,000 people", ar: "+4,200,000 شخص" },
-            goal: {
-              en: "Full dominance of the target market for an extended period.",
-              ar: "الهيمنة الكاملة على السوق المستهدف لفترة طويلة.",
-            },
-          },
-          features: [],
-        },
-      ],
-    },
-  ],
+  loading: {
+    en: "Loading packages…",
+    ar: "جاري تحميل الباقات…",
+  },
+  empty: {
+    en: "Packages are not available right now. Please try again later.",
+    ar: "الباقات غير متاحة حالياً. يرجى المحاولة لاحقاً.",
+  },
   payment: {
     kicker: { en: "Payment", ar: "الدفع" },
     title: { en: "Payment methods", ar: "طرق الدفع" },
@@ -908,14 +595,14 @@ export const finance = {
   },
   images: [
     {
-      src: "/photo/projects/p47_dashboard_01.webp",
+      src: portfolioDriveUrl("p47_dashboard_01"),
       alt: {
         en: "Financial analysis dashboard, first board",
         ar: "لوحة تحليل مالي، اللوحة الأولى",
       },
     },
     {
-      src: "/photo/projects/p48_dashboard_02.webp",
+      src: portfolioDriveUrl("p48_dashboard_02"),
       alt: {
         en: "Financial analysis dashboard, second board",
         ar: "لوحة تحليل مالي، اللوحة الثانية",
@@ -990,12 +677,12 @@ export const contact = {
       ],
     },
     {
-      id: "landline",
-      kind: "tel" as const,
-      label: { en: "Landline", ar: "الهاتف الأرضي" },
+      id: "social",
+      kind: "link" as const,
+      label: { en: "Social media", ar: "السوشال ميديا" },
       lines: [
-        { region: "SYR", text: "+963 11 323 6255", digits: "963113236255" },
-        { region: "KSA", text: "+966 11 422 2528", digits: "966114222528" },
+        { platform: "instagram" as const, text: { en: "Instagram", ar: "إنستغرام" }, href: "https://www.instagram.com/homeofcreativity/" },
+        { platform: "facebook" as const, text: { en: "Facebook", ar: "فيسبوك" }, href: "https://www.facebook.com/homeofcreativity" },
       ],
     },
     {
@@ -1013,13 +700,13 @@ export const contact = {
       id: "syr",
       country: { en: "Syria", ar: "سوريا" },
       city: { en: "Damascus, Al Hamra", ar: "دمشق، الحمراء" },
-      phones: ["+963 968 862 822", "+963 954 187 154", "+963 11 323 6255"],
+      phones: ["+963 968 862 822", "+963 954 187 154"],
     },
     {
       id: "ksa",
       country: { en: "Saudi Arabia", ar: "المملكة العربية السعودية" },
       city: { en: "Riyadh, Al Murabaa", ar: "الرياض، المربّع" },
-      phones: ["+966 55 035 0295", "+966 11 422 2528"],
+      phones: ["+966 55 035 0295"],
     },
   ],
   form: {

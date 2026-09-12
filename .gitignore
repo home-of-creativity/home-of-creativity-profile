@@ -20,6 +20,7 @@ tsconfig.tsbuildinfo
 *.pem
 npm-debug.log*
 .env*
+!.env.example
 .vercel
 
 # playwright

@@ -12,7 +12,7 @@ export function ClientJourney() {
 
   return (
     <section
-      id="clients"
+      id="journey"
       className="relative overflow-hidden bg-[var(--brand-cream)] py-16 md:py-24 lg:py-32"
     >
       <div

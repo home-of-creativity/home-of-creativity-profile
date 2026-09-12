@@ -14,20 +14,67 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { pricing, WHATSAPP_NUMBER } from "@/lib/content";
+import { fetchPricingCategories } from "@/lib/pricing-api";
+import {
+  isOneTimePlan,
+  resolvePlanPrice,
+  type BillingPeriod,
+  type PricingCategory,
+  type PricingPlan,
+  type PricingSubcategory,
+} from "@/lib/pricing-catalog";
 import { withBasePath } from "@/lib/base-path";
 import { useLanguage } from "@/lib/i18n";
 import { cn } from "@/lib/cn";
 import { whatsappHref } from "@/lib/whatsapp";
+import { InternationalPhoneField } from "../InternationalPhoneField";
+import { LoadingLottie } from "../LoadingLottie";
 import { Reveal, Stagger, StaggerItem } from "../motion";
 import { SectionHeading, Shell } from "../ui";
+import { formatInternationalPhoneDisplay, isValidInternationalPhone } from "@/lib/phone";
 
-type PricingPlan = (typeof pricing.groups)[number]["plans"][number];
-type PricingGroup = (typeof pricing.groups)[number];
+const billingPeriods: BillingPeriod[] = ["monthly", "quarterly", "semiannual", "yearly"];
+
+function billingDiscount(period: BillingPeriod) {
+  const entry = pricing.billing[period] as { label: { en: string; ar: string }; discount?: { en: string; ar: string } };
+  return entry.discount;
+}
+
+function DiscountBadge({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <span
+      className={cn(
+        "inline-flex shrink-0 items-center rounded-full bg-[var(--brand-teal-deep)] px-2.5 py-0.5 text-[0.72rem] font-semibold leading-none text-white",
+        className,
+      )}
+    >
+      {children}
+    </span>
+  );
+}
 
 function formatAmount(value: number, locale: "en" | "ar") {
   const localeTag = locale === "ar" ? "ar-SY-u-nu-latn" : "en-US";
   const grouped = new Intl.NumberFormat(localeTag, { maximumFractionDigits: 0 }).format(value);
   return `$${grouped}`;
+}
+
+function periodLabel(
+  billing: BillingPeriod,
+  oneTime: boolean,
+  t: (copy: { en: string; ar: string }) => string,
+) {
+  if (oneTime) return t(pricing.oneTime);
+  if (billing === "monthly") return t(pricing.perMonth);
+  if (billing === "quarterly") return t(pricing.perThreeMonths);
+  if (billing === "semiannual") return t(pricing.perSixMonths);
+  return t(pricing.perYear);
 }
 
 function PricingTiltCard({
@@ -83,19 +130,22 @@ function PricingTiltCard({
 
 function PlanCard({
   plan,
-  group,
+  billing,
+  oneTime,
   locale,
   t,
   onChoose,
 }: {
   plan: PricingPlan;
-  group: PricingGroup;
+  billing: BillingPeriod;
+  oneTime: boolean;
   locale: "en" | "ar";
   t: (copy: { en: string; ar: string }) => string;
   onChoose: () => void;
 }) {
-  const period = "oneTime" in group && group.oneTime ? t(pricing.oneTime) : t(pricing.perMonth);
-  const reach = "reach" in plan ? plan.reach : null;
+  const price = resolvePlanPrice(plan, billing);
+  const period = periodLabel(billing, oneTime, t);
+  const reach = plan.reach ?? null;
 
   return (
     <PricingTiltCard featured={plan.featured}>
@@ -125,7 +175,7 @@ function PlanCard({
             className="font-display m-0 text-[clamp(1.85rem,3.5vw,2.35rem)] font-semibold leading-none text-[var(--brand-purple-deep)]"
             suppressHydrationWarning
           >
-            {formatAmount(plan.priceUsd, locale)}
+            {formatAmount(price, locale)}
           </p>
           <p className="m-0 pb-1 text-[0.82rem] text-[var(--brand-muted)]">{period}</p>
         </div>
@@ -192,31 +242,44 @@ function PlanCard({
 
 type InquiryForm = {
   name: string;
-  phone: string;
+  phone: string | undefined;
   company: string;
 };
 
-const emptyInquiry: InquiryForm = { name: "", phone: "", company: "" };
+type InquirySelection = {
+  plan: PricingPlan;
+  billing: BillingPeriod;
+  oneTime: boolean;
+};
 
-function inquiryMessage(plan: PricingPlan, form: InquiryForm, t: (copy: { en: string; ar: string }) => string) {
+const emptyInquiry: InquiryForm = { name: "", phone: undefined, company: "" };
+
+function inquiryMessage(
+  selection: InquirySelection,
+  form: InquiryForm,
+  t: (copy: { en: string; ar: string }) => string,
+) {
+  const period = periodLabel(selection.billing, selection.oneTime, t);
   return t(pricing.inquiry.whatsappTemplate)
     .replace("{{name}}", form.name.trim())
     .replace("{{company}}", form.company.trim())
-    .replace("{{package}}", t(plan.subtitle))
-    .replace("{{phone}}", form.phone.trim());
+    .replace("{{package}}", t(selection.plan.subtitle))
+    .replace("{{period}}", period)
+    .replace("{{phone}}", formatInternationalPhoneDisplay(form.phone));
 }
 
 function PackageInquiryDialog({
-  plan,
+  selection,
   locale,
   t,
   onClose,
 }: {
-  plan: PricingPlan;
+  selection: InquirySelection;
   locale: "en" | "ar";
   t: (copy: { en: string; ar: string }) => string;
   onClose: () => void;
 }) {
+  const { plan } = selection;
   const titleId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
@@ -247,13 +310,13 @@ function PackageInquiryDialog({
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const valid = form.name.trim() && form.phone.trim() && form.company.trim();
+    const valid = form.name.trim() && isValidInternationalPhone(form.phone) && form.company.trim();
     if (!valid) {
       setError(true);
       return;
     }
     setError(false);
-    window.open(whatsappHref(inquiryMessage(plan, form, t)), "_blank", "noopener,noreferrer");
+    window.open(whatsappHref(inquiryMessage(selection, form, t)), "_blank", "noopener,noreferrer");
     onClose();
   }
 
@@ -277,7 +340,7 @@ function PackageInquiryDialog({
                 locale === "en" && "tracking-[0.28em] uppercase",
               )}
             >
-              {t(plan.subtitle)}
+              {t(plan.subtitle)} · {periodLabel(selection.billing, selection.oneTime, t)}
             </p>
             <h3 id={titleId} className="font-display mt-1 text-[1.25rem] font-semibold">
               {t(pricing.inquiry.title)}
@@ -310,20 +373,14 @@ function PackageInquiryDialog({
               className={cn(fieldClass, "text-start")}
             />
           </label>
-          <label className="grid gap-2 text-start text-[0.82rem]">
-            <span>{t(pricing.inquiry.phone)}</span>
-            <input
-              name="phone"
-              type="tel"
-              autoComplete="tel"
-              inputMode="tel"
-              required
-              dir="ltr"
-              value={form.phone}
-              onChange={(event) => setForm((prev) => ({ ...prev, phone: event.target.value }))}
-              className={cn(fieldClass, "text-start")}
-            />
-          </label>
+          <InternationalPhoneField
+            label={t(pricing.inquiry.phone)}
+            value={form.phone}
+            onChange={(phone) => setForm((prev) => ({ ...prev, phone }))}
+            locale={locale}
+            placeholder={pricing.inquiry.phonePlaceholder}
+            required
+          />
           <label className="grid gap-2 text-start text-[0.82rem]">
             <span>{t(pricing.inquiry.company)}</span>
             <input
@@ -359,24 +416,135 @@ function PackageInquiryDialog({
   );
 }
 
-export function Pricing() {
-  const { t, locale } = useLanguage();
-  const [activeGroup, setActiveGroup] = useState(pricing.groups[0].id);
-  const [inquiryPlan, setInquiryPlan] = useState<PricingPlan | null>(null);
-  const closeInquiry = useCallback(() => setInquiryPlan(null), []);
-
-  const group = useMemo(
-    () => pricing.groups.find((entry) => entry.id === activeGroup) ?? pricing.groups[0],
-    [activeGroup],
-  );
-
-  const sortedPlans = useMemo(
-    () => [...group.plans].sort((a, b) => a.priceUsd - b.priceUsd),
-    [group.plans],
-  );
+function SubcategoryLead({
+  subcategory,
+  locale,
+  t,
+}: {
+  subcategory: PricingSubcategory;
+  locale: "en" | "ar";
+  t: (copy: { en: string; ar: string }) => string;
+}) {
+  if (subcategory.leadInBox) {
+    return (
+      <Reveal className="mx-auto mt-8 max-w-3xl">
+        <div className="rounded-xl border border-[var(--brand-orange)]/30 bg-[var(--brand-orange)]/6 px-5 py-5 text-center md:px-6 md:py-6">
+          <h3 className="font-display m-0 text-[1.25rem] font-semibold text-[var(--brand-ink)]">
+            {t(subcategory.name)}
+          </h3>
+          {subcategory.lead ? (
+            <p className="mt-3 text-[0.95rem] leading-relaxed text-[var(--brand-ink)]/72">
+              {t(subcategory.lead)}
+            </p>
+          ) : null}
+          {subcategory.leadNote ? (
+            <p className="mt-3 flex items-center justify-center gap-2 text-[0.95rem] font-extrabold text-[var(--brand-ink)]">
+              <svg
+                aria-hidden
+                viewBox="0 0 24 24"
+                className="h-5 w-5 shrink-0 text-[var(--brand-orange)]"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z" />
+                <path d="M12 9v4" />
+                <path d="M12 17h.01" />
+              </svg>
+              {t(subcategory.leadNote)}
+            </p>
+          ) : null}
+        </div>
+      </Reveal>
+    );
+  }
 
   return (
-    <section id="pricing" className="relative overflow-hidden bg-[var(--brand-paper)] py-16 md:py-24 lg:py-32">
+    <Reveal className="mx-auto mt-8 max-w-3xl text-center">
+      <h3 className="font-display m-0 text-[1.25rem] font-semibold text-[var(--brand-ink)]">
+        {t(subcategory.name)}
+      </h3>
+      {subcategory.lead ? (
+        <p className="mt-3 text-[0.95rem] leading-relaxed text-[var(--brand-ink)]/72">{t(subcategory.lead)}</p>
+      ) : null}
+    </Reveal>
+  );
+}
+
+export function Pricing() {
+  const { t, locale } = useLanguage();
+  const [categories, setCategories] = useState<PricingCategory[]>([]);
+  const [ready, setReady] = useState(false);
+  const [activeCategory, setActiveCategory] = useState("");
+  const [activeSubcategory, setActiveSubcategory] = useState("");
+  const [activeBilling, setActiveBilling] = useState<BillingPeriod>("monthly");
+  const [inquirySelection, setInquirySelection] = useState<InquirySelection | null>(null);
+  const closeInquiry = useCallback(() => setInquirySelection(null), []);
+
+  useEffect(() => {
+    let active = true;
+
+    fetchPricingCategories()
+      .then((items) => {
+        if (!active) return;
+        setCategories(items);
+        setActiveCategory(items[0]?.id ?? "");
+        setActiveSubcategory(items[0]?.subcategories[0]?.id ?? "");
+      })
+      .catch(() => {
+        if (!active) return;
+        setCategories([]);
+        setActiveCategory("");
+        setActiveSubcategory("");
+      })
+      .finally(() => {
+        if (active) setReady(true);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const category = useMemo(
+    () => categories.find((entry) => entry.id === activeCategory) ?? categories[0],
+    [categories, activeCategory],
+  );
+
+  const subcategory = useMemo(() => {
+    if (!category) return undefined;
+    return (
+      category.subcategories.find((entry) => entry.id === activeSubcategory) ??
+      category.subcategories[0]
+    );
+  }, [category, activeSubcategory]);
+
+  const oneTime = subcategory?.oneTime ?? false;
+
+  const sortedPlans = useMemo(() => {
+    if (!subcategory) return [];
+    return [...subcategory.plans].sort(
+      (a, b) => resolvePlanPrice(a, activeBilling) - resolvePlanPrice(b, activeBilling),
+    );
+  }, [subcategory, activeBilling]);
+
+  function onCategoryChange(id: string) {
+    setActiveCategory(id);
+    const next = categories.find((entry) => entry.id === id);
+    if (next?.subcategories[0]) setActiveSubcategory(next.subcategories[0].id);
+  }
+
+  return (
+    <section
+      id="pricing"
+      className={cn(
+        "relative overflow-hidden bg-[var(--brand-paper)] py-16 md:py-24 lg:py-32",
+        !ready && "min-h-[24rem]",
+      )}
+      aria-busy={!ready}
+    >
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_12%_18%,rgb(46_14_92/0.07),transparent_40%)]"
@@ -394,6 +562,14 @@ export function Pricing() {
           </p>
         </Reveal>
 
+        {!ready ? <LoadingLottie className="mt-10" label={t(pricing.loading)} /> : null}
+
+        {ready && categories.length === 0 ? (
+          <p className="mt-10 text-center text-[0.95rem] text-[var(--brand-muted)]">{t(pricing.empty)}</p>
+        ) : null}
+
+        {ready && category && subcategory ? (
+          <>
         <Reveal className="mt-10">
           <p
             className={cn(
@@ -401,22 +577,22 @@ export function Pricing() {
               locale === "en" && "tracking-[0.18em] uppercase",
             )}
           >
-            {t(pricing.chooseGroup)}
+            {t(pricing.chooseCategory)}
           </p>
           <div
             role="tablist"
-            aria-label={t(pricing.chooseGroup)}
+            aria-label={t(pricing.chooseCategory)}
             className="mx-auto flex max-w-4xl flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-center"
           >
-            {pricing.groups.map((entry) => {
-              const selected = entry.id === activeGroup;
+            {categories.map((entry) => {
+              const selected = entry.id === activeCategory;
               return (
                 <button
                   key={entry.id}
                   type="button"
                   role="tab"
                   aria-selected={selected}
-                  onClick={() => setActiveGroup(entry.id)}
+                  onClick={() => onCategoryChange(entry.id)}
                   className={cn(
                     "cursor-pointer rounded-full border px-4 py-2.5 text-[0.82rem] font-semibold transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)] sm:px-5",
                     selected
@@ -431,60 +607,120 @@ export function Pricing() {
           </div>
         </Reveal>
 
-        {"leadInBox" in group && group.leadInBox ? (
-          <Reveal className="mx-auto mt-8 max-w-3xl">
-            <div className="rounded-xl border border-[var(--brand-orange)]/30 bg-[var(--brand-orange)]/6 px-5 py-5 text-center md:px-6 md:py-6">
-              <h3 className="font-display m-0 text-[1.25rem] font-semibold text-[var(--brand-ink)]">
-                {t(group.name)}
-              </h3>
-              <p className="mt-3 text-[0.95rem] leading-relaxed text-[var(--brand-ink)]/72">{t(group.lead)}</p>
-              {"leadNote" in group && group.leadNote ? (
-                <p className="mt-3 flex items-center justify-center gap-2 text-[0.95rem] font-extrabold text-[var(--brand-ink)]">
-                  <svg
-                    aria-hidden
-                    viewBox="0 0 24 24"
-                    className="h-5 w-5 shrink-0 text-[var(--brand-orange)]"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+        <Reveal className="mt-8 mx-auto max-w-3xl text-center">
+          <p className="mt-3 text-[0.95rem] leading-relaxed text-[var(--brand-ink)]/72">{t(category.lead)}</p>
+        </Reveal>
+
+        {category.subcategories.length > 1 ? (
+          <Reveal className="mt-8">
+            <p
+              className={cn(
+                "mb-3 text-center text-[0.72rem] text-[var(--brand-muted)]",
+                locale === "en" && "tracking-[0.18em] uppercase",
+              )}
+            >
+              {t(pricing.chooseSubcategory)}
+            </p>
+            <div
+              role="tablist"
+              aria-label={t(pricing.chooseSubcategory)}
+              className="mx-auto flex max-w-3xl flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-center"
+            >
+              {category.subcategories.map((entry) => {
+                const selected = entry.id === activeSubcategory;
+                return (
+                  <button
+                    key={entry.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={selected}
+                    onClick={() => setActiveSubcategory(entry.id)}
+                    className={cn(
+                      "cursor-pointer rounded-full border px-4 py-2.5 text-[0.82rem] font-semibold transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)] sm:px-5",
+                      selected
+                        ? "border-[var(--brand-teal-deep)] bg-[var(--brand-teal-deep)] text-white"
+                        : "border-[var(--brand-line)] bg-white/80 text-[var(--brand-ink)] hover:border-[var(--brand-teal)]/50",
+                    )}
                   >
-                    <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z" />
-                    <path d="M12 9v4" />
-                    <path d="M12 17h.01" />
-                  </svg>
-                  {t(group.leadNote)}
-                </p>
-              ) : null}
+                    {t(entry.name)}
+                  </button>
+                );
+              })}
             </div>
           </Reveal>
-        ) : (
-          <Reveal className="mt-8 mx-auto max-w-3xl text-center">
-            <h3 className="font-display m-0 text-[1.25rem] font-semibold text-[var(--brand-ink)]">
-              {t(group.name)}
-            </h3>
-            <p className="mt-3 text-[0.95rem] leading-relaxed text-[var(--brand-ink)]/72">{t(group.lead)}</p>
+        ) : null}
+
+        {!oneTime ? (
+          <Reveal className="mt-8">
+            <p
+              className={cn(
+                "mb-3 text-center text-[0.72rem] text-[var(--brand-muted)]",
+                locale === "en" && "tracking-[0.18em] uppercase",
+              )}
+            >
+              {t(pricing.chooseBilling)}
+            </p>
+            <div
+              role="tablist"
+              aria-label={t(pricing.chooseBilling)}
+              className="mx-auto flex max-w-3xl flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-center"
+            >
+              {billingPeriods.map((period) => {
+                const selected = period === activeBilling;
+                return (
+                  <button
+                    key={period}
+                    type="button"
+                    role="tab"
+                    aria-selected={selected}
+                    onClick={() => setActiveBilling(period)}
+                    className={cn(
+                      "inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border px-5 py-2.5 text-[0.82rem] font-semibold transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]",
+                      selected
+                        ? "border-[var(--brand-orange)] bg-[var(--brand-orange)] text-[var(--brand-purple-deep)]"
+                        : "border-[var(--brand-line)] bg-white/80 text-[var(--brand-ink)] hover:border-[var(--brand-orange)]/50",
+                    )}
+                  >
+                    <span>{t(pricing.billing[period].label)}</span>
+                    {billingDiscount(period) ? (
+                      <DiscountBadge>{t(billingDiscount(period)!)}</DiscountBadge>
+                    ) : null}
+                  </button>
+                );
+              })}
+            </div>
+            <div className="mx-auto mt-4 max-w-xl rounded-xl bg-[var(--brand-teal-deep)] px-5 py-3 text-center shadow-[0_8px_24px_rgb(26_127_120/0.22)]">
+              <p className="m-0 text-[0.84rem] leading-relaxed text-white">{t(pricing.billingSave)}</p>
+            </div>
           </Reveal>
-        )}
+        ) : null}
+
+        <SubcategoryLead subcategory={subcategory} locale={locale} t={t} />
 
         <Stagger
-          key={group.id}
+          key={`${category.id}-${subcategory.id}-${activeBilling}`}
           className={cn(
             "pricing-cards mt-10",
-            group.plans.length === 5 && "pricing-cards-5",
-            group.plans.length <= 3 && "pricing-cards-3",
-            group.plans.length > 3 && group.plans.length !== 5 && "pricing-cards-many",
+            sortedPlans.length === 5 && "pricing-cards-5",
+            sortedPlans.length <= 3 && "pricing-cards-3",
+            sortedPlans.length > 3 && sortedPlans.length !== 5 && "pricing-cards-many",
           )}
         >
           {sortedPlans.map((plan) => (
             <StaggerItem key={plan.id}>
               <PlanCard
                 plan={plan}
-                group={group}
+                billing={activeBilling}
+                oneTime={oneTime || isOneTimePlan(plan)}
                 locale={locale}
                 t={t}
-                onChoose={() => setInquiryPlan(plan)}
+                onChoose={() =>
+                  setInquirySelection({
+                    plan,
+                    billing: activeBilling,
+                    oneTime: oneTime || isOneTimePlan(plan),
+                  })
+                }
               />
             </StaggerItem>
           ))}
@@ -496,6 +732,8 @@ export function Pricing() {
           </p>
           <p className="m-0 text-[0.92rem] text-[var(--brand-ink)]/72">{t(pricing.confirmNote)}</p>
         </Reveal>
+          </>
+        ) : null}
 
         <Reveal className="pricing-payment relative mt-16 overflow-hidden rounded-[2rem] bg-[var(--brand-purple-deep)] px-5 py-10 shadow-[0_24px_70px_rgb(26_8_56/0.18)] sm:px-8 md:mt-20 md:px-12 md:py-14">
           <div
@@ -570,8 +808,13 @@ export function Pricing() {
         </Reveal>
       </Shell>
 
-      {inquiryPlan ? (
-        <PackageInquiryDialog plan={inquiryPlan} locale={locale} t={t} onClose={closeInquiry} />
+      {inquirySelection ? (
+        <PackageInquiryDialog
+          selection={inquirySelection}
+          locale={locale}
+          t={t}
+          onClose={closeInquiry}
+        />
       ) : null}
     </section>
   );

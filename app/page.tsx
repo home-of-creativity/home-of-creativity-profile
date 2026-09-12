@@ -3,12 +3,12 @@
 import { Footer, Nav } from "@/components/chrome";
 import { About } from "@/components/sections/About";
 import { ClientJourney } from "@/components/sections/ClientJourney";
+import { ShowcaseClients } from "@/components/sections/ShowcaseClients";
 import { Contact } from "@/components/sections/Contact";
 import { Finance } from "@/components/sections/Finance";
-import { Pricing } from "@/components/sections/Pricing";
 import { Hero } from "@/components/sections/Hero";
-import { Philosophy } from "@/components/sections/Philosophy";
 import { Projects } from "@/components/sections/Projects";
+import { Reels } from "@/components/sections/Reels";
 import { Services } from "@/components/sections/Services";
 
 export default function HomePage() {
@@ -18,12 +18,12 @@ export default function HomePage() {
       <main>
         <Hero />
         <About />
-        <Philosophy />
         <Services />
+        <ShowcaseClients />
         <ClientJourney />
+        <Reels />
         <Projects />
         <Finance />
-        <Pricing />
         <Contact />
       </main>
       <Footer />
