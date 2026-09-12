@@ -122,7 +122,7 @@ export function Contact() {
   useEffect(() => {
     let active = true;
     fetchContactChannels().then((data) => {
-      if (active) setChannels(mergeContactChannels(data, locale));
+      if (active) setChannels(mergeContactChannels(data));
     });
     return () => {
       active = false;

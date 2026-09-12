@@ -70,10 +70,12 @@ export function Stagger({
   children,
   className,
   delay = 0,
+  role,
 }: {
   children: ReactNode;
   className?: string;
   delay?: number;
+  role?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const { ready, locale } = useLanguage();
@@ -120,7 +122,7 @@ export function Stagger({
   );
 
   return (
-    <div ref={ref} className={className}>
+    <div ref={ref} className={className} role={role}>
       {children}
     </div>
   );
@@ -129,11 +131,17 @@ export function Stagger({
 export function StaggerItem({
   children,
   className,
+  role,
 }: {
   children: ReactNode;
   className?: string;
+  role?: string;
 }) {
-  return <div className={cn("gsap-stagger-item", className)}>{children}</div>;
+  return (
+    <div className={cn("gsap-stagger-item", className)} role={role}>
+      {children}
+    </div>
+  );
 }
 
 export function ParallaxFrame({

@@ -418,11 +418,9 @@ function PackageInquiryDialog({
 
 function SubcategoryLead({
   subcategory,
-  locale,
   t,
 }: {
   subcategory: PricingSubcategory;
-  locale: "en" | "ar";
   t: (copy: { en: string; ar: string }) => string;
 }) {
   if (subcategory.leadInBox) {
@@ -695,7 +693,7 @@ export function Pricing() {
           </Reveal>
         ) : null}
 
-        <SubcategoryLead subcategory={subcategory} locale={locale} t={t} />
+        <SubcategoryLead subcategory={subcategory} t={t} />
 
         <Stagger
           key={`${category.id}-${subcategory.id}-${activeBilling}`}

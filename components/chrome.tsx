@@ -122,7 +122,6 @@ export function Nav() {
     () => navLinkDefs.map((def) => ({ ...def, href: resolveHref(def, onHome) })),
     [onHome],
   );
-  const pricingHref = pagePath("pricing");
   const whatsappUrl = whatsappHref(t(contact.greeting));
 
   useGsapScope(
@@ -441,7 +440,7 @@ export function Footer() {
   useEffect(() => {
     let active = true;
     fetchContactChannels().then((data) => {
-      if (active) setChannels(mergeContactChannels(data, locale));
+      if (active) setChannels(mergeContactChannels(data));
     });
     return () => {
       active = false;

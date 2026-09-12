@@ -55,7 +55,7 @@ export async function fetchContactChannels(): Promise<ContactApiPayload | null> 
 
 type Channel = (typeof contact.channels)[number];
 
-export function mergeContactChannels(data: ContactApiPayload | null, _locale: "ar" | "en"): Channel[] {
+export function mergeContactChannels(data: ContactApiPayload | null): Channel[] {
   if (!data) {
     return isDemoDataEnabled() ? contact.channels : [];
   }
