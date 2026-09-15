@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { LoadingLottie } from "@/components/LoadingLottie";
 import { projects } from "@/lib/content";
 import { fetchPortfolioProjects, type PortfolioCategory, type PortfolioProject } from "@/lib/portfolio-api";
 import { withBasePath } from "@/lib/base-path";
@@ -141,15 +142,27 @@ function categoryLabel(category: PortfolioCategory | undefined, locale: "en" | "
 export function Projects() {
   const { t, locale } = useLanguage();
   const [items, setItems] = useState<PortfolioProject[]>([]);
+  const [ready, setReady] = useState(false);
   const [filter, setFilter] = useState<string>("all");
   const [expanded, setExpanded] = useState(false);
   const backdropSrc = backdropFor(filter);
   const gridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    let active = true;
     fetchPortfolioProjects()
-      .then(setItems)
-      .catch(() => setItems([]));
+      .then((rows) => {
+        if (active) setItems(rows);
+      })
+      .catch(() => {
+        if (active) setItems([]);
+      })
+      .finally(() => {
+        if (active) setReady(true);
+      });
+    return () => {
+      active = false;
+    };
   }, []);
 
   const categories = useMemo(() => {
@@ -207,6 +220,7 @@ export function Projects() {
     <section
       id="projects"
       className="relative isolate overflow-hidden bg-[var(--brand-purple-deep)] py-16 text-[var(--brand-cream)] md:py-24 lg:py-32"
+      aria-busy={!ready}
     >
       <div aria-hidden className="projects-backdrop pointer-events-none absolute inset-0">
         <ProjectsBackdrop src={backdropSrc} />
@@ -241,42 +255,53 @@ export function Projects() {
             </h2>
           </div>
 
-          <div
-            className="flex flex-wrap gap-2 lg:justify-end"
-            role="group"
-            aria-label={t(projects.title)}
-          >
-            {(["all", ...categories.map((category) => category.slug)] as const).map((id) => {
-              const pressed = filter === id;
-              const label =
-                id === "all"
-                  ? t(projects.filterAll)
-                  : categoryLabel(categories.find((category) => category.slug === id), locale);
+          {ready ? (
+            <div
+              className="flex flex-wrap gap-2 lg:justify-end"
+              role="group"
+              aria-label={t(projects.title)}
+            >
+              {(["all", ...categories.map((category) => category.slug)] as const).map((id) => {
+                const pressed = filter === id;
+                const label =
+                  id === "all"
+                    ? t(projects.filterAll)
+                    : categoryLabel(categories.find((category) => category.slug === id), locale);
 
-              return (
-                <button
-                  key={id}
-                  type="button"
-                  aria-pressed={pressed}
-                  onClick={() => {
-                    setFilter(id);
-                    setExpanded(false);
-                  }}
-                  className={cn(
-                    "h-10 rounded-md border px-3.5 text-[0.72rem] font-semibold uppercase transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]",
-                    locale === "ar" ? "tracking-normal" : "tracking-[0.12em]",
-                    pressed
-                      ? "border-[var(--brand-orange)] bg-[var(--brand-orange)] text-[var(--brand-purple-deep)]"
-                      : "border-white/30 bg-transparent text-white hover:border-[var(--brand-orange)] hover:text-[var(--brand-orange)]",
-                  )}
-                >
-                  {label || id}
-                </button>
-              );
-            })}
-          </div>
+                return (
+                  <button
+                    key={id}
+                    type="button"
+                    aria-pressed={pressed}
+                    onClick={() => {
+                      setFilter(id);
+                      setExpanded(false);
+                    }}
+                    className={cn(
+                      "h-10 rounded-md border px-3.5 text-[0.72rem] font-semibold uppercase transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]",
+                      locale === "ar" ? "tracking-normal" : "tracking-[0.12em]",
+                      pressed
+                        ? "border-[var(--brand-orange)] bg-[var(--brand-orange)] text-[var(--brand-purple-deep)]"
+                        : "border-white/30 bg-transparent text-white hover:border-[var(--brand-orange)] hover:text-[var(--brand-orange)]",
+                    )}
+                  >
+                    {label || id}
+                  </button>
+                );
+              })}
+            </div>
+          ) : null}
         </div>
 
+        {!ready ? (
+          <LoadingLottie className="projects-loading" label={t(projects.loading)} />
+        ) : null}
+
+        {ready && items.length === 0 ? (
+          <p className="mt-4 text-center text-[0.95rem] text-white/70">{t(projects.empty)}</p>
+        ) : null}
+
+        {ready && items.length > 0 ? (
         <div
           ref={gridRef}
           className={cn(
@@ -321,8 +346,9 @@ export function Projects() {
             );
           })}
         </div>
+        ) : null}
 
-        {canExpand || expanded ? (
+        {ready && (canExpand || expanded) ? (
           <div className="mt-12 flex justify-center">
             <button
               type="button"

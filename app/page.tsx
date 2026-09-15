@@ -10,6 +10,7 @@ import { Hero } from "@/components/sections/Hero";
 import { Projects } from "@/components/sections/Projects";
 import { Reels } from "@/components/sections/Reels";
 import { Services } from "@/components/sections/Services";
+import { SocialPhones } from "@/components/sections/SocialPhones";
 
 export default function HomePage() {
   return (
@@ -22,6 +23,7 @@ export default function HomePage() {
         <ShowcaseClients />
         <ClientJourney />
         <Reels />
+        <SocialPhones />
         <Projects />
         <Finance />
         <Contact />

@@ -15,6 +15,7 @@ export const nav = {
   clientLogos: { en: "Clients", ar: "العملاء" },
   clients: { en: "Client journey", ar: "مراحل العمل" },
   reels: { en: "Reels", ar: "الريلز" },
+  social: { en: "Social", ar: "السوشال" },
   projects: { en: "Projects", ar: "المشاريع" },
   finance: { en: "Finance", ar: "التحليل المالي" },
   pricing: { en: "Pricing", ar: "الأسعار" },
@@ -267,6 +268,36 @@ export const reels = {
     en: "Recent vertical work — identity, events, and brand stories in motion.",
     ar: "أعمال عمودية حديثة — هوية وفعاليات وقصص علامات بالحركة.",
   },
+  loading: { en: "Loading reels…", ar: "جاري تحميل الريلز…" },
+};
+
+export const socialPhones = {
+  kicker: { en: "Social media", ar: "قنواتنا على السوشال ميديا" },
+  title: { en: "Browse our pages on social media", ar: "تصفح صفحاتنا " },
+  lead: {
+    en: "Our designs are reflected in every marketing detail with creativity and professionalism",
+    ar: "تصاميمنا تنعكس في كل تفاصيل التسويق بإبداع واحترافية",
+  },
+  facebook: { en: "Facebook", ar: "فيسبوك" },
+  instagram: { en: "Instagram", ar: "إنستغرام" },
+  openFacebook: { en: "Open Facebook page", ar: "فتح صفحة فيسبوك" },
+  openInstagram: { en: "Open Instagram", ar: "فتح إنستغرام" },
+  facebookTitle: { en: "Home of Creativity on Facebook", ar: "بيت الإبداع على فيسبوك" },
+  instagramTitle: { en: "Home of Creativity on Instagram", ar: "بيت الإبداع على إنستغرام" },
+  feedScroll: { en: "Scroll posts", ar: "تمرير المنشورات" },
+  loading: { en: "Loading posts…", ar: "جاري تحميل المنشورات…" },
+  postsStat: { en: "posts", ar: "منشورات" },
+  followersStat: { en: "followers", ar: "متابعون" },
+  followingStat: { en: "following", ar: "يتابع" },
+  follow: { en: "Follow", ar: "متابعة" },
+  likesStat: { en: "likes", ar: "إعجابات" },
+  postsTab: { en: "Posts", ar: "المنشورات" },
+  reelsTab: { en: "Reels", ar: "ريلز" },
+  emptyReels: { en: "No Reels yet.", ar: "لا يوجد ريلز بعد." },
+  emptyFacebook: {
+    en: "See the latest posts on our Facebook page.",
+    ar: "شاهد أحدث المنشورات على صفحتنا في فيسبوك.",
+  },
 };
 
 export const projects = {
@@ -283,6 +314,11 @@ export const projects = {
   previous: { en: "Previous", ar: "السابق" },
   next: { en: "Next", ar: "التالي" },
   viewDetails: { en: "View details", ar: "عرض التفاصيل" },
+  loading: { en: "Loading projects…", ar: "جاري تحميل المشاريع…" },
+  empty: {
+    en: "Projects are not available right now. Please try again later.",
+    ar: "المشاريع غير متاحة حالياً. يرجى المحاولة لاحقاً.",
+  },
   items: [
     {
       id: "events",
@@ -590,8 +626,8 @@ export const finance = {
   kicker: { en: "Intelligence", ar: "الاستخبارات" },
   title: { en: "Financial analysis", ar: "التحليل المالي" },
   imageAlt: {
-    en: "Financial growth dashboard, analysis papers, and Earth at night",
-    ar: "لوحة نمو مالي وأوراق تحليل والأرض ليلاً",
+    en: "Financial analysis mark",
+    ar: "شعار التحليل المالي",
   },
   images: [
     {
@@ -681,8 +717,8 @@ export const contact = {
       kind: "link" as const,
       label: { en: "Social media", ar: "السوشال ميديا" },
       lines: [
-        { platform: "instagram" as const, text: { en: "Instagram", ar: "إنستغرام" }, href: "https://www.instagram.com/homeofcreativity/" },
-        { platform: "facebook" as const, text: { en: "Facebook", ar: "فيسبوك" }, href: "https://www.facebook.com/homeofcreativity" },
+        { platform: "instagram" as const, text: { en: "Instagram", ar: "إنستغرام" }, href: "https://www.instagram.com/homeofcreativity.sy/" },
+        { platform: "facebook" as const, text: { en: "Facebook", ar: "فيسبوك" }, href: "https://www.facebook.com/profile.php?id=61584616932975" },
       ],
     },
     {
@@ -744,12 +780,12 @@ export const notFound = {
 };
 
 export const footer = {
-  tagline: { en: "Creativation Source", ar: "مصدر الإبداع" },
+  tagline: { en: "Creativation Source", ar: "بيت الإبداع" },
   explore: { en: "Explore", ar: "استكشف" },
   reach: { en: "Reach us", ar: "تواصل معنا" },
   rights: {
     en: "© 2026 Home of Creativity — Creativation Source",
-    ar: "© 2026 هوم أوف كريتيفيتي — مصدر الإبداع",
+    ar: "© 2026 Home of Creativity — بيت الإبداع",
   },
 };
 

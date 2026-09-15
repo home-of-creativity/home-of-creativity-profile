@@ -159,12 +159,12 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className={cn(greatVibes.variable, "bg-[var(--brand-charcoal)] pt-20 pb-8 md:pt-28 md:pb-10")}>
+    <section id="contact" className={cn(greatVibes.variable, "bg-[var(--brand-orange-hot)] pt-20 pb-8 md:pt-28 md:pb-10")}>
       <Shell>
-        <div className="relative">
+        <div className="relative ">
           <div
             aria-hidden
-            className="pointer-events-none absolute -top-8 inset-x-0 z-20 flex justify-center gap-16 sm:gap-28 md:gap-40"
+            className="pointer-events-none absolute  -top-8 inset-x-0 z-20 flex justify-center gap-16 sm:gap-28 md:gap-40"
           >
             <BinderClip className="h-[4.4rem] w-12" />
             <BinderClip className="h-[4.4rem] w-12" />

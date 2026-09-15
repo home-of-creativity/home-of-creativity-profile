@@ -32,6 +32,18 @@ export function reelDrivePreviewUrl(fileId: string) {
   return `https://drive.google.com/file/d/${fileId}/preview`;
 }
 
+export function reelDriveStreamUrl(fileId: string) {
+  return `https://lh3.googleusercontent.com/d/${fileId}`;
+}
+
+export function reelDriveDownloadUrl(fileId: string) {
+  return `https://drive.usercontent.google.com/download?id=${fileId}&export=download`;
+}
+
 export function reelDriveOpenUrl(fileId: string) {
   return `https://drive.google.com/file/d/${fileId}/view`;
+}
+
+export function reelLocalSrc(reelId: string) {
+  return `/reels/${reelId}.mp4`;
 }

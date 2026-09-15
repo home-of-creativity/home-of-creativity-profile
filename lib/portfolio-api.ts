@@ -1,5 +1,6 @@
 import { demoPortfolioProject, demoPortfolioProjects, demoShowcaseClients } from "./demo-data";
 import { isDemoDataEnabled } from "./demo-mode";
+import { publicApiUrl } from "./public-api";
 
 export type ShowcaseClient = {
   id: number;
@@ -46,12 +47,12 @@ export type PortfolioProject = {
   featured: boolean;
 };
 
-const API_BASE =
-  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ?? "http://127.0.0.1:8000/api";
-
 export async function fetchShowcaseClients(): Promise<ShowcaseClient[]> {
+  const api = publicApiUrl();
+  if (!api) return isDemoDataEnabled() ? demoShowcaseClients() : [];
+
   try {
-    const response = await fetch(`${API_BASE}/portfolio/clients`, {
+    const response = await fetch(`${api}/portfolio/clients`, {
       method: "GET",
       headers: { Accept: "application/json" },
       cache: "no-store",
@@ -69,8 +70,11 @@ export async function fetchShowcaseClients(): Promise<ShowcaseClient[]> {
 }
 
 export async function fetchPortfolioProjects(): Promise<PortfolioProject[]> {
+  const api = publicApiUrl();
+  if (!api) return isDemoDataEnabled() ? demoPortfolioProjects() : [];
+
   try {
-    const response = await fetch(`${API_BASE}/portfolio/projects`, {
+    const response = await fetch(`${api}/portfolio/projects`, {
       method: "GET",
       headers: { Accept: "application/json" },
       cache: "no-store",
@@ -88,8 +92,11 @@ export async function fetchPortfolioProjects(): Promise<PortfolioProject[]> {
 }
 
 export async function fetchPortfolioProject(id: string | number): Promise<PortfolioProject | null> {
+  const api = publicApiUrl();
+  if (!api) return isDemoDataEnabled() ? demoPortfolioProject(id) : null;
+
   try {
-    const response = await fetch(`${API_BASE}/portfolio/projects/${id}`, {
+    const response = await fetch(`${api}/portfolio/projects/${id}`, {
       method: "GET",
       headers: { Accept: "application/json" },
       cache: "no-store",

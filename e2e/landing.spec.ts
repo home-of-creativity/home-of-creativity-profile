@@ -32,12 +32,25 @@ test.describe("Landing navbar and locale", () => {
 
   test("section anchors exist for the main journey", async ({ page }) => {
     await page.goto(LANDING, { waitUntil: "domcontentloaded" });
-    for (const id of ["top", "about", "vision", "mission", "services", "clients", "journey", "projects", "contact"]) {
+    for (const id of ["top", "about", "vision", "mission", "services", "clients", "journey", "reels", "social", "projects", "contact"]) {
       await expect(page.locator(`#${id}`)).toHaveCount(1);
     }
     await expect(page.locator("#pricing")).toHaveCount(0);
     await expect(page.locator("#philosophy")).toHaveCount(0);
     await expect(page.locator("#case-studies")).toHaveCount(0);
+  });
+
+  test("reels play muted without a click when they enter view", async ({ page }) => {
+    await page.goto(LANDING, { waitUntil: "domcontentloaded" });
+    await page.locator("#reels").scrollIntoViewIfNeeded();
+    const video = page.locator("#reels video").first();
+    const iframe = page.locator("#reels iframe").first();
+    await expect(video.or(iframe)).toBeVisible();
+    if (await video.count()) {
+      await expect(video).toHaveAttribute("muted", "");
+      await expect(video).toHaveAttribute("autoplay", "");
+      await expect(video).toHaveAttribute("playsinline", "");
+    }
   });
 
   test("selected project opens its details page", async ({ page }) => {

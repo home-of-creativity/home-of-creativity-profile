@@ -1,5 +1,6 @@
 import { contact } from "./content";
 import { isDemoDataEnabled } from "./demo-mode";
+import { publicApiUrl } from "./public-api";
 import type { Copy } from "./i18n";
 
 export type ContactApiItem = {
@@ -21,9 +22,6 @@ export type ContactApiPayload = {
   location: ContactApiItem[];
 };
 
-const API_BASE =
-  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ?? "http://127.0.0.1:8000/api";
-
 function emptyContactPayload(): ContactApiPayload {
   return { mobile: [], whatsapp: [], social: [], location: [] };
 }
@@ -34,8 +32,13 @@ function contactPayloadHasItems(data: ContactApiPayload | null) {
 }
 
 export async function fetchContactChannels(): Promise<ContactApiPayload | null> {
+  const api = publicApiUrl();
+  if (!api) {
+    return isDemoDataEnabled() ? null : emptyContactPayload();
+  }
+
   try {
-    const response = await fetch(`${API_BASE}/contact`, {
+    const response = await fetch(`${api}/contact`, {
       method: "GET",
       headers: { Accept: "application/json" },
       cache: "no-store",

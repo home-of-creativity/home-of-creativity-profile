@@ -13,7 +13,9 @@ npm install
 npm run dev
 ```
 
-Production is a static export. GitHub Actions deploys the `out/` folder to Pages.
+Production on GitHub Pages is a static export with **dummy/demo data** (`NEXT_PUBLIC_USE_DEMO_DATA=true`). The Laravel API is not used there.
+
+The live API is the production Docker stack in the parent `home_of_creativity` folder (`NEXT_PUBLIC_USE_DEMO_DATA=false`).
 
 ## E2E (landing)
 

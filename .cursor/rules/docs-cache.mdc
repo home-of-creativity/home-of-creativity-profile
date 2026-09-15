@@ -1,0 +1,10 @@
+---
+description: Read design/docs/cache before exploring the marketing site.
+alwaysApply: true
+---
+
+# Design code cache
+
+Before scanning, read `docs/cache/README.md` then `docs/cache/site.md`.
+
+Open source files only for the change. After a milestone, update those files.

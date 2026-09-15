@@ -1,5 +1,6 @@
 import { demoPricingCategories } from "./demo-data";
 import { isDemoDataEnabled } from "./demo-mode";
+import { publicApiUrl } from "./public-api";
 import type {
   BillingPeriod,
   PricingCategory,
@@ -7,9 +8,6 @@ import type {
   PricingReach,
   PricingSubcategory,
 } from "./pricing-catalog";
-
-const API_BASE =
-  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ?? "http://127.0.0.1:8000/api";
 
 type ApiCopy = { en: string; ar: string };
 
@@ -129,8 +127,11 @@ function mapCategory(category: ApiPricingCategory): PricingCategory {
 }
 
 export async function fetchPricingCategories(): Promise<PricingCategory[]> {
+  const api = publicApiUrl();
+  if (!api) return isDemoDataEnabled() ? demoPricingCategories : [];
+
   try {
-    const response = await fetch(`${API_BASE}/pricing`, {
+    const response = await fetch(`${api}/pricing`, {
       method: "GET",
       headers: { Accept: "application/json" },
       cache: "no-store",
