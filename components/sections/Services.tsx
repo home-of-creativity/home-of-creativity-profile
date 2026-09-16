@@ -48,17 +48,8 @@ export function Services() {
   return (
     <section
       id="services"
-      className="relative overflow-hidden bg-[var(--brand-purple)] py-16 text-[var(--brand-cream)] md:py-24 lg:py-32"
+      className="relative py-16 text-[var(--brand-cream)] md:py-24 md:pb-10 lg:pt-32 lg:pb-12"
     >
-      <div
-        aria-hidden
-        className="radial-burst pointer-events-none absolute inset-0 opacity-30"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgb(231_153_58/0.16),transparent_42%)]"
-      />
-
       <Shell className="relative">
         <Reveal className="mb-6 flex flex-col items-center text-center">
           <Hummingbird float className="mb-4 h-14 w-20" />

@@ -25,12 +25,12 @@ No `app/api/`, no `middleware.ts`, no `[locale]` segment.
 
 | URL | File | Behavior |
 | --- | --- | --- |
-| `/` | `app/page.tsx` | Landing: Hero → About → Services → Clients → Journey → Reels → Social → Projects → Finance → Contact |
+| `/` | `app/page.tsx` | Landing: Hero → About → Services+Clients (one purple band) → Journey → Reels → Social → Projects → Finance → Contact |
 | `/pricing/` | `app/pricing/page.tsx` | Packages + WhatsApp inquiry modal |
 | `/projects/detail/?id=` | `app/projects/detail/page.tsx` | Project from API or demo |
 | 404 | `app/not-found.tsx` | Branded, locale toggle |
 
-Home hashes: `#top` `#about` `#vision` `#mission` `#services` `#clients` `#journey` `#reels` `#social` `#projects` `#finance` `#contact`. **No `#pricing` on home.** Reels autoplay muted when the section is in view.
+Home hashes: `#top` `#about` `#vision` `#mission` `#services` `#clients` `#journey` `#reels` `#social` `#projects` `#finance` `#contact`. **No `#pricing` on home.** `#services` and `#clients` share one `--brand-purple` band (radial overlays on the wrapper in `app/page.tsx`). Reels autoplay muted when the section is in view.
 
 ## i18n
 

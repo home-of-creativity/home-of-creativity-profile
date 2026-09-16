@@ -13,6 +13,7 @@ const greatVibes = Great_Vibes({
 });
 import { useLanguage, type Copy } from "@/lib/i18n";
 import { whatsappHref } from "@/lib/whatsapp";
+import { ContactMap } from "@/components/ContactMap";
 import { Hummingbird } from "../brand";
 import { SocialBrandIcon } from "../SocialBrandIcon";
 import { Reveal } from "../motion";
@@ -272,6 +273,10 @@ export function Contact() {
                   </li>
                 ))}
               </ul>
+            </Reveal>
+
+            <Reveal>
+              <ContactMap />
             </Reveal>
 
             <Reveal className="relative mx-auto mt-14 max-w-3xl border-t border-[var(--brand-line)] pt-10">

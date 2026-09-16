@@ -310,24 +310,11 @@ export function ShowcaseClients() {
     <section
       id="clients"
       className={cn(
-        "relative isolate overflow-hidden bg-[var(--brand-purple-deep)] py-14 text-[var(--brand-cream)] md:py-20 lg:py-24",
+        "relative py-10 text-[var(--brand-cream)] md:py-14 md:pt-6 lg:pb-24",
         !ready && "min-h-[14rem]",
       )}
       aria-busy={!ready}
     >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_14%_18%,rgb(231_153_58/0.14),transparent_40%)]"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_88%_82%,rgb(43_181_168/0.1),transparent_38%)]"
-      />
-      <div
-        aria-hidden
-        className="radial-burst pointer-events-none absolute inset-0 opacity-20"
-      />
-
       <Shell className="relative mb-10 md:mb-12">
         <Reveal className="mx-auto max-w-2xl text-center">
           <SectionHeading

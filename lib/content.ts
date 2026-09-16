@@ -731,6 +731,10 @@ export const contact = {
       ],
     },
   ],
+  map: {
+    title: { en: "Our locations", ar: "مواقعنا" },
+    open: { en: "Open in Google Maps", ar: "فتح في Google Maps" },
+  },
   offices: [
     {
       id: "syr",

@@ -1,0 +1,70 @@
+# Deploy static landing site to VPS over SSH (key in GitHub Secrets).
+name: Deploy (SSH)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+
+concurrency:
+  group: design-production-ssh
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Build static export
+        env:
+          NEXT_PUBLIC_USE_DEMO_DATA: "false"
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          NEXT_PUBLIC_DASHBOARD_URL: ${{ secrets.NEXT_PUBLIC_DASHBOARD_URL }}
+          NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}
+        run: |
+          npm ci
+          npm run build
+          test -d out
+
+      - name: Start SSH agent
+        uses: webfactory/ssh-agent@v0.9.1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Sync to server
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          set -euo pipefail
+          : "${SSH_HOST:?Set SSH_HOST}"
+          : "${SSH_USER:?Set SSH_USER}"
+          PORT="${SSH_PORT:-22}"
+          REMOTE="${DEPLOY_PATH:-/var/www/landing/design}"
+          case "$REMOTE" in
+            /var/www/*) ;;
+            *) echo "DEPLOY_PATH must be under /var/www"; exit 1 ;;
+          esac
+
+          mkdir -p ~/.ssh
+          ssh-keyscan -p "$PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts
+
+          SSH=(ssh -p "$PORT" -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes)
+          "${SSH[@]}" "${SSH_USER}@${SSH_HOST}" "mkdir -p '$REMOTE'"
+
+          rsync -az --delete \
+            -e "ssh -p $PORT -o IdentitiesOnly=yes" \
+            out/ "${SSH_USER}@${SSH_HOST}:${REMOTE}/"
+
+          echo "Landing deployed to ${REMOTE}"
