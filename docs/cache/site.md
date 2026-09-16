@@ -2,12 +2,11 @@
 
 Path: `design/`  
 Installed: Next **15.5.25**, React **19.2.8**, Tailwind **4.3.3**, GSAP **3.15.0**, Framer Motion **12.x**  
-`basePath` / `assetPrefix`: `/home-of-creativity-profile`  
-`output: "export"` — no SSR on GitHub Pages.
+`basePath` / `assetPrefix`: empty on VPS (`NEXT_PUBLIC_BASE_PATH=none`). GitHub Pages disabled.  
+`output: "export"` — static export only.
 
-Dev: `npm run dev` → http://localhost:3000/home-of-creativity-profile/  
-Live (GitHub Pages): https://home-of-creativity.github.io/home-of-creativity-profile/  
-Live (VPS): https://hoc.agency/ (`NEXT_PUBLIC_BASE_PATH=""`)
+Dev: `npm run dev` → http://localhost:3000/ (with `NEXT_PUBLIC_BASE_PATH=none`)  
+Live (VPS): https://hoc.agency/ — API https://api.hoc.agency/api
 
 ## Layout
 
@@ -67,7 +66,7 @@ Contact and pricing forms **do not POST**. They `window.open` WhatsApp (`lib/wha
 
 ## Scripts / E2E
 
-`dev`, `dev:clean`, `build` → `out/`, `lint`, `e2e`. Deploy: `.github/workflows/deploy-pages.yml` (Node 22, `out/` to Pages).
+`dev`, `dev:clean`, `build` → `out/`, `lint`, `e2e`. Deploy: `.github/workflows/deploy-ssh.yml` (VPS rsync only).
 
 Playwright (`playwright.config.ts`): needs the **dev server**. `e2e/landing.spec.ts` = UI. `e2e/request-submit.spec.ts` hits the Laravel API directly (not the contact form).
 
