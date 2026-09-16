@@ -10,9 +10,8 @@ const nextConfig: NextConfig = {
       "",
   },
   output: "export",
-  allowedDevOrigins: ["*.trycloudflare.com"],
-  basePath: BASE_PATH,
-  assetPrefix: BASE_PATH,
+  allowedDevOrigins: ["*.trycloudflare.com", "hoc.agency", "www.hoc.agency", "api.hoc.agency"],
+  ...(BASE_PATH ? { basePath: BASE_PATH, assetPrefix: BASE_PATH } : {}),
   trailingSlash: true,
   serverExternalPackages: ["gsap", "@gsap/react"],
   images: {

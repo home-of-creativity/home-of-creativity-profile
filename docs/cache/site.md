@@ -6,7 +6,8 @@ Installed: Next **15.5.25**, React **19.2.8**, Tailwind **4.3.3**, GSAP **3.15.0
 `output: "export"` — no SSR on GitHub Pages.
 
 Dev: `npm run dev` → http://localhost:3000/home-of-creativity-profile/  
-Live: https://home-of-creativity.github.io/home-of-creativity-profile/
+Live (GitHub Pages): https://home-of-creativity.github.io/home-of-creativity-profile/  
+Live (VPS): https://hoc.agency/ (`NEXT_PUBLIC_BASE_PATH=""`)
 
 ## Layout
 

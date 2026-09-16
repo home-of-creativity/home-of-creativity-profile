@@ -1,4 +1,12 @@
-export const BASE_PATH = "/home-of-creativity-profile";
+function envBasePath() {
+  const raw = process.env.NEXT_PUBLIC_BASE_PATH;
+  if (raw === "" || raw === "/" || raw === "none" || raw === "-" || raw === "off") return "";
+  if (raw == null) return "/home-of-creativity-profile";
+  return raw.replace(/\/+$/, "");
+}
+
+/** GitHub Pages keeps `/home-of-creativity-profile`. VPS (`hoc.agency`) sets `NEXT_PUBLIC_BASE_PATH=none`. */
+export const BASE_PATH = envBasePath();
 
 export const CLIENT_TELEGRAM_URL = `https://t.me/${process.env.NEXT_PUBLIC_TELEGRAM_BOT ?? "pro_design_perfect_bot"}`;
 

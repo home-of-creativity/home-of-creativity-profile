@@ -16,14 +16,15 @@ export function CacheWorker() {
 
     if (!("serviceWorker" in navigator)) return;
 
-    const workerUrl = `${BASE_PATH}/sw.js`;
-    void navigator.serviceWorker.register(workerUrl, { scope: `${BASE_PATH}/` }).catch(() => {
+    const workerUrl = `${BASE_PATH}/sw.js`.replace(/^\/?/, "/");
+    const scope = BASE_PATH ? `${BASE_PATH}/` : "/";
+    void navigator.serviceWorker.register(workerUrl, { scope }).catch(() => {
       /* private mode or unsupported */
     });
 
     if (!("caches" in window)) return;
 
-    void caches.open("hoc-design-v3").then((cache) =>
+    void caches.open("hoc-design-v4").then((cache) =>
       Promise.all(
         PRELOAD.map((path) => {
           const url = `${BASE_PATH}${path}`;

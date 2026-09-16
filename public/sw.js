@@ -1,5 +1,5 @@
-const CACHE = "hoc-design-v3";
-const BASE = "/home-of-creativity-profile";
+const CACHE = "hoc-design-v4";
+const BASE = new URL("./", self.registration.scope).pathname.replace(/\/$/, "");
 const PRECACHE = [
   `${BASE}/hummingbird.svg`,
   `${BASE}/photo/hero-section-background.webp`,
