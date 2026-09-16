@@ -1,4 +1,5 @@
-# Deploy static landing site to VPS over SSH (key in GitHub Secrets).
+# Deploy static landing site to VPS over SSH.
+# Secrets: SSH_PRIVATE_KEY (+ SSH_PASSPHRASE if the key is encrypted).
 name: Deploy (SSH)
 
 on:
@@ -39,6 +40,7 @@ jobs:
         uses: webfactory/ssh-agent@v0.9.1
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-passphrase: ${{ secrets.SSH_PASSPHRASE }}
 
       - name: Sync to server
         env:
