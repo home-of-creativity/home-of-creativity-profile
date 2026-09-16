@@ -3,18 +3,21 @@
 import { useMemo, useState } from "react";
 import { contact } from "@/lib/content";
 import { googleMapsEmbedSrc, googleMapsSearchUrl } from "@/lib/google-maps";
+import { officesGeo } from "@/lib/seo";
 import { useLanguage } from "@/lib/i18n";
 import { cn } from "@/lib/cn";
 
 const offices = [
   {
     id: "syr" as const,
-    query: "Damascus, Al Hamra, Syria",
+    query: officesGeo.syr.mapsQuery,
+    geo: officesGeo.syr,
     office: contact.offices[0],
   },
   {
     id: "ksa" as const,
-    query: "Riyadh, Al Murabaa, Saudi Arabia",
+    query: officesGeo.ksa.mapsQuery,
+    geo: officesGeo.ksa,
     office: contact.offices[1],
   },
 ];
@@ -25,10 +28,10 @@ export function ContactMap() {
 
   const current = offices.find((office) => office.id === active) ?? offices[0];
   const embedSrc = useMemo(
-    () => googleMapsEmbedSrc(current.query, locale),
-    [current.query, locale],
+    () => googleMapsEmbedSrc(current.query, locale, 15, current.geo),
+    [current.query, current.geo, locale],
   );
-  const mapsUrl = googleMapsSearchUrl(current.query);
+  const mapsUrl = googleMapsSearchUrl(`${current.geo.latitude},${current.geo.longitude}`);
 
   return (
     <div className="relative mx-auto mt-14 max-w-3xl">

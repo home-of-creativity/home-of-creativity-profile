@@ -1,7 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Great_Vibes, IBM_Plex_Sans_Arabic, Inter } from "next/font/google";
+import { SeoJsonLd } from "@/components/SeoJsonLd";
 import { BASE_PATH } from "@/lib/base-path";
+import { officesGeo } from "@/lib/seo";
+import { GOOGLE_SITE_VERIFICATION, OG_IMAGE_PATH, SITE_URL, seoCopy } from "@/lib/site";
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -28,9 +31,79 @@ const greatVibes = Great_Vibes({
 });
 
 export const metadata: Metadata = {
-  title: "Home of Creativity — Brand Architects",
-  description:
-    "Home of Creativity (Creativation Source) — brand architects. Premium Minimalism and human-centric marketing in Syria and Saudi Arabia.",
+  metadataBase: new URL(`${SITE_URL}/`),
+  title: {
+    default: seoCopy.homeTitle.en,
+    template: "%s — Home of Creativity",
+  },
+  description: seoCopy.homeDescription.en,
+  applicationName: "Home of Creativity",
+  authors: [{ name: "Home of Creativity" }],
+  creator: "Home of Creativity",
+  publisher: "Home of Creativity",
+  category: "marketing",
+  keywords: [
+    "Home of Creativity",
+    "بيت الإبداع",
+    "brand architects",
+    "Damascus marketing agency",
+    "Riyadh marketing agency",
+    "Syria",
+    "Saudi Arabia",
+    "Premium Minimalism",
+  ],
+  manifest: "/manifest.webmanifest",
+  alternates: {
+    canonical: "/",
+    languages: {
+      "x-default": "/",
+      en: "/",
+      ar: "/",
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    alternateLocale: ["ar_AR"],
+    url: "/",
+    siteName: "Home of Creativity",
+    title: seoCopy.homeTitle.en,
+    description: seoCopy.homeDescription.en,
+    images: [
+      {
+        url: OG_IMAGE_PATH,
+        width: 1920,
+        height: 1080,
+        alt: "Home of Creativity — brand architects",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: seoCopy.homeTitle.en,
+    description: seoCopy.homeDescription.en,
+    images: [OG_IMAGE_PATH],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  verification: {
+    google: GOOGLE_SITE_VERIFICATION,
+  },
+  other: {
+    "geo.region": officesGeo.syr.region,
+    "geo.placename": "Damascus, Al Hamra",
+    "geo.position": `${officesGeo.syr.latitude};${officesGeo.syr.longitude}`,
+    ICBM: `${officesGeo.syr.latitude}, ${officesGeo.syr.longitude}`,
+  },
   icons: {
     icon: [{ url: `${BASE_PATH}/hummingbird.svg`, type: "image/svg+xml" }],
     shortcut: `${BASE_PATH}/hummingbird.svg`,
@@ -57,6 +130,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body suppressHydrationWarning>
+        <SeoJsonLd />
         <Script
           id="hoc-locale-boot"
           strategy="beforeInteractive"

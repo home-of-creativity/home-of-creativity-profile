@@ -1,3 +1,5 @@
+import { LANDING } from "./helpers";
+
 async function assertUp(name: string, url: string) {
   const response = await fetch(url, { redirect: "manual" }).catch(() => null);
   if (!response) {
@@ -6,5 +8,5 @@ async function assertUp(name: string, url: string) {
 }
 
 export default async function globalSetup() {
-  await assertUp("Landing", "http://localhost:3000/home-of-creativity-profile/");
+  await assertUp("Landing", LANDING);
 }

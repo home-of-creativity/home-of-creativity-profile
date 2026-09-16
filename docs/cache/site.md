@@ -5,6 +5,8 @@ Installed: Next **15.5.25**, React **19.2.8**, Tailwind **4.3.3**, GSAP **3.15.0
 `basePath` / `assetPrefix`: empty on VPS (`NEXT_PUBLIC_BASE_PATH=none`). GitHub Pages disabled.  
 `output: "export"` — static export only.
 
+SEO: `app/sitemap.ts`, `app/robots.ts`, Open Graph, JSON-LD (`Organization` + `LocalBusiness` + `WebSite`) with Damascus/Riyadh geo. Google Search Console HTML + DNS verification token is live. Google sitemap ping on deploy; Laravel `seo:submit-sitemap` for Search Console API.
+
 Dev: `npm run dev` → http://localhost:3000/ (with `NEXT_PUBLIC_BASE_PATH=none`)  
 Live (VPS): https://hoc.agency/ — API https://api.hoc.agency/api
 
@@ -60,7 +62,7 @@ Contact and pricing forms **do not POST**. They `window.open` WhatsApp (`lib/wha
 
 ## Env (`.env.example`)
 
-`NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_USE_DEMO_DATA`, `NEXT_PUBLIC_TELEGRAM_BOT`, `NEXT_PUBLIC_DASHBOARD_URL`, `NEXT_PUBLIC_FACEBOOK_PAGE_URL`, `NEXT_PUBLIC_INSTAGRAM_URL`.
+`NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_USE_DEMO_DATA`, `NEXT_PUBLIC_TELEGRAM_BOT`, `NEXT_PUBLIC_DASHBOARD_URL`, `NEXT_PUBLIC_FACEBOOK_PAGE_URL`, `NEXT_PUBLIC_INSTAGRAM_URL`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION`, `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`.
 
 `next.config.ts`: `trailingSlash`, `images.unoptimized`, remote Google Drive hosts, `allowedDevOrigins` for `*.trycloudflare.com`.
 

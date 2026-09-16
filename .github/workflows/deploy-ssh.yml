@@ -29,9 +29,11 @@ jobs:
         env:
           NEXT_PUBLIC_USE_DEMO_DATA: "false"
           NEXT_PUBLIC_BASE_PATH: "none"
+          NEXT_PUBLIC_SITE_URL: "https://hoc.agency"
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
           NEXT_PUBLIC_DASHBOARD_URL: ${{ secrets.NEXT_PUBLIC_DASHBOARD_URL }}
           NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}
+          NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION: "1KZ1bAVmo1TfqoQJbCVgJ9v4VUGbekh5tnzcAueiFlE"
         run: |
           npm ci
           npm run build
@@ -95,3 +97,5 @@ jobs:
             out/ "${SSH_USER}@${SSH_HOST}:${REMOTE}/"
 
           echo "Landing deployed to ${REMOTE}"
+          curl -sS "https://www.google.com/ping?sitemap=https://hoc.agency/sitemap.xml" >/dev/null || true
+          "${SSH[@]}" "${SSH_USER}@${SSH_HOST}" "cd /var/www/landing/backend && docker compose --env-file .env -f deploy/compose.yaml exec -T hoc-api php artisan seo:submit-sitemap" || true

@@ -6,9 +6,14 @@ export function googleMapsApiKey(): string {
   );
 }
 
-export function googleMapsEmbedSrc(query: string, locale: "ar" | "en", zoom = 15): string | null {
+export function googleMapsEmbedSrc(
+  query: string,
+  locale: "ar" | "en",
+  zoom = 15,
+  coords?: { latitude: number; longitude: number },
+): string | null {
   const key = googleMapsApiKey();
-  const q = query.trim();
+  const q = coords ? `${coords.latitude},${coords.longitude}` : query.trim();
   if (!key || !q) return null;
 
   const params = new URLSearchParams({
