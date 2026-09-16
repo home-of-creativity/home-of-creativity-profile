@@ -86,11 +86,11 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -p "$PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts
 
-          SSH=(ssh -p "$PORT" -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes)
+          SSH=(ssh -p "$PORT" -o StrictHostKeyChecking=yes)
           "${SSH[@]}" "${SSH_USER}@${SSH_HOST}" "mkdir -p '$REMOTE'"
 
           rsync -az --delete \
-            -e "ssh -p $PORT -o IdentitiesOnly=yes" \
+            -e "ssh -p $PORT" \
             out/ "${SSH_USER}@${SSH_HOST}:${REMOTE}/"
 
           echo "Landing deployed to ${REMOTE}"
