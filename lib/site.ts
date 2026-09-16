@@ -6,9 +6,38 @@ export const SITE_ALTERNATE = "Creativation Source";
 
 export const OG_IMAGE_PATH = "/photo/hero-section-background.webp";
 
-export const GOOGLE_SITE_VERIFICATION =
-  process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim() ||
-  "1KZ1bAVmo1TfqoQJbCVgJ9v4VUGbekh5tnzcAueiFlE";
+export function pageTitle(en: string, ar?: string): string {
+  if (ar && ar !== en) {
+    return `${ar} | ${en} — ${SITE_NAME}`;
+  }
+
+  return `${en} — ${SITE_NAME}`;
+}
+
+export function pageDescription(en: string, ar?: string): string {
+  if (ar && ar !== en) {
+    return `${ar} ${en}`;
+  }
+
+  return en;
+}
+
+function resolveGoogleSiteVerification(): string | undefined {
+  const value = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim();
+  if (value) {
+    return value;
+  }
+
+  if (process.env.NODE_ENV === "production" && process.env.NEXT_PUBLIC_USE_DEMO_DATA === "false") {
+    throw new Error(
+      "NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION is required for production builds. Set it in GitHub Actions secrets or .env.local.",
+    );
+  }
+
+  return undefined;
+}
+
+export const GOOGLE_SITE_VERIFICATION = resolveGoogleSiteVerification();
 
 export const seoCopy = {
   homeTitle: {

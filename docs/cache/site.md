@@ -5,7 +5,7 @@ Installed: Next **15.5.25**, React **19.2.8**, Tailwind **4.3.3**, GSAP **3.15.0
 `basePath` / `assetPrefix`: empty on VPS (`NEXT_PUBLIC_BASE_PATH=none`). GitHub Pages disabled.  
 `output: "export"` — static export only.
 
-SEO: `app/sitemap.ts`, `app/robots.ts`, Open Graph, JSON-LD (`Organization` + `LocalBusiness` + `WebSite`) with Damascus/Riyadh geo. Google Search Console HTML + DNS verification token is live. Google sitemap ping on deploy; Laravel `seo:submit-sitemap` for Search Console API.
+SEO: `app/sitemap.ts`, `app/robots.ts`, bilingual titles/descriptions, JSON-LD (`Organization` + `LocalBusiness` + service catalog) with Damascus/Riyadh geo. Google Search Console HTML + DNS verification. IndexNow key file on deploy; Laravel `seo:submit-sitemap` for Search Console API + IndexNow.
 
 Dev: `npm run dev` → http://localhost:3000/ (with `NEXT_PUBLIC_BASE_PATH=none`)  
 Live (VPS): https://hoc.agency/ — API https://api.hoc.agency/api

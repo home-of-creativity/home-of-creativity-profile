@@ -1,4 +1,4 @@
-import { contact, WHATSAPP_NUMBER } from "./content";
+import { contact, services, WHATSAPP_NUMBER } from "./content";
 import { SITE_ALTERNATE, SITE_NAME, SITE_NAME_AR, SITE_URL, absoluteUrl, OG_IMAGE_PATH } from "./site";
 
 export const officesGeo = {
@@ -106,6 +106,18 @@ export function seoJsonLd() {
           "Event management",
           "Premium Minimalism",
         ],
+        hasOfferCatalog: {
+          "@type": "OfferCatalog",
+          name: "Services",
+          itemListElement: services.items.map((item) => ({
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Service",
+              name: item.en,
+              alternateName: item.ar,
+            },
+          })),
+        },
       },
       {
         "@type": "WebSite",

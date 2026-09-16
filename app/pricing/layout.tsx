@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { seoCopy } from "@/lib/site";
+import { pageDescription, pageTitle, seoCopy } from "@/lib/site";
+
+const title = pageTitle(seoCopy.pricingTitle.en, seoCopy.pricingTitle.ar);
+const description = pageDescription(seoCopy.pricingDescription.en, seoCopy.pricingDescription.ar);
 
 export const metadata: Metadata = {
-  title: seoCopy.pricingTitle.en,
-  description: seoCopy.pricingDescription.en,
+  title: { absolute: title },
+  description,
   alternates: { canonical: "/pricing/" },
   openGraph: {
-    title: `${seoCopy.pricingTitle.en} — Home of Creativity`,
-    description: seoCopy.pricingDescription.en,
+    title,
+    description,
     url: "/pricing/",
   },
 };

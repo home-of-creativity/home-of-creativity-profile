@@ -1,10 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Great_Vibes, IBM_Plex_Sans_Arabic, Inter } from "next/font/google";
+import { SeoCrawlerCopy } from "@/components/SeoCrawlerCopy";
 import { SeoJsonLd } from "@/components/SeoJsonLd";
 import { BASE_PATH } from "@/lib/base-path";
 import { officesGeo } from "@/lib/seo";
-import { GOOGLE_SITE_VERIFICATION, OG_IMAGE_PATH, SITE_URL, seoCopy } from "@/lib/site";
+import { GOOGLE_SITE_VERIFICATION, OG_IMAGE_PATH, SITE_NAME, SITE_NAME_AR, SITE_URL, pageDescription, seoCopy } from "@/lib/site";
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -30,13 +31,16 @@ const greatVibes = Great_Vibes({
   display: "swap",
 });
 
+const homeTitle = `${SITE_NAME_AR} | ${SITE_NAME} — Brand Architects in Damascus & Riyadh`;
+const homeDescription = pageDescription(seoCopy.homeDescription.en, seoCopy.homeDescription.ar);
+
 export const metadata: Metadata = {
   metadataBase: new URL(`${SITE_URL}/`),
   title: {
-    default: seoCopy.homeTitle.en,
-    template: "%s — Home of Creativity",
+    default: homeTitle,
+    template: `%s — ${SITE_NAME} | ${SITE_NAME_AR}`,
   },
-  description: seoCopy.homeDescription.en,
+  description: homeDescription,
   applicationName: "Home of Creativity",
   authors: [{ name: "Home of Creativity" }],
   creator: "Home of Creativity",
@@ -55,20 +59,15 @@ export const metadata: Metadata = {
   manifest: "/manifest.webmanifest",
   alternates: {
     canonical: "/",
-    languages: {
-      "x-default": "/",
-      en: "/",
-      ar: "/",
-    },
   },
   openGraph: {
     type: "website",
-    locale: "en_US",
-    alternateLocale: ["ar_AR"],
+    locale: "ar_AR",
+    alternateLocale: ["en_US"],
     url: "/",
-    siteName: "Home of Creativity",
-    title: seoCopy.homeTitle.en,
-    description: seoCopy.homeDescription.en,
+    siteName: SITE_NAME,
+    title: homeTitle,
+    description: homeDescription,
     images: [
       {
         url: OG_IMAGE_PATH,
@@ -80,8 +79,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: seoCopy.homeTitle.en,
-    description: seoCopy.homeDescription.en,
+    title: homeTitle,
+    description: homeDescription,
     images: [OG_IMAGE_PATH],
   },
   robots: {
@@ -95,9 +94,13 @@ export const metadata: Metadata = {
       "max-video-preview": -1,
     },
   },
-  verification: {
-    google: GOOGLE_SITE_VERIFICATION,
-  },
+  ...(GOOGLE_SITE_VERIFICATION
+    ? {
+        verification: {
+          google: GOOGLE_SITE_VERIFICATION,
+        },
+      }
+    : {}),
   other: {
     "geo.region": officesGeo.syr.region,
     "geo.placename": "Damascus, Al Hamra",
@@ -131,6 +134,7 @@ export default function RootLayout({
     >
       <body suppressHydrationWarning>
         <SeoJsonLd />
+        <SeoCrawlerCopy />
         <Script
           id="hoc-locale-boot"
           strategy="beforeInteractive"
