@@ -23,10 +23,34 @@ test.describe("Landing navbar and locale", () => {
       document.cookie = "hoc-locale=;path=/;max-age=0";
     });
     await page.goto(LANDING, { waitUntil: "domcontentloaded" });
-    await expect(page.locator("html")).toHaveAttribute("lang", "ar");
-    await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+    const html = page.locator("html");
+    await expect(html).toHaveAttribute("lang", "ar");
+    await expect(html).toHaveAttribute("dir", "rtl");
+    await expect(html).not.toHaveAttribute("data-i18n-pending", "1");
+    await expect(html).toHaveCSS("direction", "rtl");
+    await expect(page.locator("body")).toBeVisible();
     await expect(page.getByRole("link", { name: "الرئيسية" }).first()).toBeVisible();
-    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await expect(page.locator("#top h1.hero-title")).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: /نُهندس|العلامات/ })).toBeVisible();
+  });
+
+  test("restores English with matching LTR before showing copy", async ({ page }) => {
+    await page.addInitScript(() => {
+      try {
+        localStorage.setItem("hoc-locale", "en");
+      } catch {
+        /* private mode */
+      }
+      document.cookie = "hoc-locale=en;path=/;max-age=31536000;samesite=lax";
+    });
+    await page.goto(LANDING, { waitUntil: "domcontentloaded" });
+    const html = page.locator("html");
+    await expect(html).toHaveAttribute("lang", "en");
+    await expect(html).toHaveAttribute("dir", "ltr");
+    await expect(html).toHaveCSS("direction", "ltr");
+    await expect(page.locator("body")).toBeVisible();
+    await expect(page.getByRole("link", { name: "Home" }).first()).toBeVisible();
+    await expect(page.getByRole("link", { name: "الرئيسية" })).toHaveCount(0);
   });
 
   test("toggles English and Arabic direction", async ({ page }) => {

@@ -6,6 +6,7 @@ import {
   useContext,
   useLayoutEffect,
   useMemo,
+  useState,
   useSyncExternalStore,
   type ReactNode,
 } from "react";
@@ -55,13 +56,13 @@ function readStoredLocale(): Locale {
   return readCookieLocale() ?? DEFAULT_LOCALE;
 }
 
-function applyDocumentLocale(next: Locale) {
+function applyDocumentLocale(next: Locale, reveal: boolean) {
   if (typeof document === "undefined") return;
-  document.documentElement.lang = next;
-  document.documentElement.dir = next === "ar" ? "rtl" : "ltr";
-  document.documentElement.dataset.locale = next;
-  document.documentElement.setAttribute("data-i18n-ready", "1");
-  document.documentElement.removeAttribute("data-i18n-pending");
+  const html = document.documentElement;
+  html.lang = next;
+  html.dir = next === "ar" ? "rtl" : "ltr";
+  html.style.direction = html.dir;
+  html.dataset.locale = next;
   window.__HOC_LOCALE__ = next;
   try {
     window.localStorage.setItem(STORAGE_KEY, next);
@@ -69,12 +70,15 @@ function applyDocumentLocale(next: Locale) {
     /* private mode */
   }
   document.cookie = `${STORAGE_KEY}=${next};path=/;max-age=31536000;samesite=lax`;
+  if (reveal) {
+    html.setAttribute("data-i18n-ready", "1");
+    html.removeAttribute("data-i18n-pending");
+  }
 }
 
+// Keep the store on the SSR default until layout runs. Reading storage at
+// module init makes getSnapshot() English while the static HTML is still Arabic.
 let current: Locale = DEFAULT_LOCALE;
-if (typeof window !== "undefined") {
-  current = readStoredLocale();
-}
 
 const listeners = new Set<() => void>();
 
@@ -97,23 +101,33 @@ function getServerSnapshot(): Locale {
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const locale = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const [ready, setReady] = useState(false);
 
   useLayoutEffect(() => {
     const stored = readStoredLocale();
     if (current !== stored) {
       current = stored;
+      applyDocumentLocale(stored, false);
       emit();
+    } else {
+      applyDocumentLocale(stored, true);
     }
-    applyDocumentLocale(stored);
+    setReady(true);
   }, []);
 
+  useLayoutEffect(() => {
+    if (!ready) return;
+    applyDocumentLocale(locale, true);
+  }, [locale, ready]);
+
   const setLocale = useCallback((next: Locale) => {
-    if (!isLocale(next) || next === current) {
-      if (isLocale(next)) applyDocumentLocale(next);
+    if (!isLocale(next)) return;
+    if (next === current) {
+      applyDocumentLocale(next, true);
       return;
     }
     current = next;
-    applyDocumentLocale(next);
+    applyDocumentLocale(next, true);
     emit();
   }, []);
 
@@ -126,13 +140,13 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const value = useMemo<LanguageContextValue>(
     () => ({
       locale,
-      ready: true,
+      ready,
       dir: locale === "ar" ? "rtl" : "ltr",
       setLocale,
       toggleLocale,
       t,
     }),
-    [locale, setLocale, toggleLocale, t],
+    [locale, ready, setLocale, toggleLocale, t],
   );
 
   return (

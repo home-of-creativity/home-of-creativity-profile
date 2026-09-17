@@ -12,11 +12,12 @@ import { useGsapScope } from "@/lib/gsap-client";
 import { shouldSkipMotion } from "@/lib/visit-cache";
 
 export function Hero() {
-  const { t, locale } = useLanguage();
+  const { t, locale, ready } = useLanguage();
   const rootRef = useRef<HTMLElement>(null);
 
   useGsapScope(
     ({ gsap }) => {
+      if (!ready) return;
       const mm = gsap.matchMedia();
 
       mm.add(
@@ -27,10 +28,30 @@ export function Hero() {
         },
         (context) => {
           const { reduceMotion, isDesktop } = context.conditions ?? {};
+          const heroCopy = [
+            ".hero-kicker",
+            ".hero-accent",
+            ".hero-title",
+            ".hero-line",
+            ".hero-cta",
+            ".hero-scroll",
+          ];
 
           if (reduceMotion || shouldSkipMotion()) {
+            gsap.set(heroCopy, { autoAlpha: 1, y: 0, x: 0 });
             return;
           }
+
+          const tl = gsap.timeline({
+            defaults: { ease: "power3.out", duration: 0.85 },
+          });
+
+          tl.from(".hero-kicker", { autoAlpha: 0, y: 16, immediateRender: false })
+            .from(".hero-accent", { autoAlpha: 0, y: 16, immediateRender: false }, "<0.08")
+            .from(".hero-title", { autoAlpha: 0, y: 22, immediateRender: false }, "<0.1")
+            .from(".hero-line", { autoAlpha: 0, y: 16, immediateRender: false }, "<0.14")
+            .from(".hero-cta", { autoAlpha: 0, y: 12, immediateRender: false }, "<0.12")
+            .from(".hero-scroll", { autoAlpha: 0, immediateRender: false }, "-=0.25");
 
           if (isDesktop) {
             gsap.to(".hero-bg", {
@@ -54,7 +75,7 @@ export function Hero() {
 
       return () => mm.revert();
     },
-    { scope: rootRef, dependencies: [locale] },
+    { scope: rootRef, dependencies: [locale, ready] },
   );
 
   return (

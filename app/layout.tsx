@@ -1,9 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import Script from "next/script";
 import { Great_Vibes, IBM_Plex_Sans_Arabic, Inter } from "next/font/google";
 import { SeoCrawlerCopy } from "@/components/SeoCrawlerCopy";
 import { SeoJsonLd } from "@/components/SeoJsonLd";
 import { BASE_PATH } from "@/lib/base-path";
+import { LOCALE_BOOT_SCRIPT } from "@/lib/locale-boot";
 import { officesGeo } from "@/lib/seo";
 import { GOOGLE_SITE_VERIFICATION, OG_IMAGE_PATH, SITE_NAME, SITE_NAME_AR, SITE_URL, pageDescription, seoCopy } from "@/lib/site";
 import { Providers } from "./providers";
@@ -132,17 +132,12 @@ export default function RootLayout({
       className={`${inter.variable} ${ibmPlexArabic.variable} ${greatVibes.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: LOCALE_BOOT_SCRIPT }} />
+      </head>
       <body suppressHydrationWarning>
         <SeoJsonLd />
         <SeoCrawlerCopy />
-        <Script
-          id="hoc-locale-boot"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var l=null;try{l=localStorage.getItem("hoc-locale");}catch(e){}if(l!=="ar"&&l!=="en"){var m=document.cookie.match(/(?:^|; )hoc-locale=(ar|en)/);l=m?m[1]:"ar";}var applied=l==="en"?"en":"ar";var h=document.documentElement;h.lang=applied;h.dir=applied==="ar"?"rtl":"ltr";h.setAttribute("data-locale",applied);h.setAttribute("data-i18n-ready","1");h.removeAttribute("data-i18n-pending");window.__HOC_LOCALE__=applied;}catch(e){}})();`,
-          }}
-        />
-        <div suppressHydrationWarning aria-hidden />
         <Providers>{children}</Providers>
       </body>
     </html>

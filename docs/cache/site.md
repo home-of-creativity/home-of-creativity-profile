@@ -32,11 +32,11 @@ No `app/api/`, no `middleware.ts`, no `[locale]` segment.
 | `/projects/detail/?id=` | `app/projects/detail/page.tsx` | Project from API or demo |
 | 404 | `app/not-found.tsx` | Branded, locale toggle |
 
-Home hashes: `#top` `#about` `#vision` `#mission` `#services` `#clients` `#journey` `#reels` `#social` `#projects` `#finance` `#contact`. **No `#pricing` on home.** `#services` and `#clients` share one `--brand-purple` band (radial overlays on the wrapper in `app/page.tsx`). Images and videos below the hero attach `src` only when they approach the viewport (`ProgressiveImage` / `AutoplayVideo` + Cache API). Landing reels come only from `GET /reels` (dashboard CMS). The section stays with an empty message when none are published; published clips autoplay muted in view and load one-by-one. There are no bundled `/reels/*.mp4` files and no Drive fallback.
+Home hashes: `#top` `#about` `#vision` `#mission` `#services` `#clients` `#journey` `#reels` `#social` `#projects` `#finance` `#contact`. **No `#pricing` on home.** `#services` and `#clients` share one `--brand-purple` band (radial overlays on the wrapper in `app/page.tsx`). Images and videos below the hero attach `src` only when they approach the viewport (`ProgressiveImage` / `AutoplayVideo` + Cache API). Landing reels come only from `GET /reels` (dashboard CMS). The section stays with an empty message when none are published; published clips autoplay muted in view and load one-by-one. There are no bundled `/reels/*.mp4` files and no Drive fallback. Hero intro GSAP is skipped when `prefers-reduced-motion` or `hoc-skip-motion`; those paths `gsap.set` kicker/title/CTA to `autoAlpha: 1`. The visible `<h1>` is `.hero-title` in `Hero.tsx`. `HeroBrandWriter` pecks each letter of “Home of Creativity” with the hummingbird beak (skipped under `prefers-reduced-motion`).
 
 ## i18n
 
-`lib/i18n.tsx` + copy in `lib/content.ts`. Default locale **Arabic** (`lang=ar` `dir=rtl`). Toggle `en`/`ar` (localStorage `hoc-locale` + cookie). Boot script in `app/layout.tsx` sets `lang`/`dir` before paint without hiding the body. The hero lockup is visible immediately (no pecking intro); GSAP loads on idle.
+`lib/i18n.tsx` + copy in `lib/content.ts`. Default locale **Arabic** (`lang=ar` `dir=rtl`). Toggle `en`/`ar` (localStorage `hoc-locale` + cookie). A blocking boot script in `app/layout.tsx` `<head>` (`lib/locale-boot.ts`) sets `lang`/`dir` before first paint. First visit (no store) stays Arabic RTL with body visible. Stored English keeps the body hidden (`data-i18n-pending`) until React copy matches LTR. CSS defaults `html { direction: rtl }`. GSAP loads on idle; the hero brand lockup is pecked in by the hummingbird.
 
 ## Data / forms
 
