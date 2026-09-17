@@ -47,6 +47,7 @@ test.describe("Landing navbar and locale", () => {
     const iframe = page.locator("#reels iframe").first();
     await expect(video.or(iframe)).toBeVisible();
     if (await video.count()) {
+      await expect(video).toHaveAttribute("src", /.+/, { timeout: 15_000 });
       await expect(video).toHaveAttribute("muted", "");
       await expect(video).toHaveAttribute("autoplay", "");
       await expect(video).toHaveAttribute("playsinline", "");

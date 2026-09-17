@@ -9,10 +9,11 @@ function prefersReducedMotion() {
 export function useAutoplayOnView(
   ref: RefObject<HTMLVideoElement | null>,
   root?: RefObject<Element | null>,
+  src?: string,
 ) {
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || !src) return;
 
     el.muted = true;
     el.defaultMuted = true;
@@ -57,5 +58,5 @@ export function useAutoplayOnView(
       el.removeEventListener("canplay", play);
       observer.disconnect();
     };
-  }, [ref, root]);
+  }, [ref, root, src]);
 }

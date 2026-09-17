@@ -3,11 +3,14 @@ import { SITE_ALTERNATE, SITE_NAME, SITE_NAME_AR, SITE_URL, absoluteUrl, OG_IMAG
 
 export const officesGeo = {
   syr: {
-    latitude: 33.5192,
-    longitude: 36.2917,
+    latitude: 33.5188338,
+    longitude: 36.2916993,
     region: "SY-DI",
     countryCode: "SY",
     mapsQuery: "Al Hamra, Damascus, Syria",
+    mapsUrl:
+      "https://www.google.com/maps/place/33%C2%B031'07.8%22N+36%C2%B017'30.1%22E/@33.5188338,36.2916993,17z/data=!3m1!4b1!4m4!3m3!8m2!3d33.5188338!4d36.2916993",
+    zoom: 17,
   },
   ksa: {
     latitude: 24.6469,
@@ -15,6 +18,7 @@ export const officesGeo = {
     region: "SA-01",
     countryCode: "SA",
     mapsQuery: "Al Murabba, Riyadh, Saudi Arabia",
+    zoom: 15,
   },
 } as const;
 
@@ -76,7 +80,7 @@ export function seoJsonLd() {
         parentOrganization: { "@id": `${SITE_URL}/#organization` },
         address: syr?.address,
         geo: syr?.geo,
-        hasMap: `https://www.google.com/maps/search/?api=1&query=${officesGeo.syr.latitude}%2C${officesGeo.syr.longitude}`,
+        hasMap: officesGeo.syr.mapsUrl,
         areaServed: [
           { "@type": "Country", "name": "Syria" },
           { "@type": "Country", "name": "Saudi Arabia" },

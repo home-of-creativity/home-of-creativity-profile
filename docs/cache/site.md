@@ -5,7 +5,7 @@ Installed: Next **15.5.25**, React **19.2.8**, Tailwind **4.3.3**, GSAP **3.15.0
 `basePath` / `assetPrefix`: empty on VPS (`NEXT_PUBLIC_BASE_PATH=none`). GitHub Pages disabled.  
 `output: "export"` — static export only.
 
-SEO: `app/sitemap.ts`, `app/robots.ts`, bilingual titles/descriptions, JSON-LD (`Organization` + `LocalBusiness` + service catalog) with Damascus/Riyadh geo. Google Search Console HTML + DNS verification. IndexNow key file on deploy; Laravel `seo:submit-sitemap` for Search Console API + IndexNow.
+SEO: `app/sitemap.ts`, `app/robots.ts`, bilingual titles/descriptions, JSON-LD (`Organization` + `LocalBusiness` + service catalog). Damascus map pin `33.5188338, 36.2916993`; Riyadh Al Murabba. Contact map uses Maps JavaScript API with mouse-wheel zoom on desktop. Google Search Console HTML + DNS verification. IndexNow key file on deploy; Laravel `seo:submit-sitemap` for Search Console API + IndexNow.
 
 Dev: `npm run dev` → http://localhost:3000/ (with `NEXT_PUBLIC_BASE_PATH=none`)  
 Live (VPS): https://hoc.agency/ — API https://api.hoc.agency/api
@@ -32,7 +32,7 @@ No `app/api/`, no `middleware.ts`, no `[locale]` segment.
 | `/projects/detail/?id=` | `app/projects/detail/page.tsx` | Project from API or demo |
 | 404 | `app/not-found.tsx` | Branded, locale toggle |
 
-Home hashes: `#top` `#about` `#vision` `#mission` `#services` `#clients` `#journey` `#reels` `#social` `#projects` `#finance` `#contact`. **No `#pricing` on home.** `#services` and `#clients` share one `--brand-purple` band (radial overlays on the wrapper in `app/page.tsx`). Reels autoplay muted when the section is in view.
+Home hashes: `#top` `#about` `#vision` `#mission` `#services` `#clients` `#journey` `#reels` `#social` `#projects` `#finance` `#contact`. **No `#pricing` on home.** `#services` and `#clients` share one `--brand-purple` band (radial overlays on the wrapper in `app/page.tsx`). Reels autoplay muted when in view, and video files load one-by-one after the section approaches the viewport.
 
 ## i18n
 

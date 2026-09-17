@@ -1,8 +1,15 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { contact } from "@/lib/content";
-import { googleMapsEmbedSrc, googleMapsSearchUrl } from "@/lib/google-maps";
+import {
+  createInteractiveGoogleMap,
+  googleMapsApiKey,
+  googleMapsClassicEmbedSrc,
+  googleMapsSearchUrl,
+  loadGoogleMapsApi,
+  type GoogleMapHandle,
+} from "@/lib/google-maps";
 import { officesGeo } from "@/lib/seo";
 import { useLanguage } from "@/lib/i18n";
 import { cn } from "@/lib/cn";
@@ -10,13 +17,11 @@ import { cn } from "@/lib/cn";
 const offices = [
   {
     id: "syr" as const,
-    query: officesGeo.syr.mapsQuery,
     geo: officesGeo.syr,
     office: contact.offices[0],
   },
   {
     id: "ksa" as const,
-    query: officesGeo.ksa.mapsQuery,
     geo: officesGeo.ksa,
     office: contact.offices[1],
   },
@@ -25,13 +30,70 @@ const offices = [
 export function ContactMap() {
   const { t, locale } = useLanguage();
   const [active, setActive] = useState<(typeof offices)[number]["id"]>("syr");
+  const [interactive, setInteractive] = useState(Boolean(googleMapsApiKey()));
+  const mapNodeRef = useRef<HTMLDivElement>(null);
+  const mapHandleRef = useRef<GoogleMapHandle | null>(null);
 
   const current = offices.find((office) => office.id === active) ?? offices[0];
+  const cityLabel = t(current.office.city);
+  const currentRef = useRef(current);
+  const cityRef = useRef(cityLabel);
+  currentRef.current = current;
+  cityRef.current = cityLabel;
   const embedSrc = useMemo(
-    () => googleMapsEmbedSrc(current.query, locale, 15, current.geo),
-    [current.query, current.geo, locale],
+    () =>
+      googleMapsClassicEmbedSrc(
+        current.geo.latitude,
+        current.geo.longitude,
+        locale,
+        current.geo.zoom,
+      ),
+    [current.geo, locale],
   );
-  const mapsUrl = googleMapsSearchUrl(`${current.geo.latitude},${current.geo.longitude}`);
+  const mapsUrl =
+    "mapsUrl" in current.geo && current.geo.mapsUrl
+      ? current.geo.mapsUrl
+      : googleMapsSearchUrl(`${current.geo.latitude},${current.geo.longitude}`);
+
+  useEffect(() => {
+    const element = mapNodeRef.current;
+    if (!interactive || !element) return;
+
+    let cancelled = false;
+
+    loadGoogleMapsApi()
+      .then((maps) => {
+        if (cancelled || !mapNodeRef.current) return;
+        const office = currentRef.current;
+        mapHandleRef.current = createInteractiveGoogleMap(mapNodeRef.current, maps, {
+          center: { lat: office.geo.latitude, lng: office.geo.longitude },
+          zoom: office.geo.zoom,
+          title: cityRef.current,
+        });
+      })
+      .catch(() => {
+        if (!cancelled) {
+          mapHandleRef.current = null;
+          setInteractive(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+      mapHandleRef.current = null;
+    };
+    // Create the map once; office changes update the existing instance below.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [interactive]);
+
+  useEffect(() => {
+    const handle = mapHandleRef.current;
+    if (!handle) return;
+    const position = { lat: current.geo.latitude, lng: current.geo.longitude };
+    handle.setCenter(position);
+    handle.setZoom(current.geo.zoom);
+    handle.setMarker(position, cityLabel);
+  }, [cityLabel, current]);
 
   return (
     <div className="relative mx-auto mt-14 max-w-3xl">
@@ -60,25 +122,27 @@ export function ContactMap() {
       </div>
 
       <div className="overflow-hidden rounded-2xl border border-[var(--brand-ink)]/12 bg-white shadow-[0_14px_36px_rgb(10_6_24/0.08)]">
-        {embedSrc ? (
+        {interactive ? (
+          <div
+            ref={mapNodeRef}
+            role="region"
+            tabIndex={0}
+            aria-label={`${t(contact.map.title)} — ${cityLabel}`}
+            className="contact-map-frame h-[min(22rem,62vw)] w-full overscroll-contain outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--brand-orange)]"
+          />
+        ) : (
           <iframe
-            title={`${t(contact.map.title)} — ${t(current.office.city)}`}
+            title={`${t(contact.map.title)} — ${cityLabel}`}
             src={embedSrc}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
             allowFullScreen
             className="contact-map-frame block h-[min(22rem,62vw)] w-full border-0"
           />
-        ) : (
-          <div className="contact-map-frame grid h-[min(22rem,62vw)] place-items-center bg-[linear-gradient(180deg,color-mix(in_srgb,var(--brand-off-white)_88%,white),var(--brand-cream))] px-6 text-center">
-            <p className="m-0 max-w-md text-[0.98rem] leading-relaxed text-[var(--brand-ink)]/78">
-              {t(current.office.city)}
-            </p>
-          </div>
         )}
 
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--brand-line)] px-4 py-3 sm:px-5">
-          <p className="m-0 text-[0.92rem] font-medium text-[var(--brand-ink)]">{t(current.office.city)}</p>
+          <p className="m-0 text-[0.92rem] font-medium text-[var(--brand-ink)]">{cityLabel}</p>
           <a
             href={mapsUrl}
             target="_blank"

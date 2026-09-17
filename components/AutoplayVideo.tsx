@@ -8,30 +8,32 @@ export function AutoplayVideo({
   poster,
   className,
   root,
+  preload = "metadata",
   onCanPlay,
   onError,
 }: {
-  src: string;
+  src?: string;
   poster?: string;
   className?: string;
   root?: RefObject<Element | null>;
+  preload?: "none" | "metadata" | "auto";
   onCanPlay?: () => void;
   onError?: () => void;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  useAutoplayOnView(videoRef, root);
+  useAutoplayOnView(videoRef, root, src);
 
   return (
     <video
       ref={videoRef}
       className={className}
-      src={src}
+      src={src || undefined}
       poster={poster && poster !== src ? poster : undefined}
       muted
       loop
       playsInline
       autoPlay
-      preload="auto"
+      preload={src ? preload : "none"}
       onCanPlay={onCanPlay}
       onError={onError}
     />
