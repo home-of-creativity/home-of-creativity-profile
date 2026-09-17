@@ -15,6 +15,7 @@ import {
 import { contact, footer, nav } from "@/lib/content";
 import { fetchContactChannels, mergeContactChannels } from "@/lib/contact-api";
 import { useLanguage, type Copy } from "@/lib/i18n";
+import { useTheme } from "@/lib/theme";
 import { cn } from "@/lib/cn";
 import { whatsappHref } from "@/lib/whatsapp";
 import { SocialBrandIcon } from "./SocialBrandIcon";
@@ -78,7 +79,7 @@ export function LanguageToggle({ compact = false }: { compact?: boolean }) {
       aria-label={t(nav.language)}
       dir="ltr"
       className={cn(
-        "relative isolate grid shrink-0 grid-cols-2 rounded-full border border-white/35 bg-black/30 p-1 text-[0.7rem] font-semibold uppercase text-[var(--brand-cream)]",
+        "relative isolate grid shrink-0 grid-cols-2 rounded-full border border-white/35 bg-black/30 p-1 text-[0.7rem] font-semibold uppercase text-[var(--brand-ivory)]",
         compact ? "min-w-[5.4rem]" : "min-w-[6.2rem]",
       )}
     >
@@ -96,7 +97,7 @@ export function LanguageToggle({ compact = false }: { compact?: boolean }) {
               "cursor-pointer rounded-full px-2.5 py-1.5 transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]",
               selected
                 ? "bg-[var(--brand-orange)] text-[var(--brand-purple-deep)]"
-                : "text-white/70 hover:text-[var(--brand-cream)]",
+                : "text-white/70 hover:text-[var(--brand-ivory)]",
             )}
           >
             {code === "en" ? "EN" : "AR"}
@@ -104,6 +105,37 @@ export function LanguageToggle({ compact = false }: { compact?: boolean }) {
         );
       })}
     </div>
+  );
+}
+
+export function ThemeToggle({ compact = false }: { compact?: boolean }) {
+  const { t } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
+  const dark = theme === "dark";
+
+  return (
+    <button
+      type="button"
+      onClick={toggleTheme}
+      aria-pressed={dark}
+      aria-label={t(dark ? nav.lightMode : nav.darkMode)}
+      title={t(nav.theme)}
+      className={cn(
+        "grid shrink-0 place-items-center rounded-full border border-white/35 bg-black/30 text-[var(--brand-ivory)] transition-colors hover:bg-black/45 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]",
+        compact ? "h-9 w-9" : "h-11 w-11",
+      )}
+    >
+      {dark ? (
+        <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.7">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 3v1.6M12 19.4V21M4.9 4.9l1.1 1.1M18 18l1.1 1.1M3 12h1.6M19.4 12H21M4.9 19.1 6 18M18 6l1.1-1.1" />
+        </svg>
+      ) : (
+        <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.7">
+          <path d="M16.2 13.1A6.2 6.2 0 0 1 11 5.2 6.4 6.4 0 1 0 16.2 13.1Z" />
+        </svg>
+      )}
+    </button>
   );
 }
 
@@ -263,7 +295,7 @@ export function Nav() {
     cn(
       mobile
         ? "border-b border-white/15 py-4 text-start text-[1.35rem] text-white"
-        : "relative grid h-11 place-items-center rounded-full px-1.5 text-[0.82rem] font-semibold text-[var(--brand-cream)] transition-colors hover:bg-white/10 hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)] xl:text-[0.9rem]",
+        : "relative grid h-11 place-items-center rounded-full px-1.5 text-[0.82rem] font-semibold text-[var(--brand-ivory)] transition-colors hover:bg-white/10 hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)] xl:text-[0.9rem]",
       !mobile && locale === "ar" ? "tracking-normal" : !mobile && "tracking-[0.08em]",
       mobile && locale === "ar" ? "tracking-normal" : mobile && "tracking-[0.14em]",
       isLinkActive(key, href) &&
@@ -338,9 +370,10 @@ export function Nav() {
               {t(nav.whatsapp)}
             </a>
             <LanguageToggle compact />
+            <ThemeToggle compact />
             <button
               type="button"
-              className="grid h-11 w-11 place-items-center text-[var(--brand-cream)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)] lg:hidden"
+              className="grid h-11 w-11 place-items-center text-[var(--brand-ivory)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)] lg:hidden"
               aria-expanded={open}
               aria-controls="mobile-nav"
               aria-label={t(nav.menu)}
@@ -451,7 +484,7 @@ export function Footer() {
   return (
     <footer
       dir={locale === "ar" ? "rtl" : "ltr"}
-      className="bg-[var(--brand-charcoal)] pb-10 text-[var(--brand-cream)]"
+      className="bg-[var(--brand-charcoal)] pb-10 text-[var(--brand-ivory)]"
     >
       <div className="mx-auto grid w-[var(--content)] gap-10 border-t border-white/10 pt-12 md:grid-cols-[1.2fr_1fr_1fr]">
         <div>

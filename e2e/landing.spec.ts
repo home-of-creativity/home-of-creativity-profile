@@ -70,6 +70,22 @@ test.describe("Landing navbar and locale", () => {
     await expect(page.getByRole("link", { name: "واتساب" }).first()).toBeVisible();
   });
 
+  test("toggles dark and light theme", async ({ page }) => {
+    await page.addInitScript(() => {
+      try {
+        localStorage.setItem("hoc-theme", "light");
+      } catch {
+        /* private mode */
+      }
+    });
+    await page.goto(LANDING, { waitUntil: "domcontentloaded" });
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    await page.getByRole("button", { name: /Dark mode|الوضع الداكن/ }).click();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+    await page.getByRole("button", { name: /Light mode|الوضع الفاتح/ }).click();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  });
+
   test("section anchors exist for the main journey", async ({ page }) => {
     await page.goto(LANDING, { waitUntil: "domcontentloaded" });
     for (const id of ["top", "about", "vision", "mission", "services", "clients", "journey", "reels", "social", "projects", "contact"]) {

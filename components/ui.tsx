@@ -50,7 +50,7 @@ export function SectionHeading({
       <h2
         className={cn(
           "font-display m-0 text-[clamp(2rem,5vw,3.6rem)] font-semibold leading-[1.05]",
-          invert ? "text-[var(--brand-cream)]" : "text-[var(--brand-ink)]",
+          invert ? "text-[var(--brand-ivory)]" : "text-[var(--brand-ink)]",
         )}
       >
         {t(title)}

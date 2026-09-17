@@ -13,7 +13,7 @@ export function Finance() {
   return (
     <section
       id="finance"
-      className="relative overflow-hidden bg-[var(--brand-purple-deep)] py-16 text-[var(--brand-cream)] md:py-24 lg:py-32"
+      className="relative overflow-hidden bg-[var(--brand-purple-deep)] py-16 text-[var(--brand-ivory)] md:py-24 lg:py-32"
     >
       <div
         aria-hidden
@@ -23,7 +23,7 @@ export function Finance() {
         <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-14 xl:gap-20">
           <Reveal>
             <SectionHeading kicker={finance.kicker} title={finance.title} invert />
-            <p className="font-display mt-6 text-[1.35rem] leading-snug text-[var(--brand-cream)] md:text-[1.55rem]">
+            <p className="font-display mt-6 text-[1.35rem] leading-snug text-[var(--brand-ivory)] md:text-[1.55rem]">
               {t(finance.heading)}
             </p>
             <p className="mt-6 max-w-2xl text-[1.05rem] leading-[1.75] text-white/75">

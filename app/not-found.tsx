@@ -53,7 +53,7 @@ export default function NotFoundPage() {
   return (
     <main
       ref={rootRef}
-      className="relative isolate min-h-[100svh] overflow-hidden bg-[var(--brand-purple-deep)] text-[var(--brand-cream)]"
+      className="relative isolate min-h-[100svh] overflow-hidden bg-[var(--brand-purple-deep)] text-[var(--brand-ivory)]"
     >
       <div className="absolute inset-0 overflow-hidden">
         <div className="nf-bg absolute inset-[-6%] h-[112%] w-[112%] will-change-transform">

@@ -373,7 +373,7 @@ export function Contact() {
                 <button
                   type="submit"
                   className={cn(
-                    "mt-2 inline-flex w-fit justify-self-center rounded-full bg-[var(--brand-purple)] px-6 py-3 text-[0.82rem] font-semibold uppercase text-[var(--brand-cream)] transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]",
+                    "mt-2 inline-flex w-fit justify-self-center rounded-full bg-[var(--brand-purple)] px-6 py-3 text-[0.82rem] font-semibold uppercase text-[var(--brand-ivory)] transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]",
                     locale === "ar" ? "tracking-normal" : "tracking-[0.14em]",
                   )}
                 >

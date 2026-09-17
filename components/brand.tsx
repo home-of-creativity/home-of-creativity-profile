@@ -25,7 +25,7 @@ export const Hummingbird = forwardRef<SVGSVGElement, MarkProps>(function Humming
       ? "var(--brand-purple)"
       : surface === "solid"
         ? "#fffdf0"
-        : "var(--brand-cream)";
+        : "var(--brand-ivory)";
   const teal = "#08af9b";
   const orange = "#f35c27";
 
@@ -125,7 +125,7 @@ export function Wordmark({
     <span
       className={cn(
         "font-display block font-semibold uppercase",
-        invert ? "text-[var(--brand-cream)]" : "text-[var(--brand-ink)]",
+        invert ? "text-[var(--brand-ivory)]" : "text-[var(--brand-ink)]",
         sizes[size],
         className,
       )}

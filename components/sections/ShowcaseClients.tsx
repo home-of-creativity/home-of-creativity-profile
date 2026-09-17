@@ -308,7 +308,7 @@ export function ShowcaseClients() {
     <section
       id="clients"
       className={cn(
-        "relative py-10 text-[var(--brand-cream)] md:py-14 md:pt-6 lg:pb-24",
+        "relative py-10 text-[var(--brand-ivory)] md:py-14 md:pt-6 lg:pb-24",
         !ready && "min-h-[14rem]",
       )}
       aria-busy={!ready}

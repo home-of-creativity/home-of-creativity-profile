@@ -13,6 +13,7 @@
   --brand-off-white: #f6f1e8;
   --brand-cream: #fbf7f0;
   --brand-paper: #f3eee4;
+  --brand-ivory: #fbf7f0;
   --brand-muted: #6b6178;
   --brand-line: color-mix(in srgb, var(--brand-ink) 12%, transparent);
   --font-en: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
@@ -47,6 +48,7 @@ html[data-i18n-pending="1"]:not([data-i18n-ready]) body {
 
 html {
   direction: rtl;
+  color-scheme: light;
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--nav-height) + 0.75rem);
   background: var(--brand-off-white);
@@ -89,6 +91,34 @@ html[lang="en"] body,
 html[lang="en"] {
   font-family: var(--font-en);
   font-synthesis: none;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --brand-off-white: #100817;
+  --brand-cream: #1a1028;
+  --brand-paper: #150c22;
+  --brand-ink: #f4eee6;
+  --brand-muted: #c2b6d4;
+  --brand-charcoal: #0c0814;
+  --brand-line: color-mix(in srgb, var(--brand-ivory) 16%, transparent);
+}
+
+html[data-theme="dark"] body {
+  background: var(--brand-off-white);
+  color: var(--brand-ink);
+}
+
+html[data-theme="dark"] #about .mix-blend-multiply {
+  mix-blend-mode: soft-light;
+  opacity: 0.55;
+}
+
+html[data-theme="dark"] .bg-white,
+html[data-theme="dark"] .bg-white\/70,
+html[data-theme="dark"] .bg-white\/80,
+html[data-theme="dark"] .bg-white\/85 {
+  background-color: color-mix(in srgb, var(--brand-purple) 30%, #140c20) !important;
 }
 
 html[lang="ar"] .font-display {
@@ -420,7 +450,7 @@ html[dir="rtl"] .lux-rule {
 }
 
 .projects-loading .loading-lottie__label {
-  color: var(--brand-cream);
+  color: var(--brand-ivory);
 }
 
 .pricing-tilt-inner {
@@ -855,7 +885,7 @@ html[dir="rtl"] .client-marquee-viewport {
 }
 
 .reel-card-loading-lottie .loading-lottie__label {
-  color: var(--brand-cream);
+  color: var(--brand-ivory);
 }
 
 .reel-card-video {

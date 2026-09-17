@@ -114,7 +114,7 @@ export function ContactMap() {
                 "rounded-full border px-4 py-2 text-[0.78rem] font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]",
                 locale === "ar" ? "tracking-normal" : "uppercase tracking-[0.12em]",
                 selected
-                  ? "border-[var(--brand-purple)] bg-[var(--brand-purple)] text-[var(--brand-cream)]"
+                  ? "border-[var(--brand-purple)] bg-[var(--brand-purple)] text-[var(--brand-ivory)]"
                   : "border-[var(--brand-line)] bg-white/80 text-[var(--brand-ink)] hover:border-[var(--brand-orange)]",
               )}
             >

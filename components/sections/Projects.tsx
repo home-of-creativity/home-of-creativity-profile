@@ -219,7 +219,7 @@ export function Projects() {
   return (
     <section
       id="projects"
-      className="relative isolate overflow-hidden bg-[var(--brand-purple-deep)] py-16 text-[var(--brand-cream)] md:py-24 lg:py-32"
+      className="relative isolate overflow-hidden bg-[var(--brand-purple-deep)] py-16 text-[var(--brand-ivory)] md:py-24 lg:py-32"
       aria-busy={!ready}
     >
       <div aria-hidden className="projects-backdrop pointer-events-none absolute inset-0">
@@ -250,7 +250,7 @@ export function Projects() {
             >
               {t(projects.kicker)}
             </p>
-            <h2 className="font-display m-0 mt-3 text-[clamp(2rem,5vw,3.6rem)] font-semibold leading-[1.05] text-[var(--brand-cream)]">
+            <h2 className="font-display m-0 mt-3 text-[clamp(2rem,5vw,3.6rem)] font-semibold leading-[1.05] text-[var(--brand-ivory)]">
               {t(projects.title)}
             </h2>
           </div>
@@ -374,7 +374,7 @@ export function Projects() {
                 });
               }}
               className={cn(
-                "inline-flex items-center gap-3 rounded-md border border-[var(--brand-orange)] px-6 py-3 text-[0.82rem] font-semibold uppercase text-[var(--brand-cream)] transition-colors duration-300 hover:bg-[var(--brand-orange)] hover:text-[var(--brand-purple-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]",
+                "inline-flex items-center gap-3 rounded-md border border-[var(--brand-orange)] px-6 py-3 text-[0.82rem] font-semibold uppercase text-[var(--brand-ivory)] transition-colors duration-300 hover:bg-[var(--brand-orange)] hover:text-[var(--brand-purple-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]",
                 locale === "ar" ? "tracking-normal" : "tracking-[0.14em]",
               )}
             >

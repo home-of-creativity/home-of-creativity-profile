@@ -229,7 +229,7 @@ function PlanCard({
             "mt-8 inline-flex w-full cursor-pointer items-center justify-center rounded-full px-5 py-3 text-[0.82rem] font-semibold transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]",
             plan.featured
               ? "bg-[var(--brand-orange)] text-[var(--brand-purple-deep)]"
-              : "border border-[var(--brand-purple-deep)] bg-transparent text-[var(--brand-purple-deep)] hover:bg-[var(--brand-purple-deep)] hover:text-[var(--brand-cream)]",
+              : "border border-[var(--brand-purple-deep)] bg-transparent text-[var(--brand-purple-deep)] hover:bg-[var(--brand-purple-deep)] hover:text-[var(--brand-ivory)]",
             locale === "ar" ? "tracking-normal" : "tracking-[0.1em] uppercase",
           )}
         >
@@ -594,7 +594,7 @@ export function Pricing() {
                   className={cn(
                     "cursor-pointer rounded-full border px-4 py-2.5 text-[0.82rem] font-semibold transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)] sm:px-5",
                     selected
-                      ? "border-[var(--brand-purple-deep)] bg-[var(--brand-purple-deep)] text-[var(--brand-cream)]"
+                      ? "border-[var(--brand-purple-deep)] bg-[var(--brand-purple-deep)] text-[var(--brand-ivory)]"
                       : "border-[var(--brand-line)] bg-white/80 text-[var(--brand-ink)] hover:border-[var(--brand-orange)]/50",
                   )}
                 >
@@ -771,7 +771,7 @@ export function Pricing() {
                   />
                 </div>
                 <div className="absolute inset-x-0 bottom-0 flex h-[32%] flex-col items-center justify-center bg-[var(--brand-charcoal)] px-3 text-center">
-                  <p className="m-0 font-display text-[clamp(1rem,3vw,1.35rem)] font-semibold text-[var(--brand-cream)]">
+                  <p className="m-0 font-display text-[clamp(1rem,3vw,1.35rem)] font-semibold text-[var(--brand-ivory)]">
                     {t(method.name)}
                   </p>
                   <p className="mt-1 m-0 text-[0.72rem] text-white/40 sm:text-[0.82rem]" dir={locale === "ar" ? "ltr" : "rtl"}>

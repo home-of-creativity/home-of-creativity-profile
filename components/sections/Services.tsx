@@ -48,7 +48,7 @@ export function Services() {
   return (
     <section
       id="services"
-      className="relative py-16 text-[var(--brand-cream)] md:py-24 md:pb-10 lg:pt-32 lg:pb-12"
+      className="relative py-16 text-[var(--brand-ivory)] md:py-24 md:pb-10 lg:pt-32 lg:pb-12"
     >
       <Shell className="relative">
         <Reveal className="mb-6 flex flex-col items-center text-center">

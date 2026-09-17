@@ -1,0 +1,2 @@
+/** Blocking boot: apply stored or preferred color theme before first paint. */
+export const THEME_BOOT_SCRIPT = `(function(){try{var t=null;try{t=localStorage.getItem("hoc-theme");}catch(e){}if(t!=="dark"&&t!=="light"){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}var h=document.documentElement;h.setAttribute("data-theme",t);h.style.colorScheme=t;window.__HOC_THEME__=t;try{localStorage.setItem("hoc-theme",t);}catch(e){}}catch(e){}})();`;

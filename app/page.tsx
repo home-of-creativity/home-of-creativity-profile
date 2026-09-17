@@ -19,7 +19,7 @@ export default function HomePage() {
       <main>
         <Hero />
         <About />
-        <div className="relative isolate overflow-hidden bg-[var(--brand-purple)] text-[var(--brand-cream)]">
+        <div className="relative isolate overflow-hidden bg-[var(--brand-purple)] text-[var(--brand-ivory)]">
           <div
             aria-hidden
             className="radial-burst pointer-events-none absolute inset-0 opacity-30"

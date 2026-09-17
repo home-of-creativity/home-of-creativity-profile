@@ -83,7 +83,7 @@ export function ClientJourney() {
             target="_blank"
             rel="noreferrer"
             className={cn(
-              "inline-flex items-center gap-2 rounded-full bg-[var(--brand-purple-deep)] px-6 py-3 text-[0.82rem] font-semibold text-[var(--brand-cream)] transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]",
+              "inline-flex items-center gap-2 rounded-full bg-[var(--brand-purple-deep)] px-6 py-3 text-[0.82rem] font-semibold text-[var(--brand-ivory)] transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]",
               locale === "ar" ? "tracking-normal" : "tracking-[0.12em] uppercase",
             )}
           >

@@ -82,7 +82,7 @@ export function Hero() {
     <section
       ref={rootRef}
       id="top"
-      className="relative isolate flex min-h-[100svh] items-center overflow-hidden bg-[var(--brand-purple-deep)] text-[var(--brand-cream)]"
+      className="relative isolate flex min-h-[100svh] items-center overflow-hidden bg-[var(--brand-purple-deep)] text-[var(--brand-ivory)]"
     >
       <div className="absolute inset-0 overflow-hidden">
         <div className="hero-bg absolute inset-0 will-change-transform md:inset-[-8%] md:h-[116%] md:w-[116%]">
@@ -178,7 +178,7 @@ export function Hero() {
           >
             <span
               className={cn(
-                "inline-flex items-center gap-3 rounded-full bg-[rgb(12_8_28/0.72)] px-6 py-3 font-semibold uppercase text-[var(--brand-cream)] transition-colors hover:bg-[rgb(12_8_28/0.88)]",
+                "inline-flex items-center gap-3 rounded-full bg-[rgb(12_8_28/0.72)] px-6 py-3 font-semibold uppercase text-[var(--brand-ivory)] transition-colors hover:bg-[rgb(12_8_28/0.88)]",
                 locale === "ar"
                   ? "px-7 py-3.5 text-[1.05rem] tracking-normal"
                   : "text-[0.82rem] tracking-[0.16em]",

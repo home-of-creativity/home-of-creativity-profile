@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { CacheWorker } from "@/components/CacheWorker";
 import { LanguageProvider, useLanguage } from "@/lib/i18n";
+import { ThemeProvider } from "@/lib/theme";
 
 function LocaleFlash() {
   const { locale } = useLanguage();
@@ -38,9 +39,11 @@ function LocaleFlash() {
 export function Providers({ children }: { children: ReactNode }) {
   return (
     <LanguageProvider>
-      <CacheWorker />
-      <LocaleFlash />
-      {children}
+      <ThemeProvider>
+        <CacheWorker />
+        <LocaleFlash />
+        {children}
+      </ThemeProvider>
     </LanguageProvider>
   );
 }
