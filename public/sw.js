@@ -1,4 +1,4 @@
-const CACHE = "hoc-design-v6";
+const CACHE = "hoc-design-v7";
 const BASE = new URL("./", self.registration.scope).pathname.replace(/\/$/, "");
 const PRECACHE = [
   `${BASE}/hummingbird.svg`,
@@ -29,6 +29,11 @@ function shouldBypass(request) {
   const url = new URL(request.url);
   const path = url.pathname;
   return (
+    path.startsWith("/dashboard") ||
+    path.startsWith("/staff") ||
+    path.startsWith("/api") ||
+    path.startsWith("/auth") ||
+    path.startsWith("/storage") ||
     path.includes("hot-update") ||
     path.includes("webpack-hmr") ||
     path.includes("/_next/webpack") ||
@@ -61,7 +66,12 @@ self.addEventListener("fetch", (event) => {
       try {
         const response = await fetch(event.request);
         if (response && (response.ok || response.type === "opaque") && response.type !== "error") {
-          cache.put(event.request, response.clone());
+          const type = response.headers.get("content-type") || "";
+          if (response.type === "opaque" || (media && !type.includes("text/html"))) {
+            cache.put(event.request, response.clone());
+          } else if (!type.includes("text/html") && !type.includes("application/json")) {
+            cache.put(event.request, response.clone());
+          }
         }
         return response;
       } catch {
