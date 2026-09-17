@@ -113,6 +113,23 @@ img {
 
 html[lang="ar"] .font-display {
   font-family: var(--font-ar);
+  letter-spacing: 0;
+}
+
+.media-reveal {
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+
+.media-reveal.is-loaded {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .media-reveal {
+    opacity: 1;
+    transition: none;
+  }
 }
 
 body::before {

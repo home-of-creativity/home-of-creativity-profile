@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { DeferredFillImage } from "@/components/ProgressiveImage";
 import { finance } from "@/lib/content";
 import { useLanguage } from "@/lib/i18n";
 import { withBasePath } from "@/lib/base-path";
@@ -33,10 +33,9 @@ export function Finance() {
 
           <Reveal>
             <div className="relative mx-auto aspect-[1942/809] w-full max-w-xl lg:max-w-none">
-              <Image
+              <DeferredFillImage
                 src={withBasePath("/photo/financial-analysis.webp")}
                 alt={t(finance.imageAlt)}
-                fill
                 sizes="(min-width: 1024px) 42vw, 90vw"
                 className="object-contain object-center"
               />

@@ -8,7 +8,7 @@ test.describe("SEO and geo", () => {
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /hoc\.agency\/?$/);
     await expect(page.locator('meta[property="og:title"]')).toHaveCount(1);
     await expect(page.locator('meta[name="geo.placename"]')).toHaveAttribute("content", /Damascus/i);
-    await expect(page.locator('meta[name="geo.position"]')).toHaveAttribute("content", /33\.5192;36\.2917/);
+    await expect(page.locator('meta[name="geo.position"]')).toHaveAttribute("content", /33\.5188338;36\.2916993/);
     const jsonLd = page.locator('script[type="application/ld+json"]');
     await expect(jsonLd).toHaveCount(1);
     const payload = JSON.parse((await jsonLd.textContent()) ?? "{}") as { "@graph"?: Array<{ "@type"?: unknown }> };

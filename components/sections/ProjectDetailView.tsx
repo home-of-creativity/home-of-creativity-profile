@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { ProgressiveImage } from "@/components/ProgressiveImage";
 import { projectDetail } from "@/lib/content";
 import { fetchPortfolioProject, type PortfolioProject, type PortfolioProjectImage } from "@/lib/portfolio-api";
 import { useLanguage } from "@/lib/i18n";
@@ -68,7 +69,7 @@ export function ProjectDetailView({ id }: { id: string }) {
     return (
       <section className="project-detail-page py-24">
         <Shell>
-          <p className="muted text-[var(--brand-muted)]">{locale === "ar" ? "جارٍ التحميل…" : "Loading…"}</p>
+          <p className="muted text-[var(--brand-muted)]">{t(projectDetail.loading)}</p>
         </Shell>
       </section>
     );
@@ -142,12 +143,13 @@ export function ProjectDetailView({ id }: { id: string }) {
 
           {activeImage?.image_url ? (
             <div className="overflow-hidden rounded-[1.4rem] border border-[var(--brand-line)] bg-[var(--brand-purple-deep)] shadow-[var(--shadow)]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <ProgressiveImage
                 src={activeImage.image_url}
                 alt={localizedAlt(activeImage, locale, localizedTitle(project, locale))}
                 referrerPolicy="no-referrer"
-                className="block aspect-[4/3] w-full object-cover"
+                priority
+                className="aspect-[4/3]"
+                imgClassName="block h-full w-full object-cover"
               />
             </div>
           ) : null}
@@ -171,12 +173,12 @@ export function ProjectDetailView({ id }: { id: string }) {
                       : "border-[var(--brand-line)]",
                   )}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={image.image_url ?? ""}
+                  <ProgressiveImage
+                    src={image.image_url}
                     alt={localizedAlt(image, locale, localizedTitle(project, locale))}
                     referrerPolicy="no-referrer"
-                    className="aspect-[4/3] w-full object-cover"
+                    className="aspect-[4/3]"
+                    imgClassName="h-full w-full object-cover"
                   />
                 </button>
               ))}

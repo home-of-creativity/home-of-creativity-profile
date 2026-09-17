@@ -1,9 +1,8 @@
-const CACHE = "hoc-design-v4";
+const CACHE = "hoc-design-v5";
 const BASE = new URL("./", self.registration.scope).pathname.replace(/\/$/, "");
 const PRECACHE = [
   `${BASE}/hummingbird.svg`,
   `${BASE}/photo/hero-section-background.webp`,
-  `${BASE}/photo/about_us_background.webp`,
 ];
 
 self.addEventListener("install", (event) => {
@@ -28,7 +27,6 @@ self.addEventListener("activate", (event) => {
 function shouldBypass(request) {
   if (request.method !== "GET") return true;
   const url = new URL(request.url);
-  if (url.origin !== self.location.origin) return true;
   const path = url.pathname;
   return (
     path.includes("hot-update") ||
@@ -39,25 +37,30 @@ function shouldBypass(request) {
 }
 
 function isMedia(url) {
-  return /\.(webp|png|jpe?g|gif|svg|avif|woff2?|ttf)$/i.test(url.pathname);
+  return (
+    /\.(webp|png|jpe?g|gif|svg|avif|woff2?|ttf|mp4|webm|ogg|m4v|mov)(\?|$)/i.test(url.pathname) ||
+    /fbcdn|cdninstagram|instagram\.|googleusercontent|ggpht|drive\.google|googleapis/i.test(url.hostname)
+  );
 }
 
 self.addEventListener("fetch", (event) => {
   if (shouldBypass(event.request)) return;
 
   const url = new URL(event.request.url);
+  const media = isMedia(url);
+  if (url.origin !== self.location.origin && !media) return;
 
   event.respondWith(
     caches.open(CACHE).then(async (cache) => {
       const cached = await cache.match(event.request);
 
-      if (isMedia(url) && cached) {
+      if (media && cached) {
         return cached;
       }
 
       try {
         const response = await fetch(event.request);
-        if (response && response.ok && response.type === "basic") {
+        if (response && (response.ok || response.type === "opaque") && response.type !== "error") {
           cache.put(event.request, response.clone());
         }
         return response;

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { ProgressiveImage } from "@/components/ProgressiveImage";
 import { showcaseClients as copy } from "@/lib/content";
 import {
   fetchShowcaseClients,
@@ -24,14 +25,11 @@ function ClientLogoDisc({
 }) {
   const initials = client.name.slice(0, 2).toUpperCase();
   const content = client.logo_url ? (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
+    <ProgressiveImage
       src={client.logo_url}
       alt={client.name}
-      loading="lazy"
-      decoding="async"
       draggable={false}
-      className="client-logo-disc-image"
+      imgClassName="client-logo-disc-image"
     />
   ) : (
     <span className="client-logo-disc-fallback" aria-hidden>

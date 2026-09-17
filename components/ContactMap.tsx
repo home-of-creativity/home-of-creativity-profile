@@ -12,6 +12,7 @@ import {
 } from "@/lib/google-maps";
 import { officesGeo } from "@/lib/seo";
 import { useLanguage } from "@/lib/i18n";
+import { useInViewOnce } from "@/lib/use-in-view";
 import { cn } from "@/lib/cn";
 
 const offices = [
@@ -31,8 +32,10 @@ export function ContactMap() {
   const { t, locale } = useLanguage();
   const [active, setActive] = useState<(typeof offices)[number]["id"]>("syr");
   const [interactive, setInteractive] = useState(Boolean(googleMapsApiKey()));
+  const hostRef = useRef<HTMLDivElement>(null);
   const mapNodeRef = useRef<HTMLDivElement>(null);
   const mapHandleRef = useRef<GoogleMapHandle | null>(null);
+  const near = useInViewOnce(hostRef, { rootMargin: "240px 0px" });
 
   const current = offices.find((office) => office.id === active) ?? offices[0];
   const cityLabel = t(current.office.city);
@@ -57,7 +60,7 @@ export function ContactMap() {
 
   useEffect(() => {
     const element = mapNodeRef.current;
-    if (!interactive || !element) return;
+    if (!near || !interactive || !element) return;
 
     let cancelled = false;
 
@@ -84,7 +87,7 @@ export function ContactMap() {
     };
     // Create the map once; office changes update the existing instance below.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [interactive]);
+  }, [interactive, near]);
 
   useEffect(() => {
     const handle = mapHandleRef.current;
@@ -96,7 +99,7 @@ export function ContactMap() {
   }, [cityLabel, current]);
 
   return (
-    <div className="relative mx-auto mt-14 max-w-3xl">
+    <div ref={hostRef} className="relative mx-auto mt-14 max-w-3xl">
       <div className="mb-4 flex flex-wrap items-center justify-center gap-2" role="tablist" aria-label={t(contact.map.title)}>
         {offices.map((office) => {
           const selected = office.id === active;
@@ -133,7 +136,7 @@ export function ContactMap() {
         ) : (
           <iframe
             title={`${t(contact.map.title)} — ${cityLabel}`}
-            src={embedSrc}
+            src={near ? embedSrc : undefined}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
             allowFullScreen

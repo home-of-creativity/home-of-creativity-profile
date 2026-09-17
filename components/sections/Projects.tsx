@@ -4,10 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { LoadingLottie } from "@/components/LoadingLottie";
+import { DeferredFillImage, ProgressiveImage } from "@/components/ProgressiveImage";
 import { projects } from "@/lib/content";
 import { fetchPortfolioProjects, type PortfolioCategory, type PortfolioProject } from "@/lib/portfolio-api";
 import { withBasePath } from "@/lib/base-path";
 import { useLanguage } from "@/lib/i18n";
+import { useInViewOnce } from "@/lib/use-in-view";
 import { cn } from "@/lib/cn";
 import { useGsapScope } from "@/lib/gsap-client";
 
@@ -32,6 +34,8 @@ function backdropMediaClass(src: string) {
 }
 
 function ProjectsBackdrop({ src }: { src: string }) {
+  const hostRef = useRef<HTMLDivElement>(null);
+  const show = useInViewOnce(hostRef, { rootMargin: "360px 0px" });
   const [current, setCurrent] = useState(src);
   const [next, setNext] = useState<string | null>(null);
   const [nextVisible, setNextVisible] = useState(false);
@@ -96,32 +100,35 @@ function ProjectsBackdrop({ src }: { src: string }) {
   }, [commitNext, next, nextVisible]);
 
   return (
-    <>
-      <Image
-        src={withBasePath(current)}
-        alt=""
-        fill
-        sizes="100vw"
-        className={backdropMediaClass(current)}
-      />
-      {next ? (
-        <Image
-          src={withBasePath(next)}
-          alt=""
-          fill
-          sizes="100vw"
-          className={cn(
-            backdropMediaClass(next),
-            "projects-backdrop-next transition-opacity ease-in-out",
-            nextVisible ? "opacity-100" : "opacity-0",
-          )}
-          style={{ transitionDuration: `${BACKDROP_FADE_MS}ms` }}
-          onLoad={revealNext}
-          onError={revealNext}
-          onTransitionEnd={handleNextTransitionEnd}
-        />
+    <div ref={hostRef} className="absolute inset-0">
+      {show ? (
+        <>
+          <DeferredFillImage
+            src={withBasePath(current)}
+            alt=""
+            sizes="100vw"
+            className={backdropMediaClass(current)}
+          />
+          {next ? (
+            <Image
+              src={withBasePath(next)}
+              alt=""
+              fill
+              sizes="100vw"
+              className={cn(
+                backdropMediaClass(next),
+                "projects-backdrop-next transition-opacity ease-in-out",
+                nextVisible ? "opacity-100" : "opacity-0",
+              )}
+              style={{ transitionDuration: `${BACKDROP_FADE_MS}ms` }}
+              onLoad={revealNext}
+              onError={revealNext}
+              onTransitionEnd={handleNextTransitionEnd}
+            />
+          ) : null}
+        </>
       ) : null}
-    </>
+    </div>
   );
 }
 
@@ -182,13 +189,6 @@ export function Projects() {
   const visible = expanded ? filtered : preview;
   const allPreview = filter === "all" && !expanded;
   const canExpand = filtered.length > preview.length;
-
-  useEffect(() => {
-    [ALL_BACKDROP, ...Object.values(CATEGORY_BACKDROPS)].forEach((path) => {
-      const img = new window.Image();
-      img.src = withBasePath(path);
-    });
-  }, []);
 
   useEffect(() => {
     const applyHash = () => {
@@ -320,12 +320,12 @@ export function Projects() {
                 className="project-card group text-start focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
               >
                 {project.image_url ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
+                  <ProgressiveImage
                     src={project.image_url}
                     alt={title}
                     referrerPolicy="no-referrer"
-                    className="project-card-media absolute inset-0 h-full w-full object-cover"
+                    className="absolute inset-0"
+                    imgClassName="project-card-media absolute inset-0 h-full w-full object-cover"
                   />
                 ) : (
                   <span className="absolute inset-0 bg-[var(--brand-purple)]" />
@@ -337,7 +337,10 @@ export function Projects() {
                   {category ? (
                     <span className="mt-1 block text-[0.78rem] text-white/80">{category}</span>
                   ) : null}
-                  <span className="mt-2 inline-flex items-center gap-2 text-[0.72rem] font-semibold uppercase text-[var(--brand-orange)]">
+                  <span className={cn(
+                    "mt-2 inline-flex items-center gap-2 text-[0.72rem] font-semibold uppercase text-[var(--brand-orange)]",
+                    locale === "ar" ? "tracking-normal" : "tracking-[0.12em]",
+                  )}>
                     {t(projects.viewDetails)}
                     <span aria-hidden>{locale === "ar" ? "←" : "→"}</span>
                   </span>

@@ -127,8 +127,8 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
-      dir="ltr"
+      lang="ar"
+      dir="rtl"
       className={`${inter.variable} ${ibmPlexArabic.variable} ${greatVibes.variable}`}
       suppressHydrationWarning
     >
@@ -139,7 +139,7 @@ export default function RootLayout({
           id="hoc-locale-boot"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var k="hoc-locale";var l=null;try{l=localStorage.getItem(k);}catch(e){}if(l!=="ar"&&l!=="en"){var m=document.cookie.match(/(?:^|; )hoc-locale=(ar|en)/);l=m?m[1]:"en";}var h=document.documentElement;h.lang=l==="ar"?"ar":"en";h.dir=l==="ar"?"rtl":"ltr";h.setAttribute("data-locale",l==="ar"?"ar":"en");if(l==="ar"){h.setAttribute("data-i18n-pending","1");var s=document.createElement("style");s.setAttribute("data-hoc-i18n","1");s.textContent='html[data-i18n-pending="1"]:not([data-i18n-ready]) body{visibility:hidden}';(document.head||h).appendChild(s);}if("serviceWorker"in navigator){var bp=${JSON.stringify(BASE_PATH)};var sw=(bp||"")+"/sw.js";if(sw.charAt(0)!=="/")sw="/"+sw;navigator.serviceWorker.register(sw,{scope:bp?bp+"/":"/"}).catch(function(){});}}catch(e){}setTimeout(function(){var h=document.documentElement;h.removeAttribute("data-i18n-pending");h.setAttribute("data-i18n-ready","1");},4000);})();`,
+            __html: `(function(){try{var k="hoc-locale";var l=null;try{l=localStorage.getItem(k);}catch(e){}if(l!=="ar"&&l!=="en"){var m=document.cookie.match(/(?:^|; )hoc-locale=(ar|en)/);l=m?m[1]:"ar";}var applied=l==="en"?"en":"ar";var h=document.documentElement;if(applied!==(h.getAttribute("lang")||"ar")){h.setAttribute("data-i18n-pending","1");var s=document.createElement("style");s.setAttribute("data-hoc-i18n","1");s.textContent='html[data-i18n-pending="1"]:not([data-i18n-ready]) body{visibility:hidden}';(document.head||h).appendChild(s);}h.lang=applied;h.dir=applied==="ar"?"rtl":"ltr";h.setAttribute("data-locale",applied);if("serviceWorker"in navigator){var bp=${JSON.stringify(BASE_PATH)};var sw=(bp||"")+"/sw.js";if(sw.charAt(0)!=="/")sw="/"+sw;navigator.serviceWorker.register(sw,{scope:bp?bp+"/":"/"}).catch(function(){});}}catch(e){}setTimeout(function(){var h=document.documentElement;h.removeAttribute("data-i18n-pending");h.setAttribute("data-i18n-ready","1");},4000);})();`,
           }}
         />
         <div suppressHydrationWarning aria-hidden />

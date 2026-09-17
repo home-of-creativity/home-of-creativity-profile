@@ -46,7 +46,7 @@ export const about = {
   title: { en: "About us", ar: "من نحن" },
   body: {
     en: "Forget aesthetic fluff and sweet talk. We are not your typical agency; we are brand architects. We dissect your business, eliminate the clutter, and rebuild it into a powerhouse driven by hard numbers and defined by visual prestige. In an era of endless noise and generic content, we stand for Premium Minimalism and direct, human-centric marketing. We do not yell to be seen. We strategically position your brand so the industry leans in and listens.",
-    ar: "نحن لسنا وكالة إعلانات أخرى تبيعك تصاميم جميلة ومنمّقة وكلاماً معسولاً. نحن مهندسو هوية تجارية. نأخذ عملك لنجرّده من العشوائية ونعيده إلى السوق كعلامة تجارية رائدة ذات هيبة بصرية مبنية على أرقام وحقائق صلبة لا تقبل الجدل. في عالم مليء بالضجيج والمحتوى المعلّب، نحن نؤمن بالفخامة البسيطة Premium Minimalism والتسويق الإنساني المباشر. لا نصرخ لجذب الانتباه، بل نصنع لعملائنا تموضعاً ذكياً يجعل السوق ينصت إليهم باحترام.",
+    ar: "نحن لسنا وكالة إعلانات أخرى تبيعك تصاميم جميلة ومنمّقة وكلاماً معسولاً. نحن مهندسو هوية تجارية. نأخذ عملك لنجرّده من العشوائية ونعيده إلى السوق كعلامة تجارية رائدة ذات هيبة بصرية مبنية على أرقام وحقائق صلبة لا تقبل الجدل. في عالم مليء بالضجيج والمحتوى المعلّب، نحن نؤمن بالفخامة البسيطة والتسويق الإنساني المباشر. لا نصرخ لجذب الانتباه، بل نصنع لعملائنا تموضعاً ذكياً يجعل السوق ينصت إليهم باحترام.",
   },
   imageAlt: {
     en: "A lone figure at the far end of a vast, geometrically lit hall",
@@ -99,7 +99,7 @@ export const services = {
     {
       id: "social",
       en: "Social Media",
-      ar: "السوشل ميديا",
+      ar: "السوشال ميديا",
       tone: "orange" as const,
     },
     {
@@ -231,7 +231,7 @@ export const clientJourney = {
       title: { en: "Quotation", ar: "عرض السعر" },
       body: {
         en: "You receive a branded PDF quotation with approve or reject — no back-and-forth guessing.",
-        ar: "تصلك عرض سعر بصيغة PDF مع خيار الموافقة أو الرفض — بلا تخمين أو مراسلات عشوائية.",
+        ar: "يصلك عرض سعر بصيغة PDF مع خيار الموافقة أو الرفض — بلا تخمين أو مراسلات عشوائية.",
       },
     },
     {
@@ -268,12 +268,12 @@ export const reels = {
     en: "Recent vertical work — identity, events, and brand stories in motion.",
     ar: "أعمال عمودية حديثة — هوية وفعاليات وقصص علامات بالحركة.",
   },
-  loading: { en: "Loading reels…", ar: "جاري تحميل الريلز…" },
+  loading: { en: "Loading reels…", ar: "جارٍ تحميل الريلز…" },
 };
 
 export const socialPhones = {
   kicker: { en: "Social media", ar: "قنواتنا على السوشال ميديا" },
-  title: { en: "Browse our pages on social media", ar: "تصفح صفحاتنا " },
+  title: { en: "Browse our pages on social media", ar: "تصفح صفحاتنا على السوشال ميديا" },
   lead: {
     en: "Our designs are reflected in every marketing detail with creativity and professionalism",
     ar: "تصاميمنا تنعكس في كل تفاصيل التسويق بإبداع واحترافية",
@@ -285,7 +285,7 @@ export const socialPhones = {
   facebookTitle: { en: "Home of Creativity on Facebook", ar: "بيت الإبداع على فيسبوك" },
   instagramTitle: { en: "Home of Creativity on Instagram", ar: "بيت الإبداع على إنستغرام" },
   feedScroll: { en: "Scroll posts", ar: "تمرير المنشورات" },
-  loading: { en: "Loading posts…", ar: "جاري تحميل المنشورات…" },
+  loading: { en: "Loading posts…", ar: "جارٍ تحميل المنشورات…" },
   postsStat: { en: "posts", ar: "منشورات" },
   followersStat: { en: "followers", ar: "متابعون" },
   followingStat: { en: "following", ar: "يتابع" },
@@ -314,7 +314,7 @@ export const projects = {
   previous: { en: "Previous", ar: "السابق" },
   next: { en: "Next", ar: "التالي" },
   viewDetails: { en: "View details", ar: "عرض التفاصيل" },
-  loading: { en: "Loading projects…", ar: "جاري تحميل المشاريع…" },
+  loading: { en: "Loading projects…", ar: "جارٍ تحميل المشاريع…" },
   empty: {
     en: "Projects are not available right now. Please try again later.",
     ar: "المشاريع غير متاحة حالياً. يرجى المحاولة لاحقاً.",
@@ -387,7 +387,7 @@ export const projects = {
       label: { en: "Motion", ar: "الحركة" },
       filter: { en: "Media", ar: "المحتوى" },
       tags: { en: "Content, film, campaigns", ar: "محتوى، تصوير، حملات" },
-      title: { en: "Social, film & campaigns", ar: "السوشل والمحتوى والحملات" },
+      title: { en: "Social, film & campaigns", ar: "السوشال والمحتوى والحملات" },
       body: {
         en: "Disciplined grids, cinematic motion, photography, and paid campaigns — proof, not stock.",
         ar: "شبكات منضبطة وتحريك سينمائي وتصوير وحملات ممولة: برهان لا صور جاهزة.",
@@ -497,6 +497,7 @@ export const projects = {
 };
 
 export const projectDetail = {
+  loading: { en: "Loading…", ar: "جارٍ التحميل…" },
   back: { en: "Back to projects", ar: "العودة للمشاريع" },
   visitWebsite: { en: "Visit website", ar: "زيارة الموقع" },
   gallery: { en: "Gallery", ar: "معرض الصور" },
@@ -565,7 +566,7 @@ export const pricing = {
     phonePlaceholder: { en: "9XX XXX XXX", ar: "9XX XXX XXX" },
     company: {
       en: "Company name or social media page",
-      ar: "اسم الشركة أو صفحة السوشيال ميديا",
+      ar: "اسم الشركة أو صفحة السوشال ميديا",
     },
     submit: { en: "Send via WhatsApp", ar: "إرسال عبر واتساب" },
     close: { en: "Close", ar: "إغلاق" },

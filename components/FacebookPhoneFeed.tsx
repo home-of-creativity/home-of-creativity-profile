@@ -3,18 +3,15 @@
 import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { AutoplayVideo } from "@/components/AutoplayVideo";
 import { Hummingbird } from "@/components/brand";
+import { ProgressiveImage } from "@/components/ProgressiveImage";
 import { socialPhones as copy } from "@/lib/content";
 import { fetchFacebookFeed } from "@/lib/facebook-feed-api";
+import { formatStat } from "@/lib/format-stat";
 import type { InstagramFeedPayload, InstagramFeedPost } from "@/lib/instagram-feed-api";
 import { facebookPageUrl, facebookPluginSrc } from "@/lib/social-embeds";
 import { useLanguage } from "@/lib/i18n";
+import { useInViewOnce } from "@/lib/use-in-view";
 import { usePhoneFeedScroll } from "@/lib/use-phone-feed-scroll";
-
-function formatStat(value: number): string {
-  if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`;
-  if (value >= 10_000) return `${(value / 1_000).toFixed(1).replace(/\.0$/, "")}K`;
-  return new Intl.NumberFormat("en").format(value);
-}
 
 function isVideo(post: InstagramFeedPost) {
   return post.media_type === "VIDEO" || post.media_type === "REELS";
@@ -61,7 +58,14 @@ function FeedTile({
       {videoSrc ? (
         <AutoplayVideo src={videoSrc} poster={imageSrc ?? undefined} className="ig-profile-media" root={root} />
       ) : (
-        <img src={imageSrc ?? ""} alt={post.caption ?? ""} referrerPolicy="no-referrer" />
+        <ProgressiveImage
+          src={imageSrc}
+          alt={post.caption ?? ""}
+          referrerPolicy="no-referrer"
+          root={root}
+          rootMargin="80px 0px"
+          imgClassName="ig-profile-media"
+        />
       )}
       <TileBadge post={post} />
     </>
@@ -157,6 +161,8 @@ function PhoneFeedLoading() {
 
 function FacebookPlugin({ title }: { title: string }) {
   const { locale } = useLanguage();
+  const hostRef = useRef<HTMLDivElement>(null);
+  const show = useInViewOnce(hostRef, { rootMargin: "200px 0px" });
   const [mode, setMode] = useState<"preview" | "plugin">("preview");
   const [iframeReady, setIframeReady] = useState(false);
 
@@ -169,26 +175,28 @@ function FacebookPlugin({ title }: { title: string }) {
   if (mode === "preview") return <FacebookPagePreview />;
 
   return (
-    <div className="social-phone-iframe-wrap">
-      {iframeReady ? null : <PhoneFeedLoading />}
-      <iframe
-        title={title}
-        src={facebookPluginSrc(430, 980, locale === "ar" ? "ar_AR" : "en_US")}
-        loading="eager"
-        width={430}
-        height={980}
-        referrerPolicy="origin"
-        allow="encrypted-media; clipboard-write"
-        className={iframeReady ? "social-phone-iframe is-ready" : "social-phone-iframe is-pending"}
-        onLoad={() => setIframeReady(true)}
-        onError={() => setMode("preview")}
-      />
+    <div ref={hostRef} className="social-phone-iframe-wrap">
+      {iframeReady || !show ? null : <PhoneFeedLoading />}
+      {show ? (
+        <iframe
+          title={title}
+          src={facebookPluginSrc(430, 980, locale === "ar" ? "ar_AR" : "en_US")}
+          loading="lazy"
+          width={430}
+          height={980}
+          referrerPolicy="origin"
+          allow="encrypted-media; clipboard-write"
+          className={iframeReady ? "social-phone-iframe is-ready" : "social-phone-iframe is-pending"}
+          onLoad={() => setIframeReady(true)}
+          onError={() => setMode("preview")}
+        />
+      ) : null}
     </div>
   );
 }
 
 export function FacebookPhoneFeed({ title }: { title: string }) {
-  const { t, dir } = useLanguage();
+  const { t, dir, locale } = useLanguage();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [feed, setFeed] = useState<InstagramFeedPayload | null>(null);
   const [tab, setTab] = useState<"posts" | "reels">("posts");
@@ -238,7 +246,13 @@ export function FacebookPhoneFeed({ title }: { title: string }) {
       <div className="ig-profile-chrome">
         <div className="ig-profile-head">
           {avatar ? (
-            <img className="ig-profile-avatar" src={avatar} alt="" referrerPolicy="no-referrer" />
+            <ProgressiveImage
+              src={avatar}
+              alt=""
+              referrerPolicy="no-referrer"
+              className="ig-profile-avatar overflow-hidden"
+              imgClassName="h-full w-full object-cover"
+            />
           ) : (
             <span className="ig-profile-avatar ig-profile-avatar-fallback" aria-hidden>
               {handle.slice(0, 1).toUpperCase()}
@@ -247,15 +261,15 @@ export function FacebookPhoneFeed({ title }: { title: string }) {
           <dl className="ig-profile-stats">
             <div>
               <dt>{t(copy.postsStat)}</dt>
-              <dd>{formatStat(postCount)}</dd>
+              <dd>{formatStat(postCount, locale)}</dd>
             </div>
             <div>
               <dt>{t(copy.followersStat)}</dt>
-              <dd>{formatStat(followers)}</dd>
+              <dd>{formatStat(followers, locale)}</dd>
             </div>
             <div>
               <dt>{t(copy.likesStat)}</dt>
-              <dd>{formatStat(likes)}</dd>
+              <dd>{formatStat(likes, locale)}</dd>
             </div>
           </dl>
         </div>

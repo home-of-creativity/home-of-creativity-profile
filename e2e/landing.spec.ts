@@ -13,6 +13,21 @@ test.describe("Landing navbar and locale", () => {
     await expect(page.getByRole("link", { name: /Login|تسجيل الدخول/i })).toHaveCount(0);
   });
 
+  test("defaults to Arabic on a first visit", async ({ page }) => {
+    await page.addInitScript(() => {
+      try {
+        localStorage.removeItem("hoc-locale");
+      } catch {
+        /* private mode */
+      }
+      document.cookie = "hoc-locale=;path=/;max-age=0";
+    });
+    await page.goto(LANDING, { waitUntil: "domcontentloaded" });
+    await expect(page.locator("html")).toHaveAttribute("lang", "ar");
+    await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+    await expect(page.getByRole("link", { name: "الرئيسية" }).first()).toBeVisible();
+  });
+
   test("toggles English and Arabic direction", async ({ page }) => {
     await page.goto(LANDING, { waitUntil: "domcontentloaded" });
     await page.getByRole("button", { name: "English" }).click();
@@ -42,11 +57,20 @@ test.describe("Landing navbar and locale", () => {
 
   test("reels play muted without a click when they enter view", async ({ page }) => {
     await page.goto(LANDING, { waitUntil: "domcontentloaded" });
-    await page.locator("#reels").scrollIntoViewIfNeeded();
+    await expect(page.locator("#reels")).toBeVisible();
     const video = page.locator("#reels video").first();
     const iframe = page.locator("#reels iframe").first();
-    await expect(video.or(iframe)).toBeVisible();
-    if (await video.count()) {
+    await expect(video.or(iframe)).toBeVisible({ timeout: 15_000 });
+    if (await page.locator("#reels video").count()) {
+      const videos = page.locator("#reels video");
+      const count = await videos.count();
+      for (let i = 0; i < count; i += 1) {
+        await expect(videos.nth(i)).not.toHaveAttribute("src");
+      }
+    }
+
+    await page.locator("#reels").scrollIntoViewIfNeeded();
+    if (await page.locator("#reels video").count()) {
       await expect(video).toHaveAttribute("src", /.+/, { timeout: 15_000 });
       await expect(video).toHaveAttribute("muted", "");
       await expect(video).toHaveAttribute("autoplay", "");
@@ -113,9 +137,9 @@ test.describe("Landing navbar and locale", () => {
     const href = await page.locator("html").getAttribute("data-wa");
     const text = decodeURIComponent(href?.split("text=")[1] ?? "");
     expect(text).toContain("مرحبا home of creativity");
-    expect(text).toContain("معاك أ. أحمد من شركة النور");
+    expect(text).toContain("معك أ. أحمد من شركة النور");
     expect(text).toContain("حابين نشترك معكم بباقة");
-    expect(text).toContain("رقمي: 0991234567");
+    expect(text).toMatch(/رقمي: \+963/);
     expect(text).toContain("شكراً لكم");
   });
 });

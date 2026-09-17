@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment, type ReactNode } from "react";
-import Image from "next/image";
+import { DeferredFillImage } from "@/components/ProgressiveImage";
 import { about } from "@/lib/content";
 import { useLanguage, type Copy } from "@/lib/i18n";
 import { withBasePath } from "@/lib/base-path";
@@ -23,10 +23,9 @@ export function About() {
       className="relative isolate overflow-hidden bg-[var(--brand-off-white)] py-16 text-[var(--brand-ink)] md:py-24 lg:py-32"
     >
       <div className="absolute inset-0 overflow-hidden">
-        <Image
+        <DeferredFillImage
           src={withBasePath("/photo/about_us_background.webp")}
           alt=""
-          fill
           sizes="100vw"
           className={cn(
             "object-cover object-[82%_18%] mix-blend-multiply",
@@ -93,10 +92,9 @@ function StatementColumn({
       className="group scroll-mt-[calc(var(--nav-height)+0.75rem)] text-start"
     >
       <div className="relative mb-8 aspect-[4/3] overflow-hidden rounded-xl border border-[var(--brand-line)] bg-[var(--brand-purple-deep)] sm:aspect-[16/10]">
-        <Image
+        <DeferredFillImage
           src={withBasePath(copy.image)}
           alt={t(copy.imageAlt)}
-          fill
           sizes="(min-width: 768px) 50vw, 100vw"
           className="object-cover object-center transition-transform duration-700 motion-safe:group-hover:scale-[1.03]"
         />

@@ -2,13 +2,10 @@
 
 import { useEffect } from "react";
 import { BASE_PATH } from "@/lib/base-path";
+import { MEDIA_CACHE } from "@/lib/media-cache";
 import { rememberVisit } from "@/lib/visit-cache";
 
-const PRELOAD = [
-  "/hummingbird.svg",
-  "/photo/hero-section-background.webp",
-  "/photo/about_us_background.webp",
-];
+const PRELOAD = ["/hummingbird.svg", "/photo/hero-section-background.webp"];
 
 export function CacheWorker() {
   useEffect(() => {
@@ -24,7 +21,7 @@ export function CacheWorker() {
 
     if (!("caches" in window)) return;
 
-    void caches.open("hoc-design-v4").then((cache) =>
+    void caches.open(MEDIA_CACHE).then((cache) =>
       Promise.all(
         PRELOAD.map((path) => {
           const url = `${BASE_PATH}${path}`;

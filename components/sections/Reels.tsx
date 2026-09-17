@@ -24,10 +24,22 @@ function ReelCard({
 }) {
   const [videoReady, setVideoReady] = useState(false);
   const notified = useRef(false);
+  const src = shouldLoad && reel.video_url ? reel.video_url : undefined;
+  const loadedSrc = useRef(src);
+
+  if (loadedSrc.current !== src) {
+    loadedSrc.current = src;
+    notified.current = false;
+  }
+
+  useEffect(() => {
+    setVideoReady(false);
+  }, [src]);
 
   if (!reel.video_url) return null;
 
   const markReady = () => {
+    if (!src) return;
     setVideoReady(true);
     if (notified.current) return;
     notified.current = true;
@@ -43,10 +55,11 @@ function ReelCard({
           </div>
         ) : null}
         <AutoplayVideo
+          key={src ?? "idle"}
           className="reel-card-video"
-          src={shouldLoad ? reel.video_url : undefined}
+          src={src}
           poster={reel.poster_url ?? undefined}
-          preload="metadata"
+          preload="none"
           onCanPlay={markReady}
           onError={markReady}
         />

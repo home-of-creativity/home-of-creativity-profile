@@ -14,6 +14,7 @@ import {
 export type Locale = "en" | "ar";
 export type Copy = { en: string; ar: string };
 
+export const DEFAULT_LOCALE: Locale = "ar";
 const STORAGE_KEY = "hoc-locale";
 
 type LanguageContextValue = {
@@ -38,14 +39,14 @@ function readCookieLocale(): Locale | null {
 }
 
 function readStoredLocale(): Locale {
-  if (typeof window === "undefined") return "en";
+  if (typeof window === "undefined") return DEFAULT_LOCALE;
   try {
     const stored = window.localStorage.getItem(STORAGE_KEY);
     if (isLocale(stored)) return stored;
   } catch {
     /* private mode */
   }
-  return readCookieLocale() ?? "en";
+  return readCookieLocale() ?? DEFAULT_LOCALE;
 }
 
 function applyDocumentLocale(next: Locale) {
@@ -67,7 +68,7 @@ function markDocumentReady() {
   document.documentElement.removeAttribute("data-i18n-pending");
 }
 
-let current: Locale = "en";
+let current: Locale = DEFAULT_LOCALE;
 const listeners = new Set<() => void>();
 
 function emit() {
@@ -84,7 +85,7 @@ function getSnapshot() {
 }
 
 function getServerSnapshot(): Locale {
-  return "en";
+  return DEFAULT_LOCALE;
 }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
@@ -120,7 +121,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     setLocale(current === "en" ? "ar" : "en");
   }, [setLocale]);
 
-  const t = useCallback((copy: Copy) => copy?.[locale] ?? "", [locale]);
+  const t = useCallback((copy: Copy) => copy?.[locale] ?? copy?.ar ?? copy?.en ?? "", [locale]);
 
   const value = useMemo<LanguageContextValue>(
     () => ({

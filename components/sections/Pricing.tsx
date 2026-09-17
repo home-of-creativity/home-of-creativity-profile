@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import {
   useCallback,
   useEffect,
@@ -29,6 +28,7 @@ import { cn } from "@/lib/cn";
 import { whatsappHref } from "@/lib/whatsapp";
 import { InternationalPhoneField } from "../InternationalPhoneField";
 import { LoadingLottie } from "../LoadingLottie";
+import { ProgressiveImage } from "../ProgressiveImage";
 import { Reveal, Stagger, StaggerItem } from "../motion";
 import { SectionHeading, Shell } from "../ui";
 import { formatInternationalPhoneDisplay, isValidInternationalPhone } from "@/lib/phone";
@@ -757,13 +757,13 @@ export function Pricing() {
                 className="group relative aspect-[4/5] overflow-hidden rounded-[1.35rem] bg-[var(--brand-charcoal)] shadow-[0_18px_38px_rgb(0_0_0/0.35)] sm:rounded-[1.75rem]"
               >
                 <div className="relative h-[72%] overflow-hidden">
-                  <Image
+                  <ProgressiveImage
                     src={withBasePath(method.image)}
                     alt=""
                     width={760}
                     height={560}
                     sizes="(max-width: 640px) 44vw, 304px"
-                    className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.035]"
+                    imgClassName="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.035]"
                   />
                   <div
                     aria-hidden

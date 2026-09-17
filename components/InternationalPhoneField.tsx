@@ -47,6 +47,7 @@ export function InternationalPhoneField({
             inputMode: "tel",
             required,
             className: "phone-input__number",
+            "aria-label": typeof label === "string" ? label : undefined,
           }}
         />
       </div>
