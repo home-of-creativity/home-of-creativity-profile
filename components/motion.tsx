@@ -37,6 +37,12 @@ export function Reveal({
             return;
           }
 
+          const alreadyVisible = el.getBoundingClientRect().top < window.innerHeight * 0.92;
+          if (alreadyVisible) {
+            gsap.set(el, { autoAlpha: 1, y: 0 });
+            return;
+          }
+
           gsap.from(el, {
             autoAlpha: 0,
             y,
@@ -94,6 +100,12 @@ export function Stagger({
         (context) => {
           const items = gsap.utils.toArray<HTMLElement>(".gsap-stagger-item");
           if (context.conditions?.reduceMotion || shouldSkipMotion()) {
+            gsap.set(items, { autoAlpha: 1, y: 0 });
+            return;
+          }
+
+          const alreadyVisible = root.getBoundingClientRect().top < window.innerHeight * 0.9;
+          if (alreadyVisible) {
             gsap.set(items, { autoAlpha: 1, y: 0 });
             return;
           }

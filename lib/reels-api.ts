@@ -1,7 +1,3 @@
-import { withBasePath } from "./base-path";
-import { publicApiUrl } from "./public-api";
-import { reelDriveStreamUrl, reelLocalSrc, reelsDriveVideos } from "./reels-drive-videos";
-
 export type LandingReel = {
   id: number;
   title_en: string;
@@ -11,20 +7,14 @@ export type LandingReel = {
   sort_order: number;
 };
 
-function fallbackReels(): LandingReel[] {
-  return reelsDriveVideos.map((reel, index) => ({
-    id: index + 1,
-    title_en: reel.title.en,
-    title_ar: reel.title.ar,
-    video_url: withBasePath(reelLocalSrc(reel.id)),
-    poster_url: reelDriveStreamUrl(reel.fileId),
-    sort_order: index + 1,
-  }));
+function reelsApiUrl(): string | null {
+  const raw = process.env.NEXT_PUBLIC_API_URL?.trim().replace(/\/$/, "") ?? "";
+  return raw.length > 0 ? raw : null;
 }
 
 export async function fetchLandingReels(): Promise<LandingReel[]> {
-  const api = publicApiUrl();
-  if (!api) return fallbackReels();
+  const api = reelsApiUrl();
+  if (!api) return [];
 
   try {
     const response = await fetch(`${api}/reels`, {
@@ -32,14 +22,11 @@ export async function fetchLandingReels(): Promise<LandingReel[]> {
       headers: { Accept: "application/json" },
       cache: "no-store",
     });
-    if (response.ok) {
-      const payload = (await response.json()) as { data?: LandingReel[] };
-      const rows = Array.isArray(payload.data) ? payload.data.filter((row) => Boolean(row.video_url)) : [];
-      if (rows.length > 0) return rows;
-    }
+    if (!response.ok) return [];
+    const payload = (await response.json()) as { data?: LandingReel[] };
+    if (!Array.isArray(payload.data)) return [];
+    return payload.data.filter((row) => Boolean(row.video_url));
   } catch {
-    // Static deploy without the API.
+    return [];
   }
-
-  return fallbackReels();
 }

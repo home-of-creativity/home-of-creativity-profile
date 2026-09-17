@@ -6,7 +6,6 @@ import {
   useContext,
   useLayoutEffect,
   useMemo,
-  useState,
   useSyncExternalStore,
   type ReactNode,
 } from "react";
@@ -16,6 +15,12 @@ export type Copy = { en: string; ar: string };
 
 export const DEFAULT_LOCALE: Locale = "ar";
 const STORAGE_KEY = "hoc-locale";
+
+declare global {
+  interface Window {
+    __HOC_LOCALE__?: Locale;
+  }
+}
 
 type LanguageContextValue = {
   locale: Locale;
@@ -40,6 +45,7 @@ function readCookieLocale(): Locale | null {
 
 function readStoredLocale(): Locale {
   if (typeof window === "undefined") return DEFAULT_LOCALE;
+  if (isLocale(window.__HOC_LOCALE__)) return window.__HOC_LOCALE__;
   try {
     const stored = window.localStorage.getItem(STORAGE_KEY);
     if (isLocale(stored)) return stored;
@@ -54,6 +60,9 @@ function applyDocumentLocale(next: Locale) {
   document.documentElement.lang = next;
   document.documentElement.dir = next === "ar" ? "rtl" : "ltr";
   document.documentElement.dataset.locale = next;
+  document.documentElement.setAttribute("data-i18n-ready", "1");
+  document.documentElement.removeAttribute("data-i18n-pending");
+  window.__HOC_LOCALE__ = next;
   try {
     window.localStorage.setItem(STORAGE_KEY, next);
   } catch {
@@ -62,13 +71,11 @@ function applyDocumentLocale(next: Locale) {
   document.cookie = `${STORAGE_KEY}=${next};path=/;max-age=31536000;samesite=lax`;
 }
 
-function markDocumentReady() {
-  if (typeof document === "undefined") return;
-  document.documentElement.setAttribute("data-i18n-ready", "1");
-  document.documentElement.removeAttribute("data-i18n-pending");
+let current: Locale = DEFAULT_LOCALE;
+if (typeof window !== "undefined") {
+  current = readStoredLocale();
 }
 
-let current: Locale = DEFAULT_LOCALE;
 const listeners = new Set<() => void>();
 
 function emit() {
@@ -90,7 +97,6 @@ function getServerSnapshot(): Locale {
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const locale = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-  const [ready, setReady] = useState(false);
 
   useLayoutEffect(() => {
     const stored = readStoredLocale();
@@ -99,13 +105,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       emit();
     }
     applyDocumentLocale(stored);
-    setReady(true);
   }, []);
-
-  useLayoutEffect(() => {
-    if (!ready) return;
-    markDocumentReady();
-  }, [ready]);
 
   const setLocale = useCallback((next: Locale) => {
     if (!isLocale(next) || next === current) {
@@ -126,13 +126,13 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const value = useMemo<LanguageContextValue>(
     () => ({
       locale,
-      ready,
+      ready: true,
       dir: locale === "ar" ? "rtl" : "ltr",
       setLocale,
       toggleLocale,
       t,
     }),
-    [locale, ready, setLocale, toggleLocale, t],
+    [locale, setLocale, toggleLocale, t],
   );
 
   return (

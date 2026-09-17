@@ -108,7 +108,7 @@ export function LanguageToggle({ compact = false }: { compact?: boolean }) {
 }
 
 export function Nav() {
-  const { t, locale, ready } = useLanguage();
+  const { t, locale } = useLanguage();
   const pathname = usePathname();
   const onHome = isHomePathname(pathname);
   const onPricing = isPagePathname(pathname, "pricing");
@@ -127,7 +127,7 @@ export function Nav() {
 
   useGsapScope(
     ({ gsap }) => {
-      if (!ready) return;
+      if (!headerRef.current) return;
 
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
@@ -149,7 +149,7 @@ export function Nav() {
       });
       return () => mm.revert();
     },
-    { scope: headerRef, dependencies: [locale, ready] },
+    { scope: headerRef, dependencies: [locale] },
   );
 
   function readActiveFromScroll() {

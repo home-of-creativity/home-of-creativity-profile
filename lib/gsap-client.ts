@@ -13,6 +13,15 @@ export type GsapBundle = {
 let cached: GsapBundle | null = null;
 let pending: Promise<GsapBundle> | null = null;
 
+function whenIdle(run: () => void) {
+  if (typeof window === "undefined") return;
+  if (typeof window.requestIdleCallback === "function") {
+    window.requestIdleCallback(run, { timeout: 900 });
+    return;
+  }
+  window.setTimeout(run, 1);
+}
+
 export function loadGsap(): Promise<GsapBundle> {
   if (cached) {
     return Promise.resolve(cached);
@@ -22,19 +31,26 @@ export function loadGsap(): Promise<GsapBundle> {
     return Promise.reject(new Error("GSAP is client-only"));
   }
 
-  pending ??= (async () => {
-    const [{ default: gsap }, { ScrollTrigger }] = await Promise.all([
-      import("gsap"),
-      import("gsap/ScrollTrigger"),
-    ]);
+  pending ??= new Promise((resolve, reject) => {
+    whenIdle(() => {
+      void (async () => {
+        try {
+          const [{ default: gsap }, { ScrollTrigger }] = await Promise.all([
+            import("gsap"),
+            import("gsap/ScrollTrigger"),
+          ]);
 
-    gsap.registerPlugin(ScrollTrigger);
-    ScrollTrigger.config({ ignoreMobileResize: true });
-    void document.fonts?.ready.then(() => ScrollTrigger.refresh());
-
-    cached = { gsap, ScrollTrigger };
-    return cached;
-  })();
+          gsap.registerPlugin(ScrollTrigger);
+          ScrollTrigger.config({ ignoreMobileResize: true });
+          cached = { gsap, ScrollTrigger };
+          resolve(cached);
+        } catch (error) {
+          pending = null;
+          reject(error);
+        }
+      })();
+    });
+  });
 
   return pending;
 }

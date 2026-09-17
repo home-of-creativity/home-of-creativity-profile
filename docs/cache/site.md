@@ -16,7 +16,7 @@ Live (VPS): https://hoc.agency/ — API https://api.hoc.agency/api
 app/                 # App Router: page, pricing, projects/detail, not-found
 components/          # sections/, chrome, motion, CacheWorker
 lib/                 # content.ts, i18n, *-api.ts, whatsapp, visit-cache
-public/sw.js         # Cache API hoc-design-v5
+public/sw.js         # Cache API hoc-design-v6
 e2e/                 # Playwright
 next.config.ts
 ```
@@ -32,11 +32,11 @@ No `app/api/`, no `middleware.ts`, no `[locale]` segment.
 | `/projects/detail/?id=` | `app/projects/detail/page.tsx` | Project from API or demo |
 | 404 | `app/not-found.tsx` | Branded, locale toggle |
 
-Home hashes: `#top` `#about` `#vision` `#mission` `#services` `#clients` `#journey` `#reels` `#social` `#projects` `#finance` `#contact`. **No `#pricing` on home.** `#services` and `#clients` share one `--brand-purple` band (radial overlays on the wrapper in `app/page.tsx`). Images and videos below the hero attach `src` only when they approach the viewport (`ProgressiveImage` / `AutoplayVideo` + Cache API). Reels autoplay muted when in view, and video files load one-by-one after the section approaches the viewport.
+Home hashes: `#top` `#about` `#vision` `#mission` `#services` `#clients` `#journey` `#reels` `#social` `#projects` `#finance` `#contact`. **No `#pricing` on home.** `#services` and `#clients` share one `--brand-purple` band (radial overlays on the wrapper in `app/page.tsx`). Images and videos below the hero attach `src` only when they approach the viewport (`ProgressiveImage` / `AutoplayVideo` + Cache API). Landing reels come only from `GET /reels` (dashboard CMS). The section stays with an empty message when none are published; published clips autoplay muted in view and load one-by-one. There are no bundled `/reels/*.mp4` files and no Drive fallback.
 
 ## i18n
 
-`lib/i18n.tsx` + copy in `lib/content.ts`. Default locale **Arabic** (`lang=ar` `dir=rtl`). Toggle `en`/`ar` (localStorage `hoc-locale` + cookie). Boot script in `app/layout.tsx` sets `lang`/`dir` before paint and hides the body only when the stored locale differs from the SSR default.
+`lib/i18n.tsx` + copy in `lib/content.ts`. Default locale **Arabic** (`lang=ar` `dir=rtl`). Toggle `en`/`ar` (localStorage `hoc-locale` + cookie). Boot script in `app/layout.tsx` sets `lang`/`dir` before paint without hiding the body. The hero lockup is visible immediately (no pecking intro); GSAP loads on idle.
 
 ## Data / forms
 
@@ -47,6 +47,7 @@ Client `fetch` to `NEXT_PUBLIC_API_URL` (default `http://127.0.0.1:8000/api`), `
 | `lib/contact-api.ts` | `GET /contact` | Demo if demo-mode |
 | `lib/portfolio-api.ts` | `GET /portfolio/clients\|projects\|{id}` | `lib/demo-data.ts` |
 | `lib/pricing-api.ts` | `GET /pricing` | `lib/pricing-catalog.ts` |
+| `lib/reels-api.ts` | `GET /reels` | Empty (dashboard only; no local files) |
 | `lib/instagram-feed-api.ts` | `GET /social/instagram-feed` | Empty / embed |
 | `lib/facebook-feed-api.ts` | `GET /social/facebook-feed` | Facebook page plugin iframe |
 
@@ -58,7 +59,7 @@ Contact and pricing forms **do not POST**. They `window.open` WhatsApp (`lib/wha
 
 - GSAP via `lib/gsap-client.ts` (dynamic import). `@gsap/react` is a dependency but unused in TSX.
 - Repeat visits: `lib/visit-cache.ts` key `hoc-skip-motion`.
-- `components/CacheWorker.tsx` + `public/sw.js` cache `hoc-design-v5` (images, fonts, and video; cache-first). Hero + mark are precached; everything else waits until near the viewport then stays in Cache Storage.
+- `components/CacheWorker.tsx` + `public/sw.js` cache `hoc-design-v6` (images, fonts, and video; cache-first). Hero + mark are precached; everything else waits until near the viewport then stays in Cache Storage.
 
 ## Env (`.env.example`)
 

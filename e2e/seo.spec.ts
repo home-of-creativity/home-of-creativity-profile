@@ -25,7 +25,7 @@ test.describe("SEO and geo", () => {
     expect(robots.ok()).toBeTruthy();
     const robotsBody = await robots.text();
     expect(robotsBody).toContain("Sitemap:");
-    expect(robotsBody).toMatch(/Disallow:\s*\/staff/);
+    expect(robotsBody).toMatch(/Disallow:\s*\/dashboard/);
 
     const sitemap = await request.get(`${origin}/sitemap.xml`);
     expect(sitemap.ok()).toBeTruthy();

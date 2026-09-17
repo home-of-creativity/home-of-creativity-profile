@@ -269,6 +269,10 @@ export const reels = {
     ar: "أعمال عمودية حديثة — هوية وفعاليات وقصص علامات بالحركة.",
   },
   loading: { en: "Loading reels…", ar: "جارٍ تحميل الريلز…" },
+  empty: {
+    en: "No published reels yet.",
+    ar: "لا توجد ريلز منشورة بعد.",
+  },
 };
 
 export const socialPhones = {

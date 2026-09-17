@@ -136,7 +136,11 @@ export function Reels() {
 
         {!ready ? <LoadingLottie className="mt-10" label={loadingLabel} /> : null}
 
-        {ready ? (
+        {ready && items.length === 0 ? (
+          <p className="mt-10 text-center text-[0.95rem] text-[var(--brand-muted)]">{t(copy.empty)}</p>
+        ) : null}
+
+        {ready && items.length > 0 ? (
           <Stagger className="reel-grid" role="list">
             {items.map((reel, index) => (
               <StaggerItem key={reel.id} role="listitem">

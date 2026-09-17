@@ -26,6 +26,7 @@ test.describe("Landing navbar and locale", () => {
     await expect(page.locator("html")).toHaveAttribute("lang", "ar");
     await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
     await expect(page.getByRole("link", { name: "الرئيسية" }).first()).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   });
 
   test("toggles English and Arabic direction", async ({ page }) => {
@@ -55,27 +56,30 @@ test.describe("Landing navbar and locale", () => {
     await expect(page.locator("#case-studies")).toHaveCount(0);
   });
 
-  test("reels play muted without a click when they enter view", async ({ page }) => {
+  test("reels come from the dashboard API or show an empty state", async ({ page }) => {
     await page.goto(LANDING, { waitUntil: "domcontentloaded" });
     await expect(page.locator("#reels")).toBeVisible();
     const video = page.locator("#reels video").first();
-    const iframe = page.locator("#reels iframe").first();
-    await expect(video.or(iframe)).toBeVisible({ timeout: 15_000 });
-    if (await page.locator("#reels video").count()) {
-      const videos = page.locator("#reels video");
-      const count = await videos.count();
-      for (let i = 0; i < count; i += 1) {
-        await expect(videos.nth(i)).not.toHaveAttribute("src");
-      }
+    const empty = page.locator("#reels").getByText(/No published reels yet|لا توجد ريلز منشورة بعد/);
+    await expect(video.or(empty)).toBeVisible({ timeout: 15_000 });
+
+    if ((await page.locator("#reels video").count()) === 0) {
+      await expect(empty).toBeVisible();
+      return;
+    }
+
+    const videos = page.locator("#reels video");
+    const count = await videos.count();
+    for (let i = 0; i < count; i += 1) {
+      await expect(videos.nth(i)).not.toHaveAttribute("src");
     }
 
     await page.locator("#reels").scrollIntoViewIfNeeded();
-    if (await page.locator("#reels video").count()) {
-      await expect(video).toHaveAttribute("src", /.+/, { timeout: 15_000 });
-      await expect(video).toHaveAttribute("muted", "");
-      await expect(video).toHaveAttribute("autoplay", "");
-      await expect(video).toHaveAttribute("playsinline", "");
-    }
+    await expect(video).toHaveAttribute("src", /.+/, { timeout: 15_000 });
+    await expect(video).toHaveAttribute("muted", "");
+    await expect(video).toHaveAttribute("autoplay", "");
+    await expect(video).toHaveAttribute("playsinline", "");
+    await expect(video).not.toHaveAttribute("src", /\/reels\/[^/]+\.mp4/);
   });
 
   test("selected project opens its details page", async ({ page }) => {
