@@ -78,10 +78,17 @@ test.describe("SEO and geo", () => {
     );
     await expect(page.getByRole("tab", { name: /السعودية|Saudi/i })).toHaveCount(0);
     await expect(page.getByRole("heading", { name: /الرياض|Riyadh/ })).toHaveCount(0);
-    await expect(page.getByRole("link", { name: /فتح في Google Maps|Open in Google Maps/ }).first()).toHaveAttribute(
+    const mapsLinks = page.getByRole("link", { name: /فتح في Google Maps|Open in Google Maps/ });
+    await expect(mapsLinks.first()).toHaveAttribute(
       "href",
       /maps\/search\/\?api=1&query=Home%20of%20Creativity%2C%20Al%20Hamra/,
     );
+    const mapsCount = await mapsLinks.count();
+    expect(mapsCount).toBeGreaterThan(0);
+    for (let index = 0; index < mapsCount; index += 1) {
+      await expect(mapsLinks.nth(index)).toHaveAttribute("target", "_blank");
+      await expect(mapsLinks.nth(index)).toHaveAttribute("rel", /noopener/);
+    }
     const jsonLd = page.locator('script[type="application/ld+json"]');
     await expect(jsonLd).toHaveCount(2);
     const payloads = await jsonLd.allTextContents();

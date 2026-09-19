@@ -90,6 +90,7 @@ export function ContactMap() {
           <p className="m-0 text-[0.92rem] font-medium text-[var(--brand-ink)]">{cityLabel}</p>
           <a
             href={geo.mapsUrl}
+            target="_blank"
             rel="noopener noreferrer"
             className="text-[0.82rem] font-semibold text-[var(--brand-purple)] transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
           >
