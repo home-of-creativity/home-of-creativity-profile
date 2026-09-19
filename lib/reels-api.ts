@@ -37,9 +37,9 @@ function rememberReels(rows: LandingReel[]) {
   } catch {
     /* quota */
   }
+  // Only posters are prefetched; videos stream from the <video> element in parallel.
   for (const row of rows) {
     void rememberLoadedMedia(row.poster_url);
-    void rememberLoadedMedia(row.video_url);
   }
 }
 

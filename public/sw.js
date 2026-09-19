@@ -1,4 +1,4 @@
-const CACHE = "hoc-design-v7";
+const CACHE = "hoc-design-v8";
 const BASE = new URL("./", self.registration.scope).pathname.replace(/\/$/, "");
 const PRECACHE = [
   `${BASE}/hummingbird.svg`,
@@ -26,6 +26,8 @@ self.addEventListener("activate", (event) => {
 
 function shouldBypass(request) {
   if (request.method !== "GET") return true;
+  // Let the browser own video: it streams byte ranges and paints the first frame early.
+  if (request.headers.has("range") || isVideo(new URL(request.url))) return true;
   const url = new URL(request.url);
   if (isMedia(url)) return false;
   const path = url.pathname;
@@ -42,9 +44,13 @@ function shouldBypass(request) {
   );
 }
 
+function isVideo(url) {
+  return /\.(mp4|webm|ogv|ogg|m4v|mov)(\?|$)/i.test(url.pathname);
+}
+
 function isMedia(url) {
   return (
-    /\.(webp|png|jpe?g|gif|svg|avif|woff2?|ttf|mp4|webm|ogg|m4v|mov)(\?|$)/i.test(url.pathname) ||
+    /\.(webp|png|jpe?g|gif|svg|avif|woff2?|ttf)(\?|$)/i.test(url.pathname) ||
     /fbcdn|cdninstagram|instagram\.|googleusercontent|ggpht|drive\.google|googleapis/i.test(url.hostname)
   );
 }
@@ -66,12 +72,17 @@ self.addEventListener("fetch", (event) => {
 
       try {
         const response = await fetch(event.request);
-        if (response && (response.ok || response.type === "opaque") && response.type !== "error") {
+        const storable =
+          response && response.type !== "error" && (response.status === 200 || response.type === "opaque");
+        if (storable) {
           const type = response.headers.get("content-type") || "";
+          if (type.startsWith("video/")) {
+            return response;
+          }
           if (response.type === "opaque" || (media && !type.includes("text/html"))) {
-            cache.put(event.request, response.clone());
+            void cache.put(event.request, response.clone()).catch(() => undefined);
           } else if (!type.includes("text/html") && !type.includes("application/json")) {
-            cache.put(event.request, response.clone());
+            void cache.put(event.request, response.clone()).catch(() => undefined);
           }
         }
         return response;

@@ -888,6 +888,17 @@ html[dir="rtl"] .client-marquee-viewport {
   color: var(--brand-ivory);
 }
 
+.reel-card-loading-error {
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.reel-card-loading-error .loading-lottie__label {
+  color: var(--brand-ivory);
+  opacity: 0.85;
+  font-size: 0.85rem;
+}
+
 .reel-card-video {
   position: absolute;
   inset: 0;

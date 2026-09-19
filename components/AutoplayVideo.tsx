@@ -12,7 +12,7 @@ export function AutoplayVideo({
   root,
   preload = "none",
   eager = false,
-  onCanPlay,
+  onReady,
   onError,
 }: {
   src?: string;
@@ -21,7 +21,7 @@ export function AutoplayVideo({
   root?: RefObject<Element | null>;
   preload?: "none" | "metadata" | "auto";
   eager?: boolean;
-  onCanPlay?: () => void;
+  onReady?: () => void;
   onError?: () => void;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -31,9 +31,12 @@ export function AutoplayVideo({
   useAutoplayOnView(videoRef, root, activeSrc);
 
   useEffect(() => {
-    if (activeSrc) void rememberLoadedMedia(activeSrc);
     if (showPoster) void rememberLoadedMedia(showPoster);
-  }, [activeSrc, showPoster]);
+  }, [showPoster]);
+
+  const ready = () => {
+    if (activeSrc) onReady?.();
+  };
 
   return (
     <video
@@ -46,11 +49,9 @@ export function AutoplayVideo({
       playsInline
       autoPlay
       preload={activeSrc ? preload : "none"}
-      onCanPlay={() => {
-        if (!activeSrc) return;
-        void rememberLoadedMedia(activeSrc);
-        onCanPlay?.();
-      }}
+      onLoadedData={ready}
+      onPlaying={ready}
+      onCanPlay={ready}
       onError={() => {
         if (!activeSrc) return;
         onError?.();

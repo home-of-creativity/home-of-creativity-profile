@@ -12,20 +12,38 @@ import { SectionHeading, Shell } from "../ui";
 function ReelCard({
   reel,
   title,
+  loadingLabel,
+  errorLabel,
 }: {
   reel: LandingReel;
   title: string;
+  loadingLabel: string;
+  errorLabel: string;
 }) {
+  const [state, setState] = useState<"loading" | "ready" | "error">("loading");
+
   if (!reel.video_url) return null;
 
   return (
     <article className="reel-card group">
       <div className="reel-card-frame">
+        {state === "loading" ? (
+          <div className="reel-card-loading">
+            <LoadingLottie className="reel-card-loading-lottie" label={loadingLabel} />
+          </div>
+        ) : null}
+        {state === "error" ? (
+          <div className="reel-card-loading reel-card-loading-error" role="status">
+            <span className="loading-lottie__label">{errorLabel}</span>
+          </div>
+        ) : null}
         <AutoplayVideo
           className="reel-card-video"
           src={reel.video_url}
-          preload="auto"
+          preload="metadata"
           eager
+          onReady={() => setState("ready")}
+          onError={() => setState("error")}
         />
       </div>
       <div className="reel-card-meta">
@@ -56,6 +74,8 @@ export function Reels() {
   }, []);
 
   const loadingLabel = t(copy.loading);
+  const cardLoadingLabel = t(copy.cardLoading);
+  const cardErrorLabel = t(copy.cardError);
 
   return (
     <section
@@ -84,6 +104,8 @@ export function Reels() {
                 <ReelCard
                   reel={reel}
                   title={locale === "ar" ? reel.title_ar : reel.title_en}
+                  loadingLabel={cardLoadingLabel}
+                  errorLabel={cardErrorLabel}
                 />
               </StaggerItem>
             ))}
