@@ -6,6 +6,18 @@ function prefersReducedMotion() {
   return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
+/**
+ * When playback never starts (iOS Low Power Mode, reduced motion, data saver) a
+ * `preload="metadata"` clip can stall before its first frame. Buffer enough to
+ * paint one and let the visitor start it by hand.
+ */
+function showFirstFrame(el: HTMLVideoElement) {
+  el.controls = true;
+  if (el.readyState >= 2 || el.preload === "auto") return;
+  el.preload = "auto";
+  el.load();
+}
+
 export function useAutoplayOnView(
   ref: RefObject<HTMLVideoElement | null>,
   root?: RefObject<Element | null>,
@@ -22,14 +34,14 @@ export function useAutoplayOnView(
 
     if (prefersReducedMotion()) {
       el.pause();
-      el.controls = true;
+      showFirstFrame(el);
       return;
     }
 
     const play = () => {
       el.muted = true;
       const attempt = el.play();
-      if (attempt) void attempt.catch(() => undefined);
+      if (attempt) void attempt.catch(() => showFirstFrame(el));
     };
 
     if (typeof IntersectionObserver === "undefined") {
