@@ -51,7 +51,7 @@ export function SeoCrawlerCopy() {
           {seoCopy.locationsTitle.ar} — {seoCopy.locationsTitle.en}
         </h2>
         <p>
-          <a href="/locations/">{contact.map.add.ar} / {contact.map.add.en}</a>
+          <a href="/locations/">{contact.map.pageTitle.ar} / {contact.map.pageTitle.en}</a>
         </p>
         {contact.offices
           .filter((office) => office.id === "syr")

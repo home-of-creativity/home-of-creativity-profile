@@ -1,67 +1,32 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { AutoplayVideo } from "@/components/AutoplayVideo";
 import { LoadingLottie } from "@/components/LoadingLottie";
 import { reels as copy } from "@/lib/content";
 import { useLanguage } from "@/lib/i18n";
-import { fetchLandingReels, type LandingReel } from "@/lib/reels-api";
+import { fetchLandingReels, peekLandingReels, type LandingReel } from "@/lib/reels-api";
 import { Reveal, Stagger, StaggerItem } from "../motion";
 import { SectionHeading, Shell } from "../ui";
 
 function ReelCard({
   reel,
   title,
-  loadingLabel,
-  shouldLoad,
-  onReady,
 }: {
   reel: LandingReel;
   title: string;
-  loadingLabel: string;
-  shouldLoad: boolean;
-  onReady: () => void;
 }) {
-  const [videoReady, setVideoReady] = useState(false);
-  const notified = useRef(false);
-  const src = shouldLoad && reel.video_url ? reel.video_url : undefined;
-  const loadedSrc = useRef(src);
-
-  if (loadedSrc.current !== src) {
-    loadedSrc.current = src;
-    notified.current = false;
-  }
-
-  useEffect(() => {
-    setVideoReady(false);
-  }, [src]);
-
   if (!reel.video_url) return null;
-
-  const markReady = () => {
-    if (!src) return;
-    setVideoReady(true);
-    if (notified.current) return;
-    notified.current = true;
-    onReady();
-  };
 
   return (
     <article className="reel-card group">
-      <div className="reel-card-frame" aria-busy={shouldLoad && !videoReady}>
-        {shouldLoad && !videoReady ? (
-          <div className="reel-card-loading">
-            <LoadingLottie className="reel-card-loading-lottie" label={loadingLabel} />
-          </div>
-        ) : null}
+      <div className="reel-card-frame">
         <AutoplayVideo
-          key={src ?? "idle"}
           className="reel-card-video"
-          src={src}
+          src={reel.video_url}
           poster={reel.poster_url ?? undefined}
-          preload="none"
-          onCanPlay={markReady}
-          onError={markReady}
+          preload="auto"
+          eager
         />
       </div>
       <div className="reel-card-meta">
@@ -73,10 +38,9 @@ function ReelCard({
 
 export function Reels() {
   const { locale, t } = useLanguage();
-  const sectionRef = useRef<HTMLElement>(null);
-  const [items, setItems] = useState<LandingReel[]>([]);
-  const [ready, setReady] = useState(false);
-  const [loadCount, setLoadCount] = useState(0);
+  const cached = peekLandingReels();
+  const [items, setItems] = useState<LandingReel[]>(cached);
+  const [ready, setReady] = useState(cached.length > 0);
 
   useEffect(() => {
     let active = true;
@@ -92,36 +56,10 @@ export function Reels() {
     };
   }, []);
 
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section || !ready || items.length === 0) return;
-
-    if (typeof IntersectionObserver === "undefined") {
-      setLoadCount(1);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) {
-          setLoadCount((count) => (count > 0 ? count : 1));
-        }
-      },
-      { rootMargin: "240px 0px", threshold: 0.05 },
-    );
-
-    observer.observe(section);
-    return () => observer.disconnect();
-  }, [items.length, ready]);
-
   const loadingLabel = t(copy.loading);
-  const unlockNext = () => {
-    setLoadCount((count) => Math.min(items.length, count + 1));
-  };
 
   return (
     <section
-      ref={sectionRef}
       id="reels"
       className="relative bg-[var(--brand-cream)] py-16 md:py-24 lg:py-32"
       aria-busy={!ready}
@@ -142,14 +80,11 @@ export function Reels() {
 
         {ready && items.length > 0 ? (
           <Stagger className="reel-grid" role="list">
-            {items.map((reel, index) => (
+            {items.map((reel) => (
               <StaggerItem key={reel.id} role="listitem">
                 <ReelCard
                   reel={reel}
                   title={locale === "ar" ? reel.title_ar : reel.title_en}
-                  loadingLabel={loadingLabel}
-                  shouldLoad={index < loadCount}
-                  onReady={unlockNext}
                 />
               </StaggerItem>
             ))}

@@ -111,15 +111,12 @@ test.describe("Landing navbar and locale", () => {
     const videos = page.locator("#reels video");
     const count = await videos.count();
     for (let i = 0; i < count; i += 1) {
-      await expect(videos.nth(i)).not.toHaveAttribute("src");
+      await expect(videos.nth(i)).toHaveAttribute("src", /.+/, { timeout: 15_000 });
     }
-
-    await page.locator("#reels").scrollIntoViewIfNeeded();
-    await expect(video).toHaveAttribute("src", /.+/, { timeout: 15_000 });
     await expect(video).toHaveAttribute("muted", "");
     await expect(video).toHaveAttribute("autoplay", "");
     await expect(video).toHaveAttribute("playsinline", "");
-    await expect(video).not.toHaveAttribute("src", /\/reels\/[^/]+\.mp4/);
+    await expect(video).not.toHaveAttribute("src", /\/reels\/[^/]+\.mp4$/);
   });
 
   test("selected project opens its details page", async ({ page }) => {

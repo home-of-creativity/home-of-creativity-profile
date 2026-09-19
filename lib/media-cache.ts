@@ -1,4 +1,4 @@
-export const MEDIA_CACHE = "hoc-design-v6";
+export const MEDIA_CACHE = "hoc-design-v7";
 
 const remembered = new Set<string>();
 

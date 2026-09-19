@@ -27,6 +27,7 @@ self.addEventListener("activate", (event) => {
 function shouldBypass(request) {
   if (request.method !== "GET") return true;
   const url = new URL(request.url);
+  if (isMedia(url)) return false;
   const path = url.pathname;
   return (
     path.startsWith("/dashboard") ||

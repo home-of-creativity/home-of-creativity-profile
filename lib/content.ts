@@ -743,11 +743,6 @@ export const contact = {
   map: {
     title: { en: "Our location", ar: "موقعنا" },
     open: { en: "Open in Google Maps", ar: "فتح في Google Maps" },
-    add: { en: "Add Home of Creativity to Google Maps", ar: "أضف بيت الإبداع إلى خرائط جوجل" },
-    addLead: {
-      en: "Google shows a pin after the official Business Profile is created. Use the button below, then enter the Damascus, Al Hamra location.",
-      ar: "جوجل يظهر الدبوس بعد إنشاء الملف التجاري الرسمي. استخدم الزر أدناه، ثم أضف موقع دمشق، الحمراء.",
-    },
     pageTitle: { en: "Home of Creativity on the map", ar: "بيت الإبداع على الخريطة" },
   },
   offices: [

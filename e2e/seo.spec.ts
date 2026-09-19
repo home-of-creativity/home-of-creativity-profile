@@ -72,10 +72,7 @@ test.describe("SEO and geo", () => {
     await expect(page).toHaveTitle(/المواقع|Locations/i);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/locations\/?$/);
     await expect(page.getByRole("heading", { level: 1, name: /بيت الإبداع على الخريطة|Home of Creativity on the map/ })).toBeVisible();
-    await expect(page.getByRole("link", { name: /أضف بيت الإبداع إلى خرائط جوجل|Add Home of Creativity to Google Maps/ })).toHaveAttribute(
-      "href",
-      /business\.google\.com\/create/,
-    );
+    await expect(page.getByRole("link", { name: /أضف بيت الإبداع إلى خرائط جوجل|Add Home of Creativity to Google Maps/ })).toHaveCount(0);
     await expect(page.getByRole("tab", { name: /السعودية|Saudi/i })).toHaveCount(0);
     await expect(page.getByRole("heading", { name: /الرياض|Riyadh/ })).toHaveCount(0);
     const mapsLinks = page.getByRole("link", { name: /فتح في Google Maps|Open in Google Maps/ });

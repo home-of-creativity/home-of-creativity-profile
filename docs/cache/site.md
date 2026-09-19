@@ -5,7 +5,7 @@ Installed: Next **15.5.25**, React **19.2.8**, Tailwind **4.3.3**, GSAP **3.15.0
 `basePath` / `assetPrefix`: empty on VPS (`NEXT_PUBLIC_BASE_PATH=none`). GitHub Pages disabled.  
 `output: "export"` — static export only.
 
-SEO: `app/sitemap.ts`, `app/robots.ts`, bilingual titles/descriptions, JSON-LD (`Organization` + `LocalBusiness` + `sameAs` social profiles + `/social/` CollectionPage + `/locations/` CollectionPage with two LocalBusiness nodes). Named Maps search URL is Syria only: “Home of Creativity, Al Hamra, Damascus” (`33.5188338, 36.2916993`). The contact/locations map has no Saudi tab. Map “open in Google Maps” links use `target="_blank"` + `rel="noopener noreferrer"`. `/locations/` has a Google Business Profile create CTA (`business.google.com/create`) — the site cannot publish the Maps pin itself. Google Search Console HTML + DNS verification. IndexNow key file on deploy; Laravel `seo:submit-sitemap` for Search Console API + IndexNow (`/` `/pricing/` `/social/` `/locations/` + sitemap).
+SEO: `app/sitemap.ts`, `app/robots.ts`, bilingual titles/descriptions, JSON-LD (`Organization` + `LocalBusiness` + `sameAs` social profiles + `/social/` CollectionPage + `/locations/` CollectionPage with two LocalBusiness nodes). Named Maps search URL is Syria only: “Home of Creativity, Al Hamra, Damascus” (`33.5188338, 36.2916993`). The contact/locations map has no Saudi tab. Map “open in Google Maps” links use `target="_blank"` + `rel="noopener noreferrer"`. `/locations/` is the Damascus Al Hamra map page only (no Google Business Profile create CTA). Google Search Console HTML + DNS verification. IndexNow key file on deploy; Laravel `seo:submit-sitemap` for Search Console API + IndexNow (`/` `/pricing/` `/social/` `/locations/` + sitemap).
 
 Dev: `npm run dev` → http://localhost:3000/ (with `NEXT_PUBLIC_BASE_PATH=none`)  
 Live (VPS): https://hoc.agency/ — API https://api.hoc.agency/api
@@ -16,7 +16,7 @@ Live (VPS): https://hoc.agency/ — API https://api.hoc.agency/api
 app/                 # App Router: page, pricing, projects/detail, not-found
 components/          # sections/, chrome, motion, CacheWorker
 lib/                 # content.ts, i18n, *-api.ts, whatsapp, visit-cache
-public/sw.js         # Cache API hoc-design-v6
+public/sw.js         # Cache API hoc-design-v7
 e2e/                 # Playwright
 next.config.ts
 ```
@@ -30,11 +30,11 @@ No `app/api/`, no `middleware.ts`, no `[locale]` segment.
 | `/` | `app/page.tsx` | Landing: Hero → About → Services+Clients (one purple band) → Journey → Reels → Social → Projects → Finance → Contact |
 | `/pricing/` | `app/pricing/page.tsx` | Packages + WhatsApp inquiry modal |
 | `/social/` | `app/social/page.tsx` | Indexable Instagram/Facebook/Telegram profiles (`sameAs` + CollectionPage JSON-LD); footer links here |
-| `/locations/` | `app/locations/page.tsx` | Indexable Damascus Al Hamra map page (named Maps URL + LocalBusiness JSON-LD + GBP claim CTA); footer + contact map link here |
+| `/locations/` | `app/locations/page.tsx` | Indexable Damascus Al Hamra map page (named Maps URL + LocalBusiness JSON-LD); footer + contact map link here |
 | `/projects/detail/?id=` | `app/projects/detail/page.tsx` | Project from API or demo |
 | 404 | `app/not-found.tsx` | Branded, locale toggle |
 
-Home hashes: `#top` `#about` `#vision` `#mission` `#services` `#clients` `#journey` `#reels` `#social` `#projects` `#finance` `#contact`. **No `#pricing` on home.** `#services` and `#clients` share one `--brand-purple` band (radial overlays on the wrapper in `app/page.tsx`). Images and videos below the hero attach `src` only when they approach the viewport (`ProgressiveImage` / `AutoplayVideo` + Cache API). Landing reels come only from `GET /reels` (dashboard CMS). The section stays with an empty message when none are published; published clips autoplay muted in view and load one-by-one. There are no bundled `/reels/*.mp4` files and no Drive fallback. Hero intro GSAP is skipped when `prefers-reduced-motion` or `hoc-skip-motion`; those paths `gsap.set` kicker/title/CTA to `autoAlpha: 1`. The visible `<h1>` is `.hero-title` in `Hero.tsx`. `HeroBrandWriter` pecks each letter of “Home of Creativity” with the hummingbird beak (skipped under `prefers-reduced-motion`).
+Home hashes: `#top` `#about` `#vision` `#mission` `#services` `#clients` `#journey` `#reels` `#social` `#projects` `#finance` `#contact`. **No `#pricing` on home.** `#services` and `#clients` share one `--brand-purple` band (radial overlays on the wrapper in `app/page.tsx`). Images and videos below the hero attach `src` only when they approach the viewport (`ProgressiveImage` / `AutoplayVideo` + Cache API). Landing reels come only from `GET /reels` (dashboard CMS). The list is cached in `localStorage`; every published clip gets `src` immediately (`preload=auto`) and the service worker keeps video/storage files in `hoc-design-v7` so a return visit does not re-download. Playback still pauses off-screen. The section stays empty when none are published. There are no bundled `/reels/*.mp4` files and no Drive fallback. Hero intro GSAP is skipped when `prefers-reduced-motion` or `hoc-skip-motion`; those paths `gsap.set` kicker/title/CTA to `autoAlpha: 1`. The visible `<h1>` is `.hero-title` in `Hero.tsx`. `HeroBrandWriter` pecks each letter of “Home of Creativity” with the hummingbird beak (skipped under `prefers-reduced-motion`).
 
 ## i18n
 

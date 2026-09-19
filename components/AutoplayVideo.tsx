@@ -11,6 +11,7 @@ export function AutoplayVideo({
   className,
   root,
   preload = "none",
+  eager = false,
   onCanPlay,
   onError,
 }: {
@@ -19,25 +20,27 @@ export function AutoplayVideo({
   className?: string;
   root?: RefObject<Element | null>;
   preload?: "none" | "metadata" | "auto";
+  eager?: boolean;
   onCanPlay?: () => void;
   onError?: () => void;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const unlocked = useInViewOnce(videoRef, { root, rootMargin: "160px 0px" });
-  const activeSrc = unlocked ? src : undefined;
+  const activeSrc = eager || unlocked ? src : undefined;
+  const showPoster = (eager || unlocked) && poster && poster !== src ? poster : undefined;
   useAutoplayOnView(videoRef, root, activeSrc);
 
   useEffect(() => {
     if (activeSrc) void rememberLoadedMedia(activeSrc);
-    if (unlocked && poster) void rememberLoadedMedia(poster);
-  }, [activeSrc, unlocked, poster]);
+    if (showPoster) void rememberLoadedMedia(showPoster);
+  }, [activeSrc, showPoster]);
 
   return (
     <video
       ref={videoRef}
       className={className}
       src={activeSrc || undefined}
-      poster={unlocked && poster && poster !== src ? poster : undefined}
+      poster={showPoster}
       muted
       loop
       playsInline

@@ -30,10 +30,6 @@ export function googleMapsSearchUrl(query: string): string {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query.trim())}`;
 }
 
-export function googleBusinessProfileCreateUrl(locale: "ar" | "en" = "ar") {
-  return `https://business.google.com/create?hl=${locale === "ar" ? "ar" : "en"}`;
-}
-
 export function googleMapsClassicEmbedSrc(
   latitude: number,
   longitude: number,

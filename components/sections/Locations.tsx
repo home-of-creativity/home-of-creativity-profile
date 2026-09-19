@@ -2,7 +2,6 @@
 
 import { ContactMap } from "@/components/ContactMap";
 import { contact } from "@/lib/content";
-import { googleBusinessProfileCreateUrl } from "@/lib/google-maps";
 import { useLanguage } from "@/lib/i18n";
 import { officesGeo } from "@/lib/seo";
 import { Reveal } from "../motion";
@@ -12,22 +11,13 @@ const office = contact.offices[0];
 const geo = officesGeo.syr;
 
 export function Locations() {
-  const { t, locale } = useLanguage();
+  const { t } = useLanguage();
 
   return (
     <section id="locations" className="px-0 pb-20 pt-28 sm:pb-24">
       <Shell>
         <Reveal className="mx-auto mb-10 max-w-2xl text-center">
           <SectionHeading kicker={contact.map.title} title={contact.map.pageTitle} align="center" level={1} />
-          <p className="mt-5 text-[0.98rem] leading-[1.7] text-[var(--brand-ink)]/72">{t(contact.map.addLead)}</p>
-          <a
-            href={googleBusinessProfileCreateUrl(locale)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--brand-purple-deep)] px-6 py-3 text-[0.82rem] font-semibold text-[var(--brand-ivory)] transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
-          >
-            {t(contact.map.add)}
-          </a>
         </Reveal>
 
         <ContactMap />
