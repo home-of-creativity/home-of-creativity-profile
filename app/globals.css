@@ -858,8 +858,9 @@ html[dir="rtl"] .client-marquee-viewport {
 .reel-card-frame {
   position: relative;
   width: 100%;
-  aspect-ratio: 9 / 16;
-  max-height: min(55vh, 34rem);
+  /* --reel-ratio comes from the clip's real videoWidth/videoHeight, so nothing is cropped */
+  aspect-ratio: var(--reel-ratio, 0.5625);
+  max-width: calc(min(72vh, 34rem) * var(--reel-ratio, 0.5625));
   margin-inline: auto;
   overflow: hidden;
   border: 1px solid var(--brand-line);
@@ -905,7 +906,7 @@ html[dir="rtl"] .client-marquee-viewport {
   width: 100%;
   height: 100%;
   border: 0;
-  object-fit: cover;
+  object-fit: contain;
   background: var(--brand-ink);
 }
 

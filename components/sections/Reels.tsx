@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { AutoplayVideo } from "@/components/AutoplayVideo";
 import { LoadingLottie } from "@/components/LoadingLottie";
 import { reels as copy } from "@/lib/content";
@@ -21,12 +21,16 @@ function ReelCard({
   errorLabel: string;
 }) {
   const [state, setState] = useState<"loading" | "ready" | "error">("loading");
+  const [ratio, setRatio] = useState<number | null>(null);
 
   if (!reel.video_url) return null;
 
   return (
     <article className="reel-card group">
-      <div className="reel-card-frame">
+      <div
+        className="reel-card-frame"
+        style={ratio ? ({ "--reel-ratio": ratio } as CSSProperties) : undefined}
+      >
         {state === "loading" ? (
           <div className="reel-card-loading">
             <LoadingLottie className="reel-card-loading-lottie" label={loadingLabel} />
@@ -42,7 +46,12 @@ function ReelCard({
           src={reel.video_url}
           preload="metadata"
           eager
-          onReady={() => setState("ready")}
+          onReady={(video) => {
+            setState("ready");
+            if (video.videoWidth > 0 && video.videoHeight > 0) {
+              setRatio(video.videoWidth / video.videoHeight);
+            }
+          }}
           onError={() => setState("error")}
         />
       </div>

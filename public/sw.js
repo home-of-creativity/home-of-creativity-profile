@@ -26,9 +26,9 @@ self.addEventListener("activate", (event) => {
 
 function shouldBypass(request) {
   if (request.method !== "GET") return true;
-  // Let the browser own video: it streams byte ranges and paints the first frame early.
-  if (request.headers.has("range") || isVideo(new URL(request.url))) return true;
   const url = new URL(request.url);
+  // Let the browser own video: it streams byte ranges and paints the first frame early.
+  if (request.headers.has("range") || isVideo(url)) return true;
   if (isMedia(url)) return false;
   const path = url.pathname;
   return (

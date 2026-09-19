@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type RefObject } from "react";
+import { useEffect, useRef, type RefObject, type SyntheticEvent } from "react";
 import { rememberLoadedMedia } from "@/lib/media-cache";
 import { useAutoplayOnView } from "@/lib/use-autoplay-on-view";
 import { useInViewOnce } from "@/lib/use-in-view";
@@ -21,7 +21,7 @@ export function AutoplayVideo({
   root?: RefObject<Element | null>;
   preload?: "none" | "metadata" | "auto";
   eager?: boolean;
-  onReady?: () => void;
+  onReady?: (video: HTMLVideoElement) => void;
   onError?: () => void;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -34,8 +34,8 @@ export function AutoplayVideo({
     if (showPoster) void rememberLoadedMedia(showPoster);
   }, [showPoster]);
 
-  const ready = () => {
-    if (activeSrc) onReady?.();
+  const ready = (event: SyntheticEvent<HTMLVideoElement>) => {
+    if (activeSrc) onReady?.(event.currentTarget);
   };
 
   return (
