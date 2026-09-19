@@ -56,6 +56,10 @@ export const metadata: Metadata = {
     "Syria",
     "Saudi Arabia",
     "Premium Minimalism",
+    "Instagram",
+    "Facebook",
+    "إنستغرام",
+    "فيسبوك",
   ],
   manifest: "/manifest.webmanifest",
   alternates: {

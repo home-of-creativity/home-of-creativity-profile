@@ -1,5 +1,13 @@
+import { CLIENT_TELEGRAM_URL } from "@/lib/base-path";
+
 const DEFAULT_FACEBOOK_PAGE = "https://www.facebook.com/profile.php?id=61584616932975";
 const DEFAULT_INSTAGRAM_URL = "https://www.instagram.com/homeofcreativity.sy/";
+
+export type OfficialSocialProfile = {
+  platform: "instagram" | "facebook" | "telegram";
+  name: string;
+  url: string;
+};
 
 export function facebookPageUrl() {
   return (process.env.NEXT_PUBLIC_FACEBOOK_PAGE_URL || DEFAULT_FACEBOOK_PAGE).replace(/\/$/, "");
@@ -40,4 +48,16 @@ export function facebookPluginSrc(width = 430, height = 980, locale = "en_US") {
 
 export function instagramEmbedSrc() {
   return `${instagramProfileUrl()}/embed`;
+}
+
+export function officialSocialProfiles(): OfficialSocialProfile[] {
+  return [
+    { platform: "instagram", name: "Instagram", url: `${instagramProfileUrl()}/` },
+    { platform: "facebook", name: "Facebook", url: facebookPageUrl() },
+    { platform: "telegram", name: "Telegram", url: CLIENT_TELEGRAM_URL },
+  ];
+}
+
+export function officialSocialUrls(): string[] {
+  return officialSocialProfiles().map((profile) => profile.url);
 }

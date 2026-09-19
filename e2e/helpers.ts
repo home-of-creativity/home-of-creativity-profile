@@ -4,3 +4,4 @@ const BASE = !raw || raw === "none" || raw === "/" ? "" : raw.replace(/\/+$/, ""
 
 export const LANDING = `${ORIGIN}${BASE}/`;
 export const PRICING = `${ORIGIN}${BASE}/pricing/`;
+export const SOCIAL = `${ORIGIN}${BASE}/social/`;

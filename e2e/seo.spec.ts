@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { LANDING } from "./helpers";
+import { LANDING, SOCIAL } from "./helpers";
 
 test.describe("SEO and geo", () => {
   test("home includes title, canonical, JSON-LD and geo tags", async ({ page }) => {
@@ -17,6 +17,17 @@ test.describe("SEO and geo", () => {
       return Array.isArray(value) ? value : [value];
     });
     expect(types).toEqual(expect.arrayContaining(["Organization", "LocalBusiness", "WebSite"]));
+    const graph = payload["@graph"] ?? [];
+    const sameAs = graph.flatMap((node) => {
+      const value = (node as { sameAs?: string[] }).sameAs;
+      return Array.isArray(value) ? value : [];
+    });
+    expect(sameAs).toEqual(
+      expect.arrayContaining([
+        "https://www.instagram.com/homeofcreativity.sy/",
+        "https://www.facebook.com/profile.php?id=61584616932975",
+      ]),
+    );
   });
 
   test("robots and sitemap are public", async ({ request }) => {
@@ -32,5 +43,26 @@ test.describe("SEO and geo", () => {
     const xml = await sitemap.text();
     expect(xml).toContain("https://hoc.agency/");
     expect(xml).toContain("https://hoc.agency/pricing/");
+    expect(xml).toContain("https://hoc.agency/social/");
+  });
+
+  test("social page is indexable with official profile links", async ({ page }) => {
+    await page.goto(SOCIAL, { waitUntil: "domcontentloaded" });
+    await expect(page).toHaveTitle(/السوشال ميديا|Social media/i);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/social\/?$/);
+    await expect(page.locator('a[rel~="me"][href*="instagram.com"]')).toHaveCount(1);
+    await expect(page.locator('a[rel~="me"][href*="facebook.com"]')).toHaveCount(1);
+    const jsonLd = page.locator('script[type="application/ld+json"]');
+    await expect(jsonLd).toHaveCount(2);
+    const payloads = await jsonLd.allTextContents();
+    const types = payloads.flatMap((text) => {
+      const parsed = JSON.parse(text || "{}") as { "@graph"?: Array<{ "@type"?: unknown }>; "@type"?: unknown };
+      const nodes = parsed["@graph"] ?? [parsed];
+      return nodes.flatMap((node) => {
+        const value = node["@type"];
+        return Array.isArray(value) ? value : [value];
+      });
+    });
+    expect(types).toEqual(expect.arrayContaining(["CollectionPage", "Organization"]));
   });
 });

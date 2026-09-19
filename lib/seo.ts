@@ -1,5 +1,6 @@
 import { contact, services, WHATSAPP_NUMBER } from "./content";
-import { SITE_ALTERNATE, SITE_NAME, SITE_NAME_AR, SITE_URL, absoluteUrl, OG_IMAGE_PATH } from "./site";
+import { SITE_ALTERNATE, SITE_NAME, SITE_NAME_AR, SITE_URL, absoluteUrl, OG_IMAGE_PATH, seoCopy } from "./site";
+import { officialSocialProfiles, officialSocialUrls } from "./social-embeds";
 
 export const officesGeo = {
   syr: {
@@ -62,10 +63,7 @@ export function seoJsonLd() {
         url: `${SITE_URL}/`,
         logo: absoluteUrl("/hummingbird.svg"),
         image: absoluteUrl(OG_IMAGE_PATH),
-        sameAs: [
-          "https://www.instagram.com/homeofcreativity.sy/",
-          "https://www.facebook.com/profile.php?id=61584616932975",
-        ],
+        sameAs: officialSocialUrls(),
       },
       {
         "@type": ["ProfessionalService", "LocalBusiness"],
@@ -74,6 +72,7 @@ export function seoJsonLd() {
         alternateName: SITE_NAME_AR,
         url: `${SITE_URL}/`,
         image: absoluteUrl(OG_IMAGE_PATH),
+        sameAs: officialSocialUrls(),
         telephone: `+${WHATSAPP_NUMBER}`,
         priceRange: "$$",
         inLanguage: ["en", "ar"],
@@ -130,6 +129,37 @@ export function seoJsonLd() {
         name: SITE_NAME,
         inLanguage: ["en", "ar"],
         publisher: { "@id": `${SITE_URL}/#organization` },
+      },
+    ],
+  };
+}
+
+export function socialPageJsonLd() {
+  const profiles = officialSocialProfiles();
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": `${SITE_URL}/social/#page`,
+        url: `${SITE_URL}/social/`,
+        name: `${seoCopy.socialTitle.ar} | ${seoCopy.socialTitle.en}`,
+        description: `${seoCopy.socialDescription.ar} ${seoCopy.socialDescription.en}`,
+        inLanguage: ["ar", "en"],
+        isPartOf: { "@id": `${SITE_URL}/#website` },
+        about: { "@id": `${SITE_URL}/#organization` },
+        publisher: { "@id": `${SITE_URL}/#organization` },
+        mainEntity: {
+          "@type": "ItemList",
+          name: `${SITE_NAME} social profiles`,
+          itemListElement: profiles.map((profile, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            name: profile.name,
+            url: profile.url,
+          })),
+        },
       },
     ],
   };

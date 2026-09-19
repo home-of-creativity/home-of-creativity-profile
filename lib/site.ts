@@ -56,6 +56,14 @@ export const seoCopy = {
     en: "Home of Creativity packages in USD. Confirm payment details on WhatsApp before checkout.",
     ar: "باقات بيت الإبداع بالدولار. تفاصيل الدفع تُؤكَّد عبر واتساب قبل الاشتراك.",
   },
+  socialTitle: {
+    en: "Social media",
+    ar: "السوشال ميديا",
+  },
+  socialDescription: {
+    en: "Follow Home of Creativity on Instagram and Facebook — brand work from Damascus and Riyadh.",
+    ar: "تابعوا بيت الإبداع على إنستغرام وفيسبوك — أعمال الهوية من دمشق والرياض.",
+  },
   projectTitle: {
     en: "Project",
     ar: "مشروع",

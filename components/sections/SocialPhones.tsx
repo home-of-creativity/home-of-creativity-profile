@@ -44,7 +44,7 @@ function PhoneFrame({
         </div>
       </div>
       <figcaption className="social-phone-caption">
-        <a href={href} target="_blank" rel="noreferrer" className="social-phone-open">
+        <a href={href} target="_blank" rel="me noreferrer" className="social-phone-open">
           {openLabel}
         </a>
       </figcaption>

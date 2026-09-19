@@ -1,5 +1,6 @@
 import { about, contact, hero, services } from "@/lib/content";
 import { SITE_NAME, SITE_NAME_AR, seoCopy } from "@/lib/site";
+import { officialSocialProfiles } from "@/lib/social-embeds";
 
 export function SeoCrawlerCopy() {
   return (
@@ -26,6 +27,20 @@ export function SeoCrawlerCopy() {
           {services.items.map((item) => (
             <li key={item.id}>
               {item.ar} / {item.en}
+            </li>
+          ))}
+        </ul>
+      </section>
+      <section>
+        <h2>
+          {seoCopy.socialTitle.ar} — {seoCopy.socialTitle.en}
+        </h2>
+        <ul>
+          {officialSocialProfiles().map((profile) => (
+            <li key={profile.platform}>
+              <a href={profile.url} rel="me">
+                {profile.name}
+              </a>
             </li>
           ))}
         </ul>
