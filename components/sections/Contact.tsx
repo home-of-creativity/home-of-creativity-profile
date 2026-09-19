@@ -2,6 +2,7 @@
 
 import { Great_Vibes } from "next/font/google";
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import { pagePath } from "@/lib/base-path";
 import { contact, services } from "@/lib/content";
 import { fetchContactChannels, mergeContactChannels } from "@/lib/contact-api";
 
@@ -277,6 +278,14 @@ export function Contact() {
 
             <Reveal>
               <ContactMap />
+              <p className="mt-4 text-center">
+                <a
+                  href={pagePath("locations")}
+                  className="text-[0.82rem] font-semibold text-[var(--brand-purple)] transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
+                >
+                  {t(contact.map.add)}
+                </a>
+              </p>
             </Reveal>
 
             <Reveal className="relative mx-auto mt-14 max-w-3xl border-t border-[var(--brand-line)] pt-10">

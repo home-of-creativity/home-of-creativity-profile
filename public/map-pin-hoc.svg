@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="56" height="70" viewBox="0 0 56 70" role="img" aria-label="HOC">
+  <path fill="#2e0e5c" d="M28 2c13.3 0 24 10.5 24 23.4 0 16.7-19.8 35.4-23.2 38.6a1.2 1.2 0 0 1-1.6 0C23.8 60.8 4 42.1 4 25.4 4 12.5 14.7 2 28 2z"/>
+  <circle cx="28" cy="25.2" r="14.2" fill="#e7993a"/>
+  <text x="28" y="29.4" text-anchor="middle" fill="#1a0838" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="700">HOC</text>
+</svg>

@@ -1,4 +1,5 @@
 import { about, contact, hero, services } from "@/lib/content";
+import { officesGeo } from "@/lib/seo";
 import { SITE_NAME, SITE_NAME_AR, seoCopy } from "@/lib/site";
 import { officialSocialProfiles } from "@/lib/social-embeds";
 
@@ -44,6 +45,24 @@ export function SeoCrawlerCopy() {
             </li>
           ))}
         </ul>
+      </section>
+      <section>
+        <h2>
+          {seoCopy.locationsTitle.ar} — {seoCopy.locationsTitle.en}
+        </h2>
+        <p>
+          <a href="/locations/">{contact.map.add.ar} / {contact.map.add.en}</a>
+        </p>
+        {contact.offices
+          .filter((office) => office.id === "syr")
+          .map((office) => (
+            <p key={office.id}>
+              <a href={officesGeo.syr.mapsUrl}>
+                {SITE_NAME}, {office.city.ar} {office.city.en}
+              </a>
+              {office.phones[0] ? ` — ${office.phones[0]}` : ""}
+            </p>
+          ))}
       </section>
       <section>
         <h2>Contact — تواصل</h2>

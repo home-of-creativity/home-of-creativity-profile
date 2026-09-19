@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { LANDING, SOCIAL } from "./helpers";
+import { LANDING, LOCATIONS, SOCIAL } from "./helpers";
 
 test.describe("SEO and geo", () => {
   test("home includes title, canonical, JSON-LD and geo tags", async ({ page }) => {
@@ -66,3 +66,32 @@ test.describe("SEO and geo", () => {
     expect(types).toEqual(expect.arrayContaining(["CollectionPage", "Organization"]));
   });
 });
+
+  test("locations page is indexable with named map links", async ({ page }) => {
+    await page.goto(LOCATIONS, { waitUntil: "domcontentloaded" });
+    await expect(page).toHaveTitle(/المواقع|Locations/i);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/locations\/?$/);
+    await expect(page.getByRole("heading", { level: 1, name: /بيت الإبداع على الخريطة|Home of Creativity on the map/ })).toBeVisible();
+    await expect(page.getByRole("link", { name: /أضف بيت الإبداع إلى خرائط جوجل|Add Home of Creativity to Google Maps/ })).toHaveAttribute(
+      "href",
+      /business\.google\.com\/create/,
+    );
+    await expect(page.getByRole("tab", { name: /السعودية|Saudi/i })).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: /الرياض|Riyadh/ })).toHaveCount(0);
+    await expect(page.getByRole("link", { name: /فتح في Google Maps|Open in Google Maps/ }).first()).toHaveAttribute(
+      "href",
+      /maps\/search\/\?api=1&query=Home%20of%20Creativity%2C%20Al%20Hamra/,
+    );
+    const jsonLd = page.locator('script[type="application/ld+json"]');
+    await expect(jsonLd).toHaveCount(2);
+    const payloads = await jsonLd.allTextContents();
+    const types = payloads.flatMap((text) => {
+      const parsed = JSON.parse(text || "{}") as { "@graph"?: Array<{ "@type"?: unknown }>; "@type"?: unknown };
+      const nodes = parsed["@graph"] ?? [parsed];
+      return nodes.flatMap((node) => {
+        const value = node["@type"];
+        return Array.isArray(value) ? value : [value];
+      });
+    });
+    expect(types).toEqual(expect.arrayContaining(["CollectionPage", "LocalBusiness"]));
+  });

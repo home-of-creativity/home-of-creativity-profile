@@ -20,13 +20,16 @@ export function SectionHeading({
   kicker,
   invert = false,
   align = "start",
+  level = 2,
 }: {
   title: Copy;
   kicker?: Copy;
   invert?: boolean;
   align?: "start" | "center";
+  level?: 1 | 2;
 }) {
   const { t, locale } = useLanguage();
+  const HeadingTag = level === 1 ? "h1" : "h2";
 
   return (
     <div
@@ -47,14 +50,14 @@ export function SectionHeading({
           {t(kicker)}
         </p>
       ) : null}
-      <h2
+      <HeadingTag
         className={cn(
           "font-display m-0 text-[clamp(2rem,5vw,3.6rem)] font-semibold leading-[1.05]",
           invert ? "text-[var(--brand-ivory)]" : "text-[var(--brand-ink)]",
         )}
       >
         {t(title)}
-      </h2>
+      </HeadingTag>
     </div>
   );
 }

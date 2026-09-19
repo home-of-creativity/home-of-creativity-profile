@@ -56,6 +56,14 @@ export const seoCopy = {
     en: "Home of Creativity packages in USD. Confirm payment details on WhatsApp before checkout.",
     ar: "باقات بيت الإبداع بالدولار. تفاصيل الدفع تُؤكَّد عبر واتساب قبل الاشتراك.",
   },
+  locationsTitle: {
+    en: "Locations",
+    ar: "المواقع",
+  },
+  locationsDescription: {
+    en: "Home of Creativity on the map — Damascus, Al Hamra.",
+    ar: "بيت الإبداع على الخريطة — دمشق، الحمراء.",
+  },
   socialTitle: {
     en: "Social media",
     ar: "السوشال ميديا",

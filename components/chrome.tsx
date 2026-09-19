@@ -42,6 +42,7 @@ const footerLinkDefs: SiteLinkDef[] = [
   { key: "journey", section: "journey", label: nav.clients },
   { key: "reels", section: "reels", label: nav.reels },
   { key: "social", page: "social", label: nav.social },
+  { key: "locations", page: "locations", label: nav.locations },
   { key: "projects", section: "projects", label: nav.projects },
   { key: "finance", section: "finance", label: nav.finance },
   { key: "pricing", page: "pricing", label: nav.pricing },

@@ -5,7 +5,7 @@ Installed: Next **15.5.25**, React **19.2.8**, Tailwind **4.3.3**, GSAP **3.15.0
 `basePath` / `assetPrefix`: empty on VPS (`NEXT_PUBLIC_BASE_PATH=none`). GitHub Pages disabled.  
 `output: "export"` — static export only.
 
-SEO: `app/sitemap.ts`, `app/robots.ts`, bilingual titles/descriptions, JSON-LD (`Organization` + `LocalBusiness` + `sameAs` social profiles + `/social/` CollectionPage). Damascus map pin `33.5188338, 36.2916993`; Riyadh Al Murabba. Contact map uses Maps JavaScript API with mouse-wheel zoom on desktop. Google Search Console HTML + DNS verification. IndexNow key file on deploy; Laravel `seo:submit-sitemap` for Search Console API + IndexNow.
+SEO: `app/sitemap.ts`, `app/robots.ts`, bilingual titles/descriptions, JSON-LD (`Organization` + `LocalBusiness` + `sameAs` social profiles + `/social/` CollectionPage + `/locations/` CollectionPage with two LocalBusiness nodes). Named Maps search URL is Syria only: “Home of Creativity, Al Hamra, Damascus” (`33.5188338, 36.2916993`). The contact/locations map has no Saudi tab. `/locations/` has a Google Business Profile create CTA (`business.google.com/create`) — the site cannot publish the Maps pin itself. Google Search Console HTML + DNS verification. IndexNow key file on deploy; Laravel `seo:submit-sitemap` for Search Console API + IndexNow (`/` `/pricing/` `/social/` `/locations/` + sitemap).
 
 Dev: `npm run dev` → http://localhost:3000/ (with `NEXT_PUBLIC_BASE_PATH=none`)  
 Live (VPS): https://hoc.agency/ — API https://api.hoc.agency/api
@@ -30,6 +30,7 @@ No `app/api/`, no `middleware.ts`, no `[locale]` segment.
 | `/` | `app/page.tsx` | Landing: Hero → About → Services+Clients (one purple band) → Journey → Reels → Social → Projects → Finance → Contact |
 | `/pricing/` | `app/pricing/page.tsx` | Packages + WhatsApp inquiry modal |
 | `/social/` | `app/social/page.tsx` | Indexable Instagram/Facebook/Telegram profiles (`sameAs` + CollectionPage JSON-LD); footer links here |
+| `/locations/` | `app/locations/page.tsx` | Indexable Damascus Al Hamra map page (named Maps URL + LocalBusiness JSON-LD + GBP claim CTA); footer + contact map link here |
 | `/projects/detail/?id=` | `app/projects/detail/page.tsx` | Project from API or demo |
 | 404 | `app/not-found.tsx` | Branded, locale toggle |
 
