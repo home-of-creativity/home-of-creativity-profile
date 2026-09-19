@@ -24,7 +24,6 @@ function ReelCard({
         <AutoplayVideo
           className="reel-card-video"
           src={reel.video_url}
-          poster={reel.poster_url ?? undefined}
           preload="auto"
           eager
         />
