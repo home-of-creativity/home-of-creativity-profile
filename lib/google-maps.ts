@@ -68,6 +68,13 @@ type GoogleMapsApi = {
     setTitle: (title: string) => void;
     setMap: (map: unknown) => void;
   };
+  marker?: {
+    AdvancedMarkerElement: new (options: Record<string, unknown>) => {
+      position: GoogleLatLng;
+      title: string;
+      map: unknown;
+    };
+  };
 };
 
 type MapsWindow = Window & {
@@ -99,7 +106,7 @@ export function loadGoogleMapsApi(): Promise<GoogleMapsApi> {
       resolve(w.google.maps);
     };
     const script = document.createElement("script");
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(key)}&callback=__hocGoogleMapsReady`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(key)}&callback=__hocGoogleMapsReady&v=weekly&loading=async&libraries=marker`;
     script.async = true;
     script.onerror = () => reject(new Error("Google Maps failed to load"));
     document.head.appendChild(script);
@@ -117,6 +124,7 @@ export function createInteractiveGoogleMap(
   const map = new maps.Map(element, {
     center: options.center,
     zoom: options.zoom,
+    mapId: "DEMO_MAP_ID",
     mapTypeControl: false,
     streetViewControl: false,
     fullscreenControl: true,
@@ -126,18 +134,30 @@ export function createInteractiveGoogleMap(
     keyboardShortcuts: true,
     clickableIcons: false,
   });
-  const marker = new maps.Marker({
-    position: options.center,
-    map,
-    title: options.title,
-  });
+  const AdvancedMarker = maps.marker?.AdvancedMarkerElement;
+  const marker = AdvancedMarker
+    ? new AdvancedMarker({
+        position: options.center,
+        map,
+        title: options.title,
+      })
+    : new maps.Marker({
+        position: options.center,
+        map,
+        title: options.title,
+      });
 
   return {
     setCenter: (position) => map.setCenter(position),
     setZoom: (zoom) => map.setZoom(zoom),
     setMarker: (position, title) => {
-      marker.setPosition(position);
-      marker.setTitle(title);
+      if ("setPosition" in marker) {
+        marker.setPosition(position);
+        marker.setTitle(title);
+        return;
+      }
+      marker.position = position;
+      marker.title = title;
     },
   };
 }

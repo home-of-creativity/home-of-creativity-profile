@@ -16,7 +16,7 @@ Live (VPS): https://hoc.agency/ — API https://api.hoc.agency/api
 app/                 # App Router: page, pricing, projects/detail, not-found
 components/          # sections/, chrome, motion, CacheWorker
 lib/                 # content.ts, i18n, *-api.ts, whatsapp, visit-cache
-public/sw.js         # Cache API hoc-design-v8 (video always bypassed)
+public/sw.js         # Cache API hoc-design-v9 (video + Facebook/Instagram/Google CDNs bypassed)
 e2e/                 # Playwright
 next.config.ts
 ```
@@ -61,7 +61,7 @@ Contact and pricing forms **do not POST**. They `window.open` WhatsApp (`lib/wha
 
 - GSAP via `lib/gsap-client.ts` (dynamic import). `@gsap/react` is a dependency but unused in TSX.
 - Repeat visits: `lib/visit-cache.ts` key `hoc-skip-motion`.
-- `components/CacheWorker.tsx` + `public/sw.js` cache `hoc-design-v6` (images, fonts, and video; cache-first). Hero + mark are precached; everything else waits until near the viewport then stays in Cache Storage.
+- `components/CacheWorker.tsx` + `public/sw.js` cache `hoc-design-v9` (same-origin images/fonts only; cache-first). Facebook/Instagram/Google CDNs and video never go through the worker (opaque/no-cors mismatch). Hero + mark are precached; everything else waits until near the viewport then stays in Cache Storage. Maps loads with `loading=async` + Advanced Marker.
 
 ## Env (`.env.example`)
 

@@ -1,4 +1,4 @@
-const CACHE = "hoc-design-v8";
+const CACHE = "hoc-design-v9";
 const BASE = new URL("./", self.registration.scope).pathname.replace(/\/$/, "");
 const PRECACHE = [
   `${BASE}/hummingbird.svg`,
@@ -24,11 +24,18 @@ self.addEventListener("activate", (event) => {
   );
 });
 
+function isThirdPartyCdn(url) {
+  return /fbcdn|cdninstagram|instagram\.|facebook\.|googleusercontent|ggpht|drive\.google|googleapis|gstatic|maps\.google/i.test(
+    url.hostname,
+  );
+}
+
 function shouldBypass(request) {
   if (request.method !== "GET") return true;
   const url = new URL(request.url);
-  // Let the browser own video: it streams byte ranges and paints the first frame early.
-  if (request.headers.has("range") || isVideo(url)) return true;
+  // Let the browser own video, Maps, and social CDNs. Intercepting those
+  // yields opaque responses that cannot be reused for cors/preload fetches.
+  if (request.headers.has("range") || isVideo(url) || isThirdPartyCdn(url)) return true;
   if (isMedia(url)) return false;
   const path = url.pathname;
   return (
@@ -49,10 +56,7 @@ function isVideo(url) {
 }
 
 function isMedia(url) {
-  return (
-    /\.(webp|png|jpe?g|gif|svg|avif|woff2?|ttf)(\?|$)/i.test(url.pathname) ||
-    /fbcdn|cdninstagram|instagram\.|googleusercontent|ggpht|drive\.google|googleapis/i.test(url.hostname)
-  );
+  return /\.(webp|png|jpe?g|gif|svg|avif|woff2?|ttf)(\?|$)/i.test(url.pathname);
 }
 
 self.addEventListener("fetch", (event) => {
@@ -66,20 +70,23 @@ self.addEventListener("fetch", (event) => {
     caches.open(CACHE).then(async (cache) => {
       const cached = await cache.match(event.request);
 
-      if (media && cached) {
+      if (media && cached && cached.type !== "opaque") {
         return cached;
       }
 
       try {
         const response = await fetch(event.request);
         const storable =
-          response && response.type !== "error" && (response.status === 200 || response.type === "opaque");
+          response &&
+          response.type !== "error" &&
+          response.type !== "opaque" &&
+          response.status === 200;
         if (storable) {
           const type = response.headers.get("content-type") || "";
           if (type.startsWith("video/")) {
             return response;
           }
-          if (response.type === "opaque" || (media && !type.includes("text/html"))) {
+          if (media && !type.includes("text/html")) {
             void cache.put(event.request, response.clone()).catch(() => undefined);
           } else if (!type.includes("text/html") && !type.includes("application/json")) {
             void cache.put(event.request, response.clone()).catch(() => undefined);
