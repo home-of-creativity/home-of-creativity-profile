@@ -2,6 +2,7 @@ export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://hoc.agency
 
 export const SITE_NAME = "Home of Creativity";
 export const SITE_NAME_AR = "بيت الإبداع";
+export const SITE_SHORT = "HOC";
 export const SITE_ALTERNATE = "Creativation Source";
 
 export const OG_IMAGE_PATH = "/photo/hero-section-background.webp";
@@ -41,12 +42,12 @@ export const GOOGLE_SITE_VERIFICATION = resolveGoogleSiteVerification();
 
 export const seoCopy = {
   homeTitle: {
-    en: "Home of Creativity — Brand Architects in Syria & Saudi Arabia",
-    ar: "بيت الإبداع — مهندسو الهوية التجارية في سوريا والسعودية",
+    en: "Home of Creativity (HOC) — Brand Agency in Damascus",
+    ar: "بيت الإبداع HOC — وكالة هوية بصرية دمشق",
   },
   homeDescription: {
-    en: "Brand architects in Damascus and Riyadh. Premium Minimalism, identity, social, ads, and events — built on numbers, not noise.",
-    ar: "مهندسو هوية تجارية في دمشق والرياض. فخامة بسيطة، هوية، سوشال، إعلانات وفعاليات — مبنية على أرقام لا على ضجيج.",
+    en: "HOC — Home of Creativity (hoc.agency) is a brand agency in Damascus and Riyadh: visual identity, social, ads, and events.",
+    ar: "بيت الإبداع (HOC / hoc) وكالة هوية بصرية في دمشق وتصميم هوية تجارية في الرياض. ابحث: بيت، الإبداع، Home، hoc.agency.",
   },
   pricingTitle: {
     en: "Pricing",

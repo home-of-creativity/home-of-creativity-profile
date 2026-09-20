@@ -4,7 +4,7 @@ import { LANDING, LOCATIONS, SOCIAL } from "./helpers";
 test.describe("SEO and geo", () => {
   test("home includes title, canonical, JSON-LD and geo tags", async ({ page }) => {
     await page.goto(LANDING, { waitUntil: "domcontentloaded" });
-    await expect(page).toHaveTitle(/Home of Creativity/i);
+    await expect(page).toHaveTitle(/بيت الإبداع \| Home \| HOC — وكالة هوية دمشق/);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /hoc\.agency\/?$/);
     await expect(page.locator('meta[property="og:title"]')).toHaveCount(1);
     await expect(page.locator('meta[name="geo.placename"]')).toHaveAttribute("content", /Damascus/i);

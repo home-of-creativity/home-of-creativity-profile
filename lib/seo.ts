@@ -1,5 +1,5 @@
 import { contact, services, WHATSAPP_NUMBER } from "./content";
-import { SITE_ALTERNATE, SITE_NAME, SITE_NAME_AR, SITE_URL, absoluteUrl, OG_IMAGE_PATH, seoCopy } from "./site";
+import { SITE_ALTERNATE, SITE_NAME, SITE_NAME_AR, SITE_SHORT, SITE_URL, absoluteUrl, OG_IMAGE_PATH, seoCopy } from "./site";
 import { officialSocialProfiles, officialSocialUrls } from "./social-embeds";
 
 export const officesGeo = {
@@ -67,7 +67,7 @@ export function seoJsonLd() {
         "@type": "Organization",
         "@id": `${SITE_URL}/#organization`,
         name: SITE_NAME,
-        alternateName: [SITE_ALTERNATE, SITE_NAME_AR],
+        alternateName: [SITE_ALTERNATE, SITE_NAME_AR, "بيت الابداع", SITE_SHORT, "hoc"],
         url: `${SITE_URL}/`,
         logo: absoluteUrl("/hummingbird.svg"),
         image: absoluteUrl(OG_IMAGE_PATH),
@@ -77,7 +77,7 @@ export function seoJsonLd() {
         "@type": ["ProfessionalService", "LocalBusiness"],
         "@id": `${SITE_URL}/#business`,
         name: SITE_NAME,
-        alternateName: SITE_NAME_AR,
+        alternateName: [SITE_NAME_AR, "بيت الابداع", SITE_SHORT, "hoc", "Home"],
         url: `${SITE_URL}/`,
         image: absoluteUrl(OG_IMAGE_PATH),
         sameAs: officialSocialUrls(),
@@ -111,11 +111,20 @@ export function seoJsonLd() {
           },
         ],
         knowsAbout: [
+          "hoc",
+          "HOC",
+          "Home of Creativity",
+          "بيت",
+          "الإبداع",
+          "بيت الإبداع",
+          "وكالة هوية بصرية دمشق",
+          "تصميم هوية تجارية الرياض",
           "Brand identity",
+          "Visual identity agency Damascus",
+          "Brand agency Riyadh",
           "Social media",
           "Paid ads",
           "Event management",
-          "Premium Minimalism",
         ],
         hasOfferCatalog: {
           "@type": "OfferCatalog",
@@ -135,6 +144,8 @@ export function seoJsonLd() {
         "@id": `${SITE_URL}/#website`,
         url: `${SITE_URL}/`,
         name: SITE_NAME,
+        alternateName: [SITE_NAME_AR, "HOC", "hoc", "Home"],
+        description: `${seoCopy.homeDescription.ar} ${seoCopy.homeDescription.en}`,
         inLanguage: ["en", "ar"],
         publisher: { "@id": `${SITE_URL}/#organization` },
       },

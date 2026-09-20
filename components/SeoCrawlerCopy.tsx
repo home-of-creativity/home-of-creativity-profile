@@ -13,6 +13,8 @@ export function SeoCrawlerCopy() {
         </h1>
         <p>{seoCopy.homeDescription.ar}</p>
         <p>{seoCopy.homeDescription.en}</p>
+        <p>بيت الإبداع وكالة هوية بصرية دمشق — تصميم هوية تجارية الرياض — Home of Creativity brand agency.</p>
+        <p>HOC / Hoc / hoc / Home / بيت / الابداع / الإبداع — hoc.agency</p>
       </header>
       <section>
         <h2>

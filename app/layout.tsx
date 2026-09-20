@@ -6,7 +6,7 @@ import { BASE_PATH } from "@/lib/base-path";
 import { LOCALE_BOOT_SCRIPT } from "@/lib/locale-boot";
 import { THEME_BOOT_SCRIPT } from "@/lib/theme-boot";
 import { officesGeo } from "@/lib/seo";
-import { GOOGLE_SITE_VERIFICATION, OG_IMAGE_PATH, SITE_NAME, SITE_NAME_AR, SITE_URL, pageDescription, seoCopy } from "@/lib/site";
+import { GOOGLE_SITE_VERIFICATION, OG_IMAGE_PATH, SITE_NAME, SITE_NAME_AR, SITE_SHORT, SITE_URL, pageDescription, seoCopy } from "@/lib/site";
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -32,7 +32,7 @@ const greatVibes = Great_Vibes({
   display: "swap",
 });
 
-const homeTitle = `${SITE_NAME_AR} | ${SITE_NAME} — Brand Architects in Damascus & Riyadh`;
+const homeTitle = `${SITE_NAME_AR} | Home | ${SITE_SHORT} — وكالة هوية دمشق`;
 const homeDescription = pageDescription(seoCopy.homeDescription.en, seoCopy.homeDescription.ar);
 
 export const metadata: Metadata = {
@@ -48,18 +48,19 @@ export const metadata: Metadata = {
   publisher: "Home of Creativity",
   category: "marketing",
   keywords: [
+    "hoc",
+    "Hoc",
+    "HOC",
+    "hoc.agency",
+    "Home",
     "Home of Creativity",
+    "بيت",
+    "الابداع",
+    "الإبداع",
     "بيت الإبداع",
-    "brand architects",
-    "Damascus marketing agency",
-    "Riyadh marketing agency",
-    "Syria",
-    "Saudi Arabia",
-    "Premium Minimalism",
-    "Instagram",
-    "Facebook",
-    "إنستغرام",
-    "فيسبوك",
+    "بيت الابداع",
+    "وكالة هوية بصرية دمشق",
+    "تصميم هوية تجارية الرياض",
   ],
   manifest: "/manifest.webmanifest",
   alternates: {
