@@ -52,14 +52,14 @@ function PhoneFrame({
   );
 }
 
-export function SocialPhones() {
+export function SocialPhones({ headingLevel = 2 }: { headingLevel?: 1 | 2 } = {}) {
   const { t } = useLanguage();
 
   return (
     <section id="social" className="social-phones-section">
       <Shell>
         <Reveal className="mx-auto mb-10 max-w-2xl text-center md:mb-14">
-          <SectionHeading kicker={copy.kicker} title={copy.title} invert align="center" />
+          <SectionHeading kicker={copy.kicker} title={copy.title} invert align="center" level={headingLevel} />
           <p className="mt-5 text-[0.98rem] leading-[1.7] text-white/70">{t(copy.lead)}</p>
         </Reveal>
 

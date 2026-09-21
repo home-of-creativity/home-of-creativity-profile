@@ -554,7 +554,7 @@ export function Pricing() {
 
       <Shell className="relative">
         <Reveal className="mx-auto max-w-2xl text-center">
-          <SectionHeading kicker={pricing.kicker} title={pricing.title} align="center" />
+          <SectionHeading kicker={pricing.kicker} title={pricing.title} align="center" level={1} />
           <p className="mt-5 text-[1.02rem] leading-relaxed text-[var(--brand-ink)]/75">
             {t(pricing.lead)}
           </p>

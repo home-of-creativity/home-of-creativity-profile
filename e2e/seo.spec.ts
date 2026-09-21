@@ -10,14 +10,21 @@ test.describe("SEO and geo", () => {
     await expect(page.locator('meta[name="geo.placename"]')).toHaveAttribute("content", /Damascus/i);
     await expect(page.locator('meta[name="geo.position"]')).toHaveAttribute("content", /33\.5188338;36\.2916993/);
     const jsonLd = page.locator('script[type="application/ld+json"]');
-    await expect(jsonLd).toHaveCount(1);
-    const payload = JSON.parse((await jsonLd.textContent()) ?? "{}") as { "@graph"?: Array<{ "@type"?: unknown }> };
-    const types = (payload["@graph"] ?? []).flatMap((node) => {
+    await expect(jsonLd).toHaveCount(2);
+    const payloads = (await jsonLd.allTextContents()).map(
+      (text) => JSON.parse(text || "{}") as { "@graph"?: Array<Record<string, unknown>> },
+    );
+    const graph = payloads.flatMap((payload) => payload["@graph"] ?? []);
+    const types = graph.flatMap((node) => {
       const value = node["@type"];
       return Array.isArray(value) ? value : [value];
     });
-    expect(types).toEqual(expect.arrayContaining(["Organization", "LocalBusiness", "WebSite"]));
-    const graph = payload["@graph"] ?? [];
+    expect(types).toEqual(expect.arrayContaining(["Organization", "LocalBusiness", "WebSite", "FAQPage"]));
+    expect(JSON.stringify(payloads)).not.toMatch(/aggregateRating|ratingValue/);
+    await expect(page.locator("#faq")).toBeVisible();
+    await expect(page.getByRole("heading", { level: 2, name: /أسئلة شائعة|Questions/ })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 3, name: /ما هو بيت الإبداع \(HOC\)\؟/ })).toBeVisible();
+    await expect(page.getByText(/وكالة هوية بصرية وهندسة علامات في الحمراء بدمشق/)).toBeVisible();
     const sameAs = graph.flatMap((node) => {
       const value = (node as { sameAs?: string[] }).sameAs;
       return Array.isArray(value) ? value : [];
@@ -37,6 +44,23 @@ test.describe("SEO and geo", () => {
     const robotsBody = await robots.text();
     expect(robotsBody).toContain("Sitemap:");
     expect(robotsBody).toMatch(/Disallow:\s*\/dashboard/);
+    expect(robotsBody).toMatch(/User-agent:\s*GPTBot/i);
+    expect(robotsBody).toMatch(/User-agent:\s*PerplexityBot/i);
+    expect(robotsBody).toMatch(/User-agent:\s*Cursor/i);
+    expect(robotsBody).toMatch(/User-agent:\s*Claude-Code/i);
+    expect(robotsBody).toMatch(/User-agent:\s*Operator/i);
+
+    const llms = await request.get(`${origin}/llms.txt`);
+    expect(llms.ok()).toBeTruthy();
+    const llmsBody = await llms.text();
+    expect(llmsBody).toMatch(/Home of Creativity/);
+    expect(llmsBody).toMatch(/بيت الإبداع/);
+    expect(llmsBody).toMatch(/hoc\.agency/);
+    expect(llmsBody).not.toMatch(/aggregateRating|ratingValue/i);
+
+    const llmsFull = await request.get(`${origin}/llms-full.txt`);
+    expect(llmsFull.ok()).toBeTruthy();
+    expect(await llmsFull.text()).toMatch(/#faq/);
 
     const sitemap = await request.get(`${origin}/sitemap.xml`);
     expect(sitemap.ok()).toBeTruthy();

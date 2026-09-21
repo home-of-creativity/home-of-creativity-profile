@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Great_Vibes, IBM_Plex_Sans_Arabic, Inter } from "next/font/google";
-import { SeoCrawlerCopy } from "@/components/SeoCrawlerCopy";
 import { SeoJsonLd } from "@/components/SeoJsonLd";
 import { BASE_PATH } from "@/lib/base-path";
 import { LOCALE_BOOT_SCRIPT } from "@/lib/locale-boot";
@@ -144,7 +143,6 @@ export default function RootLayout({
       </head>
       <body suppressHydrationWarning>
         <SeoJsonLd />
-        <SeoCrawlerCopy />
         <Providers>{children}</Providers>
       </body>
     </html>

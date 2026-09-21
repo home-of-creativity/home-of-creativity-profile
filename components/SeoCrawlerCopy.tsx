@@ -1,4 +1,4 @@
-import { about, contact, hero, services } from "@/lib/content";
+import { about, contact, faq, hero, services } from "@/lib/content";
 import { officesGeo } from "@/lib/seo";
 import { SITE_NAME, SITE_NAME_AR, seoCopy } from "@/lib/site";
 import { officialSocialProfiles } from "@/lib/social-embeds";
@@ -29,11 +29,17 @@ function crawlerHtml() {
   const servicesList = services.items
     .map((item) => `<li>${escapeHtml(item.ar)} / ${escapeHtml(item.en)}</li>`)
     .join("");
+  const faqList = faq.items
+    .map(
+      (item) =>
+        `<article><h3>${escapeHtml(item.q.ar)} / ${escapeHtml(item.q.en)}</h3><p>${escapeHtml(item.a.ar)} ${escapeHtml(item.a.en)}</p></article>`,
+    )
+    .join("");
 
   return [
     "<header>",
     `<p>${escapeHtml(SITE_NAME_AR)}</p>`,
-    `<h1>${escapeHtml(`${hero.titleLead.en} ${hero.titleAccent.en} — ${hero.titleLead.ar} ${hero.titleAccent.ar}`)}</h1>`,
+    `<p>${escapeHtml(`${hero.titleLead.en} ${hero.titleAccent.en} — ${hero.titleLead.ar} ${hero.titleAccent.ar}`)}</p>`,
     `<p>${escapeHtml(seoCopy.homeDescription.ar)}</p>`,
     `<p>${escapeHtml(seoCopy.homeDescription.en)}</p>`,
     "<p>بيت الإبداع وكالة هوية بصرية دمشق — تصميم هوية تجارية الرياض — Home of Creativity brand agency.</p>",
@@ -57,6 +63,12 @@ function crawlerHtml() {
     syr
       ? `<p><a href="${escapeHtml(officesGeo.syr.mapsUrl)}">${escapeHtml(SITE_NAME)}, ${escapeHtml(syr.city.ar)} ${escapeHtml(syr.city.en)}</a>${syrPhone}</p>`
       : "",
+    "</section>",
+    "<section>",
+    `<h2>${escapeHtml(`${faq.title.ar} — ${faq.title.en}`)}</h2>`,
+    `<p>${escapeHtml(faq.lead.ar)} ${escapeHtml(faq.lead.en)}</p>`,
+    faqList,
+    `<p><a href="/llms.txt">llms.txt</a> · <a href="/llms-full.txt">llms-full.txt</a></p>`,
     "</section>",
     "<section>",
     "<h2>Contact — تواصل</h2>",

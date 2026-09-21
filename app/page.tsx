@@ -1,10 +1,13 @@
 "use client";
 
 import { Footer, Nav } from "@/components/chrome";
+import { SeoCrawlerCopy } from "@/components/SeoCrawlerCopy";
+import { SeoHomeJsonLd } from "@/components/SeoHomeJsonLd";
 import { About } from "@/components/sections/About";
 import { ClientJourney } from "@/components/sections/ClientJourney";
 import { ShowcaseClients } from "@/components/sections/ShowcaseClients";
 import { Contact } from "@/components/sections/Contact";
+import { Faq } from "@/components/sections/Faq";
 import { Finance } from "@/components/sections/Finance";
 import { Hero } from "@/components/sections/Hero";
 import { Projects } from "@/components/sections/Projects";
@@ -15,6 +18,8 @@ import { SocialPhones } from "@/components/sections/SocialPhones";
 export default function HomePage() {
   return (
     <>
+      <SeoHomeJsonLd />
+      <SeoCrawlerCopy />
       <Nav />
       <main>
         <Hero />
@@ -36,6 +41,7 @@ export default function HomePage() {
         <SocialPhones />
         <Projects />
         <Finance />
+        <Faq />
         <Contact />
       </main>
       <Footer />

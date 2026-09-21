@@ -8,7 +8,7 @@ export default function SocialPage() {
     <>
       <Nav />
       <main id="top">
-        <SocialPhones />
+        <SocialPhones headingLevel={1} />
       </main>
       <Footer />
     </>

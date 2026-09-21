@@ -1,4 +1,4 @@
-import { contact, services, WHATSAPP_NUMBER } from "./content";
+import { contact, faq, services, WHATSAPP_NUMBER } from "./content";
 import { SITE_ALTERNATE, SITE_NAME, SITE_NAME_AR, SITE_SHORT, SITE_URL, absoluteUrl, OG_IMAGE_PATH, seoCopy } from "./site";
 import { officialSocialProfiles, officialSocialUrls } from "./social-embeds";
 
@@ -56,10 +56,13 @@ function placeNode(id: "syr" | "ksa") {
   };
 }
 
-export function seoJsonLd() {
-  const syr = placeNode("syr");
-  const ksa = placeNode("ksa");
-
+/**
+ * Site-wide graph: Organization + WebSite. Rendered on every page (`SeoJsonLd`
+ * in the root layout). Kept free of page-specific claims (no LocalBusiness
+ * address/geo, no FAQPage) so it stays valid regardless of which page it is
+ * read from.
+ */
+export function siteJsonLd() {
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -68,11 +71,41 @@ export function seoJsonLd() {
         "@id": `${SITE_URL}/#organization`,
         name: SITE_NAME,
         alternateName: [SITE_ALTERNATE, SITE_NAME_AR, "بيت الابداع", SITE_SHORT, "hoc"],
+        description: `${seoCopy.homeDescription.ar} ${seoCopy.homeDescription.en}`,
+        slogan: SITE_ALTERNATE,
         url: `${SITE_URL}/`,
         logo: absoluteUrl("/hummingbird.svg"),
         image: absoluteUrl(OG_IMAGE_PATH),
         sameAs: officialSocialUrls(),
       },
+      {
+        "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
+        url: `${SITE_URL}/`,
+        name: SITE_NAME,
+        alternateName: [SITE_NAME_AR, "HOC", "hoc", "Home"],
+        description: `${seoCopy.homeDescription.ar} ${seoCopy.homeDescription.en}`,
+        inLanguage: ["en", "ar"],
+        publisher: { "@id": `${SITE_URL}/#organization` },
+      },
+    ],
+  };
+}
+
+/**
+ * Home-only graph: LocalBusiness + FAQPage. Only `/` renders the visible
+ * `#faq` section these questions describe, so FAQPage must not ship on any
+ * other page (Google requires FAQ markup to match visible page content).
+ * `location` only lists the Damascus studio that `/locations/` maps — Riyadh
+ * is a served market (`areaServed`), not a second mapped office, so it has
+ * no `Place`/`geo` node here.
+ */
+export function homeJsonLd() {
+  const syr = placeNode("syr");
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
       {
         "@type": ["ProfessionalService", "LocalBusiness"],
         "@id": `${SITE_URL}/#business`,
@@ -83,7 +116,6 @@ export function seoJsonLd() {
         sameAs: officialSocialUrls(),
         telephone: `+${WHATSAPP_NUMBER}`,
         priceRange: "$$",
-        inLanguage: ["en", "ar"],
         parentOrganization: { "@id": `${SITE_URL}/#organization` },
         address: syr?.address,
         geo: syr?.geo,
@@ -92,7 +124,7 @@ export function seoJsonLd() {
           { "@type": "Country", "name": "Syria" },
           { "@type": "Country", "name": "Saudi Arabia" },
         ],
-        location: [syr, ksa].filter(Boolean),
+        location: [syr].filter(Boolean),
         contactPoint: [
           {
             "@type": "ContactPoint",
@@ -110,44 +142,37 @@ export function seoJsonLd() {
             availableLanguage: ["ar", "en"],
           },
         ],
-        knowsAbout: [
-          "hoc",
-          "HOC",
-          "Home of Creativity",
-          "بيت",
-          "الإبداع",
-          "بيت الإبداع",
-          "وكالة هوية بصرية دمشق",
-          "تصميم هوية تجارية الرياض",
-          "Brand identity",
-          "Visual identity agency Damascus",
-          "Brand agency Riyadh",
-          "Social media",
-          "Paid ads",
-          "Event management",
-        ],
         hasOfferCatalog: {
           "@type": "OfferCatalog",
           name: "Services",
-          itemListElement: services.items.map((item) => ({
-            "@type": "Offer",
-            itemOffered: {
+          itemListElement: services.items.map((item, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            item: {
               "@type": "Service",
               name: item.en,
               alternateName: item.ar,
+              provider: { "@id": `${SITE_URL}/#organization` },
             },
           })),
         },
       },
       {
-        "@type": "WebSite",
-        "@id": `${SITE_URL}/#website`,
-        url: `${SITE_URL}/`,
-        name: SITE_NAME,
-        alternateName: [SITE_NAME_AR, "HOC", "hoc", "Home"],
-        description: `${seoCopy.homeDescription.ar} ${seoCopy.homeDescription.en}`,
-        inLanguage: ["en", "ar"],
-        publisher: { "@id": `${SITE_URL}/#organization` },
+        "@type": "FAQPage",
+        "@id": `${SITE_URL}/#faq`,
+        url: `${SITE_URL}/#faq`,
+        name: `${faq.title.ar} | ${faq.title.en}`,
+        inLanguage: ["ar", "en"],
+        isPartOf: { "@id": `${SITE_URL}/#website` },
+        about: { "@id": `${SITE_URL}/#organization` },
+        mainEntity: faq.items.map((item) => ({
+          "@type": "Question",
+          name: `${item.q.ar} / ${item.q.en}`,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: `${item.a.ar} ${item.a.en}`,
+          },
+        })),
       },
     ],
   };
