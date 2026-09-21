@@ -73,6 +73,22 @@ export const seoCopy = {
     en: "Follow Home of Creativity on Instagram and Facebook — brand work from Damascus and Riyadh.",
     ar: "تابعوا بيت الإبداع على إنستغرام وفيسبوك — أعمال الهوية من دمشق والرياض.",
   },
+  articlesTitle: {
+    en: "Articles",
+    ar: "المقالات",
+  },
+  articlesDescription: {
+    en: "Articles on branding, social media, and creative direction from Home of Creativity.",
+    ar: "مقالات عن الهوية البصرية والسوشال والإخراج الإبداعي من بيت الإبداع.",
+  },
+  articleTitle: {
+    en: "Article",
+    ar: "مقال",
+  },
+  articleDescription: {
+    en: "Read the full article from Home of Creativity.",
+    ar: "اقرأ المقال كاملاً من بيت الإبداع.",
+  },
   projectTitle: {
     en: "Project",
     ar: "مشروع",

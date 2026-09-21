@@ -1,5 +1,4 @@
 import { publicApiUrl } from "./public-api";
-import defaults from "./legal-defaults.json";
 
 export type LegalSection = {
   id: string;
@@ -17,31 +16,32 @@ export type LegalPage = {
   updated_at?: string | null;
 };
 
-function fallbackPage(slug: "privacy" | "terms"): LegalPage | null {
-  const pages = Array.isArray(defaults) ? defaults : [];
-  return pages.find((item) => item.slug === slug) ?? null;
+function hasContent(page: LegalPage): boolean {
+  return page.sections.some((section) => {
+    const ar = section.html_ar.replace(/<[^>]+>/g, "").trim();
+    const en = section.html_en.replace(/<[^>]+>/g, "").trim();
+    return ar.length > 0 || en.length > 0;
+  });
 }
 
 export async function fetchLegalPage(slug: "privacy" | "terms"): Promise<LegalPage | null> {
   const api = publicApiUrl();
-  if (api) {
-    try {
-      const response = await fetch(`${api}/legal/${slug}`, {
-        method: "GET",
-        headers: { Accept: "application/json" },
-        cache: "no-store",
-        signal: AbortSignal.timeout(4000),
-      });
-      if (response.ok) {
-        const payload = (await response.json()) as { data?: LegalPage };
-        if (payload.data?.sections?.length) {
-          return payload.data;
-        }
-      }
-    } catch {
-      // Use bundled copy when the API is down.
-    }
-  }
+  if (!api) return null;
 
-  return fallbackPage(slug);
+  try {
+    const response = await fetch(`${api}/legal/${slug}`, {
+      method: "GET",
+      headers: { Accept: "application/json" },
+      cache: "no-store",
+      signal: AbortSignal.timeout(4000),
+    });
+    if (!response.ok) return null;
+    const payload = (await response.json()) as { data?: LegalPage };
+    if (!payload.data?.sections?.length || !hasContent(payload.data)) {
+      return null;
+    }
+    return payload.data;
+  } catch {
+    return null;
+  }
 }

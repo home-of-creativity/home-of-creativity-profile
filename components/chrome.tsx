@@ -9,6 +9,7 @@ import {
   homePath,
   isHomePathname,
   isPagePathname,
+  normalizePathname,
   pagePath,
   sectionPath,
 } from "@/lib/base-path";
@@ -32,6 +33,7 @@ type SiteLinkDef = {
 const navLinkDefs: SiteLinkDef[] = [
   { key: "home", label: nav.home },
   { key: "services", section: "services", label: nav.services },
+  { key: "articles", page: "articles", label: nav.articles },
   { key: "pricing", page: "pricing", label: nav.pricing },
   { key: "contact", section: "contact", label: nav.contact },
 ];
@@ -46,6 +48,7 @@ const footerLinkDefs: SiteLinkDef[] = [
   { key: "locations", page: "locations", label: nav.locations },
   { key: "projects", section: "projects", label: nav.projects },
   { key: "finance", section: "finance", label: nav.finance },
+  { key: "articles", page: "articles", label: nav.articles },
   { key: "pricing", page: "pricing", label: nav.pricing },
   { key: "contact", section: "contact", label: nav.contact },
 ];
@@ -168,6 +171,7 @@ export function Nav() {
   const pathname = usePathname();
   const onHome = isHomePathname(pathname);
   const onPricing = isPagePathname(pathname, "pricing");
+  const onArticles = normalizePathname(pathname).startsWith("/articles");
   const reduce = useReducedMotion();
   const headerRef = useRef<HTMLElement>(null);
   const [scrolled, setScrolled] = useState(false);
@@ -268,6 +272,7 @@ export function Nav() {
 
   function isLinkActive(key: string, href: string) {
     if (key === "pricing" && onPricing) return true;
+    if (key === "articles" && onArticles) return true;
     if (!onHome) return false;
     if (key === "home") return active === "#top";
     if (key === "services") return active === "#services";
@@ -365,7 +370,7 @@ export function Nav() {
           </a>
 
           <nav
-            className="mx-2 hidden min-w-0 grid-cols-4 items-center lg:grid"
+            className="mx-2 hidden min-w-0 grid-cols-5 items-center lg:grid"
             aria-label={t(nav.menu)}
           >
             {navLinks.map((link) => (

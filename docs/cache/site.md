@@ -13,7 +13,7 @@ Live (VPS): https://hoc.agency/ — API https://api.hoc.agency/api
 ## Layout
 
 ```
-app/                 # App Router: page, pricing, projects/detail, not-found
+app/                 # App Router: page, pricing, articles, projects/detail, not-found
 components/          # sections/, chrome, motion, CacheWorker
 lib/                 # content.ts, i18n, *-api.ts, whatsapp, visit-cache
 public/sw.js         # Cache API hoc-design-v10 (same-origin images/fonts; cross-origin API storage, video, Facebook/Instagram/Google CDNs bypassed)
@@ -29,6 +29,8 @@ No `app/api/`, no `middleware.ts`, no `[locale]` segment.
 | --- | --- | --- |
 | `/` | `app/page.tsx` | Landing: Hero → About → Services+Clients (one purple band) → Journey → Reels → Social → Projects → Finance → Contact |
 | `/pricing/` | `app/pricing/page.tsx` | Packages + WhatsApp inquiry modal |
+| `/articles/` | `app/articles/page.tsx` | Published articles list from `GET /articles` |
+| `/articles/detail/?slug=` | `app/articles/detail/page.tsx` | Single article from `GET /articles/{slug}` |
 | `/social/` | `app/social/page.tsx` | Indexable Instagram/Facebook/Telegram profiles (`sameAs` + CollectionPage JSON-LD); footer links here |
 | `/privacy/` | `app/privacy/page.tsx` | Privacy policy from `GET /legal/privacy` (demo fallback in `lib/legal-defaults.json`); footer link |
 | `/terms/` | `app/terms/page.tsx` | Terms of use from `GET /legal/terms`; footer link |
@@ -54,6 +56,7 @@ Client `fetch` to `NEXT_PUBLIC_API_URL` (default `http://127.0.0.1:8000/api`), `
 | `lib/instagram-feed-api.ts` | `GET /social/instagram-feed` | Empty / embed |
 | `lib/facebook-feed-api.ts` | `GET /social/facebook-feed` | Facebook page plugin iframe |
 | `lib/profile-pdf-api.ts` | `GET /profile-pdf` | Hidden (no navbar link until staff upload a PDF) |
+| `lib/articles-api.ts` | `GET /articles`, `GET /articles/{slug}` | Empty when API unavailable |
 
 Demo **on** unless `NEXT_PUBLIC_USE_DEMO_DATA=false` (`lib/demo-mode.ts`).
 

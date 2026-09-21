@@ -54,16 +54,16 @@ export function LegalDocument({ slug }: { slug: "privacy" | "terms" }) {
           </p>
         ) : (
           <article className="legal-doc mx-auto max-w-2xl text-start">
-            {page.sections.map((section) => (
-              <section key={section.id} id={section.id} className="legal-doc-section">
-                <h2>{locale === "ar" ? section.heading_ar : section.heading_en}</h2>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: locale === "ar" ? section.html_ar : section.html_en,
-                  }}
-                />
-              </section>
-            ))}
+            {page.sections.map((section) => {
+              const heading = (locale === "ar" ? section.heading_ar : section.heading_en).trim();
+              const html = locale === "ar" ? section.html_ar : section.html_en;
+              return (
+                <section key={section.id} id={section.id} className="legal-doc-section">
+                  {heading ? <h2>{heading}</h2> : null}
+                  <div dangerouslySetInnerHTML={{ __html: html }} />
+                </section>
+              );
+            })}
           </article>
         )}
       </Shell>

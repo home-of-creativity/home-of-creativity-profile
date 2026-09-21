@@ -18,6 +18,7 @@ export const nav = {
   social: { en: "Social", ar: "السوشال" },
   projects: { en: "Projects", ar: "المشاريع" },
   finance: { en: "Finance", ar: "التحليل المالي" },
+  articles: { en: "Articles", ar: "المقالات" },
   pricing: { en: "Pricing", ar: "الأسعار" },
   locations: { en: "Locations", ar: "المواقع" },
   privacy: { en: "Privacy Policy", ar: "سياسة الخصوصية" },
@@ -507,6 +508,20 @@ export const projects = {
       ],
     },
   ],
+};
+
+export const articlesPage = {
+  kicker: { en: "Insights", ar: "مقالات" },
+  title: { en: "Articles & insights", ar: "مقالات ورؤى" },
+  lead: {
+    en: "Notes on branding, social, and creative direction from the Home of Creativity team.",
+    ar: "مقالات عن الهوية والسوشال والإخراج الإبداعي من فريق بيت الإبداع.",
+  },
+  loading: { en: "Loading…", ar: "جارٍ التحميل…" },
+  empty: { en: "No published articles yet.", ar: "لا توجد مقالات منشورة بعد." },
+  readMore: { en: "Read article", ar: "اقرأ المقال" },
+  back: { en: "Back to articles", ar: "العودة للمقالات" },
+  notFound: { en: "Article not found", ar: "المقال غير موجود" },
 };
 
 export const projectDetail = {
