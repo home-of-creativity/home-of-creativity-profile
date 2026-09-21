@@ -45,7 +45,6 @@ function ReelCard({
           className="reel-card-video"
           src={reel.video_url}
           preload="metadata"
-          eager
           onReady={(video) => {
             setState("ready");
             if (video.videoWidth > 0 && video.videoHeight > 0) {

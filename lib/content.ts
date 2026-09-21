@@ -26,6 +26,7 @@ export const nav = {
   contact: { en: "Contact us", ar: "تواصل معنا" },
   profilePdf: { en: "Profile", ar: "الملف التعريفي" },
   whatsapp: { en: "WhatsApp", ar: "واتساب" },
+  whatsappStart: { en: "Start on WhatsApp", ar: "ابدأ عبر واتساب" },
   language: { en: "Language", ar: "اللغة" },
   theme: { en: "Color theme", ar: "مظهر الألوان" },
   darkMode: { en: "Dark mode", ar: "الوضع الداكن" },

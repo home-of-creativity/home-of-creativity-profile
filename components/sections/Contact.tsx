@@ -1,7 +1,7 @@
 "use client";
 
 import { Great_Vibes } from "next/font/google";
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { contact, services } from "@/lib/content";
 import { fetchContactChannels, mergeContactChannels } from "@/lib/contact-api";
 
@@ -19,6 +19,7 @@ import { SocialBrandIcon } from "../SocialBrandIcon";
 import { Reveal } from "../motion";
 import { Shell } from "../ui";
 import { cn } from "@/lib/cn";
+import { useGsapScope } from "@/lib/gsap-client";
 
 function telHref(digits: string) {
   return `tel:+${digits.replace(/\D/g, "")}`;
@@ -114,7 +115,8 @@ const emptyForm: FormState = {
 };
 
 export function Contact() {
-  const { t, locale } = useLanguage();
+  const { t, locale, ready } = useLanguage();
+  const listRef = useRef<HTMLUListElement>(null);
   const [form, setForm] = useState<FormState>(emptyForm);
   const [error, setError] = useState(false);
   const [sent, setSent] = useState(false);
@@ -129,6 +131,51 @@ export function Contact() {
       active = false;
     };
   }, [locale]);
+
+  useGsapScope(
+    ({ gsap }) => {
+      const root = listRef.current;
+      if (!root || !ready) return;
+
+      const items = gsap.utils.toArray<HTMLElement>(".contact-channel", root);
+      if (!items.length) return;
+
+      const mm = gsap.matchMedia();
+      mm.add(
+        {
+          reduceMotion: "(prefers-reduced-motion: reduce)",
+          allowMotion: "(prefers-reduced-motion: no-preference)",
+        },
+        (context) => {
+          if (context.conditions?.reduceMotion) {
+            gsap.set(items, { x: 0, rotate: 0 });
+            return;
+          }
+
+          gsap.set(items, { transformOrigin: "50% 50%", force3D: true, x: 0, rotate: 0 });
+
+          items.forEach((el, index) => {
+            gsap
+              .timeline({
+                delay: index * 0.08,
+                scrollTrigger: {
+                  trigger: el,
+                  start: "top 88%",
+                  once: true,
+                  toggleActions: "play none none none",
+                },
+              })
+              .to(el, { x: 22, rotate: 5.5, duration: 0.34, ease: "power2.out" })
+              .to(el, { x: -20, rotate: -4.5, duration: 0.4, ease: "power2.inOut" })
+              .to(el, { x: 0, rotate: 0, duration: 0.5, ease: "power3.out" });
+          });
+        },
+      );
+
+      return () => mm.revert();
+    },
+    { scope: listRef, dependencies: [ready, locale, channels] },
+  );
 
   const fieldClass =
     "w-full rounded-none border border-[var(--brand-line)] bg-white/80 px-4 py-3 text-[1rem] text-[var(--brand-ink)] outline-none transition-colors placeholder:text-[var(--brand-muted)] focus-visible:border-[var(--brand-orange)] focus-visible:ring-2 focus-visible:ring-[var(--brand-orange)]/30";
@@ -171,7 +218,7 @@ export function Contact() {
             <BinderClip className="h-[4.4rem] w-12" />
           </div>
 
-          <div className="relative overflow-hidden bg-[var(--brand-cream)] px-4 py-14 text-[var(--brand-ink)] shadow-[0_24px_60px_rgb(0_0_0/0.35)] sm:px-6 md:px-14 md:py-20">
+          <div className="relative overflow-visible bg-[var(--brand-cream)] px-4 py-14 text-[var(--brand-ink)] shadow-[0_24px_60px_rgb(0_0_0/0.35)] sm:px-6 md:px-14 md:py-20">
             <Hummingbird
               surface="light"
               className="pointer-events-none absolute top-1/2 left-1/2 h-[min(28rem,70%)] w-[min(44rem,92%)] -translate-x-1/2 -translate-y-1/2 opacity-[0.13]"
@@ -196,10 +243,12 @@ export function Contact() {
               </p>
             </Reveal>
 
-            <Reveal>
-              <ul className="relative mx-auto grid max-w-3xl list-none gap-5 p-0 sm:grid-cols-2">
+            <ul
+              ref={listRef}
+              className="relative mx-auto grid max-w-3xl list-none gap-5 p-0 sm:grid-cols-2"
+            >
                 {channels.filter((channel) => channel.lines.length > 0).map((channel) => (
-                  <li key={channel.id} className="list-none">
+                  <li key={channel.id} className="contact-channel list-none">
                     <article className="relative flex items-center">
                       <span className="relative z-10 grid h-14 w-14 shrink-0 place-items-center rounded-full border border-[var(--brand-ink)]/12 bg-white shadow-[0_8px_20px_rgb(10_6_24/0.08)]">
                         <span className="sr-only">{t(channel.label)}</span>
@@ -272,8 +321,7 @@ export function Contact() {
                     </article>
                   </li>
                 ))}
-              </ul>
-            </Reveal>
+            </ul>
 
             <Reveal>
               <ContactMap />

@@ -60,12 +60,15 @@ Client `fetch` to `NEXT_PUBLIC_API_URL` (default `http://127.0.0.1:8000/api`), `
 
 Demo **on** unless `NEXT_PUBLIC_USE_DEMO_DATA=false` (`lib/demo-mode.ts`).
 
-Contact and pricing forms **do not POST**. They `window.open` WhatsApp (`lib/whatsapp.ts`, number in `lib/content.ts`). Telegram bot username via `NEXT_PUBLIC_TELEGRAM_BOT`. `NEXT_PUBLIC_DASHBOARD_URL` exists in `lib/base-path.ts` but is **not linked** in the navbar. A brand-orange **Profile / الملف التعريفي** pill sits between WhatsApp and the language toggle when `GET /profile-pdf` returns a `url` (staff upload from dashboard `/profile-pdf`); it opens the PDF in a new tab.
+Contact and pricing forms **do not POST**. They `window.open` WhatsApp (`lib/whatsapp.ts`, number in `lib/content.ts`). Telegram bot username via `NEXT_PUBLIC_TELEGRAM_BOT`. `NEXT_PUBLIC_DASHBOARD_URL` exists in `lib/base-path.ts` but is **not linked** in the navbar. A brand-orange **Profile / الملف التعريفي** pill appears in the **footer** (under the tagline) when `GET /profile-pdf` returns a `url` (staff upload from dashboard `/profile-pdf`); the same pill remains in the navbar between WhatsApp and the language toggle. It opens the PDF in a new tab.
 
 ## Motion / SW
 
 - GSAP via `lib/gsap-client.ts` (dynamic import). `@gsap/react` is a dependency but unused in TSX.
+- Wheel/trackpad scrolling uses native `scroll-behavior: auto` (CSS smooth scroll on `html` made up/down scrolling feel lagged on Windows). In-page hash jumps still use JS `scrollIntoView({ behavior: "smooth" })`.
 - Repeat visits: `lib/visit-cache.ts` key `hoc-skip-motion`.
+- Looping motion (hero Ken Burns, hummingbird, client marquee ticker) pauses off-screen. Nav scroll listeners are rAF-throttled and do not use `backdrop-filter`.
+- Contact channel cards (`#contact`) swing right → left → center once when they enter the viewport on scroll-down (GSAP transform only; skipped under `prefers-reduced-motion`).
 - `components/CacheWorker.tsx` + `public/sw.js` cache `hoc-design-v10` (same-origin images/fonts only; cache-first). Cross-origin `api.hoc.agency/storage` logos, Facebook/Instagram/Google CDNs, and video never go through the worker (CORS/opaque mismatch). Hero + mark are precached; everything else waits until near the viewport then stays in Cache Storage. Maps loads with `loading=async` + Advanced Marker.
 
 ## Env (`.env.example`)

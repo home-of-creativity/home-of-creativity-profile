@@ -16,7 +16,7 @@ export function Hero() {
   const rootRef = useRef<HTMLElement>(null);
 
   useGsapScope(
-    ({ gsap }) => {
+    ({ gsap, ScrollTrigger }) => {
       if (!ready) return;
       const mm = gsap.matchMedia();
 
@@ -57,23 +57,40 @@ export function Hero() {
             .from(".hero-cta", { autoAlpha: 0, y: 12, immediateRender: false }, "<0.12")
             .from(".hero-scroll", { autoAlpha: 0, immediateRender: false }, "-=0.25");
 
+          const looping: Array<{ play: () => unknown; pause: () => unknown }> = [];
+
           if (isDesktop) {
-            gsap.to(".hero-bg", {
-              scale: 1.06,
-              duration: 28,
+            looping.push(
+              gsap.to(".hero-bg", {
+                scale: 1.06,
+                duration: 28,
+                ease: "sine.inOut",
+                yoyo: true,
+                repeat: -1,
+              }),
+            );
+          }
+
+          looping.push(
+            gsap.to(".hero-scroll-mark", {
+              y: 6,
+              duration: 1.15,
               ease: "sine.inOut",
               yoyo: true,
               repeat: -1,
+            }),
+          );
+
+          if (rootRef.current) {
+            ScrollTrigger.create({
+              trigger: rootRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              onToggle(self) {
+                looping.forEach((tween) => (self.isActive ? tween.play() : tween.pause()));
+              },
             });
           }
-
-          gsap.to(".hero-scroll-mark", {
-            y: 6,
-            duration: 1.15,
-            ease: "sine.inOut",
-            yoyo: true,
-            repeat: -1,
-          });
         },
       );
 
@@ -89,7 +106,7 @@ export function Hero() {
       className="relative isolate flex min-h-[100svh] items-center overflow-hidden bg-[var(--brand-purple-deep)] text-[var(--brand-ivory)]"
     >
       <div className="absolute inset-0 overflow-hidden">
-        <div className="hero-bg absolute inset-0 will-change-transform md:inset-[-8%] md:h-[116%] md:w-[116%]">
+        <div className="hero-bg absolute inset-0 md:inset-[-8%] md:h-[116%] md:w-[116%]">
           <Image
             src={withBasePath("/photo/hero-section-background.webp")}
             alt=""

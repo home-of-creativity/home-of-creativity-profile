@@ -30,7 +30,7 @@ export const Hummingbird = forwardRef<SVGSVGElement, MarkProps>(function Humming
   const orange = "#f35c27";
 
   useGsapScope(
-    ({ gsap }) => {
+    ({ gsap, ScrollTrigger }) => {
       if (!float) return;
 
       const root = ref.current;
@@ -45,29 +45,41 @@ export const Hummingbird = forwardRef<SVGSVGElement, MarkProps>(function Humming
         // Pivot at the shoulder where both wing paths meet the body.
         gsap.set(wings, { svgOrigin: "388 308", rotate: 4 });
 
-        gsap.to(wings, {
-          rotate: -7,
-          duration: 0.26,
-          ease: "sine.inOut",
-          yoyo: true,
-          repeat: -1,
-        });
-
-        if (!stationary) {
-          gsap
-            .timeline({ repeat: -1, defaults: { ease: "sine.inOut" } })
-            .to(bird, { yPercent: -3.2, rotate: -1.2, duration: 1.8 })
-            .to(bird, { yPercent: -1.2, rotate: 0.8, duration: 2.1 })
-            .to(bird, { yPercent: 0, rotate: 0, duration: 1.6 });
-
-          gsap.to(bird, {
-            xPercent: 1.8,
-            duration: 4.6,
+        const looping: Array<{ play: () => unknown; pause: () => unknown }> = [
+          gsap.to(wings, {
+            rotate: -7,
+            duration: 0.26,
             ease: "sine.inOut",
             yoyo: true,
             repeat: -1,
-          });
+          }),
+        ];
+
+        if (!stationary) {
+          looping.push(
+            gsap
+              .timeline({ repeat: -1, defaults: { ease: "sine.inOut" } })
+              .to(bird, { yPercent: -3.2, rotate: -1.2, duration: 1.8 })
+              .to(bird, { yPercent: -1.2, rotate: 0.8, duration: 2.1 })
+              .to(bird, { yPercent: 0, rotate: 0, duration: 1.6 }),
+            gsap.to(bird, {
+              xPercent: 1.8,
+              duration: 4.6,
+              ease: "sine.inOut",
+              yoyo: true,
+              repeat: -1,
+            }),
+          );
         }
+
+        ScrollTrigger.create({
+          trigger: root,
+          start: "top bottom",
+          end: "bottom top",
+          onToggle(self) {
+            looping.forEach((tween) => (self.isActive ? tween.play() : tween.pause()));
+          },
+        });
       });
 
       return () => mm.revert();

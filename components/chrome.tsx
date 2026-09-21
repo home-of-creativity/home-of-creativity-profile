@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { LogoLockup } from "./brand";
 import {
   CLIENT_TELEGRAM_URL,
@@ -59,6 +59,16 @@ function resolveHref(def: SiteLinkDef, onHome: boolean) {
   return sectionPath(def.section!, onHome);
 }
 
+function scrollToHash(href: string, reduce: boolean | null) {
+  if (!href.startsWith("#")) return;
+  const behavior: ScrollBehavior = reduce ? "auto" : "smooth";
+  if (href === "#top") {
+    window.scrollTo({ top: 0, behavior });
+    return;
+  }
+  document.querySelector(href)?.scrollIntoView({ behavior });
+}
+
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden fill="currentColor">
@@ -82,6 +92,38 @@ function PdfIcon({ className }: { className?: string }) {
       <path d="M14.2 3.5V8H18" />
       <path d="M8.6 12.2h6.8M8.6 15.2h5M8.6 18.2h3.4" />
     </svg>
+  );
+}
+
+function NavChatLink({
+  href,
+  label,
+  icon,
+  className,
+}: {
+  href: string;
+  label: string;
+  icon: ReactNode;
+  className?: string;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={cn(
+        "group/navchat relative hidden items-center gap-2 rounded-full px-3 py-2 text-[0.72rem] font-semibold uppercase text-white transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white min-[480px]:inline-flex lg:size-9 lg:justify-center lg:gap-0 lg:px-0 lg:py-0 lg:text-[0.78rem]",
+        className,
+      )}
+    >
+      {icon}
+      <span className="lg:sr-only">{label}</span>
+      <span
+        className="pointer-events-none absolute top-[calc(100%+0.45rem)] left-1/2 z-[60] hidden -translate-x-1/2 whitespace-nowrap rounded-md bg-[var(--brand-purple-deep)] px-2.5 py-1 text-[0.7rem] font-semibold normal-case tracking-normal text-[var(--brand-ivory)] opacity-0 shadow-[0_8px_18px_rgb(10_6_24/0.35)] transition-opacity lg:block group-hover/navchat:opacity-100 group-focus-visible/navchat:opacity-100"
+      >
+        {label}
+      </span>
+    </a>
   );
 }
 
@@ -293,10 +335,23 @@ export function Nav() {
   }, []);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    let frame = 0;
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        setScrolled((current) => {
+          const next = window.scrollY > 24;
+          return current === next ? current : next;
+        });
+      });
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   useEffect(() => {
@@ -307,17 +362,27 @@ export function Nav() {
       setActive(hash);
     }
 
+    let frame = 0;
     const updateActive = () => {
       if (lockRef.current) return;
-      setActive(readActiveFromScroll());
+      const next = readActiveFromScroll();
+      setActive((current) => (current === next ? current : next));
+    };
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        updateActive();
+      });
     };
 
     updateActive();
-    window.addEventListener("scroll", updateActive, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", updateActive);
     return () => {
-      window.removeEventListener("scroll", updateActive);
+      window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", updateActive);
+      if (frame) window.cancelAnimationFrame(frame);
       window.clearTimeout(unlockTimer.current);
     };
   }, [onHome]);
@@ -352,9 +417,9 @@ export function Nav() {
         ref={headerRef}
         dir={locale === "ar" ? "rtl" : "ltr"}
         className={cn(
-          "fixed inset-x-0 top-0 z-50 pt-[env(safe-area-inset-top,0px)] transition-[background,box-shadow,backdrop-filter] duration-500",
+          "fixed inset-x-0 top-0 z-50 pt-[env(safe-area-inset-top,0px)] transition-[background,box-shadow] duration-300",
           scrolled && !open
-            ? "bg-[color-mix(in_srgb,var(--brand-purple-deep)_90%,transparent)] shadow-[0_12px_40px_rgb(10_6_24/0.28)] backdrop-blur-xl"
+            ? "bg-[color-mix(in_srgb,var(--brand-purple-deep)_94%,transparent)] shadow-[0_12px_40px_rgb(10_6_24/0.28)]"
             : open
               ? "bg-[var(--brand-purple-deep)]"
               : "bg-[linear-gradient(180deg,rgb(18_8_40/0.55),transparent)]",
@@ -387,30 +452,18 @@ export function Nav() {
           </nav>
 
           <div className="flex items-center justify-self-end gap-2 sm:gap-3">
-            <a
+            <NavChatLink
               href={CLIENT_TELEGRAM_URL}
-              target="_blank"
-              rel="noreferrer"
-              className={cn(
-                "hidden items-center gap-2 rounded-full bg-[#229ED9] px-3 py-2 text-[0.72rem] font-semibold uppercase text-white transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white min-[480px]:inline-flex lg:px-4 lg:text-[0.78rem]",
-                locale === "ar" ? "tracking-normal" : "tracking-[0.14em]",
-              )}
-            >
-              <TelegramIcon className="h-4 w-4 shrink-0" />
-              {t(nav.telegram)}
-            </a>
-            <a
+              label={t(nav.telegram)}
+              className={cn("bg-[#229ED9]", locale === "ar" ? "tracking-normal" : "tracking-[0.14em]")}
+              icon={<TelegramIcon className="h-4 w-4 shrink-0" />}
+            />
+            <NavChatLink
               href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cn(
-                "hidden items-center gap-2 rounded-full bg-[#25D366] px-3 py-2 text-[0.72rem] font-semibold uppercase text-white transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white min-[480px]:inline-flex lg:px-4 lg:text-[0.78rem]",
-                locale === "ar" ? "tracking-normal" : "tracking-[0.14em]",
-              )}
-            >
-              <WhatsAppIcon className="h-4 w-4 shrink-0" />
-              {t(nav.whatsapp)}
-            </a>
+              label={t(nav.whatsappStart)}
+              className={cn("bg-[#25D366]", locale === "ar" ? "tracking-normal" : "tracking-[0.14em]")}
+              icon={<WhatsAppIcon className="h-4 w-4 shrink-0" />}
+            />
             {profilePdfUrl ? (
               <a
                 href={profilePdfUrl}
@@ -535,7 +588,9 @@ export function Footer() {
   const { t, locale } = useLanguage();
   const pathname = usePathname();
   const onHome = isHomePathname(pathname);
+  const reduce = useReducedMotion();
   const [channels, setChannels] = useState(contact.channels);
+  const [profilePdfUrl, setProfilePdfUrl] = useState<string | null>(null);
   const footerLinks = useMemo(
     () => footerLinkDefs.map((def) => ({ ...def, href: resolveHref(def, onHome) })),
     [onHome],
@@ -551,6 +606,18 @@ export function Footer() {
     };
   }, [locale]);
 
+  useEffect(() => {
+    let cancelled = false;
+    fetchProfilePdf().then((pdf) => {
+      if (cancelled || !pdf?.url) return;
+      const stamp = pdf.updated_at ? `?t=${encodeURIComponent(pdf.updated_at)}` : "";
+      setProfilePdfUrl(`${pdf.url}${stamp}`);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <footer
       dir={locale === "ar" ? "rtl" : "ltr"}
@@ -558,11 +625,31 @@ export function Footer() {
     >
       <div className="mx-auto grid w-[var(--content)] gap-10 border-t border-white/10 pt-12 md:grid-cols-[1.2fr_1fr_1fr]">
         <div>
-          <a href={homePath(onHome)} className="inline-flex">
+          <a
+            href={homePath(onHome)}
+            className="inline-flex"
+            onClick={(event) => {
+              if (onHome) {
+                event.preventDefault();
+                scrollToHash("#top", reduce);
+              }
+            }}
+          >
             <LogoLockup invert compact />
           </a>
           <p className="mt-4 max-w-xs text-[0.95rem] text-white/60">{t(footer.tagline)}</p>
           <p className="mt-2 text-[0.9rem] text-[var(--brand-orange)]">{t(contact.region)}</p>
+          {profilePdfUrl ? (
+            <a
+              href={profilePdfUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex w-fit items-center gap-2 rounded-full bg-[var(--brand-orange)] px-4 py-2 text-[0.82rem] font-semibold text-[var(--brand-purple-deep)] transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
+            >
+              <PdfIcon className="h-4 w-4 shrink-0" />
+              {t(nav.profilePdf)}
+            </a>
+          ) : null}
         </div>
 
         <div>
@@ -657,6 +744,12 @@ export function Footer() {
               <a
                 key={link.key}
                 href={link.href}
+                onClick={(event) => {
+                  if (onHome && link.href.startsWith("#")) {
+                    event.preventDefault();
+                    scrollToHash(link.href, reduce);
+                  }
+                }}
                 className="text-[0.95rem] text-white/70 transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
               >
                 {t(link.label)}

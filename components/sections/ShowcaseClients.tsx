@@ -145,6 +145,7 @@ function ClientLogoMarquee({ clients }: { clients: ShowcaseClient[] }) {
       let draggableInstance: { kill: () => void } | null = null;
       let loopWidth = 0;
       let dragging = false;
+      let inView = true;
       const speed = 1.5;
 
       const measure = () => {
@@ -161,7 +162,7 @@ function ClientLogoMarquee({ clients }: { clients: ShowcaseClient[] }) {
       };
 
       const tick = () => {
-        if (dragging || hoverCountRef.current > 0 || loopWidth <= 0) return;
+        if (!inView || dragging || hoverCountRef.current > 0 || loopWidth <= 0) return;
         const next = wrapX(Number(gsap.getProperty(track, "x")) - speed);
         gsap.set(track, { x: next });
       };
@@ -234,11 +235,19 @@ function ClientLogoMarquee({ clients }: { clients: ShowcaseClient[] }) {
       resizeObserver.observe(viewport);
       resizeObserver.observe(setEl);
       resizeObserver.observe(track);
+      const visibility = new IntersectionObserver(
+        ([entry]) => {
+          inView = Boolean(entry?.isIntersecting);
+        },
+        { rootMargin: "120px 0px" },
+      );
+      visibility.observe(viewport);
 
       return () => {
         disposed = true;
         window.removeEventListener("resize", onResize);
         resizeObserver.disconnect();
+        visibility.disconnect();
         gsap.ticker.remove(tick);
         draggableInstance?.kill();
       };
