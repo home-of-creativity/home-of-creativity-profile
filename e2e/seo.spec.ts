@@ -44,6 +44,8 @@ test.describe("SEO and geo", () => {
     expect(xml).toContain("https://hoc.agency/");
     expect(xml).toContain("https://hoc.agency/pricing/");
     expect(xml).toContain("https://hoc.agency/social/");
+    expect(xml).toContain("https://hoc.agency/privacy/");
+    expect(xml).toContain("https://hoc.agency/terms/");
   });
 
   test("social page is indexable with official profile links", async ({ page }) => {

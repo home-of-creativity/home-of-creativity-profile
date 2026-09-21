@@ -6,3 +6,5 @@ export const LANDING = `${ORIGIN}${BASE}/`;
 export const PRICING = `${ORIGIN}${BASE}/pricing/`;
 export const SOCIAL = `${ORIGIN}${BASE}/social/`;
 export const LOCATIONS = `${ORIGIN}${BASE}/locations/`;
+export const PRIVACY = `${ORIGIN}${BASE}/privacy/`;
+export const TERMS = `${ORIGIN}${BASE}/terms/`;

@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { LANDING, PRICING } from "./helpers";
+import { LANDING, PRICING, PRIVACY, TERMS } from "./helpers";
 
 test.describe("Landing navbar and locale", () => {
   test("shows Telegram and WhatsApp in navbar instead of staff login", async ({ page }) => {
@@ -182,5 +182,25 @@ test.describe("Landing navbar and locale", () => {
     expect(text).toContain("حابين نشترك معكم بباقة");
     expect(text).toMatch(/رقمي: \+963/);
     expect(text).toContain("شكراً لكم");
+  });
+
+  test("privacy and terms pages are separate legal documents", async ({ page }) => {
+    await page.goto(LANDING, { waitUntil: "domcontentloaded" });
+    await page.getByRole("button", { name: "العربية" }).click();
+    await page.getByRole("contentinfo").getByRole("link", { name: "سياسة الخصوصية" }).click();
+    await expect(page).toHaveURL(/\/privacy\/?$/);
+    await expect(page.getByRole("heading", { level: 1, name: "سياسة الخصوصية" })).toBeVisible();
+    await expect(page.locator("#privacy")).toBeVisible();
+
+    await page.getByRole("contentinfo").getByRole("link", { name: "شروط الاستخدام" }).click();
+    await expect(page).toHaveURL(/\/terms\/?$/);
+    await expect(page.getByRole("heading", { level: 1, name: "شروط الاستخدام" })).toBeVisible();
+    await expect(page.locator("#terms")).toBeVisible();
+
+    await page.goto(PRIVACY, { waitUntil: "domcontentloaded" });
+    await page.getByRole("button", { name: "English" }).click();
+    await expect(page.getByRole("heading", { level: 1, name: "Privacy Policy" })).toBeVisible();
+    await page.goto(TERMS, { waitUntil: "domcontentloaded" });
+    await expect(page.getByRole("heading", { level: 1, name: "Terms of Use" })).toBeVisible();
   });
 });

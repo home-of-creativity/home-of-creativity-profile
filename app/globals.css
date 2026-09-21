@@ -1406,3 +1406,38 @@ html[dir="rtl"] .client-marquee-viewport {
     transition-duration: 0.01ms !important;
   }
 }
+
+.legal-doc-section {
+  margin-block: 2rem;
+}
+
+.legal-doc-section h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.2rem;
+  font-weight: 650;
+  color: var(--brand-ink);
+}
+
+.legal-doc-section p,
+.legal-doc-section ul,
+.legal-doc-section ol {
+  margin: 0 0 0.8rem;
+  color: color-mix(in srgb, var(--brand-ink) 78%, transparent);
+  font-size: 0.98rem;
+  line-height: 1.75;
+}
+
+.legal-doc-section ul,
+.legal-doc-section ol {
+  padding-inline-start: 1.2rem;
+}
+
+.legal-doc-section a {
+  color: var(--brand-purple);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.legal-doc-section a:hover {
+  color: var(--brand-orange);
+}

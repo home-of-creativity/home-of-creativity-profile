@@ -14,6 +14,7 @@ import {
 } from "@/lib/base-path";
 import { contact, footer, nav } from "@/lib/content";
 import { fetchContactChannels, mergeContactChannels } from "@/lib/contact-api";
+import { fetchProfilePdf } from "@/lib/profile-pdf-api";
 import { useLanguage, type Copy } from "@/lib/i18n";
 import { useTheme } from "@/lib/theme";
 import { cn } from "@/lib/cn";
@@ -26,6 +27,11 @@ type SiteLinkDef = {
   label: Copy;
   section?: string;
   page?: string;
+};
+
+type NavLinkItem = SiteLinkDef & {
+  href: string;
+  external?: boolean;
 };
 
 const navLinkDefs: SiteLinkDef[] = [
@@ -150,12 +156,22 @@ export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("#top");
+  const [profilePdfUrl, setProfilePdfUrl] = useState<string | null>(null);
   const lockRef = useRef<string | null>(null);
   const unlockTimer = useRef(0);
-  const navLinks = useMemo(
-    () => navLinkDefs.map((def) => ({ ...def, href: resolveHref(def, onHome) })),
-    [onHome],
-  );
+  const navLinks = useMemo(() => {
+    const links: NavLinkItem[] = navLinkDefs.map((def) => ({ ...def, href: resolveHref(def, onHome) }));
+    if (profilePdfUrl) {
+      const contactIdx = links.findIndex((link) => link.key === "contact");
+      links.splice(contactIdx === -1 ? links.length : contactIdx, 0, {
+        key: "profile",
+        href: profilePdfUrl,
+        label: nav.profilePdf,
+        external: true,
+      });
+    }
+    return links;
+  }, [onHome, profilePdfUrl]);
   const whatsappUrl = whatsappHref(t(contact.greeting));
 
   useGsapScope(
@@ -252,6 +268,18 @@ export function Nav() {
   }
 
   useEffect(() => {
+    let cancelled = false;
+    fetchProfilePdf().then((pdf) => {
+      if (cancelled || !pdf?.url) return;
+      const stamp = pdf.updated_at ? `?t=${encodeURIComponent(pdf.updated_at)}` : "";
+      setProfilePdfUrl(`${pdf.url}${stamp}`);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -329,15 +357,26 @@ export function Nav() {
           </a>
 
           <nav
-            className="mx-2 hidden min-w-0 grid-cols-4 items-center lg:grid"
+            className={cn(
+              "mx-2 hidden min-w-0 items-center lg:grid",
+              navLinks.length > 4 ? "grid-cols-5" : "grid-cols-4",
+            )}
             aria-label={t(nav.menu)}
           >
             {navLinks.map((link) => (
               <a
                 key={link.key}
                 href={link.href}
+                target={link.external ? "_blank" : undefined}
+                rel={link.external ? "noopener noreferrer" : undefined}
                 aria-current={isLinkActive(link.key, link.href) ? "page" : undefined}
-                onClick={(event) => handleNavLinkClick(event, link.href)}
+                onClick={(event) => {
+                  if (link.external) {
+                    setOpen(false);
+                    return;
+                  }
+                  handleNavLinkClick(event, link.href);
+                }}
                 className={linkClass(link.key, link.href)}
               >
                 {t(link.label)}
@@ -420,8 +459,16 @@ export function Nav() {
                 <motion.a
                   key={link.key}
                   href={link.href}
+                  target={link.external ? "_blank" : undefined}
+                  rel={link.external ? "noopener noreferrer" : undefined}
                   aria-current={isLinkActive(link.key, link.href) ? "page" : undefined}
-                  onClick={(event) => handleNavLinkClick(event, link.href)}
+                  onClick={(event) => {
+                    if (link.external) {
+                      setOpen(false);
+                      return;
+                    }
+                    handleNavLinkClick(event, link.href);
+                  }}
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.05 * i }}
@@ -597,7 +644,19 @@ export function Footer() {
         </div>
       </div>
       <p className="mx-auto mt-10 w-[var(--content)] border-t border-white/10 pt-6 text-[0.72rem] text-white/40">
-        {t(footer.rights)}
+        {t(footer.rights)}{" "}
+        <a
+          href={pagePath("privacy")}
+          className="ms-3 text-white/55 transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
+        >
+          {t(nav.privacy)}
+        </a>
+        <a
+          href={pagePath("terms")}
+          className="ms-3 text-white/55 transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
+        >
+          {t(nav.terms)}
+        </a>
       </p>
     </footer>
   );

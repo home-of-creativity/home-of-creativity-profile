@@ -81,6 +81,22 @@ export const seoCopy = {
     en: "Selected Home of Creativity work — identity, campaigns, and brand architecture.",
     ar: "أعمال مختارة من بيت الإبداع — هوية، حملات، وهندسة العلامة.",
   },
+  privacyTitle: {
+    en: "Privacy Policy",
+    ar: "سياسة الخصوصية",
+  },
+  privacyDescription: {
+    en: "How Home of Creativity collects, uses, and protects personal information on hoc.agency, Telegram, and WhatsApp.",
+    ar: "كيف يجمع بيت الإبداع المعلومات الشخصية ويستخدمها ويحميها على hoc.agency وتيليجرام وواتساب.",
+  },
+  termsTitle: {
+    en: "Terms of Use",
+    ar: "شروط الاستخدام",
+  },
+  termsDescription: {
+    en: "Terms for using Home of Creativity services, quotations, payments, and the Telegram client bot.",
+    ar: "شروط استخدام خدمات بيت الإبداع والعروض والدفع وبوت تيليجرام.",
+  },
 };
 
 export function absoluteUrl(path = "/"): string {

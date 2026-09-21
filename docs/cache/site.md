@@ -5,7 +5,7 @@ Installed: Next **15.5.25**, React **19.2.8**, Tailwind **4.3.3**, GSAP **3.15.0
 `basePath` / `assetPrefix`: empty on VPS (`NEXT_PUBLIC_BASE_PATH=none`). GitHub Pages disabled.  
 `output: "export"` — static export only.
 
-SEO: `app/sitemap.ts`, `app/robots.ts`, bilingual titles/descriptions (home title: بيت الإبداع | Home | HOC — وكالة هوية دمشق; aliases hoc / بيت / الإبداع in description, JSON-LD `alternateName`, and about copy), JSON-LD (`Organization` + `LocalBusiness` + `sameAs` social profiles + `/social/` CollectionPage + `/locations/` CollectionPage with two LocalBusiness nodes). Named Maps search URL is Syria only: “Home of Creativity, Al Hamra, Damascus” (`33.5188338, 36.2916993`). The contact/locations map has no Saudi tab. Map “open in Google Maps” links use `target="_blank"` + `rel="noopener noreferrer"`. `/locations/` is the Damascus Al Hamra map page only (no Google Business Profile create CTA). Google Search Console HTML + DNS verification. IndexNow key file on deploy; Laravel `seo:submit-sitemap` for Search Console API + IndexNow (`/` `/pricing/` `/social/` `/locations/` + sitemap).
+SEO: `app/sitemap.ts`, `app/robots.ts`, bilingual titles/descriptions (home title: بيت الإبداع | Home | HOC — وكالة هوية دمشق; aliases hoc / بيت / الإبداع in description, JSON-LD `alternateName`, and about copy), JSON-LD (`Organization` + `LocalBusiness` + `sameAs` social profiles + `/social/` CollectionPage + `/locations/` CollectionPage with two LocalBusiness nodes). Named Maps search URL is Syria only: “Home of Creativity, Al Hamra, Damascus” (`33.5188338, 36.2916993`). The contact/locations map has no Saudi tab. Map “open in Google Maps” links use `target="_blank"` + `rel="noopener noreferrer"`. `/locations/` is the Damascus Al Hamra map page only (no Google Business Profile create CTA). Google Search Console HTML + DNS verification. IndexNow key file on deploy; Laravel `seo:submit-sitemap` for Search Console API + IndexNow (`/` `/pricing/` `/social/` `/locations/` `/privacy/` `/terms/` + sitemap).
 
 Dev: `npm run dev` → http://localhost:3000/ (with `NEXT_PUBLIC_BASE_PATH=none`)  
 Live (VPS): https://hoc.agency/ — API https://api.hoc.agency/api
@@ -30,7 +30,8 @@ No `app/api/`, no `middleware.ts`, no `[locale]` segment.
 | `/` | `app/page.tsx` | Landing: Hero → About → Services+Clients (one purple band) → Journey → Reels → Social → Projects → Finance → Contact |
 | `/pricing/` | `app/pricing/page.tsx` | Packages + WhatsApp inquiry modal |
 | `/social/` | `app/social/page.tsx` | Indexable Instagram/Facebook/Telegram profiles (`sameAs` + CollectionPage JSON-LD); footer links here |
-| `/locations/` | `app/locations/page.tsx` | Indexable Damascus Al Hamra map page (named Maps URL + LocalBusiness JSON-LD); footer + contact map link here |
+| `/privacy/` | `app/privacy/page.tsx` | Privacy policy from `GET /legal/privacy` (demo fallback in `lib/legal-defaults.json`); footer link |
+| `/terms/` | `app/terms/page.tsx` | Terms of use from `GET /legal/terms`; footer link |
 | `/projects/detail/?id=` | `app/projects/detail/page.tsx` | Project from API or demo |
 | 404 | `app/not-found.tsx` | Branded, locale toggle |
 
@@ -52,10 +53,11 @@ Client `fetch` to `NEXT_PUBLIC_API_URL` (default `http://127.0.0.1:8000/api`), `
 | `lib/reels-api.ts` | `GET /reels` | Empty (dashboard only; no local files) |
 | `lib/instagram-feed-api.ts` | `GET /social/instagram-feed` | Empty / embed |
 | `lib/facebook-feed-api.ts` | `GET /social/facebook-feed` | Facebook page plugin iframe |
+| `lib/profile-pdf-api.ts` | `GET /profile-pdf` | Hidden (no navbar link until staff upload a PDF) |
 
 Demo **on** unless `NEXT_PUBLIC_USE_DEMO_DATA=false` (`lib/demo-mode.ts`).
 
-Contact and pricing forms **do not POST**. They `window.open` WhatsApp (`lib/whatsapp.ts`, number in `lib/content.ts`). Telegram bot username via `NEXT_PUBLIC_TELEGRAM_BOT`. `NEXT_PUBLIC_DASHBOARD_URL` exists in `lib/base-path.ts` but is **not linked** in the navbar.
+Contact and pricing forms **do not POST**. They `window.open` WhatsApp (`lib/whatsapp.ts`, number in `lib/content.ts`). Telegram bot username via `NEXT_PUBLIC_TELEGRAM_BOT`. `NEXT_PUBLIC_DASHBOARD_URL` exists in `lib/base-path.ts` but is **not linked** in the navbar. A **Profile / الملف التعريفي** nav item appears only when `GET /profile-pdf` returns a `url` (staff upload from dashboard `/profile-pdf`); it opens the PDF in a new tab.
 
 ## Motion / SW
 
