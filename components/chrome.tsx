@@ -138,16 +138,27 @@ export function ThemeToggle({ compact = false }: { compact?: boolean }) {
         compact ? "h-9 w-9" : "h-11 w-11",
       )}
     >
-      {dark ? (
-        <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.7">
-          <circle cx="12" cy="12" r="4" />
-          <path d="M12 3v1.6M12 19.4V21M4.9 4.9l1.1 1.1M18 18l1.1 1.1M3 12h1.6M19.4 12H21M4.9 19.1 6 18M18 6l1.1-1.1" />
-        </svg>
-      ) : (
-        <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.7">
-          <path d="M16.2 13.1A6.2 6.2 0 0 1 11 5.2 6.4 6.4 0 1 0 16.2 13.1Z" />
-        </svg>
-      )}
+      <svg
+        viewBox="0 0 24 24"
+        className="theme-toggle-sun h-4 w-4"
+        aria-hidden
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.7"
+      >
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 3v1.6M12 19.4V21M4.9 4.9l1.1 1.1M18 18l1.1 1.1M3 12h1.6M19.4 12H21M4.9 19.1 6 18M18 6l1.1-1.1" />
+      </svg>
+      <svg
+        viewBox="0 0 24 24"
+        className="theme-toggle-moon h-4 w-4"
+        aria-hidden
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.7"
+      >
+        <path d="M16.2 13.1A6.2 6.2 0 0 1 11 5.2 6.4 6.4 0 1 0 16.2 13.1Z" />
+      </svg>
     </button>
   );
 }

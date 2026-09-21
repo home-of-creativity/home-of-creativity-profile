@@ -1,7 +1,7 @@
 "use client";
 
 import { Lottie } from "lottie-react";
-import { useReducedMotion } from "framer-motion";
+import { useEffect, useState } from "react";
 import loadingAnimation from "@/assets/loading.json";
 import { cn } from "@/lib/cn";
 
@@ -12,7 +12,11 @@ export function LoadingLottie({
   label?: string;
   className?: string;
 }) {
-  const reduce = useReducedMotion();
+  const [reduce, setReduce] = useState(false);
+
+  useEffect(() => {
+    setReduce(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  }, []);
 
   return (
     <div

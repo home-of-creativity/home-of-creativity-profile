@@ -64,12 +64,19 @@ function ReelCard({
 
 export function Reels() {
   const { locale, t } = useLanguage();
-  const cached = peekLandingReels();
-  const [items, setItems] = useState<LandingReel[]>(cached);
-  const [ready, setReady] = useState(cached.length > 0);
+  // Always start empty so SSR HTML matches the first client render.
+  // Reading localStorage here made returning visits hydrate a reel grid
+  // (React #418) while the static HTML still had the loading lottie.
+  const [items, setItems] = useState<LandingReel[]>([]);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     let active = true;
+    const cached = peekLandingReels();
+    if (cached.length > 0) {
+      setItems(cached);
+      setReady(true);
+    }
     fetchLandingReels()
       .then((rows) => {
         if (active) setItems(rows);

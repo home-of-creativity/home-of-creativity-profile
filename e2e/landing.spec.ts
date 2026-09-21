@@ -8,6 +8,26 @@ test.describe("Landing navbar and locale", () => {
     page.on("console", (msg) => {
       if (msg.type() === "error") errors.push(msg.text());
     });
+    await page.addInitScript(() => {
+      try {
+        localStorage.setItem("hoc-theme", "dark");
+        localStorage.setItem(
+          "hoc-landing-reels-v1",
+          JSON.stringify([
+            {
+              id: 1,
+              title_en: "Cached reel",
+              title_ar: "ريل مخزن",
+              video_url: "https://example.com/reel.mp4",
+              poster_url: null,
+              sort_order: 1,
+            },
+          ]),
+        );
+      } catch {
+        /* private mode */
+      }
+    });
     await page.goto(LANDING, { waitUntil: "networkidle" });
     await page.locator("#clients").scrollIntoViewIfNeeded();
     await page.waitForTimeout(800);
