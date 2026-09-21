@@ -1,4 +1,4 @@
-const CACHE = "hoc-design-v9";
+const CACHE = "hoc-design-v10";
 const BASE = new URL("./", self.registration.scope).pathname.replace(/\/$/, "");
 const PRECACHE = [
   `${BASE}/hummingbird.svg`,
@@ -33,6 +33,9 @@ function isThirdPartyCdn(url) {
 function shouldBypass(request) {
   if (request.method !== "GET") return true;
   const url = new URL(request.url);
+  // Same-origin images/fonts only. Cross-origin API storage has no CORS
+  // headers, so a worker fetch() logs as blocked and throws "offline".
+  if (url.origin !== self.location.origin) return true;
   // Let the browser own video, Maps, and social CDNs. Intercepting those
   // yields opaque responses that cannot be reused for cors/preload fetches.
   if (request.headers.has("range") || isVideo(url) || isThirdPartyCdn(url)) return true;
@@ -64,7 +67,6 @@ self.addEventListener("fetch", (event) => {
 
   const url = new URL(event.request.url);
   const media = isMedia(url);
-  if (url.origin !== self.location.origin && !media) return;
 
   event.respondWith(
     caches.open(CACHE).then(async (cache) => {

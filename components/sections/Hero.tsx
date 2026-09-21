@@ -37,8 +37,12 @@ export function Hero() {
             ".hero-scroll",
           ];
 
+          const copyNodes = heroCopy
+            .map((selector) => rootRef.current?.querySelector(selector))
+            .filter((node): node is Element => Boolean(node));
+
           if (reduceMotion || shouldSkipMotion()) {
-            gsap.set(heroCopy, { autoAlpha: 1, y: 0, x: 0 });
+            if (copyNodes.length) gsap.set(copyNodes, { autoAlpha: 1, y: 0, x: 0 });
             return;
           }
 

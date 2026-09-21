@@ -2,6 +2,18 @@ import { expect, test } from "@playwright/test";
 import { LANDING, PRICING, PRIVACY, TERMS } from "./helpers";
 
 test.describe("Landing navbar and locale", () => {
+  test("home does not hydrate-mismatch or CORS-fetch API logos", async ({ page }) => {
+    const errors: string[] = [];
+    page.on("pageerror", (err) => errors.push(err.message));
+    page.on("console", (msg) => {
+      if (msg.type() === "error") errors.push(msg.text());
+    });
+    await page.goto(LANDING, { waitUntil: "networkidle" });
+    await page.locator("#clients").scrollIntoViewIfNeeded();
+    await page.waitForTimeout(800);
+    expect(errors.filter((text) => /418|Hydration failed|Access-Control-Allow-Origin|GSAP target\s+not found/i.test(text))).toEqual([]);
+  });
+
   test("shows Telegram and WhatsApp in navbar instead of staff login", async ({ page }) => {
     await page.goto(LANDING, { waitUntil: "domcontentloaded" });
     const telegram = page.getByRole("link", { name: /Start on Telegram|ابدأ عبر تيليجرام/i }).first();

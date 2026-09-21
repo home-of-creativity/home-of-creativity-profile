@@ -29,7 +29,8 @@ export function sectionPath(sectionId: string, onHome: boolean) {
 }
 
 export function pagePath(page: string) {
-  return withBasePath(`/${page.replace(/^\//, "")}`);
+  const slug = page.replace(/^\/+|\/+$/g, "");
+  return withBasePath(`/${slug}/`);
 }
 
 /** Next.js `usePathname()` omits `basePath`; normalize both shapes for comparisons. */

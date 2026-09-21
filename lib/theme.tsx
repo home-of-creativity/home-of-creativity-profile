@@ -63,8 +63,9 @@ function applyDocumentTheme(next: Theme) {
   }
 }
 
-let current: Theme =
-  typeof window !== "undefined" && isTheme(window.__HOC_THEME__) ? window.__HOC_THEME__ : "light";
+// Keep the store on the SSR default until layout runs. Reading the boot
+// theme at module init makes getSnapshot() dark while the static HTML is light.
+let current: Theme = "light";
 const listeners = new Set<() => void>();
 
 function emit() {

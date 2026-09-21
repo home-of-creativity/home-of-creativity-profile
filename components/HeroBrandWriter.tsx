@@ -98,7 +98,7 @@ export function HeroBrandWriter({ className }: { className?: string }) {
           const homeEl = wrap.querySelector<HTMLElement>('[data-word="home"]');
           const ofEl = wrap.querySelector<HTMLElement>('[data-word="of"]');
           const creativityEl = wrap.querySelector<HTMLElement>('[data-word="creativity"]');
-          if (!homeEl || !ofEl || !creativityEl) return;
+          if (!letters.length || !homeEl || !ofEl || !creativityEl) return;
 
           const rectOf = (el: Element) => {
             const wrapRect = wrap.getBoundingClientRect();

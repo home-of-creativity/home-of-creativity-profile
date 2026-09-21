@@ -1,4 +1,4 @@
-export const MEDIA_CACHE = "hoc-design-v9";
+export const MEDIA_CACHE = "hoc-design-v10";
 
 const remembered = new Set<string>();
 
@@ -13,6 +13,11 @@ export async function rememberLoadedMedia(url: string | undefined | null) {
   // Videos stream byte-range through <video>; a full fetch here would block the first frame.
   if (isVideoUrl(url)) return;
   if (/fbcdn|cdninstagram|instagram\.|facebook\.|googleusercontent|ggpht|googleapis|gstatic/i.test(url)) {
+    return;
+  }
+  try {
+    if (new URL(url, window.location.href).origin !== window.location.origin) return;
+  } catch {
     return;
   }
   if (remembered.has(url)) return;

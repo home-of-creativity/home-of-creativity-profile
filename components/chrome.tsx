@@ -29,11 +29,6 @@ type SiteLinkDef = {
   page?: string;
 };
 
-type NavLinkItem = SiteLinkDef & {
-  href: string;
-  external?: boolean;
-};
-
 const navLinkDefs: SiteLinkDef[] = [
   { key: "home", label: nav.home },
   { key: "services", section: "services", label: nav.services },
@@ -73,6 +68,16 @@ function TelegramIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden fill="currentColor">
       <path d="M21.93 4.13a1.2 1.2 0 0 0-1.24-.17L2.82 11.09a1.01 1.01 0 0 0 .08 1.88l4.57 1.67 1.76 5.58a1.01 1.01 0 0 0 1.66.38l2.52-2.58 4.96 3.66a1.2 1.2 0 0 0 1.88-.75l3.2-15.3ZM8.53 13.78l9.62-5.96-7.28 7.01-.28 2.92-1.55-4.88 7.28-7.01-9.62 5.96 1.83-.04Z" />
+    </svg>
+  );
+}
+
+function PdfIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M7 3.5h7.2L18.5 8v12.5a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1Z" />
+      <path d="M14.2 3.5V8H18" />
+      <path d="M8.6 12.2h6.8M8.6 15.2h5M8.6 18.2h3.4" />
     </svg>
   );
 }
@@ -127,6 +132,7 @@ export function ThemeToggle({ compact = false }: { compact?: boolean }) {
       aria-pressed={dark}
       aria-label={t(dark ? nav.lightMode : nav.darkMode)}
       title={t(nav.theme)}
+      suppressHydrationWarning
       className={cn(
         "grid shrink-0 place-items-center rounded-full border border-white/35 bg-black/30 text-[var(--brand-ivory)] transition-colors hover:bg-black/45 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]",
         compact ? "h-9 w-9" : "h-11 w-11",
@@ -159,19 +165,10 @@ export function Nav() {
   const [profilePdfUrl, setProfilePdfUrl] = useState<string | null>(null);
   const lockRef = useRef<string | null>(null);
   const unlockTimer = useRef(0);
-  const navLinks = useMemo(() => {
-    const links: NavLinkItem[] = navLinkDefs.map((def) => ({ ...def, href: resolveHref(def, onHome) }));
-    if (profilePdfUrl) {
-      const contactIdx = links.findIndex((link) => link.key === "contact");
-      links.splice(contactIdx === -1 ? links.length : contactIdx, 0, {
-        key: "profile",
-        href: profilePdfUrl,
-        label: nav.profilePdf,
-        external: true,
-      });
-    }
-    return links;
-  }, [onHome, profilePdfUrl]);
+  const navLinks = useMemo(
+    () => navLinkDefs.map((def) => ({ ...def, href: resolveHref(def, onHome) })),
+    [onHome],
+  );
   const whatsappUrl = whatsappHref(t(contact.greeting));
 
   useGsapScope(
@@ -357,26 +354,15 @@ export function Nav() {
           </a>
 
           <nav
-            className={cn(
-              "mx-2 hidden min-w-0 items-center lg:grid",
-              navLinks.length > 4 ? "grid-cols-5" : "grid-cols-4",
-            )}
+            className="mx-2 hidden min-w-0 grid-cols-4 items-center lg:grid"
             aria-label={t(nav.menu)}
           >
             {navLinks.map((link) => (
               <a
                 key={link.key}
                 href={link.href}
-                target={link.external ? "_blank" : undefined}
-                rel={link.external ? "noopener noreferrer" : undefined}
                 aria-current={isLinkActive(link.key, link.href) ? "page" : undefined}
-                onClick={(event) => {
-                  if (link.external) {
-                    setOpen(false);
-                    return;
-                  }
-                  handleNavLinkClick(event, link.href);
-                }}
+                onClick={(event) => handleNavLinkClick(event, link.href)}
                 className={linkClass(link.key, link.href)}
               >
                 {t(link.label)}
@@ -409,6 +395,20 @@ export function Nav() {
               <WhatsAppIcon className="h-4 w-4 shrink-0" />
               {t(nav.whatsapp)}
             </a>
+            {profilePdfUrl ? (
+              <a
+                href={profilePdfUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  "inline-flex items-center gap-2 rounded-full bg-[var(--brand-orange)] px-2.5 py-2 text-[0.72rem] font-semibold uppercase text-[var(--brand-purple-deep)] transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white min-[480px]:px-3 lg:px-4 lg:text-[0.78rem]",
+                  locale === "ar" ? "tracking-normal" : "tracking-[0.14em]",
+                )}
+              >
+                <PdfIcon className="h-4 w-4 shrink-0" />
+                {t(nav.profilePdf)}
+              </a>
+            ) : null}
             <LanguageToggle compact />
             <ThemeToggle compact />
             <button
@@ -459,16 +459,8 @@ export function Nav() {
                 <motion.a
                   key={link.key}
                   href={link.href}
-                  target={link.external ? "_blank" : undefined}
-                  rel={link.external ? "noopener noreferrer" : undefined}
                   aria-current={isLinkActive(link.key, link.href) ? "page" : undefined}
-                  onClick={(event) => {
-                    if (link.external) {
-                      setOpen(false);
-                      return;
-                    }
-                    handleNavLinkClick(event, link.href);
-                  }}
+                  onClick={(event) => handleNavLinkClick(event, link.href)}
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.05 * i }}
@@ -501,6 +493,20 @@ export function Nav() {
                 <WhatsAppIcon className="h-5 w-5 shrink-0" />
                 {t(nav.whatsapp)}
               </motion.a>
+              {profilePdfUrl ? (
+                <motion.a
+                  href={profilePdfUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.32 }}
+                  className="mt-2 inline-flex w-fit items-center gap-2 rounded-full bg-[var(--brand-orange)] px-5 py-3 text-[1rem] font-semibold text-[var(--brand-purple-deep)]"
+                >
+                  <PdfIcon className="h-5 w-5 shrink-0" />
+                  {t(nav.profilePdf)}
+                </motion.a>
+              ) : null}
             </div>
           </motion.nav>
         ) : null}
@@ -643,7 +649,7 @@ export function Footer() {
           </nav>
         </div>
       </div>
-      <p className="mx-auto mt-10 w-[var(--content)] border-t border-white/10 pt-6 text-[0.72rem] text-white/40">
+      <div className="mx-auto mt-10 w-[var(--content)] border-t border-white/10 pt-6 text-[0.72rem] text-white/40">
         {t(footer.rights)}{" "}
         <a
           href={pagePath("privacy")}
@@ -657,7 +663,7 @@ export function Footer() {
         >
           {t(nav.terms)}
         </a>
-      </p>
+      </div>
     </footer>
   );
 }

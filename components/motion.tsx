@@ -99,6 +99,7 @@ export function Stagger({
         },
         (context) => {
           const items = gsap.utils.toArray<HTMLElement>(".gsap-stagger-item");
+          if (!items.length) return;
           if (context.conditions?.reduceMotion || shouldSkipMotion()) {
             gsap.set(items, { autoAlpha: 1, y: 0 });
             return;

@@ -211,6 +211,7 @@ export function Projects() {
   useGsapScope(
     ({ gsap }) => {
       const cards = gsap.utils.toArray<HTMLElement>(".project-card");
+      if (!cards.length) return;
       gsap.set(cards, { autoAlpha: 1, y: 0, clearProps: "transform" });
     },
     { scope: gridRef, dependencies: [filter, expanded, visible.length] },
