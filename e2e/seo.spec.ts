@@ -23,8 +23,11 @@ test.describe("SEO and geo", () => {
     expect(JSON.stringify(payloads)).not.toMatch(/aggregateRating|ratingValue/);
     await expect(page.locator("#faq")).toBeVisible();
     await expect(page.getByRole("heading", { level: 2, name: /أسئلة شائعة|Questions/ })).toBeVisible();
-    await expect(page.getByRole("heading", { level: 3, name: /ما هو بيت الإبداع \(HOC\)\؟/ })).toBeVisible();
-    await expect(page.getByText(/وكالة هوية بصرية وهندسة علامات في الحمراء بدمشق/)).toBeVisible();
+    const firstQuestion = page.getByRole("heading", { level: 3, name: /ماذا يفعل بيت الإبداع\؟/ });
+    await expect(firstQuestion).toBeVisible();
+    await expect(page.getByText(/بيت الإبداع وكالة هوية بصرية وهندسة علامات في الحمراء بدمشق/)).toBeHidden();
+    await firstQuestion.click();
+    await expect(page.getByText(/بيت الإبداع وكالة هوية بصرية وهندسة علامات في الحمراء بدمشق/)).toBeVisible();
     const sameAs = graph.flatMap((node) => {
       const value = (node as { sameAs?: string[] }).sameAs;
       return Array.isArray(value) ? value : [];
@@ -34,6 +37,13 @@ test.describe("SEO and geo", () => {
         "https://www.instagram.com/homeofcreativity.sy/",
         "https://www.facebook.com/profile.php?id=61584616932975",
       ]),
+    );
+    const aliases = graph.flatMap((node) => {
+      const value = (node as { alternateName?: string | string[] }).alternateName;
+      return Array.isArray(value) ? value : value ? [value] : [];
+    });
+    expect(aliases).toEqual(
+      expect.arrayContaining(["Creativation Source", "بيت الإبداع", "بيت الابداع", "HOC", "hoc", "Home"]),
     );
   });
 
@@ -97,7 +107,7 @@ test.describe("SEO and geo", () => {
     await page.goto(LOCATIONS, { waitUntil: "domcontentloaded" });
     await expect(page).toHaveTitle(/المواقع|Locations/i);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/locations\/?$/);
-    await expect(page.getByRole("heading", { level: 1, name: /بيت الإبداع على الخريطة|Home of Creativity on the map/ })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: /دمشق، الحمراء|Damascus, Al Hamra/ })).toBeVisible();
     await expect(page.getByRole("link", { name: /أضف بيت الإبداع إلى خرائط جوجل|Add Home of Creativity to Google Maps/ })).toHaveCount(0);
     await expect(page.getByRole("tab", { name: /السعودية|Saudi/i })).toHaveCount(0);
     await expect(page.getByRole("heading", { name: /الرياض|Riyadh/ })).toHaveCount(0);

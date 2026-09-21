@@ -47,6 +47,7 @@ export const metadata: Metadata = {
   publisher: "Home of Creativity",
   category: "marketing",
   keywords: [
+    "Creativation Source",
     "hoc",
     "Hoc",
     "HOC",

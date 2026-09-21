@@ -46,8 +46,8 @@ export const seoCopy = {
     ar: "بيت الإبداع HOC — وكالة هوية بصرية دمشق",
   },
   homeDescription: {
-    en: "HOC — Home of Creativity (hoc.agency) is a brand agency in Damascus and Riyadh: visual identity, social, ads, and events.",
-    ar: "بيت الإبداع (HOC / hoc) وكالة هوية بصرية في دمشق وتصميم هوية تجارية في الرياض. ابحث: بيت، الإبداع، Home، hoc.agency.",
+    en: "Home of Creativity (HOC / hoc) — بيت الإبداع and Creativation Source. Visual-identity agency in Damascus and brand identity for clients in Riyadh.",
+    ar: "بيت الإبداع (HOC) وCreativation Source وكالة هوية بصرية في دمشق وتصميم هوية تجارية في الرياض. Home of Creativity — hoc.agency.",
   },
   pricingTitle: {
     en: "Pricing",

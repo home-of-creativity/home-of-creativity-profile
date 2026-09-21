@@ -42,8 +42,6 @@ function crawlerHtml() {
     `<p>${escapeHtml(`${hero.titleLead.en} ${hero.titleAccent.en} — ${hero.titleLead.ar} ${hero.titleAccent.ar}`)}</p>`,
     `<p>${escapeHtml(seoCopy.homeDescription.ar)}</p>`,
     `<p>${escapeHtml(seoCopy.homeDescription.en)}</p>`,
-    "<p>بيت الإبداع وكالة هوية بصرية دمشق — تصميم هوية تجارية الرياض — Home of Creativity brand agency.</p>",
-    "<p>HOC / Hoc / hoc / Home / بيت / الابداع / الإبداع — hoc.agency</p>",
     "</header>",
     "<section>",
     `<h2>${escapeHtml(`${about.title.ar} — ${about.title.en}`)}</h2>`,
