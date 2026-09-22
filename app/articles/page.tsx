@@ -1,14 +1,15 @@
-"use client";
-
 import { Footer, Nav } from "@/components/chrome";
 import { ArticlesIndex } from "@/components/sections/ArticlesIndex";
+import { fetchArticles } from "@/lib/articles-api";
 
-export default function ArticlesPage() {
+export default async function ArticlesPage() {
+  const articles = await fetchArticles();
+
   return (
     <>
       <Nav />
       <main id="top">
-        <ArticlesIndex />
+        <ArticlesIndex articles={articles} />
       </main>
       <Footer />
     </>

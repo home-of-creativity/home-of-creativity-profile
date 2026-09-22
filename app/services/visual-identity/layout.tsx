@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { SeoServiceDetailJsonLd } from "@/components/SeoServiceDetailJsonLd";
 import { serviceDetails } from "@/lib/content";
-import { pageDescription, pageTitle } from "@/lib/site";
+import { pageDescription } from "@/lib/site";
 
 const SLUG = "visual-identity";
 const detail = serviceDetails.find((entry) => entry.slug === SLUG)!;
 
-const title = pageTitle(detail.title.en, detail.title.ar);
+const title = "Visual Identity Design in Damascus | HOC";
 const description = pageDescription(detail.metaDescription.en, detail.metaDescription.ar);
 
 export const metadata: Metadata = {

@@ -57,7 +57,9 @@ function crawlerHtml() {
     "</section>",
     "<section>",
     `<h2>${escapeHtml(`${seoCopy.locationsTitle.ar} — ${seoCopy.locationsTitle.en}`)}</h2>`,
-    `<p><a href="/locations/">${escapeHtml(`${contact.map.pageTitle.ar} / ${contact.map.pageTitle.en}`)}</a></p>`,
+    `<p><a href="/locations/damascus/">${escapeHtml(`${contact.map.pageTitle.ar} / ${contact.map.pageTitle.en}`)}</a></p>`,
+    `<p><a href="/services/branding/">Branding Agency in Damascus</a></p>`,
+    `<p><a href="/services/visual-identity/">Visual Identity Design in Damascus</a></p>`,
     syr
       ? `<p><a href="${escapeHtml(officesGeo.syr.mapsUrl)}">${escapeHtml(SITE_NAME)}, ${escapeHtml(syr.city.ar)} ${escapeHtml(syr.city.en)}</a>${syrPhone}</p>`
       : "",

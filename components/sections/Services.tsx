@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { services } from "@/lib/content";
+import { pagePath } from "@/lib/base-path";
 import { useLanguage } from "@/lib/i18n";
 import { Hummingbird, Wordmark } from "../brand";
 import { Reveal, Stagger, StaggerItem } from "../motion";
@@ -16,7 +18,7 @@ function serviceHref(id: string) {
     case "booths":
       return "#project-events";
     case "identity":
-      return "#project-identity";
+      return pagePath("services/visual-identity");
     case "social":
     case "accounts":
     case "marketing":
@@ -58,6 +60,11 @@ export function Services() {
         <Reveal className="mx-auto mb-14 max-w-2xl text-center">
           <SectionHeading kicker={services.kicker} title={services.title} invert align="center" />
           <p className="mt-5 text-white/70">{t(services.lead)}</p>
+          <p className="mt-4 text-[0.95rem]">
+            <Link href={pagePath("services/branding")} className="font-semibold text-[var(--brand-orange)] hover:text-white">
+              {locale === "ar" ? "خدمات الهوية في دمشق" : "branding services in Damascus"}
+            </Link>
+          </p>
         </Reveal>
 
         <Stagger className="flex flex-wrap justify-center gap-2 md:gap-3">

@@ -42,12 +42,12 @@ export const GOOGLE_SITE_VERIFICATION = resolveGoogleSiteVerification();
 
 export const seoCopy = {
   homeTitle: {
-    en: "Home of Creativity (HOC) — Brand Agency in Damascus",
-    ar: "بيت الإبداع HOC — وكالة هوية بصرية دمشق",
+    en: "Branding Agency in Damascus",
+    ar: "وكالة هوية في دمشق",
   },
   homeDescription: {
-    en: "Home of Creativity (HOC) is a creative and branding agency in Al Hamra, Damascus. It provides visual identity, marketing, social media, and websites, and serves clients in Syria and Saudi Arabia.",
-    ar: "بيت الإبداع (HOC) وكالة إبداع وهوية في الحمراء بدمشق. تقدّم الهوية البصرية والتسويق والسوشال ميديا والمواقع، وتخدم عملاء في سوريا والسعودية.",
+    en: "Home of Creativity (HOC) is a branding and creative agency in Al Hamra, Damascus, specializing in visual identity, for clients in Syria and Saudi Arabia.",
+    ar: "بيت الإبداع (HOC) وكالة هوية وإبداع في الحمراء بدمشق، متخصصة في الهوية البصرية، وتخدم عملاء في سوريا والسعودية.",
   },
   pricingTitle: {
     en: "Pricing",

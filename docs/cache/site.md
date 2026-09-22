@@ -1,6 +1,6 @@
 # Marketing site (Next.js static export)
 
-Last updated: 22 September 2026 (GEO/SEO entity audit — Riyadh is a served market not an address, `/about/`, `/services/` + 3 service pages, real `/articles/{slug}/` and `/projects/{id}/` routes, `llms.txt`/`llms-full.txt` rewrite)
+Last updated: 22 September 2026 (non-branded GEO — `/services/branding/`, `/services/brand-identity/`, retitled `/services/visual-identity/`, `/locations/damascus/`, six static articles, article index in the first HTML)
 
 Path: `design/`  
 Installed: Next **15.5.25**, React **19.2.8**, Tailwind **4.3.3**, GSAP **3.15.0**, Framer Motion **12.x**  
@@ -36,9 +36,11 @@ No `app/api/`, no `middleware.ts`, no `[locale]` segment.
 | `/` | `app/page.tsx` | Landing: Hero → About → Services+Clients (one purple band) → Journey → Reels → Social → Projects → Finance → FAQ → Contact |
 | `/about/` | `app/about/page.tsx` | Canonical entity description (no CMS fetch) |
 | `/services/` | `app/services/page.tsx` | Index of all 14 practices; links to the 3 published detail pages |
-| `/services/visual-identity/`, `/services/social-media/`, `/services/websites-ecommerce/` | `app/services/{slug}/page.tsx` | Static detail page: definition, audience, process, 3 FAQs, `Service`+`BreadcrumbList`+`FAQPage` JSON-LD |
+| `/services/branding/`, `/services/brand-identity/` | `app/services/branding/page.tsx`, `app/services/brand-identity/page.tsx` | Category pages inside the published catalog. Branding is not a new practice and not brand strategy. Both languages are in the HTML via `data-lang`. |
+| `/services/visual-identity/`, `/services/social-media/`, `/services/websites-ecommerce/` | `app/services/{slug}/page.tsx` | Static detail page: definition, audience, process, 3 FAQs, `Service`+`BreadcrumbList`+`FAQPage` JSON-LD. Visual identity H1/title target “Visual Identity Design in Damascus”. |
+| `/locations/damascus/` | `app/locations/damascus/page.tsx` | Canonical office URL. `/locations/` is the index and links here. Map stays Damascus-only. |
 | `/pricing/` | `app/pricing/page.tsx` | Packages + WhatsApp inquiry modal |
-| `/articles/` | `app/articles/page.tsx` | Published articles list from `GET /articles` (client fetch, CSR index) |
+| `/articles/` | `app/articles/page.tsx` | Server-rendered index: titles, excerpts, and links in the first HTML. Static cluster from `lib/geo-articles.ts` plus `GET /articles`. Empty API is the empty copy, not “Loading…”. |
 | `/articles/{slug}/` | `app/articles/[slug]/page.tsx` | **Server Component**, `generateStaticParams`/`generateMetadata` fetch `GET /articles` + `GET /articles/{slug}` at **build time**; bilingual body baked into static HTML via `ArticleDetailStatic` (`data-lang="ar"`/`"en"` blocks, CSS-toggled in `globals.css`, no client fetch) + `Article`+`BreadcrumbList` JSON-LD. Zero pages when the API is unreachable at build time (no article URLs, not a broken fetch) |
 | `/social/` | `app/social/page.tsx` | Indexable Instagram/Facebook/Telegram profiles (`sameAs` + CollectionPage JSON-LD); footer links here |
 | `/privacy/` | `app/privacy/page.tsx` | Privacy policy from `GET /legal/privacy` (demo fallback in `lib/legal-defaults.json`); footer link |

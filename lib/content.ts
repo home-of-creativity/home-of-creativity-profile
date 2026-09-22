@@ -55,8 +55,8 @@ export const about = {
   kicker: { en: "Home of Creativity", ar: "بيت الإبداع" },
   title: { en: "About us", ar: "من نحن" },
   body: {
-    en: "Home of Creativity (HOC) — بيت الإبداع — is a creative and branding agency based in Al Hamra, Damascus, Syria. We provide visual identity, marketing, social media, websites, events, and other creative services, and we work with clients in Syria and Saudi Arabia, including Riyadh — a market we serve, not a second studio. We dissect your business, eliminate the clutter, and rebuild it into a powerhouse driven by hard numbers and defined by visual prestige. We do not yell to be seen. We strategically position your brand so the industry leans in and listens.",
-    ar: "بيت الإبداع (Home of Creativity — HOC) وكالة إبداع وهوية مقرها الحمراء في دمشق، سوريا. نقدّم الهوية البصرية والتسويق والسوشال ميديا والمواقع والفعاليات وخدمات إبداعية أخرى، ونعمل مع عملاء في سوريا والسعودية بما في ذلك الرياض — وهي سوق نخدمه، لا مكتباً ثانياً. نأخذ عملك لنجرّده من العشوائية ونعيده إلى السوق كعلامة تجارية رائدة ذات هيبة بصرية مبنية على أرقام وحقائق صلبة لا تقبل الجدل. لا نصرخ لجذب الانتباه، بل نصنع لعملائنا تموضعاً ذكياً يجعل السوق ينصت إليهم باحترام.",
+    en: "Home of Creativity (HOC) is a branding and creative agency in Al Hamra, Damascus, specializing in visual identity, for clients in Syria and Saudi Arabia. We provide visual identity, marketing, social media, websites, events, and other creative services, and we work with clients in Syria and Saudi Arabia, including Riyadh — a market we serve, not a second studio. We dissect your business, eliminate the clutter, and rebuild it into a powerhouse driven by hard numbers and defined by visual prestige. We do not yell to be seen. We strategically position your brand so the industry leans in and listens.",
+    ar: "بيت الإبداع (HOC) وكالة هوية وإبداع في الحمراء بدمشق، متخصصة في الهوية البصرية، وتخدم عملاء في سوريا والسعودية. نقدّم الهوية البصرية والتسويق والسوشال ميديا والمواقع والفعاليات وخدمات إبداعية أخرى، ونعمل مع عملاء في سوريا والسعودية بما في ذلك الرياض — وهي سوق نخدمه، لا مكتباً ثانياً. نأخذ عملك لنجرّده من العشوائية ونعيده إلى السوق كعلامة تجارية رائدة ذات هيبة بصرية مبنية على أرقام وحقائق صلبة لا تقبل الجدل. لا نصرخ لجذب الانتباه، بل نصنع لعملائنا تموضعاً ذكياً يجعل السوق ينصت إليهم باحترام.",
   },
   imageAlt: {
     en: "A lone figure at the far end of a vast, geometrically lit hall",
@@ -246,14 +246,14 @@ export const serviceDetails: ServiceDetail[] = [
   {
     id: "identity",
     slug: "visual-identity",
-    title: { en: "Visual identities", ar: "الهويات البصرية" },
+    title: { en: "Visual Identity Design in Damascus", ar: "تصميم الهوية البصرية في دمشق" },
     metaDescription: {
-      en: "Visual identity design from Home of Creativity (HOC) in Al Hamra, Damascus, for clients in Syria and Saudi Arabia.",
-      ar: "تصميم الهوية البصرية من بيت الإبداع (HOC) في الحمراء بدمشق، لعملاء في سوريا والسعودية.",
+      en: "Visual identity design from Home of Creativity (HOC) in Al Hamra, Damascus: mark, colors, typography, and applications, for clients in Syria and Saudi Arabia.",
+      ar: "تصميم الهوية البصرية من بيت الإبداع (HOC) في الحمراء بدمشق: الشعار والألوان والخطوط والتطبيقات، لعملاء في سوريا والسعودية.",
     },
     definition: {
-      en: "Visual identity is the design of a brand's mark, colors, typography, and applications — the visual system that carries a business across print, digital, and physical spaces. Home of Creativity designs visual identities for clients in Syria and Saudi Arabia, including Riyadh.",
-      ar: "الهوية البصرية هي تصميم شعار العلامة وألوانها وخطوطها وتطبيقاتها — النظام البصري الذي يحمل العمل عبر المطبوعات والمنصات الرقمية والمساحات الفعلية. يصمم بيت الإبداع الهويات البصرية لعملاء في سوريا والسعودية بما في ذلك الرياض.",
+      en: "Visual identity is the design of a brand's mark, colors, typography, and applications — the visual system that carries a business across print, digital, and physical spaces. Home of Creativity (HOC), in Al Hamra, Damascus, designs that system for clients in Syria and Saudi Arabia, including Riyadh. What a project includes is confirmed in the quotation, not as a fixed public list.",
+      ar: "الهوية البصرية هي تصميم شعار العلامة وألوانها وخطوطها وتطبيقاتها — النظام البصري الذي يحمل العمل عبر المطبوعات والمنصات الرقمية والمساحات الفعلية. يصمم بيت الإبداع (HOC) في الحمراء بدمشق هذا النظام لعملاء في سوريا والسعودية بما في ذلك الرياض. يُؤكد ما يشمله المشروع في عرض السعر، وليس كقائمة عامة ثابتة.",
     },
     audienceLabel: { en: "Who it's for", ar: "لمن هذه الخدمة" },
     audience: {
@@ -422,6 +422,197 @@ export const servicesPage = {
     ar: "لم تُنشر صفحة مخصصة لهذه الممارسة بعد.",
   },
   viewPage: { en: "View service page", ar: "عرض صفحة الخدمة" },
+  hubNote: {
+    en: "Looking for identity work in Damascus? Read the branding page, then visual identity design.",
+    ar: "تبحث عن عمل هوية في دمشق؟ اقرأ صفحة الهوية، ثم تصميم الهوية البصرية.",
+  },
+};
+
+type TopicFaq = { q: Copy; a: Copy };
+type TopicLink = { href: string; label: Copy };
+type TopicSection = { heading: Copy; body: Copy };
+
+export type TopicPageCopy = {
+  title: Copy;
+  metaTitle: string;
+  metaDescription: Copy;
+  lead: Copy;
+  sections: TopicSection[];
+  faqs: TopicFaq[];
+  links: TopicLink[];
+};
+
+/**
+ * Category page for non-branded queries. It explains branding and points at
+ * the published visual-identity practice. It is not a new sold service, and
+ * it does not add brand strategy to the catalog.
+ */
+export const brandingPage: TopicPageCopy = {
+  title: { en: "Branding Agency in Damascus", ar: "وكالة هوية في دمشق" },
+  metaTitle: "Branding Agency in Damascus, Syria | HOC",
+  metaDescription: {
+    en: "Home of Creativity (HOC) is a branding and visual identity agency based in Damascus, Syria, working with clients in Syria and Saudi Arabia.",
+    ar: "بيت الإبداع (HOC) وكالة هوية بصرية مقرها دمشق، سوريا، وتعمل مع عملاء في سوريا والسعودية.",
+  },
+  lead: {
+    en: "Home of Creativity (HOC) is a branding and visual identity agency based in Damascus, Syria.",
+    ar: "بيت الإبداع (Home of Creativity — HOC) وكالة هوية بصرية مقرها دمشق، سوريا.",
+  },
+  sections: [
+    {
+      heading: { en: "What branding means here", ar: "ماذا تعني الهوية هنا" },
+      body: {
+        en: "On this site, branding means the published creative practices that make a business recognizable, starting with visual identity: a mark, colors, typography, and applications. Home of Creativity does not publish a separate brand-strategy product. The office is in Al Hamra, Damascus. Saudi Arabia, including Riyadh, is a market HOC serves, not a second office.",
+        ar: "في هذا الموقع، الهوية تعني الممارسات الإبداعية المنشورة التي تجعل العمل قابلاً للتعرّف، وتبدأ بالهوية البصرية: الشعار والألوان والخطوط والتطبيقات. لا ينشر بيت الإبداع منتجاً منفصلاً لاستراتيجية العلامة. المكتب في الحمراء بدمشق. السعودية، بما فيها الرياض، سوق يخدمه بيت الإبداع وليست مكتباً ثانياً.",
+      },
+    },
+    {
+      heading: { en: "What you can hire", ar: "ما الذي يمكن طلبه" },
+      body: {
+        en: "The identity practice you hire is visual identities. Related practices that already have their own pages are social media and websites and ecommerce. The other published practices — marketing, paid ads, events, filming, and the rest of the catalog — stay listed on the services index until their own pages exist. Scope is confirmed in a quotation. There is no public price and no published timeline.",
+        ar: "الممارسة التي تُطلب للهوية هي الهويات البصرية. الممارسات المرتبطة التي لها صفحاتها: السوشال ميديا، والمواقع والمتاجر. بقية الممارسات المنشورة — التسويق والحملات الممولة والفعاليات والتصوير وباقي القائمة — تبقى في فهرس الخدمات إلى أن تُنشر صفحاتها. يُؤكد النطاق في عرض السعر. لا يوجد سعر عام ولا مدة منشورة.",
+      },
+    },
+    {
+      heading: { en: "Who it is for", ar: "لمن هذه الصفحة" },
+      body: {
+        en: "Businesses and organizations in Syria, and clients in Saudi Arabia. Home of Creativity does not publish an industries-served list, so this page does not name sectors.",
+        ar: "شركات وجهات في سوريا، وعملاء في السعودية. لا ينشر بيت الإبداع قائمة صناعات، لذلك لا تسمّي هذه الصفحة قطاعات.",
+      },
+    },
+    {
+      heading: { en: "How a project starts", ar: "كيف يبدأ المشروع" },
+      body: {
+        en: "Message Home of Creativity on Telegram or WhatsApp with the brief. HOC sends a quotation. Payment details are confirmed on WhatsApp before work begins. There is no self-serve checkout.",
+        ar: "راسل بيت الإبداع عبر تيليجرام أو واتساب بالموجز. يُرسل عرض سعر. تُؤكد تفاصيل الدفع عبر واتساب قبل بدء العمل. لا يوجد دفع ذاتي على الموقع.",
+      },
+    },
+  ],
+  faqs: [
+    {
+      q: { en: "What does a branding agency do?", ar: "ماذا تفعل وكالة الهوية؟" },
+      a: {
+        en: "At Home of Creativity, it means designing the visual identity and the other creative practices published on hoc.agency, from a studio in Al Hamra, Damascus. It does not mean a separate brand-strategy engagement.",
+        ar: "عند بيت الإبداع، تعني تصميم الهوية البصرية وبقية الممارسات الإبداعية المنشورة على hoc.agency، من مكتب في الحمراء بدمشق. ولا تعني تعاقداً منفصلاً لاستراتيجية العلامة.",
+      },
+    },
+    {
+      q: { en: "Does HOC provide branding in Damascus?", ar: "هل يقدّم بيت الإبداع الهوية في دمشق؟" },
+      a: {
+        en: "Yes. The only published office is in Al Hamra, Damascus, Syria. That is where the work is based.",
+        ar: "نعم. المكتب المنشور الوحيد في الحمراء بدمشق، سوريا. ومن هناك يُدار العمل.",
+      },
+    },
+    {
+      q: { en: "Can HOC work with clients outside Syria?", ar: "هل يعمل بيت الإبداع مع عملاء خارج سوريا؟" },
+      a: {
+        en: "Yes. HOC works with clients in Saudi Arabia, including Riyadh. That is a served market. There is no HOC office in Riyadh.",
+        ar: "نعم. يعمل بيت الإبداع مع عملاء في السعودية بما في ذلك الرياض. هذه سوق مخدومة. لا يوجد مكتب لبيت الإبداع في الرياض.",
+      },
+    },
+    {
+      q: { en: "What should a client prepare?", ar: "ماذا يجهّز العميل؟" },
+      a: {
+        en: "A short brief on Telegram or WhatsApp: what the business is, and what you need designed. Home of Creativity confirms scope in the quotation before payment.",
+        ar: "موجز قصير عبر تيليجرام أو واتساب: ما هو العمل، وما الذي يحتاج إلى تصميم. يؤكد بيت الإبداع النطاق في عرض السعر قبل الدفع.",
+      },
+    },
+  ],
+  links: [
+    { href: "services/brand-identity", label: { en: "brand identity services", ar: "خدمات الهوية التجارية" } },
+    { href: "services/visual-identity", label: { en: "visual identity design services", ar: "تصميم الهوية البصرية" } },
+    { href: "locations/damascus", label: { en: "the Damascus office", ar: "مكتب دمشق" } },
+    { href: "articles/what-is-visual-identity", label: { en: "what visual identity is", ar: "ما هي الهوية البصرية" } },
+    { href: "services/social-media", label: { en: "social media", ar: "السوشال ميديا" } },
+    { href: "services/websites-ecommerce", label: { en: "websites and ecommerce", ar: "المواقع والمتاجر" } },
+  ],
+};
+
+/** Explains logo, visual identity, and brand identity without adding a new practice. */
+export const brandIdentityPage: TopicPageCopy = {
+  title: { en: "Brand Identity Services", ar: "خدمات الهوية التجارية" },
+  metaTitle: "Brand Identity Services | HOC Damascus",
+  metaDescription: {
+    en: "Brand identity, visual identity, and a logo are not the same thing. Home of Creativity (HOC) in Damascus publishes visual identity design as the practice you hire.",
+    ar: "الهوية التجارية والهوية البصرية والشعار ليست شيئاً واحداً. ينشر بيت الإبداع (HOC) في دمشق تصميم الهوية البصرية بوصفها الممارسة التي تُطلب.",
+  },
+  lead: {
+    en: "A logo, a visual identity, and a brand identity are related, and they are not the same thing. Home of Creativity (HOC) in Damascus publishes visual identities as the practice you hire for this work.",
+    ar: "الشعار والهوية البصرية والهوية التجارية مفاهيم مرتبطة، وليست شيئاً واحداً. ينشر بيت الإبداع (HOC) في دمشق الهويات البصرية بوصفها الممارسة التي تُطلب لهذا العمل.",
+  },
+  sections: [
+    {
+      heading: { en: "Logo", ar: "الشعار" },
+      body: {
+        en: "A logo is a mark: a wordmark, a symbol, or both. It identifies. On its own it is not a visual system.",
+        ar: "الشعار علامة: كلمة أو رمز أو كلاهما. يعرّف بالعمل. وحده ليس نظاماً بصرياً.",
+      },
+    },
+    {
+      heading: { en: "Visual identity", ar: "الهوية البصرية" },
+      body: {
+        en: "Visual identity is the system around that mark: colors, typography, and applications across print, digital, and physical spaces. That is the published Home of Creativity practice.",
+        ar: "الهوية البصرية هي النظام حول تلك العلامة: الألوان والخطوط والتطبيقات عبر المطبوعات والرقمي والمساحات الفعلية. هذه هي ممارسة بيت الإبداع المنشورة.",
+      },
+    },
+    {
+      heading: { en: "Brand identity", ar: "الهوية التجارية" },
+      body: {
+        en: "Brand identity is the broader way a business is recognized. The visual identity is the visual part of that recognition. Home of Creativity does not publish a separate brand-strategy service, a price, or a timeline for this work. The office is in Al Hamra, Damascus. Clients in Saudi Arabia, including Riyadh, are a served market.",
+        ar: "الهوية التجارية هي الصورة الأوسع التي يُعرَف بها العمل. الهوية البصرية هي الجزء البصري من ذلك التعرّف. لا ينشر بيت الإبداع خدمة منفصلة لاستراتيجية العلامة، ولا سعراً، ولا مدة لهذا العمل. المكتب في الحمراء بدمشق. العملاء في السعودية، بما فيها الرياض، سوق مخدومة.",
+      },
+    },
+  ],
+  faqs: [
+    {
+      q: {
+        en: "What is the difference between a logo and a visual identity?",
+        ar: "ما الفرق بين الشعار والهوية البصرية؟",
+      },
+      a: {
+        en: "A logo is one mark. A visual identity is the system of mark, color, type, and applications. Home of Creativity designs the system.",
+        ar: "الشعار علامة واحدة. الهوية البصرية نظام الشعار واللون والخط والتطبيقات. يصمم بيت الإبداع هذا النظام.",
+      },
+    },
+    {
+      q: {
+        en: "Does Home of Creativity sell brand strategy?",
+        ar: "هل يبيع بيت الإبداع استراتيجية علامة؟",
+      },
+      a: {
+        en: "No. Brand strategy is not one of the fourteen published practices. The published identity practice is visual identities.",
+        ar: "لا. استراتيجية العلامة ليست من الممارسات الأربع عشرة المنشورة. ممارسة الهوية المنشورة هي الهويات البصرية.",
+      },
+    },
+    {
+      q: { en: "Where is this work based?", ar: "من أين يُدار هذا العمل؟" },
+      a: {
+        en: "From the office in Al Hamra, Damascus, Syria. Saudi Arabia is a market served, not a second studio.",
+        ar: "من المكتب في الحمراء بدمشق، سوريا. السعودية سوق مخدومة وليست استوديو ثانياً.",
+      },
+    },
+  ],
+  links: [
+    { href: "services/branding", label: { en: "branding services in Damascus", ar: "خدمات الهوية في دمشق" } },
+    { href: "services/visual-identity", label: { en: "visual identity design services", ar: "تصميم الهوية البصرية" } },
+    { href: "articles/logo-vs-brand-identity", label: { en: "logo versus brand identity", ar: "الشعار مقابل الهوية التجارية" } },
+    { href: "locations/damascus", label: { en: "the Damascus office", ar: "مكتب دمشق" } },
+  ],
+};
+
+export const damascusPage = {
+  title: { en: "Home of Creativity in Damascus", ar: "بيت الإبداع في دمشق" },
+  metaTitle: "Home of Creativity — Damascus, Al Hamra | HOC",
+  metaDescription: {
+    en: "Home of Creativity (HOC) has one office, in Al Hamra, Damascus, Syria. Branding and visual identity work is based there. Saudi Arabia is a market served, not a second office.",
+    ar: "لبيت الإبداع (HOC) مكتب واحد في الحمراء بدمشق، سوريا. عمل الهوية والهوية البصرية ينطلق من هناك. السعودية سوق مخدومة وليست مكتباً ثانياً.",
+  },
+  lead: {
+    en: "Home of Creativity (HOC) — بيت الإبداع — is based in Al Hamra, Damascus, Syria. Branding and visual identity work starts from that office. Saudi Arabia, including Riyadh, is a market HOC serves. It is not a second studio, and this page is not a Riyadh address.",
+    ar: "بيت الإبداع (Home of Creativity — HOC) مقره الحمراء في دمشق، سوريا. عمل الهوية والهوية البصرية ينطلق من هذا المكتب. السعودية، بما فيها الرياض، سوق يخدمها بيت الإبداع. ليست استوديو ثانياً، وهذه الصفحة ليست عنواناً في الرياض.",
+  },
+  servicesLabel: { en: "Services from Damascus", ar: "خدمات من دمشق" },
+  contactLabel: { en: "Contact", ar: "التواصل" },
 };
 
 export const showcaseClients = {
@@ -980,8 +1171,8 @@ export const faq = {
         ar: "أين يقع بيت الإبداع؟",
       },
       a: {
-        en: "Our office is in Al Hamra, Damascus, Syria — the only physical location on our map at hoc.agency/locations/.",
-        ar: "مكتبنا في الحمراء، دمشق، سوريا — وهو الموقع المادي الوحيد على خريطتنا في hoc.agency/locations/.",
+        en: "Our office is in Al Hamra, Damascus, Syria — the only physical location, at hoc.agency/locations/damascus/.",
+        ar: "مكتبنا في الحمراء، دمشق، سوريا — وهو الموقع المادي الوحيد، في hoc.agency/locations/damascus/.",
       },
     },
     {

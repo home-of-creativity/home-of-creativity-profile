@@ -17,6 +17,12 @@ export function ServicesPage() {
         <Reveal className="mx-auto mb-12 max-w-2xl text-center">
           <SectionHeading kicker={servicesPage.kicker} title={servicesPage.title} align="center" level={1} />
           <p className="mt-5 text-[1.02rem] leading-[1.75] text-[var(--brand-ink)]/75">{t(servicesPage.lead)}</p>
+          <p className="mt-4 text-[0.98rem] leading-[1.7] text-[var(--brand-ink)]/75">
+            {t(servicesPage.hubNote)}{" "}
+            <Link href={pagePath("services/branding")} className="font-semibold text-[var(--brand-purple)] hover:text-[var(--brand-orange)]">
+              {locale === "ar" ? "وكالة هوية في دمشق" : "Branding Agency in Damascus"}
+            </Link>
+          </p>
         </Reveal>
 
         <Stagger className="mx-auto grid max-w-3xl gap-3 sm:grid-cols-2">

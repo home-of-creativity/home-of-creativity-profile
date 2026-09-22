@@ -3,6 +3,13 @@
 import Link from "next/link";
 import { serviceDetails, servicesPage } from "@/lib/content";
 import { pagePath } from "@/lib/base-path";
+
+const identityLinks = [
+  { href: "services/branding", en: "branding services in Damascus", ar: "خدمات الهوية في دمشق" },
+  { href: "services/brand-identity", en: "brand identity services", ar: "خدمات الهوية التجارية" },
+  { href: "locations/damascus", en: "the Damascus office", ar: "مكتب دمشق" },
+  { href: "articles/what-is-visual-identity", en: "what visual identity is", ar: "ما هي الهوية البصرية" },
+];
 import { useLanguage } from "@/lib/i18n";
 import { whatsappHref } from "@/lib/whatsapp";
 import { Reveal } from "../motion";
@@ -30,10 +37,18 @@ export function ServiceDetailPage({ slug }: { slug: string }) {
 
         <Reveal className="mx-auto mb-10 max-w-2xl text-center">
           <span aria-hidden className="mx-auto mb-3 block h-px w-9 bg-[var(--brand-orange)]" />
-          <h1 className="font-display m-0 text-[clamp(2rem,5vw,3.6rem)] font-semibold leading-[1.05] text-[var(--brand-ink)]">
-            {t(detail.title)}
-          </h1>
-          <p className="mt-6 text-[1.05rem] leading-[1.75] text-[var(--brand-ink)]/80">{t(detail.definition)}</p>
+          <div data-lang="ar" lang="ar" dir="rtl">
+            <h1 className="font-display m-0 text-[clamp(2rem,5vw,3.6rem)] font-semibold leading-[1.05] text-[var(--brand-ink)]">
+              {detail.title.ar}
+            </h1>
+            <p className="mt-6 text-[1.05rem] leading-[1.75] text-[var(--brand-ink)]/80">{detail.definition.ar}</p>
+          </div>
+          <div data-lang="en" lang="en" dir="ltr">
+            <h1 className="font-display m-0 text-[clamp(2rem,5vw,3.6rem)] font-semibold leading-[1.05] text-[var(--brand-ink)]">
+              {detail.title.en}
+            </h1>
+            <p className="mt-6 text-[1.05rem] leading-[1.75] text-[var(--brand-ink)]/80">{detail.definition.en}</p>
+          </div>
         </Reveal>
 
         <div className="mx-auto grid max-w-2xl gap-8">
@@ -77,6 +92,26 @@ export function ServiceDetailPage({ slug }: { slug: string }) {
               {locale === "ar" ? "ابدأ عبر واتساب" : "Start on WhatsApp"}
             </a>
           </Reveal>
+
+          {slug === "visual-identity" ? (
+            <Reveal>
+              <h2 className="font-display m-0 text-[1.1rem] font-semibold text-[var(--brand-ink)]">
+                {locale === "ar" ? "صفحات ذات صلة" : "Related pages"}
+              </h2>
+              <ul className="mt-3 flex flex-wrap gap-3 p-0">
+                {identityLinks.map((link) => (
+                  <li key={link.href} className="list-none">
+                    <Link
+                      href={pagePath(link.href)}
+                      className="text-[0.9rem] font-semibold text-[var(--brand-purple)] hover:text-[var(--brand-orange)]"
+                    >
+                      {locale === "ar" ? link.ar : link.en}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+          ) : null}
 
           {siblings.length ? (
             <Reveal>

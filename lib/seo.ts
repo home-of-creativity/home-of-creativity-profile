@@ -1,5 +1,5 @@
 import type { Article } from "./articles-api";
-import { aboutPage, articlesPage, contact, faq, projects, serviceDetails, services, servicesPage, WHATSAPP_NUMBER } from "./content";
+import { aboutPage, articlesPage, brandIdentityPage, brandingPage, contact, damascusPage, faq, projects, serviceDetails, services, servicesPage, WHATSAPP_NUMBER } from "./content";
 import type { PortfolioProject } from "./portfolio-api";
 import { SITE_ALTERNATE, SITE_NAME, SITE_NAME_AR, SITE_SHORT, SITE_URL, absoluteUrl, OG_IMAGE_PATH, seoCopy } from "./site";
 import { officialSocialProfiles, officialSocialUrls } from "./social-embeds";
@@ -67,6 +67,7 @@ export function siteJsonLd() {
         name: SITE_NAME,
         alternateName: [SITE_SHORT, SITE_NAME_AR, "بيت الابداع", SITE_ALTERNATE],
         description: `${seoCopy.homeDescription.ar} ${seoCopy.homeDescription.en}`,
+        knowsAbout: ["Branding", "Visual identity", "Brand identity", "Damascus"],
         url: `${SITE_URL}/`,
         logo: absoluteUrl("/hummingbird.svg"),
         image: absoluteUrl(OG_IMAGE_PATH),
@@ -180,10 +181,10 @@ export function locationsPageJsonLd() {
       if (!place) return null;
       return {
         "@type": ["ProfessionalService", "LocalBusiness"],
-        "@id": `${SITE_URL}/locations/#${id}`,
+        "@id": `${SITE_URL}/#place-${id}`,
         name: place.name,
         alternateName: SITE_NAME_AR,
-        url: `${SITE_URL}/locations/#${id}`,
+        url: `${SITE_URL}/locations/damascus/`,
         image: absoluteUrl(OG_IMAGE_PATH),
         telephone: place.telephone,
         address: place.address,
@@ -364,6 +365,106 @@ export function serviceDetailJsonLd(slug: string) {
   };
 }
 
+function topicPageJsonLd(
+  copy: { title: { en: string; ar: string }; lead: { en: string }; faqs: { q: { ar: string }; a: { ar: string } }[] },
+  path: string,
+) {
+  const url = `${SITE_URL}${path}`;
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Service",
+        "@id": `${url}#service`,
+        name: copy.title.en,
+        alternateName: copy.title.ar,
+        url,
+        description: copy.lead.en,
+        provider: { "@id": `${SITE_URL}/#organization` },
+        areaServed: [
+          { "@type": "Country", name: "Syria" },
+          { "@type": "Country", name: "Saudi Arabia" },
+        ],
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${url}#breadcrumb`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: SITE_NAME, item: `${SITE_URL}/` },
+          { "@type": "ListItem", position: 2, name: servicesPage.title.en, item: `${SITE_URL}/services/` },
+          { "@type": "ListItem", position: 3, name: copy.title.en, item: url },
+        ],
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${url}#faq`,
+        url: `${url}#faq`,
+        inLanguage: "ar",
+        mainEntity: copy.faqs.map((item) => ({
+          "@type": "Question",
+          name: item.q.ar,
+          acceptedAnswer: { "@type": "Answer", text: item.a.ar },
+        })),
+      },
+    ],
+  };
+}
+
+/** Category page. Not a new practice beyond published visual identities. */
+export function brandingPageJsonLd() {
+  return topicPageJsonLd(brandingPage, "/services/branding/");
+}
+
+/** Explains logo / visual identity / brand identity. The hired practice stays visual identities. */
+export function brandIdentityPageJsonLd() {
+  return topicPageJsonLd(brandIdentityPage, "/services/brand-identity/");
+}
+
+/** Canonical URL for the one published office. */
+export function damascusPageJsonLd() {
+  const place = placeNode("syr");
+  const url = `${SITE_URL}/locations/damascus/`;
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": `${url}#page`,
+        url,
+        name: damascusPage.title.en,
+        description: damascusPage.lead.en,
+        inLanguage: ["ar", "en"],
+        isPartOf: { "@id": `${SITE_URL}/#website` },
+        about: { "@id": `${SITE_URL}/#place-syr` },
+        publisher: { "@id": `${SITE_URL}/#organization` },
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${url}#breadcrumb`,
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: SITE_NAME, item: `${SITE_URL}/` },
+          { "@type": "ListItem", position: 2, name: seoCopy.locationsTitle.en, item: `${SITE_URL}/locations/` },
+          { "@type": "ListItem", position: 3, name: "Damascus", item: url },
+        ],
+      },
+      place
+        ? {
+            ...place,
+            "@type": ["ProfessionalService", "LocalBusiness"],
+            url,
+            parentOrganization: { "@id": `${SITE_URL}/#organization` },
+            areaServed: [
+              { "@type": "Country", name: "Syria" },
+              { "@type": "Country", name: "Saudi Arabia" },
+            ],
+          }
+        : null,
+    ].filter(Boolean),
+  };
+}
+
 /** `/articles/{slug}/` — one canonical URL per real article, server-rendered at build time. */
 export function articleJsonLd(article: Article) {
   const url = `${SITE_URL}/articles/${article.slug}/`;
@@ -378,7 +479,10 @@ export function articleJsonLd(article: Article) {
         url,
         headline: article.title_ar,
         alternativeHeadline: article.title_en,
-        ...(published ? { datePublished: published } : {}),
+        description: article.excerpt_en ?? article.excerpt_ar ?? undefined,
+        image: absoluteUrl(OG_IMAGE_PATH),
+        mainEntityOfPage: { "@type": "WebPage", "@id": url },
+        ...(published ? { datePublished: published, dateModified: published } : {}),
         inLanguage: "ar",
         isPartOf: { "@id": `${SITE_URL}/#website` },
         author: { "@id": `${SITE_URL}/#organization` },

@@ -12,7 +12,7 @@ Do not invent awards, client counts, revenue, certifications, years of experienc
 ## Where: one office, one market
 
 Office (the only physical, mapped location): Al Hamra, Damascus, Syria.
-Public map: https://hoc.agency/locations/
+Public map: https://hoc.agency/locations/damascus/
 
 HOC also works with clients in Saudi Arabia, including Riyadh. That is a served market, not a second studio: the site lists a Saudi contact number but does not publish a Riyadh street address or a second office on the map.
 
@@ -32,9 +32,18 @@ Home of Creativity sends a quotation. Payment details are confirmed on WhatsApp 
 
 - https://hoc.agency/about/ — canonical entity description
 - https://hoc.agency/services/ — all 14 practices
+- https://hoc.agency/services/branding/ — category page for “branding agency in Damascus”. Not a new practice and not brand strategy.
+- https://hoc.agency/services/brand-identity/ — distinguishes logo, visual identity, and brand identity. The hired practice remains visual identities.
 - https://hoc.agency/services/visual-identity/
 - https://hoc.agency/services/social-media/
 - https://hoc.agency/services/websites-ecommerce/
+- https://hoc.agency/locations/damascus/ — the one office
+- https://hoc.agency/articles/what-is-visual-identity/
+- https://hoc.agency/articles/what-is-brand-identity/
+- https://hoc.agency/articles/logo-vs-visual-identity/
+- https://hoc.agency/articles/logo-vs-brand-identity/
+- https://hoc.agency/articles/how-to-choose-a-branding-agency-in-damascus/
+- https://hoc.agency/articles/branding-for-businesses-in-syria/
 
 ## Official profiles
 
@@ -62,7 +71,7 @@ Q: ما الخدمات التي تقدمونها؟
 A: الهويات البصرية، السوشال ميديا، إدارة الحسابات، التسويق، الحملات الممولة، المعارض والمؤتمرات، إدارة الفعاليات، تصميم البوثات، التصوير والمونتاج، الهدايا الدعائية، الإعلانات الطرقية، المواقع والمتاجر الإلكترونية، تصميم التطبيقات، والتحليل المالي.
 
 Q: أين يقع بيت الإبداع؟
-A: مكتبنا في الحمراء، دمشق، سوريا — وهو الموقع المادي الوحيد على خريطتنا في hoc.agency/locations/.
+A: مكتبنا في الحمراء، دمشق، سوريا — وهو الموقع المادي الوحيد على خريطتنا في hoc.agency/locations/damascus/.
 
 Q: هل يعمل بيت الإبداع مع عملاء في السعودية؟
 A: نعم. نعمل مع عملاء في السعودية بما في ذلك الرياض، وهي سوق نخدمها؛ لا يوجد لدينا مكتب مادي في الرياض.

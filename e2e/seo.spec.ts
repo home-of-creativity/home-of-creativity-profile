@@ -1,10 +1,10 @@
 import { expect, test } from "@playwright/test";
-import { LANDING, LOCATIONS, SOCIAL } from "./helpers";
+import { DAMASCUS, LANDING, LOCATIONS, SOCIAL } from "./helpers";
 
 test.describe("SEO and geo", () => {
   test("home includes title, canonical, JSON-LD and geo tags", async ({ page }) => {
     await page.goto(LANDING, { waitUntil: "domcontentloaded" });
-    await expect(page).toHaveTitle(/بيت الإبداع \| Home \| HOC — وكالة هوية دمشق/);
+    await expect(page).toHaveTitle(/بيت الإبداع \| HOC — Branding Agency in Damascus/);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /hoc\.agency\/?$/);
     await expect(page.locator('meta[property="og:title"]')).toHaveCount(1);
     await expect(page.locator('meta[name="geo.placename"]')).toHaveAttribute("content", /Damascus/i);
@@ -81,6 +81,11 @@ test.describe("SEO and geo", () => {
     expect(xml).toContain("https://hoc.agency/social/");
     expect(xml).toContain("https://hoc.agency/privacy/");
     expect(xml).toContain("https://hoc.agency/terms/");
+    expect(xml).toContain("https://hoc.agency/services/branding/");
+    expect(xml).toContain("https://hoc.agency/services/visual-identity/");
+    expect(xml).toContain("https://hoc.agency/services/brand-identity/");
+    expect(xml).toContain("https://hoc.agency/locations/damascus/");
+    expect(xml).toContain("https://hoc.agency/articles/what-is-visual-identity/");
   });
 
   test("social page is indexable with official profile links", async ({ page }) => {
@@ -108,7 +113,13 @@ test.describe("SEO and geo", () => {
     await page.goto(LOCATIONS, { waitUntil: "domcontentloaded" });
     await expect(page).toHaveTitle(/المواقع|Locations/i);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/locations\/?$/);
-    await expect(page.getByRole("heading", { level: 1, name: /دمشق، الحمراء|Damascus, Al Hamra/ })).toBeVisible();
+    await expect(page.getByRole("link", { name: /دمشق، الحمراء|Damascus, Al Hamra/ })).toHaveAttribute("href", /\/locations\/damascus\/?$/);
+    await expect(page.getByRole("heading", { name: /الرياض|Riyadh/ })).toHaveCount(0);
+
+    await page.goto(DAMASCUS, { waitUntil: "domcontentloaded" });
+    await expect(page).toHaveTitle(/Damascus, Al Hamra \| HOC/);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/locations\/damascus\/?$/);
+    await expect(page.getByRole("heading", { level: 1, name: /بيت الإبداع في دمشق|Home of Creativity in Damascus/ })).toBeVisible();
     await expect(page.getByRole("link", { name: /أضف بيت الإبداع إلى خرائط جوجل|Add Home of Creativity to Google Maps/ })).toHaveCount(0);
     await expect(page.getByRole("tab", { name: /السعودية|Saudi/i })).toHaveCount(0);
     await expect(page.getByRole("heading", { name: /الرياض|Riyadh/ })).toHaveCount(0);
@@ -134,5 +145,5 @@ test.describe("SEO and geo", () => {
         return Array.isArray(value) ? value : [value];
       });
     });
-    expect(types).toEqual(expect.arrayContaining(["CollectionPage", "LocalBusiness"]));
+    expect(types).toEqual(expect.arrayContaining(["WebPage", "LocalBusiness", "BreadcrumbList"]));
   });

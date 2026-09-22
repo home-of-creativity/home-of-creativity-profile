@@ -1,3 +1,4 @@
+import { geoArticles } from "./geo-articles";
 import { publicApiUrl } from "./public-api";
 
 export type Article = {
@@ -13,7 +14,7 @@ export type Article = {
   created_at?: string | null;
 };
 
-export async function fetchArticles(): Promise<Article[]> {
+async function fetchRemoteArticles(): Promise<Article[]> {
   const api = publicApiUrl();
   if (!api) return [];
 
@@ -32,21 +33,34 @@ export async function fetchArticles(): Promise<Article[]> {
   }
 }
 
-export async function fetchArticle(slug: string): Promise<Article | null> {
-  const api = publicApiUrl();
-  if (!api || !slug.trim()) return null;
+/** Static cluster first, then CMS rows that do not reuse those slugs. */
+export async function fetchArticles(): Promise<Article[]> {
+  const remote = await fetchRemoteArticles();
+  const staticSlugs = new Set(geoArticles.map((article) => article.slug));
+  return [...geoArticles, ...remote.filter((article) => !staticSlugs.has(article.slug))];
+}
 
-  try {
-    const response = await fetch(`${api}/articles/${encodeURIComponent(slug.trim())}`, {
-      method: "GET",
-      headers: { Accept: "application/json" },
-      cache: "no-store",
-      signal: AbortSignal.timeout(8000),
-    });
-    if (!response.ok) return null;
-    const payload = (await response.json()) as { data?: Article };
-    return payload.data ?? null;
-  } catch {
-    return null;
+export async function fetchArticle(slug: string): Promise<Article | null> {
+  const trimmed = slug.trim();
+  if (!trimmed || trimmed === "__none__") return null;
+
+  const api = publicApiUrl();
+  if (api) {
+    try {
+      const response = await fetch(`${api}/articles/${encodeURIComponent(trimmed)}`, {
+        method: "GET",
+        headers: { Accept: "application/json" },
+        cache: "no-store",
+        signal: AbortSignal.timeout(8000),
+      });
+      if (response.ok) {
+        const payload = (await response.json()) as { data?: Article };
+        if (payload.data) return payload.data;
+      }
+    } catch {
+      // Fall through to the static cluster.
+    }
   }
+
+  return geoArticles.find((article) => article.slug === trimmed) ?? null;
 }

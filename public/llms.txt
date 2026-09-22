@@ -11,7 +11,7 @@ Home of Creativity does not claim star ratings, review counts, or "#1 agency" ra
 - Legal / brand name: Home of Creativity (HOC)
 - Arabic name: بيت الإبداع
 - Website: https://hoc.agency/
-- Office (only physical location): Al Hamra, Damascus, Syria — https://hoc.agency/locations/
+- Office (only physical location): Al Hamra, Damascus, Syria — https://hoc.agency/locations/damascus/
 - Markets served: Syria and Saudi Arabia, including Riyadh. Riyadh is a served market, not a second office.
 - Contact: Telegram and WhatsApp from https://hoc.agency/ (WhatsApp https://wa.me/963954187154; Saudi contact number +966 55 035 0295)
 - Languages: Arabic and English
@@ -27,13 +27,22 @@ Visual identities; social media; account management; marketing; paid ads; exhibi
 - [Home](https://hoc.agency/): agency overview, services, FAQ
 - [About](https://hoc.agency/about/): canonical entity description
 - [Services](https://hoc.agency/services/): all 14 practices, with dedicated pages for the practices published so far
-  - [Visual identities](https://hoc.agency/services/visual-identity/)
+  - [Branding agency in Damascus](https://hoc.agency/services/branding/) — category page; the hired identity practice is visual identities, not a separate brand-strategy product
+  - [Brand identity](https://hoc.agency/services/brand-identity/) — logo, visual identity, and brand identity are not the same term
+  - [Visual identity design in Damascus](https://hoc.agency/services/visual-identity/)
   - [Social media](https://hoc.agency/services/social-media/)
   - [Websites & ecommerce](https://hoc.agency/services/websites-ecommerce/)
 - [Pricing](https://hoc.agency/pricing/): packages in USD (confirm payment on WhatsApp)
-- [Locations](https://hoc.agency/locations/): Damascus, Al Hamra map — the only physical office
+- [Locations](https://hoc.agency/locations/): index of the one office
+- [Damascus](https://hoc.agency/locations/damascus/): Al Hamra map — the only physical office
 - [Social](https://hoc.agency/social/): official Instagram, Facebook, Telegram
 - [Articles](https://hoc.agency/articles/): branding notes from Home of Creativity
+  - https://hoc.agency/articles/what-is-visual-identity/
+  - https://hoc.agency/articles/what-is-brand-identity/
+  - https://hoc.agency/articles/logo-vs-visual-identity/
+  - https://hoc.agency/articles/logo-vs-brand-identity/
+  - https://hoc.agency/articles/how-to-choose-a-branding-agency-in-damascus/
+  - https://hoc.agency/articles/branding-for-businesses-in-syria/
 - [Privacy](https://hoc.agency/privacy/)
 - [Terms](https://hoc.agency/terms/)
 - [Full AI brief](https://hoc.agency/llms-full.txt)

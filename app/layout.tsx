@@ -31,7 +31,7 @@ const greatVibes = Great_Vibes({
   display: "swap",
 });
 
-const homeTitle = `${SITE_NAME_AR} | Home | ${SITE_SHORT} — وكالة هوية دمشق`;
+const homeTitle = `${SITE_NAME_AR} | ${SITE_SHORT} — Branding Agency in Damascus`;
 const homeDescription = pageDescription(seoCopy.homeDescription.en, seoCopy.homeDescription.ar);
 
 export const metadata: Metadata = {
@@ -54,7 +54,8 @@ export const metadata: Metadata = {
     "بيت الإبداع",
     "بيت الابداع",
     "وكالة هوية بصرية دمشق",
-    "تصميم هوية تجارية الرياض",
+    "branding agency Damascus",
+    "visual identity Damascus",
   ],
   manifest: "/manifest.webmanifest",
   alternates: {
