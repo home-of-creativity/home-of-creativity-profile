@@ -85,7 +85,6 @@ test.describe("SEO and geo", () => {
     expect(xml).toContain("https://hoc.agency/services/visual-identity/");
     expect(xml).toContain("https://hoc.agency/services/brand-identity/");
     expect(xml).toContain("https://hoc.agency/locations/damascus/");
-    expect(xml).toContain("https://hoc.agency/articles/what-is-visual-identity/");
   });
 
   test("social page is indexable with official profile links", async ({ page }) => {

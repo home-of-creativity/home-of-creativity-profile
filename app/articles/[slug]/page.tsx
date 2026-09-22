@@ -63,7 +63,7 @@ export default async function ArticleDetailPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd(article)) }}
       />
       <Nav />
-      <main id="top">
+      <main id="top" data-article-slug={article.slug}>
         <ArticleDetailStatic article={article} />
       </main>
       <Footer />

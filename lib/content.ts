@@ -522,7 +522,6 @@ export const brandingPage: TopicPageCopy = {
     { href: "services/brand-identity", label: { en: "brand identity services", ar: "خدمات الهوية التجارية" } },
     { href: "services/visual-identity", label: { en: "visual identity design services", ar: "تصميم الهوية البصرية" } },
     { href: "locations/damascus", label: { en: "the Damascus office", ar: "مكتب دمشق" } },
-    { href: "articles/what-is-visual-identity", label: { en: "what visual identity is", ar: "ما هي الهوية البصرية" } },
     { href: "services/social-media", label: { en: "social media", ar: "السوشال ميديا" } },
     { href: "services/websites-ecommerce", label: { en: "websites and ecommerce", ar: "المواقع والمتاجر" } },
   ],
@@ -595,7 +594,6 @@ export const brandIdentityPage: TopicPageCopy = {
   links: [
     { href: "services/branding", label: { en: "branding services in Damascus", ar: "خدمات الهوية في دمشق" } },
     { href: "services/visual-identity", label: { en: "visual identity design services", ar: "تصميم الهوية البصرية" } },
-    { href: "articles/logo-vs-brand-identity", label: { en: "logo versus brand identity", ar: "الشعار مقابل الهوية التجارية" } },
     { href: "locations/damascus", label: { en: "the Damascus office", ar: "مكتب دمشق" } },
   ],
 };

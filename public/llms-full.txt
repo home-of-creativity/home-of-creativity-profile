@@ -38,12 +38,7 @@ Home of Creativity sends a quotation. Payment details are confirmed on WhatsApp 
 - https://hoc.agency/services/social-media/
 - https://hoc.agency/services/websites-ecommerce/
 - https://hoc.agency/locations/damascus/ — the one office
-- https://hoc.agency/articles/what-is-visual-identity/
-- https://hoc.agency/articles/what-is-brand-identity/
-- https://hoc.agency/articles/logo-vs-visual-identity/
-- https://hoc.agency/articles/logo-vs-brand-identity/
-- https://hoc.agency/articles/how-to-choose-a-branding-agency-in-damascus/
-- https://hoc.agency/articles/branding-for-businesses-in-syria/
+- https://hoc.agency/articles/ — dashboard articles only; each published slug is /articles/{slug}/ after the next site build, and /articles/detail/?slug= opens it immediately
 
 ## Official profiles
 

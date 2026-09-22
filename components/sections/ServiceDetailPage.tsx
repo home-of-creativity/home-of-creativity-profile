@@ -8,7 +8,6 @@ const identityLinks = [
   { href: "services/branding", en: "branding services in Damascus", ar: "خدمات الهوية في دمشق" },
   { href: "services/brand-identity", en: "brand identity services", ar: "خدمات الهوية التجارية" },
   { href: "locations/damascus", en: "the Damascus office", ar: "مكتب دمشق" },
-  { href: "articles/what-is-visual-identity", en: "what visual identity is", ar: "ما هي الهوية البصرية" },
 ];
 import { useLanguage } from "@/lib/i18n";
 import { whatsappHref } from "@/lib/whatsapp";

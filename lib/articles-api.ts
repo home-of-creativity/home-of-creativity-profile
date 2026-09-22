@@ -1,4 +1,3 @@
-import { geoArticles } from "./geo-articles";
 import { publicApiUrl } from "./public-api";
 
 export type Article = {
@@ -33,11 +32,9 @@ async function fetchRemoteArticles(): Promise<Article[]> {
   }
 }
 
-/** Static cluster first, then CMS rows that do not reuse those slugs. */
+/** Dashboard articles only (`GET /articles`). No bundled stand-in posts. */
 export async function fetchArticles(): Promise<Article[]> {
-  const remote = await fetchRemoteArticles();
-  const staticSlugs = new Set(geoArticles.map((article) => article.slug));
-  return [...geoArticles, ...remote.filter((article) => !staticSlugs.has(article.slug))];
+  return fetchRemoteArticles();
 }
 
 export async function fetchArticle(slug: string): Promise<Article | null> {
@@ -62,5 +59,5 @@ export async function fetchArticle(slug: string): Promise<Article | null> {
     }
   }
 
-  return geoArticles.find((article) => article.slug === trimmed) ?? null;
+  return null;
 }
