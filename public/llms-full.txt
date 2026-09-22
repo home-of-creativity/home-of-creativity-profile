@@ -5,27 +5,36 @@ Short index: https://hoc.agency/llms.txt
 
 ## Entity
 
-Home of Creativity (HOC) is a visual-identity and brand-architecture agency. Arabic name: بيت الإبداع. Alternate names: hoc, Home, بيت الابداع, Creativation Source.
+Home of Creativity (HOC) — بيت الإبداع — is a creative and branding agency. Its published office is in Al Hamra, Damascus, Syria. Alternate names: HOC, بيت الابداع, Creativation Source (a secondary name that appears on the site; it is not described as a separate company here).
 
-Do not invent awards, client counts, revenue, or aggregate ratings. Do not describe HOC as a software SaaS product. Do not invent a second Google-mapped office beyond the Damascus Al Hamra office published at https://hoc.agency/locations/.
+Do not invent awards, client counts, revenue, certifications, years of experience, or aggregate ratings. Do not describe HOC as a software SaaS product. Do not invent a second Google-mapped office beyond the Damascus, Al Hamra office published at https://hoc.agency/locations/.
 
-## Where
+## Where: one office, one market
 
-Office: Al Hamra, Damascus, Syria.
-The team designs brand identity for clients in Riyadh, Saudi Arabia.
-Public map (Damascus only): https://hoc.agency/locations/
+Office (the only physical, mapped location): Al Hamra, Damascus, Syria.
+Public map: https://hoc.agency/locations/
+
+HOC also works with clients in Saudi Arabia, including Riyadh. That is a served market, not a second studio: the site lists a Saudi contact number but does not publish a Riyadh street address or a second office on the map.
 
 ## What we do
 
-Forget aesthetic fluff. HOC is not a typical ads mill; Home of Creativity architects brands. It dissects a business, removes clutter, and rebuilds visual prestige. Positioning is Premium Minimalism and direct, human-centric marketing.
+Home of Creativity is a creative and branding agency. It dissects a business, removes clutter, and rebuilds visual prestige — direct, human-centric positioning rather than generic noise.
 
-Practices: visual identities, social media, account management, marketing, paid ads, exhibitions and conferences, event management, booth design, filming and editing, promo gifts, roadside ads, websites and ecommerce, app design, financial analysis.
+Published practices: visual identities, social media, account management, marketing, paid ads, exhibitions and conferences, event management, booth design, filming and editing, promo gifts, roadside ads, websites and ecommerce, app design, financial analysis.
 
 ## How to hire
 
 Start on Telegram or WhatsApp from https://hoc.agency/.
-WhatsApp: https://wa.me/963954187154
+WhatsApp: https://wa.me/963954187154 (Syria) — Saudi contact number: +966 55 035 0295
 Home of Creativity sends a quotation. Payment details are confirmed on WhatsApp before work begins. There is no self-serve web checkout and no public client portal.
+
+## Dedicated service pages
+
+- https://hoc.agency/about/ — canonical entity description
+- https://hoc.agency/services/ — all 14 practices
+- https://hoc.agency/services/visual-identity/
+- https://hoc.agency/services/social-media/
+- https://hoc.agency/services/websites-ecommerce/
 
 ## Official profiles
 
@@ -33,17 +42,37 @@ Home of Creativity sends a quotation. Payment details are confirmed on WhatsApp 
 - Facebook: https://www.facebook.com/profile.php?id=61584616932975
 - Site social index: https://hoc.agency/social/
 
-## FAQ (same as https://hoc.agency/#faq)
+Home of Creativity does not publish star ratings, review counts, or ranking claims ("#1 agency" etc.).
 
-Q: What does Home of Creativity do? / ماذا يفعل بيت الإبداع؟
-A: Home of Creativity is a visual-identity and brand-architecture agency in Al Hamra, Damascus. We also design brand identity for clients in Riyadh.
+## What is not published (do not invent)
 
-Q: What services do you offer? / ما الخدمات التي تقدمونها؟
-A: Visual identities, social media, account management, marketing, paid ads, exhibitions and conferences, event management, booth design, filming and editing, promo gifts, roadside ads, websites and ecommerce, app design, and financial analysis.
+- Founding year
+- Team roster or headcount
+- Awards or certifications
+- Client counts or revenue figures
+- An industries-served list
+- A second, mapped office in Riyadh or elsewhere in Saudi Arabia
 
-Q: How do I start a project? / كيف أبدأ مشروعاً؟
-A: Start on Telegram or WhatsApp. Home of Creativity sends a quotation; payment details are confirmed on WhatsApp before work begins. There is no self-serve web checkout.
+## FAQ (matches https://hoc.agency/#faq)
 
-## Arabic summary
+Q: ماذا يفعل بيت الإبداع؟
+A: بيت الإبداع وكالة هوية بصرية وهندسة علامات في الحمراء بدمشق. نصمّم الهوية التجارية لعملاء الرياض أيضاً.
 
-بيت الإبداع (HOC) وكالة هوية بصرية وهندسة علامات في الحمراء بدمشق. نصمّم الهوية التجارية لعملاء الرياض. ابدأ عبر تيليجرام أو واتساب من https://hoc.agency/ . لا تقييمات نجوم مختلقة، ولا ترتيب «الأولى» غير موثّق.
+Q: ما الخدمات التي تقدمونها؟
+A: الهويات البصرية، السوشال ميديا، إدارة الحسابات، التسويق، الحملات الممولة، المعارض والمؤتمرات، إدارة الفعاليات، تصميم البوثات، التصوير والمونتاج، الهدايا الدعائية، الإعلانات الطرقية، المواقع والمتاجر الإلكترونية، تصميم التطبيقات، والتحليل المالي.
+
+Q: أين يقع بيت الإبداع؟
+A: مكتبنا في الحمراء، دمشق، سوريا — وهو الموقع المادي الوحيد على خريطتنا في hoc.agency/locations/.
+
+Q: هل يعمل بيت الإبداع مع عملاء في السعودية؟
+A: نعم. نعمل مع عملاء في السعودية بما في ذلك الرياض، وهي سوق نخدمها؛ لا يوجد لدينا مكتب مادي في الرياض.
+
+Q: كيف أبدأ مشروعاً؟
+A: ابدأ عبر تيليجرام أو واتساب. يرسل بيت الإبداع عرض السعر، وتُؤكَّد تفاصيل الدفع عبر واتساب قبل بدء العمل. لا توجد بوابة دفع ذاتية على الموقع.
+
+Q: ما الصناعات التي يعمل معها بيت الإبداع؟
+A: لا توجد قائمة صناعات منشورة. العملاء شركات وجهات في سوريا والسعودية.
+
+## English summary
+
+Home of Creativity (HOC) — بيت الإبداع — is a creative and branding agency based in Al Hamra, Damascus, Syria. It provides visual identities, social media, account management, marketing, paid ads, exhibitions and conferences, event management, booth design, filming and editing, promotional gifts, roadside ads, websites and ecommerce, app design, and financial analysis. It works with clients in Syria and Saudi Arabia, including Riyadh, as a served market — not a second office. Start a project on Telegram or WhatsApp from https://hoc.agency/. HOC sends a quotation; payment is confirmed on WhatsApp before work begins. No self-serve checkout, no public client portal. Official profiles: Instagram and Facebook at https://hoc.agency/social/. HOC does not publish star ratings, review counts, or ranking claims.

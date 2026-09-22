@@ -46,8 +46,8 @@ export const seoCopy = {
     ar: "بيت الإبداع HOC — وكالة هوية بصرية دمشق",
   },
   homeDescription: {
-    en: "Home of Creativity (HOC / hoc) — بيت الإبداع and Creativation Source. Visual-identity agency in Damascus and brand identity for clients in Riyadh.",
-    ar: "بيت الإبداع (HOC) وCreativation Source وكالة هوية بصرية في دمشق وتصميم هوية تجارية في الرياض. Home of Creativity — hoc.agency.",
+    en: "Home of Creativity (HOC) is a creative and branding agency in Al Hamra, Damascus. It provides visual identity, marketing, social media, and websites, and serves clients in Syria and Saudi Arabia.",
+    ar: "بيت الإبداع (HOC) وكالة إبداع وهوية في الحمراء بدمشق. تقدّم الهوية البصرية والتسويق والسوشال ميديا والمواقع، وتخدم عملاء في سوريا والسعودية.",
   },
   pricingTitle: {
     en: "Pricing",
@@ -56,6 +56,22 @@ export const seoCopy = {
   pricingDescription: {
     en: "Home of Creativity packages in USD. Confirm payment details on WhatsApp before checkout.",
     ar: "باقات بيت الإبداع بالدولار. تفاصيل الدفع تُؤكَّد عبر واتساب قبل الاشتراك.",
+  },
+  aboutTitle: {
+    en: "About",
+    ar: "من نحن",
+  },
+  aboutDescription: {
+    en: "Home of Creativity (HOC) is a creative and branding agency in Al Hamra, Damascus, serving clients in Syria and Saudi Arabia.",
+    ar: "بيت الإبداع (HOC) وكالة إبداع وهوية في الحمراء بدمشق، تخدم عملاء في سوريا والسعودية.",
+  },
+  servicesTitle: {
+    en: "Services",
+    ar: "خدماتنا",
+  },
+  servicesDescription: {
+    en: "The fourteen published practices at Home of Creativity (HOC) — visual identity, marketing, social media, websites, events, and more.",
+    ar: "الممارسات الأربع عشرة المنشورة لدى بيت الإبداع (HOC) — الهوية البصرية، التسويق، السوشال ميديا، المواقع، الفعاليات، وغيرها.",
   },
   locationsTitle: {
     en: "Locations",
@@ -70,8 +86,8 @@ export const seoCopy = {
     ar: "السوشال ميديا",
   },
   socialDescription: {
-    en: "Follow Home of Creativity on Instagram and Facebook — brand work from Damascus and Riyadh.",
-    ar: "تابعوا بيت الإبداع على إنستغرام وفيسبوك — أعمال الهوية من دمشق والرياض.",
+    en: "Follow Home of Creativity on Instagram and Facebook — brand work from Damascus, for clients across Syria and Saudi Arabia.",
+    ar: "تابعوا بيت الإبداع على إنستغرام وفيسبوك — أعمال هوية من دمشق، لعملاء في سوريا والسعودية.",
   },
   articlesTitle: {
     en: "Articles",

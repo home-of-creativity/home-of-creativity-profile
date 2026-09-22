@@ -7,7 +7,7 @@ import { LoadingLottie } from "@/components/LoadingLottie";
 import { DeferredFillImage, ProgressiveImage } from "@/components/ProgressiveImage";
 import { projects } from "@/lib/content";
 import { fetchPortfolioProjects, type PortfolioCategory, type PortfolioProject } from "@/lib/portfolio-api";
-import { withBasePath } from "@/lib/base-path";
+import { pagePath, withBasePath } from "@/lib/base-path";
 import { useLanguage } from "@/lib/i18n";
 import { useInViewOnce } from "@/lib/use-in-view";
 import { cn } from "@/lib/cn";
@@ -317,7 +317,7 @@ export function Projects() {
             return (
               <Link
                 key={project.id}
-                href={`/projects/detail/?id=${project.id}`}
+                href={pagePath(`projects/${project.id}`)}
                 className="project-card group text-start focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
               >
                 {project.image_url ? (

@@ -43,8 +43,9 @@ test.describe("SEO and geo", () => {
       return Array.isArray(value) ? value : value ? [value] : [];
     });
     expect(aliases).toEqual(
-      expect.arrayContaining(["Creativation Source", "بيت الإبداع", "بيت الابداع", "HOC", "hoc", "Home"]),
+      expect.arrayContaining(["Creativation Source", "بيت الإبداع", "بيت الابداع", "HOC"]),
     );
+    expect(aliases).not.toEqual(expect.arrayContaining(["Home", "hoc"]));
   });
 
   test("robots and sitemap are public", async ({ request }) => {

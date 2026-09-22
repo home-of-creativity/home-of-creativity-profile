@@ -46,6 +46,25 @@ html[data-i18n-pending="1"]:not([data-i18n-ready]) body {
   visibility: hidden;
 }
 
+/*
+ * Bilingual server-rendered content blocks (article/project detail pages).
+ * Both languages are present in the static HTML for crawlers; this toggles
+ * which one is visible to match the locale already applied to <html> by
+ * LOCALE_BOOT_SCRIPT / LanguageProvider — no client re-render required.
+ */
+[data-lang] {
+  display: none;
+}
+
+html[data-locale="ar"] [data-lang="ar"],
+html:not([data-locale]) [data-lang="ar"] {
+  display: block;
+}
+
+html[data-locale="en"] [data-lang="en"] {
+  display: block;
+}
+
 html {
   direction: rtl;
   color-scheme: light;
@@ -633,55 +652,65 @@ html[dir="rtl"] .lux-rule {
   position: relative;
   overflow: hidden;
   width: 100%;
-  cursor: grab;
   user-select: none;
   -webkit-user-select: none;
   touch-action: pan-y;
   direction: ltr;
   unicode-bidi: isolate;
   text-align: left;
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    #000 6%,
-    #000 18%,
-    #000 82%,
-    #000 94%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    #000 6%,
-    #000 18%,
-    #000 82%,
-    #000 94%,
-    transparent 100%
-  );
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
 }
 
 html[dir="rtl"] .client-marquee-viewport {
   direction: ltr;
 }
 
-.client-marquee-viewport:active {
-  cursor: grabbing;
+.client-marquee-viewport::before,
+.client-marquee-viewport::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  z-index: 1;
+  width: 7%;
+  pointer-events: none;
+}
+
+.client-marquee-viewport::before {
+  inset-inline-start: 0;
+  background: linear-gradient(to right, var(--brand-purple), transparent);
+}
+
+.client-marquee-viewport::after {
+  inset-inline-end: 0;
+  background: linear-gradient(to left, var(--brand-purple), transparent);
 }
 
 .client-marquee-track {
   display: flex;
   align-items: center;
   width: max-content;
-  gap: clamp(1.6rem, 4vw, 2.75rem);
+  gap: 0;
   padding-inline: 0;
-  will-change: transform;
   direction: ltr;
   position: relative;
-  inset-inline-start: 0;
+  animation: client-marquee-scroll var(--marquee-duration, 28s) linear infinite;
+}
+
+.client-marquee-viewport.is-paused .client-marquee-track,
+.client-marquee-viewport.is-offscreen .client-marquee-track,
+.client-marquee-viewport.is-static .client-marquee-track {
+  animation-play-state: paused;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .client-marquee-viewport:hover .client-marquee-track {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes client-marquee-scroll {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
 }
 
 .client-marquee-set {
@@ -689,6 +718,7 @@ html[dir="rtl"] .client-marquee-viewport {
   align-items: center;
   flex: 0 0 auto;
   gap: clamp(1.6rem, 4vw, 2.75rem);
+  padding-inline-end: clamp(1.6rem, 4vw, 2.75rem);
 }
 
 .client-logo-disc {
@@ -703,8 +733,8 @@ html[dir="rtl"] .client-marquee-viewport {
   border: 2px solid color-mix(in srgb, var(--brand-cream) 55%, var(--brand-purple));
   padding: 0;
   text-decoration: none;
-  box-shadow: 0 12px 30px rgb(10 6 24 / 0.34);
-  transition: border-color 0.25s ease;
+  box-shadow: 0 4px 12px rgb(10 6 24 / 0.18);
+  contain: layout paint;
 }
 
 .client-logo-disc:has(.client-logo-disc-image) {
@@ -764,7 +794,8 @@ html[dir="rtl"] .client-marquee-viewport {
   }
 
   .client-marquee-track {
-    transform: none !important;
+    animation: none;
+    transform: none;
     width: max-content;
   }
 }

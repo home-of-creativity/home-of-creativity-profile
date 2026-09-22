@@ -5,12 +5,12 @@ import { useEffect, useState } from "react";
 import { fetchArticles, type Article } from "@/lib/articles-api";
 import { articlesPage } from "@/lib/content";
 import { useLanguage } from "@/lib/i18n";
-import { withBasePath } from "@/lib/base-path";
+import { pagePath } from "@/lib/base-path";
 import { Reveal, Stagger, StaggerItem } from "../motion";
 import { SectionHeading, Shell } from "../ui";
 
 function articleHref(slug: string) {
-  return withBasePath(`/articles/detail/?slug=${encodeURIComponent(slug)}`);
+  return pagePath(`articles/${slug}`);
 }
 
 function localizedTitle(article: Article, locale: "en" | "ar") {

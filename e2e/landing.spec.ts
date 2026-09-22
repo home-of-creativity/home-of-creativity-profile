@@ -159,7 +159,7 @@ test.describe("Landing navbar and locale", () => {
     await expect(card).toBeVisible({ timeout: 15_000 });
     const title = ((await card.innerText()) ?? "").split("\n")[0]?.trim();
     await card.click();
-    await expect(page).toHaveURL(/\/projects\/detail\/\?id=/);
+    await expect(page).toHaveURL(/\/projects\/\d+\/?$/);
     if (title) {
       await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
     }

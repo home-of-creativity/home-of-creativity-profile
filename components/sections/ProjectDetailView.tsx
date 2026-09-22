@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { ProgressiveImage } from "@/components/ProgressiveImage";
 import { projectDetail } from "@/lib/content";
-import { fetchPortfolioProject, type PortfolioProject, type PortfolioProjectImage } from "@/lib/portfolio-api";
+import type { PortfolioProject, PortfolioProjectImage } from "@/lib/portfolio-api";
 import { useLanguage } from "@/lib/i18n";
 import { cn } from "@/lib/cn";
 import { Shell } from "../ui";
@@ -39,54 +39,19 @@ function allImages(project: PortfolioProject, locale: "en" | "ar") {
   return merged.filter((image) => image.image_url);
 }
 
-export function ProjectDetailView({ id }: { id: string }) {
+export function ProjectDetailView({ project }: { project: PortfolioProject }) {
   const { t, locale } = useLanguage();
-  const [project, setProject] = useState<PortfolioProject | null>(null);
-  const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  useEffect(() => {
-    setLoading(true);
-    fetchPortfolioProject(id)
-      .then(setProject)
-      .catch(() => setProject(null))
-      .finally(() => setLoading(false));
-  }, [id]);
-
-  const images = useMemo(() => (project ? allImages(project, locale) : []), [project, locale]);
+  const images = useMemo(() => allImages(project, locale), [project, locale]);
   const socialEntries = useMemo(
     () =>
-      project
-        ? SOCIAL_ORDER.flatMap((platform) => {
-            const url = project.social_links?.[platform];
-            return url ? [{ platform, url }] : [];
-          })
-        : [],
+      SOCIAL_ORDER.flatMap((platform) => {
+        const url = project.social_links?.[platform];
+        return url ? [{ platform, url }] : [];
+      }),
     [project],
   );
-
-  if (loading) {
-    return (
-      <section className="project-detail-page py-24">
-        <Shell>
-          <p className="muted text-[var(--brand-muted)]">{t(projectDetail.loading)}</p>
-        </Shell>
-      </section>
-    );
-  }
-
-  if (!project) {
-    return (
-      <section className="project-detail-page py-24">
-        <Shell>
-          <p className="text-[var(--brand-muted)]">{t(projectDetail.notFound)}</p>
-          <Link href="/#projects" className="project-detail-back mt-6 inline-flex">
-            {t(projectDetail.back)}
-          </Link>
-        </Shell>
-      </section>
-    );
-  }
 
   const activeImage = images[activeIndex] ?? images[0];
 

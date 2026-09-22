@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { ProgressiveImage } from "@/components/ProgressiveImage";
 import { showcaseClients as copy } from "@/lib/content";
 import {
@@ -9,25 +9,18 @@ import {
 } from "@/lib/portfolio-api";
 import { useLanguage } from "@/lib/i18n";
 import { cn } from "@/lib/cn";
-import { useGsapScope } from "@/lib/gsap-client";
 import { Reveal } from "../motion";
 import { SectionHeading, Shell } from "../ui";
 
 
-function ClientLogoDisc({
-  client,
-  onHoverStart,
-  onHoverEnd,
-}: {
-  client: ShowcaseClient;
-  onHoverStart?: () => void;
-  onHoverEnd?: () => void;
-}) {
+function ClientLogoDisc({ client }: { client: ShowcaseClient }) {
   const initials = client.name.slice(0, 2).toUpperCase();
   const content = client.logo_url ? (
     <ProgressiveImage
       src={client.logo_url}
       alt={client.name}
+      width={120}
+      height={120}
       draggable={false}
       imgClassName="client-logo-disc-image"
     />
@@ -37,13 +30,6 @@ function ClientLogoDisc({
     </span>
   );
 
-  const hoverProps = {
-    onMouseEnter: onHoverStart,
-    onMouseLeave: onHoverEnd,
-    onFocus: onHoverStart,
-    onBlur: onHoverEnd,
-  };
-
   if (client.website_url) {
     return (
       <a
@@ -52,7 +38,6 @@ function ClientLogoDisc({
         rel="noreferrer noopener"
         className="client-logo-disc"
         aria-label={client.name}
-        {...hoverProps}
       >
         {content}
       </a>
@@ -60,7 +45,7 @@ function ClientLogoDisc({
   }
 
   return (
-    <div className="client-logo-disc" aria-label={client.name} {...hoverProps}>
+    <div className="client-logo-disc" aria-label={client.name}>
       {content}
     </div>
   );
@@ -68,49 +53,23 @@ function ClientLogoDisc({
 
 function ClientLogoSet({
   clients,
-  setRef,
   hidden = false,
-  onHoverStart,
-  onHoverEnd,
 }: {
   clients: ShowcaseClient[];
-  setRef?: React.RefObject<HTMLDivElement | null>;
   hidden?: boolean;
-  onHoverStart?: () => void;
-  onHoverEnd?: () => void;
 }) {
   return (
-    <div
-      ref={setRef}
-      className="client-marquee-set"
-      aria-hidden={hidden || undefined}
-    >
-      {clients.map((client) => (
-        <ClientLogoDisc
-          key={client.id}
-          client={client}
-          onHoverStart={onHoverStart}
-          onHoverEnd={onHoverEnd}
-        />
+    <div className="client-marquee-set" aria-hidden={hidden || undefined}>
+      {clients.map((client, index) => (
+        <ClientLogoDisc key={`${hidden ? "b" : "a"}-${client.id}-${index}`} client={client} />
       ))}
     </div>
   );
 }
 
 function ClientLogoMarquee({ clients }: { clients: ShowcaseClient[] }) {
-  const { t, locale } = useLanguage();
+  const { t } = useLanguage();
   const viewportRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const setRef = useRef<HTMLDivElement>(null);
-  const hoverCountRef = useRef(0);
-
-  const pauseScroll = () => {
-    hoverCountRef.current += 1;
-  };
-
-  const resumeScroll = () => {
-    hoverCountRef.current = Math.max(0, hoverCountRef.current - 1);
-  };
 
   const loopClients = useMemo(() => {
     if (clients.length === 0) return [];
@@ -119,141 +78,54 @@ function ClientLogoMarquee({ clients }: { clients: ShowcaseClient[] }) {
     let pass = 0;
 
     while (items.length < Math.max(clients.length, 6)) {
-      clients.forEach((client, index) => {
-        items.push({
-          ...client,
-          id: client.id * 1000 + pass * 100 + index,
-        });
+      clients.forEach((client) => {
+        items.push(client);
       });
       pass += 1;
+      if (pass > 8) break;
     }
 
     return items;
   }, [clients]);
 
-  useGsapScope(
-    ({ gsap }) => {
-      const viewport = viewportRef.current;
-      const track = trackRef.current;
-      const setEl = setRef.current;
-      if (!viewport || !track || !setEl || clients.length === 0) return;
+  const duration = Math.max(22, loopClients.length * 2.6);
 
-      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (reduced) return;
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport || loopClients.length === 0) return;
 
-      let disposed = false;
-      let draggableInstance: { kill: () => void } | null = null;
-      let loopWidth = 0;
-      let dragging = false;
-      let inView = true;
-      const speed = 1.5;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) {
+      viewport.classList.add("is-static");
+      return;
+    }
 
-      const measure = () => {
-        const trackStyles = window.getComputedStyle(track);
-        const gap = Number.parseFloat(trackStyles.columnGap || trackStyles.gap || "0") || 0;
-        loopWidth = setEl.offsetWidth + gap;
-      };
+    let scrollPause = 0;
+    const setPaused = (on: boolean) => {
+      viewport.classList.toggle("is-paused", on);
+    };
 
-      const wrapX = (value: number) => {
-        if (loopWidth <= 0) return value;
-        while (value <= -loopWidth) value += loopWidth;
-        while (value > 0) value -= loopWidth;
-        return value;
-      };
+    const visibility = new IntersectionObserver(
+      ([entry]) => {
+        viewport.classList.toggle("is-offscreen", !entry?.isIntersecting);
+      },
+      { rootMargin: "80px 0px" },
+    );
+    visibility.observe(viewport);
 
-      const tick = () => {
-        if (!inView || dragging || hoverCountRef.current > 0 || loopWidth <= 0) return;
-        const next = wrapX(Number(gsap.getProperty(track, "x")) - speed);
-        gsap.set(track, { x: next });
-      };
+    const onPageScroll = () => {
+      setPaused(true);
+      window.clearTimeout(scrollPause);
+      scrollPause = window.setTimeout(() => setPaused(false), 160);
+    };
+    window.addEventListener("scroll", onPageScroll, { passive: true });
 
-      const setup = async () => {
-        await new Promise<void>((resolve) => {
-          requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
-        });
-
-        if (disposed) return;
-
-        measure();
-        if (loopWidth <= 0) return;
-
-        gsap.set(track, { x: 0, force3D: true });
-        gsap.ticker.add(tick);
-
-        try {
-          const [{ Draggable }, { InertiaPlugin }] = await Promise.all([
-            import("gsap/Draggable"),
-            import("gsap/InertiaPlugin"),
-          ]);
-
-          if (disposed) return;
-
-          gsap.registerPlugin(Draggable, InertiaPlugin);
-
-          const instances = Draggable.create(track, {
-            type: "x",
-            inertia: true,
-            cursor: "inherit",
-            activeCursor: "grabbing",
-            edgeResistance: 0.82,
-            onPress() {
-              dragging = true;
-            },
-            onDrag() {
-              gsap.set(track, { x: wrapX(Number(gsap.getProperty(track, "x"))) });
-            },
-            onThrowUpdate() {
-              gsap.set(track, { x: wrapX(Number(gsap.getProperty(track, "x"))) });
-            },
-            onRelease() {
-              dragging = false;
-              gsap.set(track, { x: wrapX(Number(gsap.getProperty(track, "x"))) });
-            },
-          });
-
-          draggableInstance = instances[0] ?? null;
-        } catch {
-          /* auto-scroll still works without drag inertia */
-        }
-      };
-
-      void setup();
-
-      const onResize = () => {
-        const previous = loopWidth;
-        measure();
-        if (loopWidth <= 0) return;
-
-        const currentX = Number(gsap.getProperty(track, "x"));
-        if (previous > 0 && loopWidth !== previous) {
-          gsap.set(track, { x: wrapX(currentX) });
-        }
-      };
-
-      window.addEventListener("resize", onResize);
-      const resizeObserver = new ResizeObserver(onResize);
-      resizeObserver.observe(viewport);
-      resizeObserver.observe(setEl);
-      resizeObserver.observe(track);
-      const visibility = new IntersectionObserver(
-        ([entry]) => {
-          inView = Boolean(entry?.isIntersecting);
-        },
-        { rootMargin: "120px 0px" },
-      );
-      visibility.observe(viewport);
-
-      return () => {
-        disposed = true;
-        window.removeEventListener("resize", onResize);
-        resizeObserver.disconnect();
-        visibility.disconnect();
-        gsap.ticker.remove(tick);
-        draggableInstance?.kill();
-      };
-    },
-    { scope: viewportRef, dependencies: [clients, loopClients, locale] },
-  );
+    return () => {
+      visibility.disconnect();
+      window.removeEventListener("scroll", onPageScroll);
+      window.clearTimeout(scrollPause);
+    };
+  }, [loopClients.length]);
 
   return (
     <div className="client-marquee-shell">
@@ -262,26 +134,11 @@ function ClientLogoMarquee({ clients }: { clients: ShowcaseClient[] }) {
         className="client-marquee-viewport"
         dir="ltr"
         aria-label={t(copy.gridLabel)}
+        style={{ "--marquee-duration": `${duration}s` } as CSSProperties}
       >
-        <div ref={trackRef} className="client-marquee-track">
-          <ClientLogoSet
-            clients={loopClients}
-            setRef={setRef}
-            onHoverStart={pauseScroll}
-            onHoverEnd={resumeScroll}
-          />
-          <ClientLogoSet
-            clients={loopClients}
-            hidden
-            onHoverStart={pauseScroll}
-            onHoverEnd={resumeScroll}
-          />
-          <ClientLogoSet
-            clients={loopClients}
-            hidden
-            onHoverStart={pauseScroll}
-            onHoverEnd={resumeScroll}
-          />
+        <div className="client-marquee-track">
+          <ClientLogoSet clients={loopClients} />
+          <ClientLogoSet clients={loopClients} hidden />
         </div>
       </div>
     </div>

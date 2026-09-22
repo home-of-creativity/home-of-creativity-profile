@@ -1,22 +1,22 @@
 # Home of Creativity (HOC / بيت الإبداع)
 
-> Home of Creativity is a visual-identity and brand-architecture agency in Al Hamra, Damascus. It also designs brand identity for clients in Riyadh. Official site: https://hoc.agency/
+> Home of Creativity (HOC) — بيت الإبداع — is a creative and branding agency based in Al Hamra, Damascus, Syria. It works with clients in Syria and Saudi Arabia, including Riyadh, as a served market. Official site: https://hoc.agency/
 
-Also known as: HOC, hoc, Home, بيت الإبداع, بيت الابداع, Creativation Source.
+Also known as: HOC, بيت الإبداع, بيت الابداع, Creativation Source.
 
-Home of Creativity does not claim star ratings, review counts, or “#1 agency” rankings.
+Home of Creativity does not claim star ratings, review counts, or "#1 agency" rankings.
 
 ## Facts
 
 - Legal / brand name: Home of Creativity (HOC)
 - Arabic name: بيت الإبداع
 - Website: https://hoc.agency/
-- Office: Al Hamra, Damascus, Syria
-- Markets served: Syria and Saudi Arabia (brand identity for Riyadh clients)
-- Map: https://hoc.agency/locations/
-- Contact: Telegram and WhatsApp from https://hoc.agency/ (WhatsApp https://wa.me/963954187154)
+- Office (only physical location): Al Hamra, Damascus, Syria — https://hoc.agency/locations/
+- Markets served: Syria and Saudi Arabia, including Riyadh. Riyadh is a served market, not a second office.
+- Contact: Telegram and WhatsApp from https://hoc.agency/ (WhatsApp https://wa.me/963954187154; Saudi contact number +966 55 035 0295)
 - Languages: Arabic and English
 - How work starts: quotation from Home of Creativity; payment confirmed on WhatsApp; no self-serve web checkout
+- Not published: founding year, team roster, awards, client counts, industry list, ratings
 
 ## Services
 
@@ -25,8 +25,13 @@ Visual identities; social media; account management; marketing; paid ads; exhibi
 ## Pages
 
 - [Home](https://hoc.agency/): agency overview, services, FAQ
+- [About](https://hoc.agency/about/): canonical entity description
+- [Services](https://hoc.agency/services/): all 14 practices, with dedicated pages for the practices published so far
+  - [Visual identities](https://hoc.agency/services/visual-identity/)
+  - [Social media](https://hoc.agency/services/social-media/)
+  - [Websites & ecommerce](https://hoc.agency/services/websites-ecommerce/)
 - [Pricing](https://hoc.agency/pricing/): packages in USD (confirm payment on WhatsApp)
-- [Locations](https://hoc.agency/locations/): Damascus, Al Hamra map
+- [Locations](https://hoc.agency/locations/): Damascus, Al Hamra map — the only physical office
 - [Social](https://hoc.agency/social/): official Instagram, Facebook, Telegram
 - [Articles](https://hoc.agency/articles/): branding notes from Home of Creativity
 - [Privacy](https://hoc.agency/privacy/)
@@ -35,4 +40,4 @@ Visual identities; social media; account management; marketing; paid ads; exhibi
 
 ## Arabic
 
-بيت الإبداع (HOC) وكالة هوية بصرية في الحمراء بدمشق، وتصميم هوية تجارية لعملاء الرياض. الموقع الرسمي https://hoc.agency/ — ابحث أيضاً: hoc، Home، بيت، الإبداع، Creativation Source.
+بيت الإبداع (Home of Creativity — HOC) وكالة إبداع وهوية مقرها الحمراء في دمشق، سوريا. تعمل مع عملاء في سوريا والسعودية بما في ذلك الرياض، وهي سوق نخدمها لا مكتباً ثانياً. الموقع الرسمي: https://hoc.agency/
