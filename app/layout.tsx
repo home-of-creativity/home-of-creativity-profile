@@ -140,11 +140,6 @@ export default function RootLayout({
       <body suppressHydrationWarning>
         <SeoJsonLd />
         <Providers>{children}</Providers>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var base=${JSON.stringify(BASE_PATH)};var path=location.pathname;if(base&&path.indexOf(base)===0)path=path.slice(base.length)||"/";var m=path.match(/^\\/articles\\/([^/]+)\\/?$/);if(!m||m[1]==="detail")return;var slug=decodeURIComponent(m[1]);var node=document.querySelector("[data-article-slug]");if(node&&node.getAttribute("data-article-slug")===slug)return;location.replace(base+"/articles/detail/?slug="+encodeURIComponent(slug));}catch(e){}})();`,
-          }}
-        />
       </body>
     </html>
   );

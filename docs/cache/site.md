@@ -41,7 +41,7 @@ No `app/api/`, no `middleware.ts`, no `[locale]` segment.
 | `/locations/damascus/` | `app/locations/damascus/page.tsx` | Canonical office URL. `/locations/` is the index and links here. Map stays Damascus-only. |
 | `/pricing/` | `app/pricing/page.tsx` | Packages + WhatsApp inquiry modal |
 | `/articles/` | `app/articles/page.tsx` | Client list from `GET /articles` only (dashboard). No bundled articles. |
-| `/articles/detail/?slug=` | `app/articles/detail/page.tsx` | Client fetch of `GET /articles/{slug}` so a post added in the dashboard opens before the next static build. Unknown `/articles/{slug}/` paths fall through to the homepage on Caddy (`try_files` → `/index.html`); a layout script sends those to this query URL. |
+| `/articles/detail/?slug=` | `app/articles/detail/page.tsx` | Client fetch of `GET /articles/{slug}` so a post added in the dashboard opens before the next static build. A path with no exported file is the 404 page (`out/404.html`), not the homepage. |
 | `/articles/{slug}/` | `app/articles/[slug]/page.tsx` | **Server Component**, `generateStaticParams`/`generateMetadata` fetch `GET /articles` + `GET /articles/{slug}` at **build time**; bilingual body baked into static HTML via `ArticleDetailStatic` (`data-lang="ar"`/`"en"` blocks, CSS-toggled in `globals.css`, no client fetch) + `Article`+`BreadcrumbList` JSON-LD. Zero pages when the API is unreachable at build time (no article URLs, not a broken fetch) |
 | `/social/` | `app/social/page.tsx` | Indexable Instagram/Facebook/Telegram profiles (`sameAs` + CollectionPage JSON-LD); footer links here |
 | `/privacy/` | `app/privacy/page.tsx` | Privacy policy from `GET /legal/privacy` (demo fallback in `lib/legal-defaults.json`); footer link |
