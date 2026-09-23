@@ -92,7 +92,7 @@ export function ServiceDetailPage({ slug }: { slug: string }) {
                 <div className="flex h-full items-start gap-4 rounded-2xl border border-[var(--brand-ink)]/10 bg-white p-5 shadow-[0_12px_30px_rgb(10_6_24/0.05)]">
                   <span
                     aria-hidden
-                    className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[var(--brand-orange)]/12 font-display text-[0.95rem] font-semibold text-[var(--brand-purple-deep)]"
+                    className="step-index grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[var(--brand-orange)]/12 font-display text-[0.95rem] font-semibold text-[var(--brand-purple-deep)]"
                   >
                     {String(index + 1).padStart(2, "0")}
                   </span>

@@ -172,7 +172,7 @@ function PlanCard({
 
         <div className="mt-5 flex items-end gap-2">
           <p
-            className="font-display m-0 text-[clamp(1.85rem,3.5vw,2.35rem)] font-semibold leading-none text-[var(--brand-purple-deep)]"
+            className="price-figure font-display m-0 text-[clamp(1.85rem,3.5vw,2.35rem)] font-semibold leading-none text-[var(--brand-purple-deep)]"
             suppressHydrationWarning
           >
             {formatAmount(price, locale)}

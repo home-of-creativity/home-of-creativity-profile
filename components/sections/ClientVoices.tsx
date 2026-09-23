@@ -131,10 +131,7 @@ export function ClientVoices() {
                       </svg>
                     ))}
                   </p>
-                  <blockquote className="m-0 mt-3 flex-1">
-                    <p className="m-0 text-[1.05rem] leading-[1.85] text-[var(--brand-ink)]/80">{t(item.quote)}</p>
-                  </blockquote>
-                  <figcaption className="mt-7 w-full border-t border-[var(--brand-ink)]/10 pt-5">
+                  <figcaption className="mt-5 w-full border-t border-[var(--brand-ink)]/10 pt-5">
                     <p className="font-display m-0 text-[1.25rem] leading-snug font-semibold text-[var(--brand-ink)]">
                       {name}
                     </p>

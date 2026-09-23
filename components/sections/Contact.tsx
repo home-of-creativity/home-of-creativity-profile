@@ -274,7 +274,7 @@ export function Contact() {
                                   className="text-[0.95rem] font-medium transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
                                 >
                                   <span className="text-[var(--brand-muted)]">{line.region}</span>{" "}
-                                  <span dir="ltr">{text}</span>
+                                  <span className="contact-number" dir="ltr">{text}</span>
                                 </a>
                               );
                             }
@@ -287,7 +287,7 @@ export function Contact() {
                                   className="text-[0.95rem] font-medium transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
                                 >
                                   <span className="text-[var(--brand-muted)]">{line.region}</span>{" "}
-                                  <span dir="ltr">{text}</span>
+                                  <span className="contact-number" dir="ltr">{text}</span>
                                 </a>
                               );
                             }

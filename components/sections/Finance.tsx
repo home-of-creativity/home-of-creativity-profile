@@ -49,7 +49,7 @@ export function Finance() {
               <article className="lux-card group flex h-full flex-col border border-white/12 bg-[color-mix(in_srgb,var(--brand-purple)_42%,transparent)] p-7 backdrop-blur-sm">
                 <div className="mb-8 flex items-center justify-between">
                   <span className="lux-rule block h-px w-10 bg-[var(--brand-orange)]" />
-                  <span className="text-[0.72rem] text-white/40">
+                  <span className="finance-index text-[0.72rem] text-white/40">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                 </div>
