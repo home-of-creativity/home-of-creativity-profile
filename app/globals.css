@@ -658,7 +658,6 @@ html[dir="rtl"] .lux-rule {
   direction: ltr;
   unicode-bidi: isolate;
   text-align: left;
-  contain: paint;
 }
 
 html[dir="rtl"] .client-marquee-viewport {
@@ -694,8 +693,6 @@ html[dir="rtl"] .client-marquee-viewport {
   direction: ltr;
   position: relative;
   transform: translate3d(0, 0, 0);
-  backface-visibility: hidden;
-  will-change: transform;
   animation: client-marquee-scroll var(--marquee-duration, 28s) linear infinite;
 }
 
@@ -706,7 +703,6 @@ html[dir="rtl"] .client-marquee-track {
 .client-marquee-viewport.is-offscreen .client-marquee-track,
 .client-marquee-viewport.is-static .client-marquee-track {
   animation-play-state: paused;
-  will-change: auto;
 }
 
 @media (hover: hover) and (pointer: fine) {

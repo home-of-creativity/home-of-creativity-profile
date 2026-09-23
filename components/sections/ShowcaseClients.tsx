@@ -8,7 +8,6 @@ import {
 } from "@/lib/portfolio-api";
 import { useLanguage } from "@/lib/i18n";
 import { cn } from "@/lib/cn";
-import { Reveal } from "../motion";
 import { SectionHeading, Shell } from "../ui";
 
 
@@ -27,9 +26,7 @@ function ClientLogoDisc({
       width={120}
       height={120}
       draggable={false}
-      loading="lazy"
       decoding="async"
-      fetchPriority="low"
       className="client-logo-disc-image"
     />
   ) : (
@@ -116,7 +113,7 @@ function ClientLogoMarquee({ clients }: { clients: ShowcaseClient[] }) {
       ([entry]) => {
         viewport.classList.toggle("is-offscreen", !entry?.isIntersecting);
       },
-      { rootMargin: "120px 0px" },
+      { rootMargin: "100% 0px" },
     );
     visibility.observe(viewport);
 
@@ -178,13 +175,13 @@ export function ShowcaseClients() {
       aria-busy={!ready}
     >
       <Shell className="relative mb-10 md:mb-12">
-        <Reveal className="mx-auto max-w-2xl text-center">
+        <div className="mx-auto max-w-2xl text-center">
           <SectionHeading
             title={copy.title}
             align="center"
             invert
           />
-        </Reveal>
+        </div>
       </Shell>
 
       {ready ? (
