@@ -41,7 +41,7 @@ export function loadGsap(): Promise<GsapBundle> {
           ]);
 
           gsap.registerPlugin(ScrollTrigger);
-          ScrollTrigger.config({ ignoreMobileResize: true });
+          ScrollTrigger.config({ ignoreMobileResize: true, limitCallbacks: true });
           cached = { gsap, ScrollTrigger };
           resolve(cached);
         } catch (error) {

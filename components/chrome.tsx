@@ -248,7 +248,7 @@ export function Nav() {
               trigger: document.documentElement,
               start: "top top",
               end: "bottom bottom",
-              scrub: 0.35,
+              scrub: true,
             },
           },
         );

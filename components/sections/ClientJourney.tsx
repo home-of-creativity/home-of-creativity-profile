@@ -30,71 +30,75 @@ export function ClientJourney() {
       const pin = pinRef.current;
       const track = trackRef.current;
       if (!pin || !track) return;
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const mm = gsap.matchMedia();
+      mm.add("(min-width: 900px) and (prefers-reduced-motion: no-preference)", () => {
+        const count = steps.length;
+        if (count < 2) return;
 
-      const count = steps.length;
-      if (count < 2) return;
+        const units = (count - 1) * (HOLD + TRAVEL) + HOLD;
+        const segment = HOLD + TRAVEL;
 
-      const units = (count - 1) * (HOLD + TRAVEL) + HOLD;
-      const segment = HOLD + TRAVEL;
-
-      const timeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: pin,
-          start: "top top",
-          end: () => `+=${window.innerHeight * units}`,
-          pin: true,
-          scrub: 0.85,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-          onUpdate(self) {
-            const time = self.progress * units;
-            const index = Math.min(count - 1, Math.floor((time + TRAVEL / 2) / segment));
-            panels.current.forEach((panel, i) => {
-              panel?.setAttribute("aria-hidden", i === index ? "false" : "true");
-            });
+        const timeline = gsap.timeline({
+          scrollTrigger: {
+            trigger: pin,
+            start: "top top",
+            end: () => `+=${window.innerHeight * units}`,
+            pin: true,
+            scrub: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            fastScrollEnd: true,
+            onUpdate(self) {
+              const time = self.progress * units;
+              const index = Math.min(count - 1, Math.floor((time + TRAVEL / 2) / segment));
+              panels.current.forEach((panel, i) => {
+                panel?.setAttribute("aria-hidden", i === index ? "false" : "true");
+              });
+            },
           },
-        },
-      });
+        });
 
-      const reveal = (index: number, at: number) => {
-        const frame = frames.current[index];
-        const panel = panels.current[index];
-        if (frame) {
+        const reveal = (index: number, at: number) => {
+          const frame = frames.current[index];
+          const panel = panels.current[index];
+          if (frame) {
+            timeline.fromTo(
+              frame,
+              { scale: 1.07, xPercent: index === 0 ? 0 : 4 },
+              { scale: 1, xPercent: 0, duration: TRAVEL, ease: "power3.out", force3D: true },
+              at,
+            );
+          }
+          if (!panel) return;
           timeline.fromTo(
-            frame,
-            { scale: 1.07, xPercent: index === 0 ? 0 : 4 },
-            { scale: 1, xPercent: 0, duration: TRAVEL, ease: "power3.out", force3D: true },
+            panel.querySelectorAll("[data-nivx-part]"),
+            { y: 20, opacity: 0 },
+            { y: 0, opacity: 1, duration: TRAVEL * 0.65, stagger: 0.04, ease: "power3.out", force3D: true },
+            at + TRAVEL * 0.2,
+          );
+        };
+
+        reveal(0, 0);
+
+        let at = HOLD;
+        for (let index = 0; index < count - 1; index += 1) {
+          const step = index + 1;
+          timeline.to(
+            track,
+            {
+              x: () => -(step * pin.offsetWidth),
+              duration: TRAVEL,
+              ease: "power3.inOut",
+              force3D: true,
+            },
             at,
           );
+          reveal(step, at);
+          at += TRAVEL + HOLD;
         }
-        if (!panel) return;
-        timeline.fromTo(
-          panel.querySelectorAll("[data-nivx-part]"),
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: TRAVEL * 0.65, stagger: 0.04, ease: "power3.out", force3D: true },
-          at + TRAVEL * 0.2,
-        );
-      };
+      });
 
-      reveal(0, 0);
-
-      let at = HOLD;
-      for (let index = 0; index < count - 1; index += 1) {
-        const step = index + 1;
-        timeline.to(
-          track,
-          {
-            x: () => -(step * pin.offsetWidth),
-            duration: TRAVEL,
-            ease: "power3.inOut",
-            force3D: true,
-          },
-          at,
-        );
-        reveal(step, at);
-        at += TRAVEL + HOLD;
-      }
+      return () => mm.revert();
     },
     { scope: sectionRef, dependencies: [locale, steps.length] },
   );
@@ -116,7 +120,7 @@ export function ClientJourney() {
       </header>
 
       <div ref={pinRef} dir="ltr" className="journey-nivx-pin relative h-[100dvh] min-h-[100svh] w-full overflow-hidden">
-        <div ref={trackRef} className="journey-nivx-track flex h-full w-max will-change-transform">
+        <div ref={trackRef} className="journey-nivx-track flex h-full w-max">
           {steps.map((step, index) => (
             <article
               key={step.id}
@@ -131,7 +135,7 @@ export function ClientJourney() {
                 ref={(node) => {
                   frames.current[index] = node;
                 }}
-                className="absolute inset-0 will-change-transform"
+                className="journey-nivx-frame absolute inset-0"
               >
                 <img
                   src={withBasePath(step.image)}
@@ -143,7 +147,7 @@ export function ClientJourney() {
                 />
               </div>
               <div aria-hidden className="journey-slide-veil" />
-              <div className="absolute inset-x-0 bottom-0 z-10 px-5 pb-10 md:px-12 md:pb-16">
+              <div className="journey-nivx-copy absolute inset-x-0 bottom-0 z-10 px-5 pb-10 md:px-12 md:pb-16">
                 <div className="mx-auto max-w-3xl">
                   <h3 data-nivx-part className="font-display m-0 text-[clamp(1.8rem,4vw,3.2rem)] font-semibold leading-[1.12]">
                     {t(step.title)}
