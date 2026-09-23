@@ -150,12 +150,16 @@ html[data-theme="dark"] #about .about-wash {
   opacity: 0.42;
 }
 
+.price-figure {
+  color: var(--brand-purple-deep);
+}
+
 html[data-theme="dark"] .price-figure,
 html[data-theme="dark"] .step-index,
 html[data-theme="dark"] .contact-number,
 html[data-theme="dark"] .ig-profile-stats dd,
 html[data-theme="dark"] #finance .finance-index {
-  color: #fff;
+  color: #fff !important;
 }
 
 html[data-theme="dark"] #contact h2 {
