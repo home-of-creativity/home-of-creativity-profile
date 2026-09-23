@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { SeoServicesJsonLd } from "@/components/SeoServicesJsonLd";
-import { pageDescription, pageTitle, seoCopy } from "@/lib/site";
+import { seoCopy, seoMetaDescription, seoMetaTitle } from "@/lib/site";
 
-const title = pageTitle(seoCopy.servicesTitle.en, seoCopy.servicesTitle.ar);
-const description = pageDescription(seoCopy.servicesDescription.en, seoCopy.servicesDescription.ar);
+const title = seoMetaTitle(seoCopy.servicesTitle);
+const description = seoMetaDescription(seoCopy.servicesDescription);
 
 export const metadata: Metadata = {
   title: { absolute: title },
@@ -18,10 +17,5 @@ export const metadata: Metadata = {
 };
 
 export default function ServicesLayout({ children }: { children: ReactNode }) {
-  return (
-    <>
-      <SeoServicesJsonLd />
-      {children}
-    </>
-  );
+  return children;
 }

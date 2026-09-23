@@ -139,16 +139,20 @@ export function homeJsonLd() {
         hasOfferCatalog: {
           "@type": "OfferCatalog",
           name: "Services",
-          itemListElement: services.items.map((item, index) => ({
-            "@type": "ListItem",
-            position: index + 1,
-            item: {
-              "@type": "Service",
-              name: item.en,
-              alternateName: item.ar,
-              provider: { "@id": `${SITE_URL}/#organization` },
-            },
-          })),
+          itemListElement: services.items.map((item, index) => {
+            const detail = serviceDetails.find((entry) => entry.id === item.id);
+            return {
+              "@type": "ListItem",
+              position: index + 1,
+              item: {
+                "@type": "Service",
+                name: item.en,
+                alternateName: item.ar,
+                provider: { "@id": `${SITE_URL}/#organization` },
+                ...(detail ? { url: `${SITE_URL}/services/${detail.slug}/` } : {}),
+              },
+            };
+          }),
         },
       },
       {
@@ -285,7 +289,7 @@ export function servicesPageJsonLd() {
         "@id": `${SITE_URL}/services/#page`,
         url: `${SITE_URL}/services/`,
         name: `${servicesPage.title.ar} | ${servicesPage.title.en}`,
-        description: servicesPage.lead.en,
+        description: `${servicesPage.lead.ar} ${servicesPage.lead.en}`,
         inLanguage: ["ar", "en"],
         isPartOf: { "@id": `${SITE_URL}/#website` },
         about: { "@id": `${SITE_URL}/#organization` },
@@ -313,7 +317,7 @@ export function servicesPageJsonLd() {
   };
 }
 
-/** `/services/{slug}/` — one dedicated page per confirmed practice. */
+/** `/services/{slug}/` — one page per practice in `services.items`. */
 export function serviceDetailJsonLd(slug: string) {
   const detail = serviceDetails.find((entry) => entry.slug === slug);
   if (!detail) return null;
@@ -324,17 +328,38 @@ export function serviceDetailJsonLd(slug: string) {
     "@context": "https://schema.org",
     "@graph": [
       {
+        "@type": "WebPage",
+        "@id": `${url}#page`,
+        url,
+        name: seoMetaTitle(detail.metaTitle),
+        description: seoMetaDescription(detail.metaDescription),
+        inLanguage: ["ar", "en"],
+        isPartOf: { "@id": `${SITE_URL}/#website` },
+        about: { "@id": `${url}#service` },
+        breadcrumb: { "@id": `${url}#breadcrumb` },
+      },
+      {
         "@type": "Service",
         "@id": `${url}#service`,
         name: detail.title.en,
         alternateName: detail.title.ar,
+        serviceType: detail.title.en,
         url,
-        description: detail.definition.en,
+        description: `${detail.definition.ar} ${detail.definition.en}`,
         provider: { "@id": `${SITE_URL}/#organization` },
         areaServed: [
           { "@type": "Country", name: "Syria" },
           { "@type": "Country", name: "Saudi Arabia" },
         ],
+        hasOfferCatalog: {
+          "@type": "OfferCatalog",
+          name: `${detail.title.ar} | ${detail.title.en}`,
+          itemListElement: detail.covers.map((item, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            item: { "@type": "Service", name: item.en, alternateName: item.ar },
+          })),
+        },
       },
       {
         "@type": "BreadcrumbList",

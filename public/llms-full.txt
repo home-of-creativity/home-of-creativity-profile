@@ -31,12 +31,25 @@ Home of Creativity sends a quotation. Payment details are confirmed on WhatsApp 
 ## Dedicated service pages
 
 - https://hoc.agency/about/ — canonical entity description
-- https://hoc.agency/services/ — all 14 practices
+- https://hoc.agency/services/ — all 14 practices, each with its own page
 - https://hoc.agency/services/branding/ — category page for “branding agency in Damascus”. Not a new practice and not brand strategy.
 - https://hoc.agency/services/brand-identity/ — distinguishes logo, visual identity, and brand identity. The hired practice remains visual identities.
-- https://hoc.agency/services/visual-identity/
-- https://hoc.agency/services/social-media/
-- https://hoc.agency/services/websites-ecommerce/
+- https://hoc.agency/services/marketing/ — market and audience research, marketing plan, campaign messaging
+- https://hoc.agency/services/paid-ads/ — paid social campaigns: targeting, ad design, performance follow-up
+- https://hoc.agency/services/social-media/ — content planning, design, reels, publishing
+- https://hoc.agency/services/account-management/ — daily account operation, replies, reports
+- https://hoc.agency/services/roadside-ads/ — outdoor billboards, print-ready files
+- https://hoc.agency/services/promo-gifts/ — branded gifts and packaging
+- https://hoc.agency/services/filming-editing/ — photo, video, reels, and ad editing
+- https://hoc.agency/services/visual-identity/ — logo, colors, typography, applications, guidelines
+- https://hoc.agency/services/exhibitions-conferences/ — event planning, branding, venue setup, on-the-day coordination
+- https://hoc.agency/services/event-management/ — launches, openings, private events
+- https://hoc.agency/services/booth-design/ — 3D exhibition stand design
+- https://hoc.agency/services/websites-ecommerce/ — company sites and online stores
+- https://hoc.agency/services/app-design/ — app UX, UI, and prototypes
+- https://hoc.agency/services/financial-analysis/ — financial data into dashboards and decision support
+
+Each service page states scope areas in general terms. Exact deliverables, prices, and timelines are confirmed in the quotation and are not published.
 - https://hoc.agency/locations/damascus/ — the one office
 - https://hoc.agency/articles/ — dashboard articles only; each published slug is /articles/{slug}/ after the next site build, and /articles/detail/?slug= opens it immediately
 

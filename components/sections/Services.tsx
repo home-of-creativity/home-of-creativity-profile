@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { services } from "@/lib/content";
 import { pagePath } from "@/lib/base-path";
+import { serviceDetailById } from "@/lib/service-details";
 import { useLanguage } from "@/lib/i18n";
 import { Hummingbird, Wordmark } from "../brand";
 import { Reveal, Stagger, StaggerItem } from "../motion";
@@ -10,30 +11,8 @@ import { SectionHeading, Shell } from "../ui";
 import { cn } from "@/lib/cn";
 
 function serviceHref(id: string) {
-  switch (id) {
-    case "finance":
-      return "#finance";
-    case "exhibitions":
-    case "events":
-    case "booths":
-      return "#project-events";
-    case "identity":
-      return pagePath("services/visual-identity");
-    case "social":
-    case "accounts":
-    case "marketing":
-    case "ads":
-    case "film":
-      return "#project-media";
-    case "gifts":
-    case "outdoor":
-      return "#project-promo";
-    case "web":
-    case "apps":
-      return "#project-digital";
-    default:
-      return "#projects";
-  }
+  const detail = serviceDetailById(id);
+  return detail ? pagePath(`services/${detail.slug}`) : pagePath("services");
 }
 
 const tones = {
@@ -73,7 +52,7 @@ export function Services() {
             const secondary = locale === "ar" ? item.en : item.ar;
             return (
               <StaggerItem key={item.id}>
-                <a
+                <Link
                   href={serviceHref(item.id)}
                   className={cn(
                     "inline-flex max-w-full items-center overflow-hidden rounded-full shadow-[0_10px_30px_rgb(10_6_24/0.24)] transition-transform duration-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]",
@@ -89,7 +68,7 @@ export function Services() {
                   <span className={cn("px-2.5 py-1.5 text-xs leading-tight md:px-4 md:py-2.5 md:text-[0.82rem]", tones[item.tone])}>
                     {secondary}
                   </span>
-                </a>
+                </Link>
               </StaggerItem>
             );
           })}

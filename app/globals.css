@@ -1688,3 +1688,51 @@ html[lang="ar"] .article-card-date {
 .article-body a:hover {
   color: var(--brand-orange);
 }
+
+.voice-stars {
+  display: flex;
+  justify-content: center;
+  gap: 0.28rem;
+  margin: 0.15rem 0 0;
+  color: var(--brand-orange);
+}
+
+.journey-nivx-pin {
+  overflow: hidden;
+}
+
+.journey-slide-veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgb(26 8 56 / 0.78) 0%, rgb(26 8 56 / 0.22) 28%, transparent 52%);
+}
+
+.journey-slide-copy {
+  position: absolute;
+  inset-inline-start: 0;
+  bottom: 0;
+  z-index: 1;
+  max-width: min(46rem, 100%);
+  padding: clamp(1.5rem, 5vw, 4.5rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journey-nivx-pin {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .journey-nivx-track {
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    transform: none !important;
+  }
+
+  .journey-nivx-slide {
+    width: 100%;
+    min-height: 28rem;
+    height: min(100svh, 42rem);
+  }
+}

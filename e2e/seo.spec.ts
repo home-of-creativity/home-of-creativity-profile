@@ -85,6 +85,23 @@ test.describe("SEO and geo", () => {
     expect(xml).toContain("https://hoc.agency/services/visual-identity/");
     expect(xml).toContain("https://hoc.agency/services/brand-identity/");
     expect(xml).toContain("https://hoc.agency/locations/damascus/");
+    for (const slug of ["marketing", "paid-ads", "booth-design", "financial-analysis"]) {
+      expect(xml).toContain(`https://hoc.agency/services/${slug}/`);
+    }
+  });
+
+  test("every service has an indexable page with Service JSON-LD", async ({ page }) => {
+    const origin = new URL(LANDING).origin;
+    await page.goto(`${origin}/services/marketing/`, { waitUntil: "domcontentloaded" });
+    await expect(page).toHaveTitle(/خدمات التسويق .*\| Marketing Services .*\| HOC Agency$/);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/services\/marketing\/?$/);
+    const payloads = await page.locator('script[type="application/ld+json"]').allTextContents();
+    const types = payloads.flatMap((text) => {
+      const parsed = JSON.parse(text || "{}") as { "@graph"?: Array<{ "@type"?: unknown }> };
+      return (parsed["@graph"] ?? []).flatMap((node) => (Array.isArray(node["@type"]) ? node["@type"] : [node["@type"]]));
+    });
+    expect(types).toEqual(expect.arrayContaining(["Service", "BreadcrumbList", "FAQPage"]));
+    expect(types).not.toContain("CollectionPage");
   });
 
   test("social page is indexable with official profile links", async ({ page }) => {

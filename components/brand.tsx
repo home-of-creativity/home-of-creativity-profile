@@ -12,10 +12,12 @@ type MarkProps = {
   float?: boolean;
   /** Wingbeat only — no hover drift. Use for fixed-position hero marks on desktop. */
   stationary?: boolean;
+  /** Wings held up (open FAQ). Otherwise the usual wingbeat when `float` is set. */
+  wingsRaised?: boolean;
 };
 
 export const Hummingbird = forwardRef<SVGSVGElement, MarkProps>(function Hummingbird(
-  { className, title, surface = "dark", float = false, stationary = false },
+  { className, title, surface = "dark", float = false, stationary = false, wingsRaised = false },
   forwardedRef,
 ) {
   const ref = useRef<SVGSVGElement>(null);
@@ -31,10 +33,30 @@ export const Hummingbird = forwardRef<SVGSVGElement, MarkProps>(function Humming
 
   useGsapScope(
     ({ gsap, ScrollTrigger }) => {
-      if (!float) return;
-
       const root = ref.current;
       if (!root) return;
+
+      if (wingsRaised) {
+        const mm = gsap.matchMedia();
+        const pose = () => {
+          const wings = root.querySelector("[data-wings]");
+          if (!wings) return;
+          gsap.set(wings, { svgOrigin: "388 308", rotate: -14 });
+        };
+        mm.add("(prefers-reduced-motion: no-preference)", () => {
+          const wings = root.querySelector("[data-wings]");
+          if (!wings) return;
+          gsap.fromTo(
+            wings,
+            { svgOrigin: "388 308", rotate: 4 },
+            { rotate: -14, duration: 0.45, ease: "power2.out" },
+          );
+        });
+        mm.add("(prefers-reduced-motion: reduce)", pose);
+        return () => mm.revert();
+      }
+
+      if (!float) return;
 
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
@@ -84,7 +106,7 @@ export const Hummingbird = forwardRef<SVGSVGElement, MarkProps>(function Humming
 
       return () => mm.revert();
     },
-    { scope: ref, dependencies: [float, stationary] },
+    { scope: ref, dependencies: [float, stationary, wingsRaised] },
   );
 
   return (

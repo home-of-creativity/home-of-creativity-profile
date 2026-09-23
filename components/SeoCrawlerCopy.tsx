@@ -1,6 +1,7 @@
 import { about, contact, faq, hero, services } from "@/lib/content";
 import { officesGeo } from "@/lib/seo";
-import { SITE_NAME, SITE_NAME_AR, seoCopy, seoMetaDescription, seoMetaTitle } from "@/lib/site";
+import { serviceDetailById } from "@/lib/service-details";
+import { SITE_NAME, SITE_NAME_AR, seoCopy, seoMetaTitle } from "@/lib/site";
 import { officialSocialProfiles } from "@/lib/social-embeds";
 
 function escapeHtml(value: string) {
@@ -27,7 +28,11 @@ function crawlerHtml() {
     .join("");
   const syrPhone = syr?.phones[0] ? ` — ${escapeHtml(syr.phones[0])}` : "";
   const servicesList = services.items
-    .map((item) => `<li>${escapeHtml(item.ar)} / ${escapeHtml(item.en)}</li>`)
+    .map((item) => {
+      const label = `${escapeHtml(item.ar)} / ${escapeHtml(item.en)}`;
+      const detail = serviceDetailById(item.id);
+      return detail ? `<li><a href="/services/${detail.slug}/">${label}</a></li>` : `<li>${label}</li>`;
+    })
     .join("");
   const faqList = faq.items
     .map(

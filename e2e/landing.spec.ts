@@ -120,7 +120,7 @@ test.describe("Landing navbar and locale", () => {
 
   test("section anchors exist for the main journey", async ({ page }) => {
     await page.goto(LANDING, { waitUntil: "domcontentloaded" });
-    for (const id of ["top", "about", "vision", "mission", "services", "clients", "journey", "reels", "social", "projects", "contact"]) {
+    for (const id of ["top", "about", "vision", "mission", "services", "clients", "voices", "journey", "reels", "social", "projects", "faq", "contact"]) {
       await expect(page.locator(`#${id}`)).toHaveCount(1);
     }
     await expect(page.locator("#pricing")).toHaveCount(0);

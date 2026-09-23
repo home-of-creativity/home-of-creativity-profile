@@ -33,9 +33,12 @@ export function ServicesPage() {
               <>
                 <span className="text-[1rem] font-semibold text-[var(--brand-ink)]">{label}</span>
                 {detail ? (
-                  <span className="mt-1 text-[0.82rem] font-semibold text-[var(--brand-orange)]">
-                    {t(servicesPage.viewPage)} →
-                  </span>
+                  <>
+                    <span className="mt-1 text-[0.86rem] leading-snug text-[var(--brand-ink)]/65">{t(detail.tagline)}</span>
+                    <span className="mt-2 text-[0.82rem] font-semibold text-[var(--brand-orange)]">
+                      {t(servicesPage.viewPage)} →
+                    </span>
+                  </>
                 ) : (
                   <span className="mt-1 text-[0.82rem] text-[var(--brand-ink)]/50">
                     {t(servicesPage.comingSoon)}

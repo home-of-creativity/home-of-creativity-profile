@@ -92,12 +92,12 @@ export const seoCopy = {
     en: "Have a new project, an idea you want to develop, or looking for a better way to present your brand online? Talk to the HOC Agency team and share what you're thinking. We'll help you define the right next step and turn the idea into an actionable plan.",
   },
   servicesTitle: {
-    en: "Services",
-    ar: "خدماتنا",
+    ar: "خدمات HOC Agency | أذرع إبداعية وعقل استراتيجي واحد",
+    en: "HOC Agency Services | Many creative arms, one strategic mind",
   },
   servicesDescription: {
-    en: "The fourteen published practices at Home of Creativity (HOC) — visual identity, marketing, social media, websites, events, and more.",
-    ar: "الممارسات الأربع عشرة المنشورة لدى بيت الإبداع (HOC) — الهوية البصرية، التسويق، السوشال ميديا، المواقع، الفعاليات، وغيرها.",
+    ar: "أربع عشرة ممارسة لدى HOC Agency: التسويق، السوشال ميديا، الهوية البصرية، المواقع، الفعاليات، والتحليل المالي. لكل خدمة صفحتها: ماذا تشمل، لمن هي، وكيف تبدأ.",
+    en: "Fourteen practices at HOC Agency: marketing, social media, visual identity, websites, events, and financial analysis. Each service has its own page — what it covers, who it is for, and how to start.",
   },
   locationsTitle: {
     en: "Locations",

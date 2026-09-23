@@ -226,202 +226,14 @@ export const services = {
   ],
 };
 
-type ServiceFaq = { q: Copy; a: Copy };
-
-export type ServiceDetail = {
-  id: string;
-  slug: string;
-  title: Copy;
-  metaDescription: Copy;
-  definition: Copy;
-  audienceLabel: Copy;
-  audience: Copy;
-  processLabel: Copy;
-  process: Copy;
-  faqs: ServiceFaq[];
-};
-
-/**
- * Dedicated pages for the first three published practices (per the GEO
- * audit roadmap). The other eleven practices stay on `/services/` only,
- * until their own definitions are confirmed — do not invent deliverables,
- * pricing, or timelines beyond what `services.items` and the public
- * quotation flow already state.
- */
-export const serviceDetails: ServiceDetail[] = [
-  {
-    id: "identity",
-    slug: "visual-identity",
-    title: { en: "Visual Identity Design in Damascus", ar: "تصميم الهوية البصرية في دمشق" },
-    metaDescription: {
-      en: "Visual identity design from Home of Creativity (HOC) in Al Hamra, Damascus: mark, colors, typography, and applications, for clients in Syria and Saudi Arabia.",
-      ar: "تصميم الهوية البصرية من بيت الإبداع (HOC) في الحمراء بدمشق: الشعار والألوان والخطوط والتطبيقات، لعملاء في سوريا والسعودية.",
-    },
-    definition: {
-      en: "Visual identity is the design of a brand's mark, colors, typography, and applications — the visual system that carries a business across print, digital, and physical spaces. Home of Creativity (HOC), in Al Hamra, Damascus, designs that system for clients in Syria and Saudi Arabia, including Riyadh. What a project includes is confirmed in the quotation, not as a fixed public list.",
-      ar: "الهوية البصرية هي تصميم شعار العلامة وألوانها وخطوطها وتطبيقاتها — النظام البصري الذي يحمل العمل عبر المطبوعات والمنصات الرقمية والمساحات الفعلية. يصمم بيت الإبداع (HOC) في الحمراء بدمشق هذا النظام لعملاء في سوريا والسعودية بما في ذلك الرياض. يُؤكد ما يشمله المشروع في عرض السعر، وليس كقائمة عامة ثابتة.",
-    },
-    audienceLabel: { en: "Who it's for", ar: "لمن هذه الخدمة" },
-    audience: {
-      en: "Businesses and organizations that need a defined visual identity, from a first logo system to a brand refresh. No industries-served list is published; clients are in Syria and Saudi Arabia.",
-      ar: "شركات وجهات تحتاج إلى هوية بصرية محددة، من أول نظام شعار إلى تحديث للعلامة. لا توجد قائمة صناعات منشورة؛ العملاء في سوريا والسعودية.",
-    },
-    processLabel: { en: "How it works", ar: "طريقة العمل" },
-    process: {
-      en: "Start on Telegram or WhatsApp with your brief. Home of Creativity sends a quotation; payment details are confirmed on WhatsApp before design work begins, and files are delivered on Telegram.",
-      ar: "ابدأ عبر تيليجرام أو واتساب بموجز مشروعك. يرسل بيت الإبداع عرض سعر، وتُؤكَّد تفاصيل الدفع عبر واتساب قبل بدء التصميم، وتُسلَّم الملفات عبر تيليجرام.",
-    },
-    faqs: [
-      {
-        q: {
-          en: "What is included in a visual identity project?",
-          ar: "ما الذي تشمله مشاريع الهوية البصرية؟",
-        },
-        a: {
-          en: "Scope depends on the quotation Home of Creativity sends after reviewing your brief. Deliverables are confirmed before payment; they are not published as a fixed list here.",
-          ar: "يعتمد النطاق على عرض السعر الذي يرسله بيت الإبداع بعد مراجعة موجزك. تُؤكَّد المخرجات قبل الدفع، ولا تُنشر كقائمة ثابتة هنا.",
-        },
-      },
-      {
-        q: {
-          en: "Does Home of Creativity design identities for clients in Saudi Arabia?",
-          ar: "هل يصمم بيت الإبداع هويات لعملاء في السعودية؟",
-        },
-        a: {
-          en: "Yes. Home of Creativity designs visual identities for clients in Saudi Arabia, including Riyadh, as a served market — there is no physical HOC office in Riyadh.",
-          ar: "نعم. يصمم بيت الإبداع هويات بصرية لعملاء في السعودية بما في ذلك الرياض، وهي سوق نخدمها — لا يوجد مكتب مادي لبيت الإبداع في الرياض.",
-        },
-      },
-      {
-        q: {
-          en: "How long does a visual identity project take?",
-          ar: "كم تستغرق مشاريع الهوية البصرية؟",
-        },
-        a: {
-          en: "Timelines are not published in advance; they are confirmed in the quotation after Home of Creativity reviews your brief.",
-          ar: "لا تُنشر المواعيد مسبقاً؛ تُؤكَّد في عرض السعر بعد مراجعة بيت الإبداع لموجزك.",
-        },
-      },
-    ],
-  },
-  {
-    id: "social",
-    slug: "social-media",
-    title: { en: "Social media", ar: "السوشال ميديا" },
-    metaDescription: {
-      en: "Social media design and account management from Home of Creativity (HOC), for clients in Syria and Saudi Arabia.",
-      ar: "تصميم السوشال ميديا وإدارة الحسابات من بيت الإبداع (HOC)، لعملاء في سوريا والسعودية.",
-    },
-    definition: {
-      en: "Social media is the ongoing design and publishing of content for a brand's channels — posts, stories, and campaigns that keep a visual identity consistent across platforms. Home of Creativity provides social media as a published service, alongside account management.",
-      ar: "السوشال ميديا هي التصميم والنشر المستمر لمحتوى قنوات العلامة — منشورات وقصص وحملات تحافظ على اتساق الهوية البصرية عبر المنصات. يقدّم بيت الإبداع خدمة السوشال ميديا، إلى جانب إدارة الحسابات.",
-    },
-    audienceLabel: { en: "Who it's for", ar: "لمن هذه الخدمة" },
-    audience: {
-      en: "Businesses and organizations in Syria and Saudi Arabia that need consistent social content and account management. No industries-served list is published.",
-      ar: "شركات وجهات في سوريا والسعودية تحتاج إلى محتوى سوشال ميديا متسق وإدارة حسابات. لا توجد قائمة صناعات منشورة.",
-    },
-    processLabel: { en: "How it works", ar: "طريقة العمل" },
-    process: {
-      en: "Start on Telegram or WhatsApp with your brief. Home of Creativity sends a quotation; payment details are confirmed on WhatsApp before production begins, and content is delivered on Telegram.",
-      ar: "ابدأ عبر تيليجرام أو واتساب بموجز مشروعك. يرسل بيت الإبداع عرض سعر، وتُؤكَّد تفاصيل الدفع عبر واتساب قبل بدء الإنتاج، ويُسلَّم المحتوى عبر تيليجرام.",
-    },
-    faqs: [
-      {
-        q: {
-          en: "What is included in a social media package?",
-          ar: "ما الذي تشمله باقات السوشال ميديا؟",
-        },
-        a: {
-          en: "Scope depends on the quotation Home of Creativity sends after reviewing your brief; published package tiers are listed at hoc.agency/pricing/.",
-          ar: "يعتمد النطاق على عرض السعر الذي يرسله بيت الإبداع بعد مراجعة موجزك؛ باقات الاشتراك المنشورة مذكورة في hoc.agency/pricing/.",
-        },
-      },
-      {
-        q: {
-          en: "Does Home of Creativity manage accounts for clients in Saudi Arabia?",
-          ar: "هل يدير بيت الإبداع حسابات لعملاء في السعودية؟",
-        },
-        a: {
-          en: "Yes. Home of Creativity works with clients in Saudi Arabia, including Riyadh, as a served market — there is no physical HOC office in Riyadh.",
-          ar: "نعم. يعمل بيت الإبداع مع عملاء في السعودية بما في ذلك الرياض، وهي سوق نخدمها — لا يوجد مكتب مادي لبيت الإبداع في الرياض.",
-        },
-      },
-      {
-        q: {
-          en: "How does account management differ from social media design?",
-          ar: "ما الفرق بين إدارة الحسابات وتصميم السوشال ميديا؟",
-        },
-        a: {
-          en: "Both are published as separate services; the exact split of responsibilities is confirmed in the quotation for your project.",
-          ar: "كلاهما خدمة منشورة منفصلة؛ يتم تحديد توزيع المسؤوليات بدقة في عرض السعر الخاص بمشروعك.",
-        },
-      },
-    ],
-  },
-  {
-    id: "web",
-    slug: "websites-ecommerce",
-    title: { en: "Websites & ecommerce", ar: "المواقع والمتاجر الإلكترونية" },
-    metaDescription: {
-      en: "Website and ecommerce design from Home of Creativity (HOC), for clients in Syria and Saudi Arabia.",
-      ar: "تصميم المواقع والمتاجر الإلكترونية من بيت الإبداع (HOC)، لعملاء في سوريا والسعودية.",
-    },
-    definition: {
-      en: "Websites and ecommerce covers designing and building sites and online stores — one of Home of Creativity's published services, alongside app design.",
-      ar: "المواقع والمتاجر الإلكترونية تشمل تصميم وبناء المواقع والمتاجر عبر الإنترنت — من خدمات بيت الإبداع المنشورة، إلى جانب تصميم التطبيقات.",
-    },
-    audienceLabel: { en: "Who it's for", ar: "لمن هذه الخدمة" },
-    audience: {
-      en: "Businesses and organizations in Syria and Saudi Arabia that need a website or online store. No industries-served list is published.",
-      ar: "شركات وجهات في سوريا والسعودية تحتاج إلى موقع أو متجر عبر الإنترنت. لا توجد قائمة صناعات منشورة.",
-    },
-    processLabel: { en: "How it works", ar: "طريقة العمل" },
-    process: {
-      en: "Start on Telegram or WhatsApp with your brief. Home of Creativity sends a quotation; payment details are confirmed on WhatsApp before development begins, and access is delivered on Telegram.",
-      ar: "ابدأ عبر تيليجرام أو واتساب بموجز مشروعك. يرسل بيت الإبداع عرض سعر، وتُؤكَّد تفاصيل الدفع عبر واتساب قبل بدء التطوير، ويُسلَّم الوصول عبر تيليجرام.",
-    },
-    faqs: [
-      {
-        q: {
-          en: "Does Home of Creativity build online stores as well as websites?",
-          ar: "هل يبني بيت الإبداع متاجر إلكترونية إضافة للمواقع؟",
-        },
-        a: {
-          en: "Yes. Websites and ecommerce are published together as one service; scope is confirmed in the quotation.",
-          ar: "نعم. المواقع والمتاجر الإلكترونية منشورة معاً كخدمة واحدة؛ يُؤكَّد النطاق في عرض السعر.",
-        },
-      },
-      {
-        q: {
-          en: "Does Home of Creativity build websites for clients in Saudi Arabia?",
-          ar: "هل يبني بيت الإبداع مواقع لعملاء في السعودية؟",
-        },
-        a: {
-          en: "Yes. Home of Creativity works with clients in Saudi Arabia, including Riyadh, as a served market — there is no physical HOC office in Riyadh.",
-          ar: "نعم. يعمل بيت الإبداع مع عملاء في السعودية بما في ذلك الرياض، وهي سوق نخدمها — لا يوجد مكتب مادي لبيت الإبداع في الرياض.",
-        },
-      },
-      {
-        q: {
-          en: "Is app design part of this service?",
-          ar: "هل تصميم التطبيقات جزء من هذه الخدمة؟",
-        },
-        a: {
-          en: "App design is a separate published service alongside websites and ecommerce; see hoc.agency/services/.",
-          ar: "تصميم التطبيقات خدمة منشورة منفصلة إلى جانب المواقع والمتاجر الإلكترونية؛ راجع hoc.agency/services/.",
-        },
-      },
-    ],
-  },
-];
+export { serviceDetails, type ServiceDetail } from "./service-details";
 
 export const servicesPage = {
   kicker: { en: "Practices", ar: "ممارساتنا" },
   title: { en: "Our services", ar: "خدماتنا" },
   lead: {
-    en: "Fourteen published practices. Definitions and dedicated pages are added as they are confirmed — three are published so far.",
-    ar: "أربع عشرة ممارسة منشورة. تُضاف التعريفات والصفحات المخصصة كلما تم تأكيدها — ثلاث منشورة حتى الآن.",
+    en: "Fourteen practices under one strategic mind. Each has its own page: what it covers, who it is for, and how to start.",
+    ar: "أربع عشرة ممارسة يجمعها عقل استراتيجي واحد. لكل ممارسة صفحتها: ماذا تشمل، لمن هي، وكيف تبدأ.",
   },
   comingSoon: {
     en: "A dedicated page for this practice is not published yet.",
@@ -640,9 +452,18 @@ export const showcaseClients = {
 export const clientVoices = {
   kicker: { en: "In their words", ar: "بكلماتهم" },
   title: { en: "Client notes", ar: "آراء العملاء" },
+  lead: {
+    en: "Partners who trusted us with their brand — and what stayed with them.",
+    ar: "شركاء وثقوا بنا في علاماتهم، وهذا ما بقي معهم.",
+  },
+  role: { en: "Home of Creativity client", ar: "عميل بيت الإبداع" },
+  ratingLabel: { en: "Five stars", ar: "خمس نجوم" },
   items: [
     {
       id: "abu-shaker",
+      /** `id` in `GET /portfolio/clients` — the logo comes from the dashboard. */
+      clientId: 1,
+      aliases: ["abo shakir", "abu shaker", "أبو شاكر"],
       name: { en: "Abu Shaker", ar: "أبو شاكر" },
       quote: {
         en: "From the first brief to the final files, the path was clear. The identity Home of Creativity drew is now the face we introduce ourselves with.",
@@ -651,6 +472,8 @@ export const clientVoices = {
     },
     {
       id: "jaddu-shaker",
+      clientId: 8,
+      aliases: ["جدو شاكر", "jaddu shaker"],
       name: { en: "Jaddu Shaker", ar: "جدو شاكر" },
       quote: {
         en: "We wanted a presence that feels like home: warm and familiar, without noise. Home of Creativity understood that from the first session.",
@@ -659,6 +482,8 @@ export const clientVoices = {
     },
     {
       id: "raheel-roaa",
+      clientId: 2,
+      aliases: ["raheel", "roaa", "رحيل", "رؤى"],
       name: { en: "Raheel & Roaa", ar: "رحيل ورؤى" },
       quote: {
         en: "The name carries a meaning, and the design carried it as it is. The work stayed consistent across social and print.",
@@ -688,10 +513,14 @@ export const clientJourney = {
     en: "From your first message until the vision is complete, your team stays informed — without chaos.",
     ar: "من رسالتك الأولى وحتى اكتمال الرؤية، فريقك على اطلاع دائم بلا عشوائية",
   },
-  cta: { en: "Start on WhatsApp", ar: "ابدأ عبر واتساب" },
   steps: [
     {
       id: "start",
+      image: "/photo/journey-launch.webp",
+      imageAlt: {
+        en: "The HOC hummingbird mark above a single warm light",
+        ar: "علامة الطائر الطنان فوق ضوء دافئ واحد",
+      },
       title: { en: "Launch and agreement", ar: "الانطلاق والاتفاق" },
       body: {
         en: "Share your project on Telegram or WhatsApp in one step. As soon as we receive your vision — text or a file — our team analyzes the requirements at once, and you receive a clear PDF quotation: no chaos, no wasted time.",
@@ -700,6 +529,11 @@ export const clientJourney = {
     },
     {
       id: "build",
+      image: "/photo/journey-build.webp",
+      imageAlt: {
+        en: "The HOC hummingbird mark within a quiet gold lattice",
+        ar: "علامة الطائر الطنان داخل شبكة ذهبية هادئة",
+      },
       title: { en: "Approval and engineering the work", ar: "الاعتماد وهندسة العمل" },
       body: {
         en: "Once you approve the quotation and complete payment securely in the same conversation, the task moves at once to the internal workshops. Marketing, content, and design teams work through our systems to engineer your entity with care.",
@@ -708,6 +542,11 @@ export const clientJourney = {
     },
     {
       id: "handoff",
+      image: "/photo/journey-handoff.webp",
+      imageAlt: {
+        en: "The HOC hummingbird mark in flight toward a dusk horizon",
+        ar: "علامة الطائر الطنان في طيران نحو أفق الغروب",
+      },
       title: { en: "Delivery and the start of the journey", ar: "التسليم وبداية الرحلة" },
       body: {
         en: "You receive the final outputs on Telegram, ready to launch. We handle any requested revisions with full flexibility so the work matches the standard we aim for. We also welcome direct contact through our phone numbers.",

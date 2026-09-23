@@ -21,12 +21,14 @@ export function SectionHeading({
   invert = false,
   align = "start",
   level = 2,
+  id,
 }: {
   title: Copy;
   kicker?: Copy;
   invert?: boolean;
   align?: "start" | "center";
   level?: 1 | 2;
+  id?: string;
 }) {
   const { t, locale } = useLanguage();
   const HeadingTag = level === 1 ? "h1" : "h2";
@@ -51,6 +53,7 @@ export function SectionHeading({
         </p>
       ) : null}
       <HeadingTag
+        id={id}
         className={cn(
           "font-display m-0 text-[clamp(2rem,5vw,3.6rem)] font-semibold leading-[1.05]",
           invert ? "text-[var(--brand-ivory)]" : "text-[var(--brand-ink)]",

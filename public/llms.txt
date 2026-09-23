@@ -26,12 +26,23 @@ Visual identities; social media; account management; marketing; paid ads; exhibi
 
 - [Home](https://hoc.agency/): agency overview, services, FAQ
 - [About](https://hoc.agency/about/): canonical entity description
-- [Services](https://hoc.agency/services/): all 14 practices, with dedicated pages for the practices published so far
+- [Services](https://hoc.agency/services/): all 14 practices, each with its own page
   - [Branding agency in Damascus](https://hoc.agency/services/branding/) — category page; the hired identity practice is visual identities, not a separate brand-strategy product
   - [Brand identity](https://hoc.agency/services/brand-identity/) — logo, visual identity, and brand identity are not the same term
+  - [Marketing](https://hoc.agency/services/marketing/)
+  - [Paid ads](https://hoc.agency/services/paid-ads/)
+  - [Social media management](https://hoc.agency/services/social-media/)
+  - [Account management](https://hoc.agency/services/account-management/)
+  - [Roadside ads](https://hoc.agency/services/roadside-ads/)
+  - [Promo gifts](https://hoc.agency/services/promo-gifts/)
+  - [Filming & editing](https://hoc.agency/services/filming-editing/)
   - [Visual identity design in Damascus](https://hoc.agency/services/visual-identity/)
-  - [Social media](https://hoc.agency/services/social-media/)
+  - [Exhibitions & conferences](https://hoc.agency/services/exhibitions-conferences/)
+  - [Event management](https://hoc.agency/services/event-management/)
+  - [Booth design](https://hoc.agency/services/booth-design/)
   - [Websites & ecommerce](https://hoc.agency/services/websites-ecommerce/)
+  - [App design](https://hoc.agency/services/app-design/)
+  - [Financial analysis](https://hoc.agency/services/financial-analysis/)
 - [Pricing](https://hoc.agency/pricing/): packages in USD (confirm payment on WhatsApp)
 - [Locations](https://hoc.agency/locations/): index of the one office
 - [Damascus](https://hoc.agency/locations/damascus/): Al Hamra map — the only physical office

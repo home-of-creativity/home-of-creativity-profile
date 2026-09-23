@@ -47,7 +47,18 @@ export type PortfolioProject = {
   featured: boolean;
 };
 
-export async function fetchShowcaseClients(): Promise<ShowcaseClient[]> {
+let showcaseClientsRequest: Promise<ShowcaseClient[]> | null = null;
+
+/** Logos marquee and client notes both read this list; share one request per page load. */
+export function fetchShowcaseClients(): Promise<ShowcaseClient[]> {
+  showcaseClientsRequest ??= requestShowcaseClients().catch((error: unknown) => {
+    showcaseClientsRequest = null;
+    throw error;
+  });
+  return showcaseClientsRequest;
+}
+
+async function requestShowcaseClients(): Promise<ShowcaseClient[]> {
   const api = publicApiUrl();
   if (!api) return isDemoDataEnabled() ? demoShowcaseClients() : [];
 
