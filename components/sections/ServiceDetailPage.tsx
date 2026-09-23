@@ -9,6 +9,7 @@ import { findServiceDetail, serviceDetailLabels as labels, serviceProcess } from
 import { whatsappHref } from "@/lib/whatsapp";
 import { Reveal, Stagger, StaggerItem } from "../motion";
 import { Shell } from "../ui";
+import { FaqList } from "./Faq";
 
 const identityLinks = [
   { href: "services/branding", en: "Branding services in Damascus", ar: "خدمات الهوية في دمشق" },
@@ -122,26 +123,14 @@ export function ServiceDetailPage({ slug }: { slug: string }) {
             <h2 id="faq" className="font-display m-0 text-center text-[clamp(1.5rem,3vw,2rem)] font-semibold">
               {t(labels.faq)}
             </h2>
-            <div className="mt-6 border-y border-[var(--brand-ink)]/12">
-              {detail.faqs.map((item) => (
-                <details
-                  key={item.q.en}
-                  name="service-faq"
-                  className="group border-b border-[var(--brand-ink)]/12 last:border-b-0"
-                >
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-[1rem] font-semibold marker:content-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)] [&::-webkit-details-marker]:hidden">
-                    {t(item.q)}
-                    <span
-                      aria-hidden
-                      className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-[var(--brand-ink)]/15 text-[var(--brand-orange)] transition-transform group-open:rotate-45"
-                    >
-                      +
-                    </span>
-                  </summary>
-                  <p className="m-0 pb-5 text-[0.96rem] leading-[1.8] text-[var(--brand-ink)]/72">{t(item.a)}</p>
-                </details>
-              ))}
-            </div>
+            <FaqList
+              name="service-faq"
+              items={detail.faqs.map((item) => ({
+                id: item.q.en,
+                question: t(item.q),
+                answer: t(item.a),
+              }))}
+            />
           </Reveal>
 
           <Reveal className="mx-auto mt-14 max-w-4xl">

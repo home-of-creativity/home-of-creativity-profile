@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { TopicPageCopy } from "@/lib/content";
 import { pagePath } from "@/lib/base-path";
 import { whatsappHref } from "@/lib/whatsapp";
+import { FaqList } from "./Faq";
 
 /**
  * Bilingual category page. Both languages are in the static HTML;
@@ -56,16 +57,14 @@ function TopicLocale({ copy, lang }: { copy: TopicPageCopy; lang: "ar" | "en" })
             <h2 className="font-display m-0 text-[1.4rem] font-semibold text-[var(--brand-ink)]">
               {lang === "ar" ? "أسئلة شائعة" : "FAQ"}
             </h2>
-            <div className="mt-4 border-y border-[var(--brand-ink)]/12">
-              {copy.faqs.map((item) => (
-                <details key={item.q.en} className="group border-b border-[var(--brand-ink)]/12 last:border-b-0">
-                  <summary className="cursor-pointer py-4 text-[0.98rem] font-semibold text-[var(--brand-ink)] marker:content-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]">
-                    {item.q[lang]}
-                  </summary>
-                  <p className="m-0 pb-4 text-[0.95rem] leading-[1.7] text-[var(--brand-ink)]/70">{item.a[lang]}</p>
-                </details>
-              ))}
-            </div>
+            <FaqList
+              name={`topic-faq-${lang}`}
+              items={copy.faqs.map((item) => ({
+                id: item.q.en,
+                question: item.q[lang],
+                answer: item.a[lang],
+              }))}
+            />
           </section>
         ) : null}
 

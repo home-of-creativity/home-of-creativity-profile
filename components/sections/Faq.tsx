@@ -6,8 +6,9 @@ import { useLanguage } from "@/lib/i18n";
 import { Hummingbird } from "../brand";
 import { Reveal } from "../motion";
 import { SectionHeading, Shell } from "../ui";
+import { cn } from "@/lib/cn";
 
-function FaqMark() {
+export function FaqMark() {
   const ref = useRef<HTMLSpanElement>(null);
   const [open, setOpen] = useState(false);
 
@@ -36,6 +37,32 @@ function FaqMark() {
   );
 }
 
+export function FaqList({
+  items,
+  name,
+  className,
+}: {
+  items: { id: string; question: string; answer: string }[];
+  name: string;
+  className?: string;
+}) {
+  return (
+    <div className={cn("max-w-3xl border-y border-[var(--brand-ink)]/12", className ?? "mt-6")}>
+      {items.map((item) => (
+        <details key={item.id} name={name} className="group border-b border-[var(--brand-ink)]/12 last:border-b-0">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-7 marker:content-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)] [&::-webkit-details-marker]:hidden">
+            <h3 className="font-display m-0 text-[1.35rem] leading-snug text-[var(--brand-ink)] md:text-[1.5rem]">
+              {item.question}
+            </h3>
+            <FaqMark />
+          </summary>
+          <p className="m-0 max-w-2xl pb-7 text-[1.05rem] leading-[1.75] text-[var(--brand-ink)]/75">{item.answer}</p>
+        </details>
+      ))}
+    </div>
+  );
+}
+
 export function Faq() {
   const { t } = useLanguage();
 
@@ -56,25 +83,15 @@ export function Faq() {
           </p>
         </Reveal>
 
-        <div className="mt-12 max-w-3xl border-y border-[var(--brand-ink)]/12">
-          {faq.items.map((item) => (
-            <details
-              key={item.id}
-              name="faq"
-              className="group border-b border-[var(--brand-ink)]/12 last:border-b-0"
-            >
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-7 marker:content-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)] [&::-webkit-details-marker]:hidden">
-                <h3 className="font-display m-0 text-[1.35rem] leading-snug text-[var(--brand-ink)] md:text-[1.5rem]">
-                  {t(item.q)}
-                </h3>
-                <FaqMark />
-              </summary>
-              <p className="m-0 max-w-2xl pb-7 text-[1.05rem] leading-[1.75] text-[var(--brand-ink)]/75">
-                {t(item.a)}
-              </p>
-            </details>
-          ))}
-        </div>
+        <FaqList
+          name="faq"
+          className="mt-12"
+          items={faq.items.map((item) => ({
+            id: item.id,
+            question: t(item.q),
+            answer: t(item.a),
+          }))}
+        />
       </Shell>
     </section>
   );

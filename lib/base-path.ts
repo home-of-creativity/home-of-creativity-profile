@@ -30,6 +30,7 @@ export function sectionPath(sectionId: string, onHome: boolean) {
 
 export function pagePath(page: string) {
   const slug = page.replace(/^\/+|\/+$/g, "");
+  if (!slug) return withBasePath("/");
   return withBasePath(`/${slug}/`);
 }
 
