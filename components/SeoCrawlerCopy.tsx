@@ -1,6 +1,6 @@
 import { about, contact, faq, hero, services } from "@/lib/content";
 import { officesGeo } from "@/lib/seo";
-import { SITE_NAME, SITE_NAME_AR, seoCopy } from "@/lib/site";
+import { SITE_NAME, SITE_NAME_AR, seoCopy, seoMetaDescription, seoMetaTitle } from "@/lib/site";
 import { officialSocialProfiles } from "@/lib/social-embeds";
 
 function escapeHtml(value: string) {
@@ -52,7 +52,8 @@ function crawlerHtml() {
     `<ul>${servicesList}</ul>`,
     "</section>",
     "<section>",
-    `<h2>${escapeHtml(`${seoCopy.socialTitle.ar} — ${seoCopy.socialTitle.en}`)}</h2>`,
+    `<h2>${escapeHtml(seoMetaTitle(seoCopy.socialTitle))}</h2>`,
+    `<p>${escapeHtml(seoCopy.socialDescription.ar)} ${escapeHtml(seoCopy.socialDescription.en)}</p>`,
     `<ul>${profiles}</ul>`,
     "</section>",
     "<section>",

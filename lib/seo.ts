@@ -1,7 +1,7 @@
 import type { Article } from "./articles-api";
 import { aboutPage, articlesPage, brandIdentityPage, brandingPage, contact, damascusPage, faq, projects, serviceDetails, services, servicesPage, WHATSAPP_NUMBER } from "./content";
 import type { PortfolioProject } from "./portfolio-api";
-import { SITE_ALTERNATE, SITE_NAME, SITE_NAME_AR, SITE_SHORT, SITE_URL, absoluteUrl, OG_IMAGE_PATH, seoCopy } from "./site";
+import { SITE_ALTERNATE, SITE_NAME, SITE_NAME_AR, SITE_SHORT, SITE_URL, absoluteUrl, OG_IMAGE_PATH, seoCopy, seoMetaDescription, seoMetaTitle } from "./site";
 import { officialSocialProfiles, officialSocialUrls } from "./social-embeds";
 
 export const officesGeo = {
@@ -66,7 +66,7 @@ export function siteJsonLd() {
         "@id": `${SITE_URL}/#organization`,
         name: SITE_NAME,
         alternateName: [SITE_SHORT, SITE_NAME_AR, "بيت الابداع", SITE_ALTERNATE],
-        description: `${seoCopy.homeDescription.ar} ${seoCopy.homeDescription.en}`,
+        description: seoMetaDescription(seoCopy.homeDescription),
         knowsAbout: ["Branding", "Visual identity", "Brand identity", "Damascus"],
         url: `${SITE_URL}/`,
         logo: absoluteUrl("/hummingbird.svg"),
@@ -79,7 +79,7 @@ export function siteJsonLd() {
         url: `${SITE_URL}/`,
         name: SITE_NAME,
         alternateName: [SITE_SHORT, SITE_NAME_AR, "بيت الابداع", SITE_ALTERNATE],
-        description: `${seoCopy.homeDescription.ar} ${seoCopy.homeDescription.en}`,
+        description: seoMetaDescription(seoCopy.homeDescription),
         inLanguage: ["en", "ar"],
         publisher: { "@id": `${SITE_URL}/#organization` },
       },
@@ -234,8 +234,8 @@ export function socialPageJsonLd() {
         "@type": "CollectionPage",
         "@id": `${SITE_URL}/social/#page`,
         url: `${SITE_URL}/social/`,
-        name: `${seoCopy.socialTitle.ar} | ${seoCopy.socialTitle.en}`,
-        description: `${seoCopy.socialDescription.ar} ${seoCopy.socialDescription.en}`,
+        name: seoMetaTitle(seoCopy.socialTitle),
+        description: seoMetaDescription(seoCopy.socialDescription),
         inLanguage: ["ar", "en"],
         isPartOf: { "@id": `${SITE_URL}/#website` },
         about: { "@id": `${SITE_URL}/#organization` },

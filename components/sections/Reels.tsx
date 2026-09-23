@@ -100,7 +100,7 @@ export function Reels() {
     >
       <Shell>
         <Reveal className="mx-auto mb-10 max-w-2xl text-center md:mb-14">
-          <SectionHeading kicker={copy.kicker} title={copy.title} align="center" />
+          <SectionHeading title={copy.title} align="center" />
           <p className="mt-5 text-[0.98rem] leading-[1.7] text-[var(--brand-ink)]/75">
             {t(copy.lead)}
           </p>

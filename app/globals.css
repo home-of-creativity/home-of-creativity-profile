@@ -658,6 +658,7 @@ html[dir="rtl"] .lux-rule {
   direction: ltr;
   unicode-bidi: isolate;
   text-align: left;
+  contain: paint;
 }
 
 html[dir="rtl"] .client-marquee-viewport {
@@ -692,13 +693,20 @@ html[dir="rtl"] .client-marquee-viewport {
   padding-inline: 0;
   direction: ltr;
   position: relative;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  will-change: transform;
   animation: client-marquee-scroll var(--marquee-duration, 28s) linear infinite;
 }
 
-.client-marquee-viewport.is-paused .client-marquee-track,
+html[dir="rtl"] .client-marquee-track {
+  animation-name: client-marquee-scroll-rev;
+}
+
 .client-marquee-viewport.is-offscreen .client-marquee-track,
 .client-marquee-viewport.is-static .client-marquee-track {
   animation-play-state: paused;
+  will-change: auto;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -708,8 +716,22 @@ html[dir="rtl"] .client-marquee-viewport {
 }
 
 @keyframes client-marquee-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
   to {
     transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes client-marquee-scroll-rev {
+  from {
+    transform: translate3d(-50%, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -733,8 +755,6 @@ html[dir="rtl"] .client-marquee-viewport {
   border: 2px solid color-mix(in srgb, var(--brand-cream) 55%, var(--brand-purple));
   padding: 0;
   text-decoration: none;
-  box-shadow: 0 4px 12px rgb(10 6 24 / 0.18);
-  contain: layout paint;
 }
 
 .client-logo-disc:has(.client-logo-disc-image) {

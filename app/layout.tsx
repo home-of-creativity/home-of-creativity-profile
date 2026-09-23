@@ -5,7 +5,7 @@ import { BASE_PATH } from "@/lib/base-path";
 import { LOCALE_BOOT_SCRIPT } from "@/lib/locale-boot";
 import { THEME_BOOT_SCRIPT } from "@/lib/theme-boot";
 import { officesGeo } from "@/lib/seo";
-import { GOOGLE_SITE_VERIFICATION, OG_IMAGE_PATH, SITE_NAME, SITE_NAME_AR, SITE_SHORT, SITE_URL, pageDescription, seoCopy } from "@/lib/site";
+import { GOOGLE_SITE_VERIFICATION, OG_IMAGE_PATH, SITE_NAME, SITE_NAME_AR, SITE_SHORT, SITE_URL, seoCopy, seoMetaDescription, seoMetaTitle } from "@/lib/site";
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -31,8 +31,8 @@ const greatVibes = Great_Vibes({
   display: "swap",
 });
 
-const homeTitle = `${SITE_NAME_AR} | ${SITE_SHORT} — Branding Agency in Damascus`;
-const homeDescription = pageDescription(seoCopy.homeDescription.en, seoCopy.homeDescription.ar);
+const homeTitle = seoMetaTitle(seoCopy.homeTitle);
+const homeDescription = seoMetaDescription(seoCopy.homeDescription);
 
 export const metadata: Metadata = {
   metadataBase: new URL(`${SITE_URL}/`),

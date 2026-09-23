@@ -5,6 +5,7 @@ import { SeoCrawlerCopy } from "@/components/SeoCrawlerCopy";
 import { SeoHomeJsonLd } from "@/components/SeoHomeJsonLd";
 import { About } from "@/components/sections/About";
 import { ClientJourney } from "@/components/sections/ClientJourney";
+import { ClientVoices } from "@/components/sections/ClientVoices";
 import { ShowcaseClients } from "@/components/sections/ShowcaseClients";
 import { Contact } from "@/components/sections/Contact";
 import { Faq } from "@/components/sections/Faq";
@@ -36,6 +37,7 @@ export default function HomePage() {
           <Services />
           <ShowcaseClients />
         </div>
+        <ClientVoices />
         <ClientJourney />
         <Reels />
         <SocialPhones />

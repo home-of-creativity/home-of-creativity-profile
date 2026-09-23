@@ -4,7 +4,7 @@ import { DAMASCUS, LANDING, LOCATIONS, SOCIAL } from "./helpers";
 test.describe("SEO and geo", () => {
   test("home includes title, canonical, JSON-LD and geo tags", async ({ page }) => {
     await page.goto(LANDING, { waitUntil: "domcontentloaded" });
-    await expect(page).toHaveTitle(/بيت الإبداع \| HOC — Branding Agency in Damascus/);
+    await expect(page).toHaveTitle(/HOC Agency \| أفكار تُرى، وحضور يُتذكر \| HOC Agency \| Ideas seen, presence remembered/);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /hoc\.agency\/?$/);
     await expect(page.locator('meta[property="og:title"]')).toHaveCount(1);
     await expect(page.locator('meta[name="geo.placename"]')).toHaveAttribute("content", /Damascus/i);
@@ -71,7 +71,7 @@ test.describe("SEO and geo", () => {
 
     const llmsFull = await request.get(`${origin}/llms-full.txt`);
     expect(llmsFull.ok()).toBeTruthy();
-    expect(await llmsFull.text()).toMatch(/#faq/);
+    expect(await llmsFull.text()).toMatch(/FAQ/);
 
     const sitemap = await request.get(`${origin}/sitemap.xml`);
     expect(sitemap.ok()).toBeTruthy();
@@ -89,7 +89,7 @@ test.describe("SEO and geo", () => {
 
   test("social page is indexable with official profile links", async ({ page }) => {
     await page.goto(SOCIAL, { waitUntil: "domcontentloaded" });
-    await expect(page).toHaveTitle(/السوشال ميديا|Social media/i);
+    await expect(page).toHaveTitle(/إدارة السوشال ميديا \| حضور يصنع فرقًا \| Social Media Management \| Presence that makes a difference/);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/social\/?$/);
     await expect(page.locator('a[rel~="me"][href*="instagram.com"]')).toHaveCount(1);
     await expect(page.locator('a[rel~="me"][href*="facebook.com"]')).toHaveCount(1);

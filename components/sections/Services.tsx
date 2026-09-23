@@ -58,11 +58,11 @@ export function Services() {
           <Wordmark invert size="sm" />
         </Reveal>
         <Reveal className="mx-auto mb-14 max-w-2xl text-center">
-          <SectionHeading kicker={services.kicker} title={services.title} invert align="center" />
+          <SectionHeading title={services.title} invert align="center" />
           <p className="mt-5 text-white/70">{t(services.lead)}</p>
           <p className="mt-4 text-[0.95rem]">
             <Link href={pagePath("services/branding")} className="font-semibold text-[var(--brand-orange)] hover:text-white">
-              {locale === "ar" ? "خدمات الهوية في دمشق" : "branding services in Damascus"}
+              {t(services.brandingLink)}
             </Link>
           </p>
         </Reveal>

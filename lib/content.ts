@@ -12,8 +12,10 @@ export const nav = {
   home: { en: "Home", ar: "الرئيسية" },
   about: { en: "About", ar: "من نحن" },
   services: { en: "Services", ar: "خدماتنا" },
-  clientLogos: { en: "Clients", ar: "العملاء" },
-  clients: { en: "Client journey", ar: "مراحل العمل" },
+  clientLogos: { en: "Partners", ar: "شركاء النجاح" },
+  voices: { en: "Client notes", ar: "آراء العملاء" },
+  clients: { en: "Strategic partnership", ar: "رحلة الشراكة" },
+  clientStory: { en: "A client story", ar: "قصة عميل" },
   reels: { en: "Reels", ar: "الريلز" },
   social: { en: "Social", ar: "السوشال" },
   projects: { en: "Projects", ar: "المشاريع" },
@@ -38,14 +40,14 @@ export const nav = {
 } satisfies Record<string, Copy>;
 
 export const hero = {
-  kicker: { en: "Ideas. People. Places.", ar: "أفكار. بشر. أماكن." },
-  accentLead: { en: "A brighter", ar: "غدٌ أشدّ" },
-  accentWord: { en: "tomorrow.", ar: "إشراقًا." },
+  kicker: { en: "Strategy. Invention. Leadership.", ar: "استراتيجية. ابتكار. ريادة." },
+  accentLead: { en: "Ideas you can see.", ar: "أفكار تُرى." },
+  accentWord: { en: "Identities you live.", ar: "هويات تُعاش." },
   titleLead: { en: "We architect", ar: "نُهندس" },
-  titleAccent: { en: "brands.", ar: "العلامات." },
+  titleAccent: { en: "commercial brands", ar: "العلامات التجارية" },
   line: {
-    en: "We turn bold ideas into meaningful brands that shape people, places and a brighter tomorrow.",
-    ar: "نحوّل الأفكار الجريئة إلى علاماتٍ ذات هيبة، تُقيم الناس والأماكن وتصنع غدًا أكثر إشراقًا.",
+    en: "We translate your ambitious goals into a distinctive reality. We blend art with marketing intelligence to invent identities that live, express your distinction, and lift your work toward the world's horizons.",
+    ar: "نترجم أهدافك الطموحة إلى واقع مُتميز .. نمزج الفن بالذكاء التسويقي لنبتكر هويات تنبض بالحياة، تعبر عن تميزك، وتحلق بأعمالك نحو آفاق العالم.",
   },
   primary: { en: "Explore our work", ar: "اكتشف أعمالنا" },
   scroll: { en: "Scroll to explore", ar: "مرّر لاستكشاف المزيد" },
@@ -55,8 +57,8 @@ export const about = {
   kicker: { en: "Home of Creativity", ar: "بيت الإبداع" },
   title: { en: "About us", ar: "من نحن" },
   body: {
-    en: "Home of Creativity (HOC) is a branding and creative agency in Al Hamra, Damascus, specializing in visual identity, for clients in Syria and Saudi Arabia. We provide visual identity, marketing, social media, websites, events, and other creative services, and we work with clients in Syria and Saudi Arabia, including Riyadh — a market we serve, not a second studio. We dissect your business, eliminate the clutter, and rebuild it into a powerhouse driven by hard numbers and defined by visual prestige. We do not yell to be seen. We strategically position your brand so the industry leans in and listens.",
-    ar: "بيت الإبداع (HOC) وكالة هوية وإبداع في الحمراء بدمشق، متخصصة في الهوية البصرية، وتخدم عملاء في سوريا والسعودية. نقدّم الهوية البصرية والتسويق والسوشال ميديا والمواقع والفعاليات وخدمات إبداعية أخرى، ونعمل مع عملاء في سوريا والسعودية بما في ذلك الرياض — وهي سوق نخدمه، لا مكتباً ثانياً. نأخذ عملك لنجرّده من العشوائية ونعيده إلى السوق كعلامة تجارية رائدة ذات هيبة بصرية مبنية على أرقام وحقائق صلبة لا تقبل الجدل. لا نصرخ لجذب الانتباه، بل نصنع لعملائنا تموضعاً ذكياً يجعل السوق ينصت إليهم باحترام.",
+    en: "Behind every distinctive brand is an ally who refuses the superficial. Some shout in the market to be heard; others arrive and everyone listens. At Home of Creativity (HOC), we build the second kind. Our aim is not to sell you images to post or view-counts without value. We take your brand out of the crowd, distinguish it by what already sets it apart, and strengthen your commercial identity with advanced marketing intelligence. From our bases in Saudi Arabia and the United Arab Emirates, with a strategic presence in Syria, we came to be part of your entity — together we turn the language of numbers and facts into a distinctive reality. Our mission is not to find your brand a seat among competitors, but to build it a distinctive entity that becomes the reference that sets the rules.",
+    ar: "وراء كل علامة تجارية مُميزة، حليف لا يقبل بالسطحية. هناك من يصرخ في السوق ليُسمع، وهناك من يحضُر فيُنصت له الجميع.. في بيت الإبداع HOC، نتقن صناعة النوع الثاني. ليس هدفنا أن نبيعكم صوراً تُنشر أو أرقام مشاهدات بلا فائدة، نأخذ علامتكم من زحام السوق، نُميزها بما تمتاز به، ونعزز هويتكم التجارية بذكاء تسويقي مُتطور. من مقراتنا في المملكة العربية السعودية والإمارات العربية المتحدة وبحضور استراتيجي إلى سوريا، أتينا لنكون جزءاً من كيانكم، لنحوّل معاً لغة الأرقام والحقائق إلى واقع مميز. مهمتنا أن لا نبحث لعلامتك عن مقعد بين المنافسين، بل نبني لها كياناً مميزاً يجعلها المرجع الذي يُملي قواعد اللعبة.",
   },
   imageAlt: {
     en: "A lone figure at the far end of a vast, geometrically lit hall",
@@ -129,10 +131,26 @@ export const services = {
   kicker: { en: "Practices", ar: "ممارساتنا" },
   title: { en: "Our services", ar: "خدماتنا" },
   lead: {
-    en: "Fourteen practices. One architectural standard.",
-    ar: "أربع عشرة ممارسة. معيار معماري واحد.",
+    en: "Several creative arms. One strategic mind.",
+    ar: "أذرع إبداعية متعددة.. وعقل استراتيجي واحد.",
+  },
+  brandingLink: {
+    en: "Marketing, advertising, and publicity services",
+    ar: "خدمات التسويق والدعاية والإعلان",
   },
   items: [
+    {
+      id: "marketing",
+      en: "Marketing",
+      ar: "التسويق",
+      tone: "teal" as const,
+    },
+    {
+      id: "ads",
+      en: "Paid Ads",
+      ar: "حملات ممولة",
+      tone: "orange" as const,
+    },
     {
       id: "social",
       en: "Social Media",
@@ -146,16 +164,28 @@ export const services = {
       tone: "purple" as const,
     },
     {
-      id: "marketing",
-      en: "Marketing",
-      ar: "التسويق",
-      tone: "teal" as const,
+      id: "outdoor",
+      en: "Roadside Ads",
+      ar: "إعلانات طرقية",
+      tone: "blue" as const,
     },
     {
-      id: "ads",
-      en: "Paid Ads",
-      ar: "حملات ممولة",
+      id: "gifts",
+      en: "Promo Gifts",
+      ar: "الهدايا الدعائية",
       tone: "orange" as const,
+    },
+    {
+      id: "film",
+      en: "Filming & Editing",
+      ar: "تصوير ومونتاج",
+      tone: "orange" as const,
+    },
+    {
+      id: "identity",
+      en: "Visual Identities",
+      ar: "الهويات البصرية",
+      tone: "blue" as const,
     },
     {
       id: "exhibitions",
@@ -174,30 +204,6 @@ export const services = {
       en: "Booth Design",
       ar: "تصميم البوثات",
       tone: "peach" as const,
-    },
-    {
-      id: "identity",
-      en: "Visual Identities",
-      ar: "الهويات البصرية",
-      tone: "blue" as const,
-    },
-    {
-      id: "film",
-      en: "Filming & Editing",
-      ar: "تصوير ومونتاج",
-      tone: "orange" as const,
-    },
-    {
-      id: "gifts",
-      en: "Promo Gifts",
-      ar: "الهدايا الدعائية",
-      tone: "orange" as const,
-    },
-    {
-      id: "outdoor",
-      en: "Roadside Ads",
-      ar: "إعلانات طرقية",
-      tone: "blue" as const,
     },
     {
       id: "web",
@@ -615,7 +621,7 @@ export const damascusPage = {
 
 export const showcaseClients = {
   kicker: { en: "Who we serve", ar: "من نخدم" },
-  title: { en: "Our clients", ar: "عملاؤنا" },
+  title: { en: "Partners in success", ar: "شركاء النجاح" },
   lead: {
     en: "Brands and partners we have built with — from identity to campaigns and digital products.",
     ar: "علامات وشركاء بنينا معهم — من الهوية إلى الحملات والمنتجات الرقمية.",
@@ -631,61 +637,81 @@ export const showcaseClients = {
   ],
 } satisfies Record<string, Copy | string[]>;
 
+export const clientVoices = {
+  kicker: { en: "In their words", ar: "بكلماتهم" },
+  title: { en: "Client notes", ar: "آراء العملاء" },
+  items: [
+    {
+      id: "abu-shaker",
+      name: { en: "Abu Shaker", ar: "أبو شاكر" },
+      quote: {
+        en: "From the first brief to the final files, the path was clear. The identity Home of Creativity drew is now the face we introduce ourselves with.",
+        ar: "من أول موجز حتى الملفات النهائية، كان المسار واضحاً. الهوية التي رسمها بيت الإبداع صارت الوجه الذي نعرّف به أنفسنا.",
+      },
+    },
+    {
+      id: "jaddu-shaker",
+      name: { en: "Jaddu Shaker", ar: "جدو شاكر" },
+      quote: {
+        en: "We wanted a presence that feels like home: warm and familiar, without noise. Home of Creativity understood that from the first session.",
+        ar: "أردنا حضوراً يشبه البيت: دافئاً ومألوفاً، بلا ضجيج. بيت الإبداع فهم ذلك من الجلسة الأولى.",
+      },
+    },
+    {
+      id: "raheel-roaa",
+      name: { en: "Raheel & Roaa", ar: "رحيل ورؤى" },
+      quote: {
+        en: "The name carries a meaning, and the design carried it as it is. The work stayed consistent across social and print.",
+        ar: "الاسم يحمل معنى، والتصميم حمله كما هو. العمل جاء متّسقاً على السوشال وعلى المواد المطبوعة.",
+      },
+    },
+  ],
+};
+
+export const clientStory = {
+  kicker: { en: "A client story", ar: "قصة عميل" },
+  title: { en: "Abu Shaker and Jaddu Shaker", ar: "أبو شاكر وجدو شاكر" },
+  lead: {
+    en: "A partnership that lasts. The average life of our client relationships is two years.",
+    ar: "شراكة تدوم. متوسط عمر علاقة عملائنا معنا سنتان.",
+  },
+  body: {
+    en: "Abu Shaker and Jaddu Shaker are two of the voices that stay with Home of Creativity. Their notes sit on the homepage; this page keeps that relationship in view — not as a campaign, but as a partnership that holds.",
+    ar: "أبو شاكر وجدو شاكر صوتان يبقيان مع بيت الإبداع. كلماتهما على الصفحة الرئيسية، وهذه الصفحة تُبقي تلك العلاقة ظاهرة: ليست حملة عابرة، بل شراكة تصمد.",
+  },
+};
+
 export const clientJourney = {
   kicker: { en: "Process", ar: "العملية" },
-  title: { en: "Work stages", ar: "مراحل العمل" },
+  title: { en: "The strategic partnership journey", ar: "رحلة الشراكة الاستراتيجية" },
   lead: {
-    en: "From first message to final delivery — a clear path through Telegram, with your team always in the loop.",
-    ar: "من أول رسالة إلى التسليم النهائي — مسار واضح عبر تيليجرام، وفريقك على اطلاع في كل مرحلة.",
+    en: "From your first message until the vision is complete, your team stays informed — without chaos.",
+    ar: "من رسالتك الأولى وحتى اكتمال الرؤية، فريقك على اطلاع دائم بلا عشوائية",
   },
-  cta: { en: "Start on Telegram", ar: "ابدأ عبر تيليجرام" },
+  cta: { en: "Start on WhatsApp", ar: "ابدأ عبر واتساب" },
   steps: [
     {
-      id: "submit",
-      title: { en: "Submit your brief", ar: "تقديم الطلب" },
+      id: "start",
+      title: { en: "Launch and agreement", ar: "الانطلاق والاتفاق" },
       body: {
-        en: "Describe your project on Telegram — text, images, or PDFs — and send it in one flow.",
-        ar: "صِف مشروعك على تيليجرام — نصاً أو صوراً أو PDF — وأرسله في خطوة واحدة.",
+        en: "Share your project on Telegram or WhatsApp in one step. As soon as we receive your vision — text or a file — our team analyzes the requirements at once, and you receive a clear PDF quotation: no chaos, no wasted time.",
+        ar: "شاركنا مشروعك عبر تيليجرام أو واتساب بخطوة واحدة .. بمجرد استلامنا لرؤيتك (نصاً أو ملفاً)، يحلل فريقنا المتطلبات فوراً، تستلم عرض سعر واضح بصيغة PDF؛ بلا عشوائية أو وقت مهدور.",
       },
     },
     {
-      id: "review",
-      title: { en: "Sales review", ar: "مراجعة المبيعات" },
+      id: "build",
+      title: { en: "Approval and engineering the work", ar: "الاعتماد وهندسة العمل" },
       body: {
-        en: "Our sales team receives your request instantly, reviews the brief, and opens your file on ClickUp.",
-        ar: "يستلم فريق المبيعات طلبك فوراً، يراجع الموجز، ويفتح ملفك على كليك أب.",
+        en: "Once you approve the quotation and complete payment securely in the same conversation, the task moves at once to the internal workshops. Marketing, content, and design teams work through our systems to engineer your entity with care.",
+        ar: "فور اعتمادك للعرض وإتمام الإجراءات المالية بأمان في نفس المحادثة، تنتقل المهمة فوراً إلى ورشات العمل الداخلية. هنا، تتضافر جهود فرق التسويق، المحتوى والتصميم عبر أنظمتنا الخاصة لهندسة كيانك بدقة وعناية.",
       },
     },
     {
-      id: "quote",
-      title: { en: "Quotation", ar: "عرض السعر" },
+      id: "handoff",
+      title: { en: "Delivery and the start of the journey", ar: "التسليم وبداية الرحلة" },
       body: {
-        en: "You receive a branded PDF quotation with approve or reject — no back-and-forth guessing.",
-        ar: "يصلك عرض سعر بصيغة PDF مع خيار الموافقة أو الرفض — بلا تخمين أو مراسلات عشوائية.",
-      },
-    },
-    {
-      id: "payment",
-      title: { en: "Payment & invoice", ar: "الدفع والفاتورة" },
-      body: {
-        en: "After approval, the invoice arrives on Telegram. Upload your receipt securely from the same chat.",
-        ar: "بعد الموافقة، تصل الفاتورة على تيليجرام. ارفع وصل الدفع بأمان من نفس المحادثة.",
-      },
-    },
-    {
-      id: "production",
-      title: { en: "Production", ar: "التنفيذ" },
-      body: {
-        en: "Design, content, and media teams take over — each department gets its own ClickUp task.",
-        ar: "يتولى فريق التصميم والمحتوى والإعلام — ولكل قسم مهمة مستقلة على كليك أب.",
-      },
-    },
-    {
-      id: "delivery",
-      title: { en: "Delivery & review", ar: "التسليم والمراجعة" },
-      body: {
-        en: "Final files land on Telegram. Request a revision or sign off when the work meets your standard.",
-        ar: "الملفات النهائية تصل على تيليجرام. اطلب تعديلاً أو اعتماداً عندما يلبي العمل معيارك.",
+        en: "You receive the final outputs on Telegram, ready to launch. We handle any requested revisions with full flexibility so the work matches the standard we aim for. We also welcome direct contact through our phone numbers.",
+        ar: "تتلقى المخرجات النهائية عبر تيليجرام لتكون جاهزة للانطلاق. وندير أي تعديلات مطلوبة بمرونة تامة لضمان مطابقة العمل لمعايير الصدارة التي نهدف لها.. كما أننا نرحب بتواصلكم المباشر عبر أرقام التواصل.",
       },
     },
   ],
@@ -693,10 +719,10 @@ export const clientJourney = {
 
 export const reels = {
   kicker: { en: "In motion", ar: "بالحركة" },
-  title: { en: "Reels & short films", ar: "ريلز وأفلام قصيرة" },
+  title: { en: "Digital presence and the power of a moving brand", ar: "الظهور الرقمي.. وقوة العلامة المتحركة" },
   lead: {
-    en: "Recent vertical work — identity, events, and brand stories in motion.",
-    ar: "أعمال عمودية حديثة — هوية وفعاليات وقصص علامات بالحركة.",
+    en: "We believe a brand's strength is in how continuously it appears. We focused on reels and short videos as a media front — and we put that craft in your hands so you can build your brand's entity and take the scene yourself.",
+    ar: "إيماناً منا بأن قوة العلامة تكمن في استمرارية ظهورها، ركزنا على الريلز والفيديوهات القصيرة كواجهة إعلامية .. وضعنا خبراتنا بين يديك لنبني كيان علامتك التجارية وتتصدر المشهد بنفسك.",
   },
   loading: { en: "Loading reels…", ar: "جارٍ تحميل الريلز…" },
   cardLoading: { en: "Loading…", ar: "جارٍ التحميل…" },
@@ -708,11 +734,11 @@ export const reels = {
 };
 
 export const socialPhones = {
-  kicker: { en: "Social media", ar: "قنواتنا على السوشال ميديا" },
-  title: { en: "Browse our pages on social media", ar: "تصفح صفحاتنا على السوشال ميديا" },
+  kicker: { en: "HOC community", ar: "مجتمع HOC" },
+  title: { en: "The pulse of creativity, and brand architecture up close", ar: "نبض الإبداع.. وهندسة العلامات عن قرب" },
   lead: {
-    en: "Our designs are reflected in every marketing detail with creativity and professionalism",
-    ar: "تصاميمنا تنعكس في كل تفاصيل التسويق بإبداع واحترافية",
+    en: "Browse our accounts and see how we strip ideas of chaos to make content that holds the eye and builds distinction.",
+    ar: "تصفح حساباتنا واستكشف كيف نجرّد الأفكار من العشوائية لنصنع محتوى يخطف الأنظار ويصنع التميز...",
   },
   facebook: { en: "Facebook", ar: "فيسبوك" },
   instagram: { en: "Instagram", ar: "إنستغرام" },
@@ -737,8 +763,8 @@ export const socialPhones = {
 };
 
 export const projects = {
-  kicker: { en: "Our work", ar: "أعمالنا" },
-  title: { en: "Selected projects", ar: "مشاريع مختارة" },
+  kicker: { en: "Impact on the ground", ar: "الأثر على أرض الواقع" },
+  title: { en: "Our projects beyond the scene", ar: "مشاريعنا ما وراء المشهد" },
   lead: {
     en: "Spatial, visual, and digital systems built to hold a room — not just a slide.",
     ar: "أنظمة مكانية وبصرية ورقمية تُبنى لتملأ القاعة، لا الشريحة فقط.",
@@ -1074,8 +1100,8 @@ export const pricing = {
 };
 
 export const finance = {
-  kicker: { en: "Intelligence", ar: "الاستخبارات" },
-  title: { en: "Financial analysis", ar: "التحليل المالي" },
+  kicker: { en: "The deeper dimension of the commercial brand", ar: "البُعد العميق للعلامة التجارية" },
+  title: { en: "Financial analysis for smart, decisive leadership", ar: "التحليل المالي .. لقيادة ذكية وحاسمة" },
   imageAlt: {
     en: "Financial analysis mark",
     ar: "شعار التحليل المالي",
@@ -1097,36 +1123,36 @@ export const finance = {
     },
   ],
   heading: {
-    en: "Smart solutions for strategic and financial decision-making",
-    ar: "حلولنا الذكية لدعم القرارات الاستراتيجية والمالية",
+    en: "Smart solutions for strategic and financial decisions",
+    ar: "حلول ذكية لدعم القرارات الاستراتيجية والمالية",
   },
   body: {
-    en: "We are your strategic partner in transforming complex data into smart visual insights that drive your financial and investment decisions. Our primary focus is on data engineering, analysis, and designing interactive dashboards (Excel & Power BI) that turn raw numbers into clear key performance indicators to monitor profits and liquidity. Our services also encompass remote financial management, bookkeeping, and preparing certified balance sheets to ensure comprehensive financial control for your business.",
-    ar: "نحن شريككم الاستراتيجي في تحويل البيانات المعقّدة إلى رؤى بصرية ذكية تدعم قراراتكم الاستثمارية والمالية، ونركّز بشكل أساسي على هندسة وتحليل البيانات، وتصميم لوحات المعلومات التفاعلية (Excel & Power BI) التي تحوّل الأرقام إلى مؤشرات أداء واضحة لرصد الأرباح والسيولة. كما تشمل خدماتنا أيضاً إدارة الشؤون المالية عن بُعد، ومسك الدفاتر، وإعداد الميزانيات العمومية المعتمدة لضمان رقابة مالية متكاملة لأعمالكم.",
+    en: "True creativity is incomplete without a clear financial foundation. At HOC we do not see numbers as mere accounts, but as a roadmap that leads the entity toward leadership. We translate data chaos into an interactive visual scene — performance interfaces that place the financial truth in your hands, so strategic decisions are built on the language of numbers.",
+    ar: "الإبداع الحقيقي لا يكتمل دون أساس مالي واضح. في (HOC)، لا نرى الأرقام كمجرد حسابات، بل كخريطة طريق تقود الكيان نحو الريادة. نترجم فوضى البيانات إلى مشهد بصري تفاعلي بواجهات أداء تفاعلية تضع الحقيقة المالية بين يديك، لتكون القرارات الاستراتيجية مبنية على لغة الأرقام.",
   },
   offerings: [
     {
       id: "data",
-      title: { en: "Data engineering", ar: "هندسة البيانات" },
+      title: { en: "Engineering financial certainty", ar: "هندسة اليقين المالي" },
       body: {
-        en: "We structure raw financial records so the story of profit and liquidity is readable.",
-        ar: "نُهندس السجلات المالية الخام كي تكون قصة الربح والسيولة مقروءة.",
+        en: "We recast raw records and data, strip them of complexity, and draw from them a clear story of liquidity and profit on which the next steps are built.",
+        ar: "نعيد صياغة السجلات والبيانات الخام، لنجردها من التعقيد ونستخرج منها قصة واضحة للسيولة والأرباح يؤسس عليها للخطوات القادمة.",
       },
     },
     {
       id: "dashboards",
-      title: { en: "Excel & Power BI", ar: "إكسل وباور بي آي" },
+      title: { en: "Strategic command screens", ar: "شاشات القيادة الاستراتيجية" },
       body: {
-        en: "Interactive dashboards that turn figures into clear performance indicators.",
-        ar: "لوحات تفاعلية تحوّل الأرقام إلى مؤشرات أداء واضحة.",
+        en: "We design and invent visual, dynamic dashboards that put the analysis on a single screen.",
+        ar: "نصمم ونبتكر لوحات تحكم مرئية وديناميكية (Dashboards) تضع التحليل في شاشة واحدة.",
       },
     },
     {
       id: "control",
-      title: { en: "Remote control", ar: "رقابة عن بُعد" },
+      title: { en: "Financial immunity", ar: "الحصانة المالية" },
       body: {
-        en: "Bookkeeping, certified balance sheets, and remote financial management.",
-        ar: "مسك دفاتر وميزانيات معتمدة وإدارة مالية عن بُعد.",
+        en: "Strict oversight that gives your entity operational and financial stability and integrated protection against market swings.",
+        ar: "رقابة صارمة تضمن لكيانك استقراراً عملياً ومالياً وحماية متكاملة في وجه تقلبات السوق.",
       },
     },
   ],
@@ -1247,8 +1273,8 @@ export const contact = {
   title: { en: "Contact us", ar: "تواصل معنا" },
   region: { en: "SYR — KSA", ar: "سوريا — السعودية" },
   lead: {
-    en: "Tell us what you are building. We will reply with a precise next step.",
-    ar: "أخبرنا بما تبنونه. نرد بخطوة تالية دقيقة.",
+    en: "This is where we begin engineering the impact. Share the details of your project.",
+    ar: "من هنا نبدأ هندسة الأثر.. شاركنا تفاصيل مشروعك.",
   },
   greeting: {
     en: "Hello Home of Creativity",

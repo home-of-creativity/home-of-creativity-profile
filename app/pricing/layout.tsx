@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { pageDescription, pageTitle, seoCopy } from "@/lib/site";
+import { seoCopy, seoMetaDescription, seoMetaTitle } from "@/lib/site";
 
-const title = pageTitle(seoCopy.pricingTitle.en, seoCopy.pricingTitle.ar);
-const description = pageDescription(seoCopy.pricingDescription.en, seoCopy.pricingDescription.ar);
+const title = seoMetaTitle(seoCopy.pricingTitle);
+const description = seoMetaDescription(seoCopy.pricingDescription);
 
 export const metadata: Metadata = {
   title: { absolute: title },

@@ -1,8 +1,8 @@
 "use client";
 
-import { clientJourney } from "@/lib/content";
-import { CLIENT_TELEGRAM_URL } from "@/lib/base-path";
+import { clientJourney, contact } from "@/lib/content";
 import { useLanguage } from "@/lib/i18n";
+import { whatsappHref } from "@/lib/whatsapp";
 import { cn } from "@/lib/cn";
 import { Reveal, Stagger, StaggerItem } from "../motion";
 import { SectionHeading, Shell } from "../ui";
@@ -26,11 +26,7 @@ export function ClientJourney() {
 
       <Shell className="relative">
         <Reveal className="mx-auto mb-14 max-w-2xl text-center">
-          <SectionHeading
-            kicker={clientJourney.kicker}
-            title={clientJourney.title}
-            align="center"
-          />
+          <SectionHeading title={clientJourney.title} align="center" />
           <p className="mt-5 text-[1.02rem] leading-relaxed text-[var(--brand-ink)]/75">
             {t(clientJourney.lead)}
           </p>
@@ -79,9 +75,9 @@ export function ClientJourney() {
 
         <Reveal className="mt-12 flex justify-center">
           <a
-            href={CLIENT_TELEGRAM_URL}
+            href={whatsappHref(t(contact.greeting))}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className={cn(
               "inline-flex items-center gap-2 rounded-full bg-[var(--brand-purple-deep)] px-6 py-3 text-[0.82rem] font-semibold text-[var(--brand-ivory)] transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]",
               locale === "ar" ? "tracking-normal" : "tracking-[0.12em] uppercase",

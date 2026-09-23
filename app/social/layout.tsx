@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { SeoSocialJsonLd } from "@/components/SeoSocialJsonLd";
-import { pageDescription, pageTitle, seoCopy } from "@/lib/site";
+import { seoCopy, seoMetaDescription, seoMetaTitle } from "@/lib/site";
 
-const title = pageTitle(seoCopy.socialTitle.en, seoCopy.socialTitle.ar);
-const description = pageDescription(seoCopy.socialDescription.en, seoCopy.socialDescription.ar);
+const title = seoMetaTitle(seoCopy.socialTitle);
+const description = seoMetaDescription(seoCopy.socialDescription);
 
 export const metadata: Metadata = {
   title: { absolute: title },

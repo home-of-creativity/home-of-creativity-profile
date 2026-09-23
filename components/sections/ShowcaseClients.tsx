@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { ProgressiveImage } from "@/components/ProgressiveImage";
 import { showcaseClients as copy } from "@/lib/content";
 import {
   fetchShowcaseClients,
@@ -13,16 +12,25 @@ import { Reveal } from "../motion";
 import { SectionHeading, Shell } from "../ui";
 
 
-function ClientLogoDisc({ client }: { client: ShowcaseClient }) {
+function ClientLogoDisc({
+  client,
+  decorative = false,
+}: {
+  client: ShowcaseClient;
+  decorative?: boolean;
+}) {
   const initials = client.name.slice(0, 2).toUpperCase();
   const content = client.logo_url ? (
-    <ProgressiveImage
+    <img
       src={client.logo_url}
-      alt={client.name}
+      alt={decorative ? "" : client.name}
       width={120}
       height={120}
       draggable={false}
-      imgClassName="client-logo-disc-image"
+      loading="lazy"
+      decoding="async"
+      fetchPriority="low"
+      className="client-logo-disc-image"
     />
   ) : (
     <span className="client-logo-disc-fallback" aria-hidden>
@@ -61,7 +69,11 @@ function ClientLogoSet({
   return (
     <div className="client-marquee-set" aria-hidden={hidden || undefined}>
       {clients.map((client, index) => (
-        <ClientLogoDisc key={`${hidden ? "b" : "a"}-${client.id}-${index}`} client={client} />
+        <ClientLogoDisc
+          key={`${hidden ? "b" : "a"}-${client.id}-${index}`}
+          client={client}
+          decorative={hidden}
+        />
       ))}
     </div>
   );
@@ -100,30 +112,16 @@ function ClientLogoMarquee({ clients }: { clients: ShowcaseClient[] }) {
       return;
     }
 
-    let scrollPause = 0;
-    const setPaused = (on: boolean) => {
-      viewport.classList.toggle("is-paused", on);
-    };
-
     const visibility = new IntersectionObserver(
       ([entry]) => {
         viewport.classList.toggle("is-offscreen", !entry?.isIntersecting);
       },
-      { rootMargin: "80px 0px" },
+      { rootMargin: "120px 0px" },
     );
     visibility.observe(viewport);
 
-    const onPageScroll = () => {
-      setPaused(true);
-      window.clearTimeout(scrollPause);
-      scrollPause = window.setTimeout(() => setPaused(false), 160);
-    };
-    window.addEventListener("scroll", onPageScroll, { passive: true });
-
     return () => {
       visibility.disconnect();
-      window.removeEventListener("scroll", onPageScroll);
-      window.clearTimeout(scrollPause);
     };
   }, [loopClients.length]);
 
@@ -182,7 +180,6 @@ export function ShowcaseClients() {
       <Shell className="relative mb-10 md:mb-12">
         <Reveal className="mx-auto max-w-2xl text-center">
           <SectionHeading
-            kicker={copy.kicker}
             title={copy.title}
             align="center"
             invert
