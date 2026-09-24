@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useEffect, useState, type ReactNode } from "react";
 import { Footer, Nav } from "@/components/chrome";
 import { SeoCrawlerCopy } from "@/components/SeoCrawlerCopy";
 import { SeoHomeJsonLd } from "@/components/SeoHomeJsonLd";
@@ -17,6 +18,24 @@ const Projects = dynamic(() => import("@/components/sections/Projects").then((mo
 const Finance = dynamic(() => import("@/components/sections/Finance").then((mod) => mod.Finance));
 const Faq = dynamic(() => import("@/components/sections/Faq").then((mod) => mod.Faq));
 const Contact = dynamic(() => import("@/components/sections/Contact").then((mod) => mod.Contact));
+
+function AfterPaint({ children }: { children: ReactNode }) {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const start = () => {
+      if (typeof window.requestIdleCallback === "function") {
+        window.requestIdleCallback(() => setShow(true), { timeout: 1200 });
+        return;
+      }
+      window.setTimeout(() => setShow(true), 1);
+    };
+    if (document.readyState === "complete") start();
+    else window.addEventListener("load", start, { once: true });
+  }, []);
+
+  return show ? children : null;
+}
 
 export default function HomePage() {
   return (
@@ -40,11 +59,13 @@ export default function HomePage() {
           <ShowcaseClients />
         </div>
         <ClientVoices />
-        <ClientJourney />
-        <Reels />
-        <SocialPhones />
-        <Projects />
-        <Finance />
+        <AfterPaint>
+          <ClientJourney />
+          <Reels />
+          <SocialPhones />
+          <Projects />
+          <Finance />
+        </AfterPaint>
         <Faq />
         <Contact />
       </main>

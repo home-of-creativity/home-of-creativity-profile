@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import { Great_Vibes, IBM_Plex_Sans_Arabic, Inter } from "next/font/google";
+import { IBM_Plex_Sans_Arabic, Inter } from "next/font/google";
 import { SeoJsonLd } from "@/components/SeoJsonLd";
-import { BASE_PATH } from "@/lib/base-path";
+import { BASE_PATH, withBasePath } from "@/lib/base-path";
 import { LOCALE_BOOT_SCRIPT } from "@/lib/locale-boot";
 import { THEME_BOOT_SCRIPT } from "@/lib/theme-boot";
 import { officesGeo } from "@/lib/seo";
@@ -17,18 +17,11 @@ const inter = Inter({
 
 const ibmPlexArabic = IBM_Plex_Sans_Arabic({
   subsets: ["arabic", "latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "600", "700"],
   variable: "--font-ibm-plex-arabic",
   display: "swap",
   adjustFontFallback: true,
   fallback: ["Geeza Pro", "Tahoma", "Arial", "sans-serif"],
-});
-
-const greatVibes = Great_Vibes({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-great-vibes",
-  display: "swap",
 });
 
 const homeTitle = seoMetaTitle(seoCopy.homeTitle);
@@ -130,10 +123,24 @@ export default function RootLayout({
     <html
       lang="ar"
       dir="rtl"
-      className={`${inter.variable} ${ibmPlexArabic.variable} ${greatVibes.variable}`}
+      className={`${inter.variable} ${ibmPlexArabic.variable}`}
       suppressHydrationWarning
     >
       <head>
+        <link
+          rel="preload"
+          as="image"
+          href={withBasePath("/photo/hero-section-background-mobile.webp")}
+          media="(max-width: 799px)"
+          fetchPriority="high"
+        />
+        <link
+          rel="preload"
+          as="image"
+          href={withBasePath("/photo/hero-section-background.webp")}
+          media="(min-width: 800px)"
+          fetchPriority="high"
+        />
         <script dangerouslySetInnerHTML={{ __html: LOCALE_BOOT_SCRIPT }} />
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
       </head>
