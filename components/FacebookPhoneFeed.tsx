@@ -60,9 +60,8 @@ function FeedTile({
       ) : (
         <ProgressiveImage
           src={imageSrc}
-          alt={post.caption ?? ""}
+          alt=""
           referrerPolicy="no-referrer"
-          root={root}
           rootMargin="80px 0px"
           imgClassName="ig-profile-media"
         />
@@ -73,7 +72,13 @@ function FeedTile({
 
   if (post.permalink) {
     return (
-      <a href={post.permalink} target="_blank" rel="noreferrer" className="ig-profile-tile">
+      <a
+        href={post.permalink}
+        target="_blank"
+        rel="noreferrer"
+        className="ig-profile-tile"
+        aria-label={post.caption?.trim() || "Facebook"}
+      >
         {inner}
       </a>
     );

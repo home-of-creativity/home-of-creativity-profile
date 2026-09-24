@@ -1,6 +1,7 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
+import { useInViewOnce } from "@/lib/use-in-view";
 import { socialPhones as copy } from "@/lib/content";
 import { useLanguage } from "@/lib/i18n";
 import { InstagramPhoneFeed } from "@/components/InstagramPhoneFeed";
@@ -54,6 +55,8 @@ function PhoneFrame({
 
 export function SocialPhones({ headingLevel = 2 }: { headingLevel?: 1 | 2 } = {}) {
   const { t } = useLanguage();
+  const rowRef = useRef<HTMLDivElement>(null);
+  const showFeeds = useInViewOnce(rowRef, { rootMargin: "480px 0px" });
 
   return (
     <section id="social" className="social-phones-section">
@@ -63,7 +66,7 @@ export function SocialPhones({ headingLevel = 2 }: { headingLevel?: 1 | 2 } = {}
           <p className="mt-5 text-[0.98rem] leading-[1.7] text-white/70">{t(copy.lead)}</p>
         </Reveal>
 
-        <div className="social-phones-row" dir="ltr" role="list">
+        <div ref={rowRef} className="social-phones-row" dir="ltr">
           <PhoneFrame
             platform="facebook"
             title={t(copy.facebook)}
@@ -71,7 +74,7 @@ export function SocialPhones({ headingLevel = 2 }: { headingLevel?: 1 | 2 } = {}
             openLabel={t(copy.openFacebook)}
             hideChrome
           >
-            <FacebookPhoneFeed title={t(copy.facebookTitle)} />
+            {showFeeds ? <FacebookPhoneFeed title={t(copy.facebookTitle)} /> : null}
           </PhoneFrame>
 
           <PhoneFrame
@@ -81,7 +84,7 @@ export function SocialPhones({ headingLevel = 2 }: { headingLevel?: 1 | 2 } = {}
             openLabel={t(copy.openInstagram)}
             hideChrome
           >
-            <InstagramPhoneFeed title={t(copy.instagramTitle)} />
+            {showFeeds ? <InstagramPhoneFeed title={t(copy.instagramTitle)} /> : null}
           </PhoneFrame>
         </div>
       </Shell>

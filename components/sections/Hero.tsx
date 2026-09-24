@@ -105,6 +105,12 @@ export function Hero() {
       id="top"
       className="relative isolate flex min-h-[100svh] items-center overflow-hidden bg-[var(--brand-purple-deep)] text-[var(--brand-ivory)]"
     >
+      <link
+        rel="preload"
+        as="image"
+        href={withBasePath("/photo/hero-section-background.webp")}
+        fetchPriority="high"
+      />
       <div className="absolute inset-0 overflow-hidden">
         <div className="hero-bg absolute inset-0 md:inset-[-8%] md:h-[116%] md:w-[116%]">
           <Image
@@ -112,7 +118,7 @@ export function Hero() {
             alt=""
             fill
             priority
-            sizes="100vw"
+            sizes="(max-width: 799px) 100vw, 100vw"
             className={cn(
               "hero-bg-media object-cover object-[50%_42%]",
               locale === "ar" ? "md:object-[72%_48%]" : "md:object-[28%_48%]",

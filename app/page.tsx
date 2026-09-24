@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { Footer, Nav } from "@/components/chrome";
 import { SeoCrawlerCopy } from "@/components/SeoCrawlerCopy";
 import { SeoHomeJsonLd } from "@/components/SeoHomeJsonLd";
@@ -12,9 +13,10 @@ import { Faq } from "@/components/sections/Faq";
 import { Finance } from "@/components/sections/Finance";
 import { Hero } from "@/components/sections/Hero";
 import { Projects } from "@/components/sections/Projects";
-import { Reels } from "@/components/sections/Reels";
 import { Services } from "@/components/sections/Services";
-import { SocialPhones } from "@/components/sections/SocialPhones";
+
+const Reels = dynamic(() => import("@/components/sections/Reels").then((mod) => mod.Reels));
+const SocialPhones = dynamic(() => import("@/components/sections/SocialPhones").then((mod) => mod.SocialPhones));
 
 export default function HomePage() {
   return (
