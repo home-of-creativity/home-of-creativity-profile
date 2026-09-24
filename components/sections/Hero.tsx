@@ -122,12 +122,12 @@ export function Hero() {
         <div className="hero-bg absolute inset-0 md:inset-[-8%] md:h-[116%] md:w-[116%]">
           <picture>
             <source
-              media="(max-width: 799px)"
-              srcSet={withBasePath("/photo/hero-section-background-mobile.webp")}
+              media="(min-width: 800px)"
+              srcSet={withBasePath("/photo/hero-section-background.webp")}
               type="image/webp"
             />
             <img
-              src={withBasePath("/photo/hero-section-background.webp")}
+              src={withBasePath("/photo/hero-section-background-mobile.webp")}
               alt=""
               fetchPriority="high"
               decoding="async"

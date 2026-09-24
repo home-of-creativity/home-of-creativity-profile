@@ -5,18 +5,18 @@ import { Footer, Nav } from "@/components/chrome";
 import { SeoCrawlerCopy } from "@/components/SeoCrawlerCopy";
 import { SeoHomeJsonLd } from "@/components/SeoHomeJsonLd";
 import { About } from "@/components/sections/About";
-import { ClientJourney } from "@/components/sections/ClientJourney";
 import { ClientVoices } from "@/components/sections/ClientVoices";
 import { ShowcaseClients } from "@/components/sections/ShowcaseClients";
-import { Contact } from "@/components/sections/Contact";
-import { Faq } from "@/components/sections/Faq";
-import { Finance } from "@/components/sections/Finance";
 import { Hero } from "@/components/sections/Hero";
-import { Projects } from "@/components/sections/Projects";
 import { Services } from "@/components/sections/Services";
 
+const ClientJourney = dynamic(() => import("@/components/sections/ClientJourney").then((mod) => mod.ClientJourney));
 const Reels = dynamic(() => import("@/components/sections/Reels").then((mod) => mod.Reels));
 const SocialPhones = dynamic(() => import("@/components/sections/SocialPhones").then((mod) => mod.SocialPhones));
+const Projects = dynamic(() => import("@/components/sections/Projects").then((mod) => mod.Projects));
+const Finance = dynamic(() => import("@/components/sections/Finance").then((mod) => mod.Finance));
+const Faq = dynamic(() => import("@/components/sections/Faq").then((mod) => mod.Faq));
+const Contact = dynamic(() => import("@/components/sections/Contact").then((mod) => mod.Contact));
 
 export default function HomePage() {
   return (

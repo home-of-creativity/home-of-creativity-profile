@@ -15,11 +15,15 @@ let pending: Promise<GsapBundle> | null = null;
 
 function whenIdle(run: () => void) {
   if (typeof window === "undefined") return;
-  if (typeof window.requestIdleCallback === "function") {
-    window.requestIdleCallback(run, { timeout: 900 });
-    return;
-  }
-  window.setTimeout(run, 1);
+  const start = () => {
+    if (typeof window.requestIdleCallback === "function") {
+      window.requestIdleCallback(run, { timeout: 2500 });
+      return;
+    }
+    window.setTimeout(run, 1);
+  };
+  if (document.readyState === "complete") start();
+  else window.addEventListener("load", start, { once: true });
 }
 
 export function loadGsap(): Promise<GsapBundle> {
