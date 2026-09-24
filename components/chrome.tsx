@@ -658,7 +658,7 @@ export function Footer() {
         <div>
           <p
             className={cn(
-              "m-0 text-[0.78rem] text-white/45",
+              "m-0 text-[0.78rem] text-white/80",
               locale === "en" && "tracking-[0.18em] uppercase",
             )}
           >
@@ -680,7 +680,7 @@ export function Footer() {
                       </span>
                     ) : (
                       <>
-                        {"region" in line && line.region ? <span className="text-white/40">{line.region} </span> : null}
+                        {"region" in line && line.region ? <span className="text-white/80">{line.region} </span> : null}
                         <span dir={channel.kind === "tel" || channel.kind === "whatsapp" ? "ltr" : undefined}>{value}</span>
                       </>
                     );
@@ -736,7 +736,7 @@ export function Footer() {
         <div>
           <p
             className={cn(
-              "m-0 text-[0.78rem] text-white/45",
+              "m-0 text-[0.78rem] text-white/80",
               locale === "en" && "tracking-[0.18em] uppercase",
             )}
           >
@@ -761,17 +761,17 @@ export function Footer() {
           </nav>
         </div>
       </div>
-      <div className="mx-auto mt-10 w-[var(--content)] border-t border-white/10 pt-6 text-[0.72rem] text-white/40">
+      <div className="mx-auto mt-10 w-[var(--content)] border-t border-white/10 pt-6 text-[0.72rem] text-white/80">
         {t(footer.rights)}{" "}
         <a
           href={pagePath("privacy")}
-          className="ms-3 text-white/55 transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
+          className="ms-3 text-white/80 transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
         >
           {t(nav.privacy)}
         </a>
         <a
           href={pagePath("terms")}
-          className="ms-3 text-white/55 transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
+          className="ms-3 text-white/80 transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
         >
           {t(nav.terms)}
         </a>

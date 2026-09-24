@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useRef } from "react";
 import { Hummingbird } from "../brand";
 import { HeroBrandWriter } from "../HeroBrandWriter";
@@ -108,22 +107,36 @@ export function Hero() {
       <link
         rel="preload"
         as="image"
+        href={withBasePath("/photo/hero-section-background-mobile.webp")}
+        media="(max-width: 799px)"
+        fetchPriority="high"
+      />
+      <link
+        rel="preload"
+        as="image"
         href={withBasePath("/photo/hero-section-background.webp")}
+        media="(min-width: 800px)"
         fetchPriority="high"
       />
       <div className="absolute inset-0 overflow-hidden">
         <div className="hero-bg absolute inset-0 md:inset-[-8%] md:h-[116%] md:w-[116%]">
-          <Image
-            src={withBasePath("/photo/hero-section-background.webp")}
-            alt=""
-            fill
-            priority
-            sizes="(max-width: 799px) 100vw, 100vw"
-            className={cn(
-              "hero-bg-media object-cover object-[50%_42%]",
-              locale === "ar" ? "md:object-[72%_48%]" : "md:object-[28%_48%]",
-            )}
-          />
+          <picture>
+            <source
+              media="(max-width: 799px)"
+              srcSet={withBasePath("/photo/hero-section-background-mobile.webp")}
+              type="image/webp"
+            />
+            <img
+              src={withBasePath("/photo/hero-section-background.webp")}
+              alt=""
+              fetchPriority="high"
+              decoding="async"
+              className={cn(
+                "hero-bg-media object-cover object-[50%_42%]",
+                locale === "ar" ? "md:object-[72%_48%]" : "md:object-[28%_48%]",
+              )}
+            />
+          </picture>
         </div>
       </div>
 
