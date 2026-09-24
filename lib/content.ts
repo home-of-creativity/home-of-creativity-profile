@@ -1187,12 +1187,12 @@ export const contact = {
     submit: { en: "Send", ar: "إرسال" },
     sending: { en: "Sending…", ar: "جارٍ الإرسال…" },
     successSupport: {
-      en: "Your message was sent to support@hoc.agency, with a copy to info@hoc.agency.",
-      ar: "وصلت رسالتك إلى support@hoc.agency، ونسخة إلى info@hoc.agency.",
+      en: "Your message was sent.",
+      ar: "تم نجاح الإرسال.",
     },
     successSales: {
-      en: "Your message was sent to sales@hoc.agency, with a copy to info@hoc.agency.",
-      ar: "وصلت رسالتك إلى sales@hoc.agency، ونسخة إلى info@hoc.agency.",
+      en: "Your message was sent.",
+      ar: "تم نجاح الإرسال.",
     },
     error: {
       en: "Please complete the required fields before sending.",
