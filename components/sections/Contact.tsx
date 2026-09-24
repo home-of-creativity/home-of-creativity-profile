@@ -1,9 +1,9 @@
 "use client";
 
 import { Great_Vibes } from "next/font/google";
-import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { contact, services } from "@/lib/content";
-import { fetchContactChannels, mergeContactChannels } from "@/lib/contact-api";
+import { fetchContactChannels, mergeContactChannels, sendContactMessage } from "@/lib/contact-api";
 
 const greatVibes = Great_Vibes({
   subsets: ["latin"],
@@ -118,7 +118,8 @@ export function Contact() {
   const { t, locale, ready } = useLanguage();
   const listRef = useRef<HTMLUListElement>(null);
   const [form, setForm] = useState<FormState>(emptyForm);
-  const [error, setError] = useState(false);
+  const [errorKind, setErrorKind] = useState<"fields" | "send" | "config" | null>(null);
+  const [sending, setSending] = useState(false);
   const [sentTo, setSentTo] = useState<"support" | "sales" | null>(null);
   const [channels, setChannels] = useState(contact.channels);
 
@@ -184,33 +185,35 @@ export function Contact() {
   const interestLabel = supportSelected
     ? t(contact.form.supportInterest)
     : (services.items.find((item) => item.id === form.interest)?.[locale] ?? "—");
-  const inbox = supportSelected ? "support" : "sales";
-  const template = t(contact.form.mailTemplate);
-  const preview = useMemo(
-    () =>
-      template
-        .replace("{{name}}", form.name.trim() || "—")
-        .replace("{{email}}", form.email.trim() || "—")
-        .replace("{{phone}}", form.phone.trim() || "—")
-        .replace("{{interest}}", interestLabel)
-        .replace("{{message}}", form.message.trim()),
-    [form, template, interestLabel],
-  );
 
-  function onSubmit(event: FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (sending) return;
     const valid = form.name.trim() && form.email.trim() && form.message.trim();
     if (!valid) {
-      setError(true);
+      setErrorKind("fields");
       setSentTo(null);
       return;
     }
-    const to = contact.emails.find((email) => email.id === inbox)?.address ?? "sales@hoc.agency";
-    const cc = contact.emails.find((email) => email.id === "info")?.address ?? "info@hoc.agency";
-    const href = `mailto:${to}?cc=${encodeURIComponent(cc)}&subject=${encodeURIComponent(t(contact.form.mailSubject))}&body=${encodeURIComponent(preview)}`;
-    setError(false);
-    setSentTo(inbox);
-    window.location.href = href;
+    setErrorKind(null);
+    setSending(true);
+    const result = await sendContactMessage({
+      name: form.name.trim(),
+      email: form.email.trim(),
+      phone: form.phone.trim(),
+      interest: form.interest,
+      interestLabel,
+      message: form.message.trim(),
+      locale,
+    });
+    setSending(false);
+    if (!result.ok) {
+      setErrorKind(result.reason === "config" || result.reason === "unavailable" ? "config" : "send");
+      setSentTo(null);
+      return;
+    }
+    setForm(emptyForm);
+    setSentTo(result.to);
   }
 
   return (
@@ -443,9 +446,15 @@ export function Contact() {
                   />
                 </label>
 
-                {error ? (
+                {errorKind ? (
                   <p role="alert" className="m-0 text-[0.9rem] text-[#9a2b2b]">
-                    {t(contact.form.error)}
+                    {t(
+                      errorKind === "fields"
+                        ? contact.form.error
+                        : errorKind === "config"
+                          ? contact.form.errorConfig
+                          : contact.form.errorSend,
+                    )}
                   </p>
                 ) : null}
                 {sentTo ? (
@@ -456,12 +465,13 @@ export function Contact() {
 
                 <button
                   type="submit"
+                  disabled={sending}
                   className={cn(
-                    "mt-2 inline-flex w-fit justify-self-center rounded-full bg-[var(--brand-purple)] px-6 py-3 text-[0.82rem] font-semibold uppercase text-[var(--brand-ivory)] transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]",
+                    "mt-2 inline-flex w-fit justify-self-center rounded-full bg-[var(--brand-purple)] px-6 py-3 text-[0.82rem] font-semibold uppercase text-[var(--brand-ivory)] transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)] disabled:cursor-wait disabled:opacity-70",
                     locale === "ar" ? "tracking-normal" : "tracking-[0.14em]",
                   )}
                 >
-                  {t(contact.form.submit)}
+                  {sending ? t(contact.form.sending) : t(contact.form.submit)}
                 </button>
               </form>
             </Reveal>

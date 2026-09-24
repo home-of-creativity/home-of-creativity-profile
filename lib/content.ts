@@ -1184,24 +1184,27 @@ export const contact = {
     interestPlaceholder: { en: "Choose a practice", ar: "اختر ممارسة" },
     supportInterest: { en: "Technical issue or support", ar: "مشكلة تقنية أو دعم" },
     message: { en: "Message", ar: "الرسالة" },
-    submit: { en: "Send by email", ar: "إرسال بالبريد" },
-    sending: { en: "Opening your email…", ar: "جارٍ فتح البريد…" },
+    submit: { en: "Send", ar: "إرسال" },
+    sending: { en: "Sending…", ar: "جارٍ الإرسال…" },
     successSupport: {
-      en: "Your email app is ready for support@hoc.agency, with a copy to info@hoc.agency. Send the message to finish.",
-      ar: "برنامج البريد جاهز برسالة إلى support@hoc.agency، ونسخة إلى info@hoc.agency. أرسلها لإكمال الطلب.",
+      en: "Your message was sent to support@hoc.agency, with a copy to info@hoc.agency.",
+      ar: "وصلت رسالتك إلى support@hoc.agency، ونسخة إلى info@hoc.agency.",
     },
     successSales: {
-      en: "Your email app is ready for sales@hoc.agency, with a copy to info@hoc.agency. Send the message to finish.",
-      ar: "برنامج البريد جاهز برسالة إلى sales@hoc.agency، ونسخة إلى info@hoc.agency. أرسلها لإكمال الطلب.",
+      en: "Your message was sent to sales@hoc.agency, with a copy to info@hoc.agency.",
+      ar: "وصلت رسالتك إلى sales@hoc.agency، ونسخة إلى info@hoc.agency.",
     },
     error: {
       en: "Please complete the required fields before sending.",
       ar: "أكمل الحقول المطلوبة قبل الإرسال.",
     },
-    mailSubject: { en: "Website contact", ar: "تواصل من الموقع" },
-    mailTemplate: {
-      en: "Hello Home of Creativity, my name is {{name}}. Email: {{email}}. Phone: {{phone}}. Interest: {{interest}}.\n\n{{message}}",
-      ar: "مرحباً هوم أوف كريتيفيتي، أنا {{name}}. البريد: {{email}}. الهاتف: {{phone}}. الاهتمام: {{interest}}.\n\n{{message}}",
+    errorSend: {
+      en: "The message could not be sent. Try again in a moment.",
+      ar: "تعذر إرسال الرسالة. حاول مرة أخرى بعد لحظات.",
+    },
+    errorConfig: {
+      en: "Email sending is not ready on the server yet.",
+      ar: "إرسال البريد غير جاهز على السيرفر بعد.",
     },
   },
 };

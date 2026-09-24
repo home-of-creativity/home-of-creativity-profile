@@ -61,7 +61,7 @@ Client `fetch` to `NEXT_PUBLIC_API_URL` (default `http://127.0.0.1:8000/api`), `
 
 | Module | Endpoint | Fallback |
 | --- | --- | --- |
-| `lib/contact-api.ts` | `GET /contact` | Demo if demo-mode |
+| `lib/contact-api.ts` | `GET /contact`, `POST /contact/messages` | Channels: demo if demo-mode. The form always posts when `NEXT_PUBLIC_API_URL` is set |
 | `lib/portfolio-api.ts` | `GET /portfolio/clients\|projects\|{id}` | `lib/demo-data.ts` |
 | `lib/pricing-api.ts` | `GET /pricing` | `lib/pricing-catalog.ts` |
 | `lib/reels-api.ts` | `GET /reels` | Empty (dashboard only; no local files) |
@@ -72,7 +72,7 @@ Client `fetch` to `NEXT_PUBLIC_API_URL` (default `http://127.0.0.1:8000/api`), `
 
 Demo **on** unless `NEXT_PUBLIC_USE_DEMO_DATA=false` (`lib/demo-mode.ts`).
 
-Contact form opens the visitor's email app: interest «مشكلة تقنية أو دعم» addresses `support@hoc.agency`, every other interest addresses `sales@hoc.agency`, and `info@hoc.agency` is always `cc`. Homepage `#contact` shows `info@hoc.agency` and `support@hoc.agency`. `/pricing/` shows `sales@hoc.agency`. Telegram bot username via `NEXT_PUBLIC_TELEGRAM_BOT`. `NEXT_PUBLIC_DASHBOARD_URL` exists in `lib/base-path.ts` but is **not linked** in the navbar. A brand-orange **Profile / الملف التعريفي** pill appears in the **footer** (under the tagline) when `GET /profile-pdf` returns a `url` (staff upload from dashboard `/profile-pdf`); the same pill remains in the navbar between WhatsApp and the language toggle. It opens the PDF in a new tab.
+Contact form posts to `POST /api/contact/messages` (no mailto). Interest «مشكلة تقنية أو دعم» is delivered to `support@hoc.agency`, every other interest to `sales@hoc.agency`, and `info@hoc.agency` is always CC. SMTP is the `contact` mailer (`CONTACT_MAIL_*`, mailbox `info@hoc.agency`). Homepage `#contact` shows `info@hoc.agency` and `support@hoc.agency`. `/pricing/` shows `sales@hoc.agency`. Telegram bot username via `NEXT_PUBLIC_TELEGRAM_BOT`. `NEXT_PUBLIC_DASHBOARD_URL` exists in `lib/base-path.ts` but is **not linked** in the navbar. A brand-orange **Profile / الملف التعريفي** pill appears in the **footer** (under the tagline) when `GET /profile-pdf` returns a `url` (staff upload from dashboard `/profile-pdf`); the same pill remains in the navbar between WhatsApp and the language toggle. It opens the PDF in a new tab.
 
 ## Motion / SW
 
@@ -107,4 +107,4 @@ Caddy edge (`backend/deploy/Caddyfile`) now `encode zstd gzip` on `@siteAsset`, 
 
 ## Do not assume
 
-- Locale URLs, SSR, staff login in navbar, contact POST to API, pricing section on home, `npm start` as production, Flutter in this repo.
+- Locale URLs, SSR, staff login in navbar, pricing section on home, `npm start` as production, Flutter in this repo.
