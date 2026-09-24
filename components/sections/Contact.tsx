@@ -457,12 +457,6 @@ export function Contact() {
                     )}
                   </p>
                 ) : null}
-                {sentTo ? (
-                  <p role="status" className="m-0 text-[0.9rem] text-[var(--brand-teal-deep)]">
-                    {t(sentTo === "support" ? contact.form.successSupport : contact.form.successSales)}
-                  </p>
-                ) : null}
-
                 <button
                   type="submit"
                   disabled={sending}
@@ -478,6 +472,11 @@ export function Contact() {
           </div>
         </div>
       </Shell>
+      {sentTo ? (
+        <p role="status" className="mx-auto mt-6 w-[var(--content)] text-center text-[1.05rem] font-semibold text-[var(--brand-ivory)]">
+          {t(contact.form.successSupport)}
+        </p>
+      ) : null}
     </section>
   );
 }

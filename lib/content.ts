@@ -1188,11 +1188,11 @@ export const contact = {
     sending: { en: "Sending…", ar: "جارٍ الإرسال…" },
     successSupport: {
       en: "Your message was sent.",
-      ar: "تم نجاح الإرسال.",
+      ar: "تم إرسال الرسالة بنجاح.",
     },
     successSales: {
       en: "Your message was sent.",
-      ar: "تم نجاح الإرسال.",
+      ar: "تم إرسال الرسالة بنجاح.",
     },
     error: {
       en: "Please complete the required fields before sending.",

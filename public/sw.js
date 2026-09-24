@@ -1,4 +1,4 @@
-const CACHE = "hoc-design-v10";
+const CACHE = "hoc-design-v11";
 const BASE = new URL("./", self.registration.scope).pathname.replace(/\/$/, "");
 const PRECACHE = [
   `${BASE}/hummingbird.svg`,
