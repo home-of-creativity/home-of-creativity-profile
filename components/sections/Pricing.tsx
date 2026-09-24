@@ -733,6 +733,17 @@ export function Pricing() {
           </>
         ) : null}
 
+        <Reveal className="mt-10 text-center">
+          <a
+            href={`mailto:${pricing.salesEmail.address}`}
+            dir="ltr"
+            className="inline-flex items-center gap-2 text-[0.95rem] font-semibold text-[var(--brand-purple)] underline-offset-4 transition-colors hover:text-[var(--brand-orange)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
+          >
+            <span>{t(pricing.salesEmail.label)}</span>
+            <span>{pricing.salesEmail.address}</span>
+          </a>
+        </Reveal>
+
         <Reveal className="pricing-payment relative mt-16 overflow-hidden rounded-[2rem] bg-[var(--brand-purple-deep)] px-5 py-10 shadow-[0_24px_70px_rgb(26_8_56/0.18)] sm:px-8 md:mt-20 md:px-12 md:py-14">
           <div
             aria-hidden

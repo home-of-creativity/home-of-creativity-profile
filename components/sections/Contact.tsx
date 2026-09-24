@@ -119,7 +119,7 @@ export function Contact() {
   const listRef = useRef<HTMLUListElement>(null);
   const [form, setForm] = useState<FormState>(emptyForm);
   const [error, setError] = useState(false);
-  const [sent, setSent] = useState(false);
+  const [sentTo, setSentTo] = useState<"support" | "sales" | null>(null);
   const [channels, setChannels] = useState(contact.channels);
 
   useEffect(() => {
@@ -180,17 +180,21 @@ export function Contact() {
   const fieldClass =
     "w-full rounded-none border border-[var(--brand-line)] bg-white/80 px-4 py-3 text-[1rem] text-[var(--brand-ink)] outline-none transition-colors placeholder:text-[var(--brand-muted)] focus-visible:border-[var(--brand-orange)] focus-visible:ring-2 focus-visible:ring-[var(--brand-orange)]/30";
 
-  const template = t(contact.form.whatsappTemplate);
-
+  const supportSelected = form.interest === "support";
+  const interestLabel = supportSelected
+    ? t(contact.form.supportInterest)
+    : (services.items.find((item) => item.id === form.interest)?.[locale] ?? "—");
+  const inbox = supportSelected ? "support" : "sales";
+  const template = t(contact.form.mailTemplate);
   const preview = useMemo(
     () =>
       template
         .replace("{{name}}", form.name.trim() || "—")
         .replace("{{email}}", form.email.trim() || "—")
         .replace("{{phone}}", form.phone.trim() || "—")
-        .replace("{{interest}}", form.interest.trim() || "—")
+        .replace("{{interest}}", interestLabel)
         .replace("{{message}}", form.message.trim()),
-    [form, template],
+    [form, template, interestLabel],
   );
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -198,12 +202,15 @@ export function Contact() {
     const valid = form.name.trim() && form.email.trim() && form.message.trim();
     if (!valid) {
       setError(true);
-      setSent(false);
+      setSentTo(null);
       return;
     }
+    const to = contact.emails.find((email) => email.id === inbox)?.address ?? "sales@hoc.agency";
+    const cc = contact.emails.find((email) => email.id === "info")?.address ?? "info@hoc.agency";
+    const href = `mailto:${to}?cc=${encodeURIComponent(cc)}&subject=${encodeURIComponent(t(contact.form.mailSubject))}&body=${encodeURIComponent(preview)}`;
     setError(false);
-    setSent(true);
-    window.open(whatsappHref(preview), "_blank", "noopener,noreferrer");
+    setSentTo(inbox);
+    window.location.href = href;
   }
 
   return (
@@ -321,6 +328,34 @@ export function Contact() {
                     </article>
                   </li>
                 ))}
+                {contact.emails
+                  .filter((email) => email.id !== "sales")
+                  .map((email) => (
+                  <li key={email.id} className="contact-channel list-none">
+                    <article className="relative flex items-center">
+                      <span className="relative z-10 grid h-14 w-14 shrink-0 place-items-center rounded-full border border-[var(--brand-ink)]/12 bg-white shadow-[0_8px_20px_rgb(10_6_24/0.08)]">
+                        <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden fill="none">
+                          <rect x="3" y="5" width="18" height="14" rx="2" stroke="var(--brand-orange)" strokeWidth="1.7" />
+                          <path d="m4 7 8 6 8-6" stroke="var(--brand-orange)" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </span>
+                      <div className="relative -ms-7 min-w-0 flex-1 rounded-2xl border border-[var(--brand-ink)]/12 bg-white py-3.5 ps-10 pe-4 shadow-[0_10px_24px_rgb(10_6_24/0.05)]">
+                        <span
+                          aria-hidden
+                          className="absolute end-3 bottom-0 h-1 w-14 rounded-full bg-[linear-gradient(90deg,var(--brand-teal),var(--brand-purple))]"
+                        />
+                        <a
+                          href={`mailto:${email.address}`}
+                          dir="ltr"
+                          className="text-[0.95rem] font-medium transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
+                        >
+                          <span className="text-[var(--brand-muted)]">{t(email.label)}</span>{" "}
+                          {email.address}
+                        </a>
+                      </div>
+                    </article>
+                  </li>
+                ))}
             </ul>
 
             <Reveal>
@@ -386,8 +421,9 @@ export function Contact() {
                       className={cn(fieldClass, "text-start")}
                     >
                       <option value="">{t(contact.form.interestPlaceholder)}</option>
+                      <option value="support">{t(contact.form.supportInterest)}</option>
                       {services.items.map((item) => (
-                        <option key={item.id} value={locale === "ar" ? item.ar : item.en}>
+                        <option key={item.id} value={item.id}>
                           {locale === "ar" ? item.ar : item.en}
                         </option>
                       ))}
@@ -412,9 +448,9 @@ export function Contact() {
                     {t(contact.form.error)}
                   </p>
                 ) : null}
-                {sent ? (
+                {sentTo ? (
                   <p role="status" className="m-0 text-[0.9rem] text-[var(--brand-teal-deep)]">
-                    {t(contact.form.success)}
+                    {t(sentTo === "support" ? contact.form.successSupport : contact.form.successSales)}
                   </p>
                 ) : null}
 

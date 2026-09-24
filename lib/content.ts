@@ -842,6 +842,10 @@ export const pricing = {
     en: "Not sure which package fits? Message us before payment — we will recommend the right scope.",
     ar: "غير متأكد من الباقة المناسبة؟ راسلنا قبل الدفع — نساعدك باختيار النطاق الصحيح.",
   },
+  salesEmail: {
+    label: { en: "Sales", ar: "المبيعات" },
+    address: "sales@hoc.agency",
+  },
   chooseCategory: { en: "Category", ar: "الفئة" },
   chooseSubcategory: { en: "Subcategory", ar: "الفئة الفرعية" },
   chooseBilling: { en: "Billing period", ar: "فترة الاشتراك" },
@@ -1167,24 +1171,35 @@ export const contact = {
       phones: ["+963 968 862 822", "+963 954 187 154"],
     },
   ],
+  emails: [
+    { id: "info", label: { en: "Info", ar: "معلومات" }, address: "info@hoc.agency" },
+    { id: "support", label: { en: "Support", ar: "الدعم" }, address: "support@hoc.agency" },
+    { id: "sales", label: { en: "Sales", ar: "المبيعات" }, address: "sales@hoc.agency" },
+  ],
   form: {
     name: { en: "Name", ar: "الاسم" },
     email: { en: "Email", ar: "البريد الإلكتروني" },
     phone: { en: "Phone", ar: "الهاتف" },
     interest: { en: "Interest", ar: "الاهتمام" },
     interestPlaceholder: { en: "Choose a practice", ar: "اختر ممارسة" },
+    supportInterest: { en: "Technical issue or support", ar: "مشكلة تقنية أو دعم" },
     message: { en: "Message", ar: "الرسالة" },
-    submit: { en: "Send via WhatsApp", ar: "إرسال عبر واتساب" },
-    sending: { en: "Opening WhatsApp…", ar: "جارٍ فتح واتساب…" },
-    success: {
-      en: "WhatsApp is ready with your message. Send it to start the conversation.",
-      ar: "واتساب جاهز برسالتك. أرسلها لتبدأ الحوار.",
+    submit: { en: "Send by email", ar: "إرسال بالبريد" },
+    sending: { en: "Opening your email…", ar: "جارٍ فتح البريد…" },
+    successSupport: {
+      en: "Your email app is ready for support@hoc.agency, with a copy to info@hoc.agency. Send the message to finish.",
+      ar: "برنامج البريد جاهز برسالة إلى support@hoc.agency، ونسخة إلى info@hoc.agency. أرسلها لإكمال الطلب.",
+    },
+    successSales: {
+      en: "Your email app is ready for sales@hoc.agency, with a copy to info@hoc.agency. Send the message to finish.",
+      ar: "برنامج البريد جاهز برسالة إلى sales@hoc.agency، ونسخة إلى info@hoc.agency. أرسلها لإكمال الطلب.",
     },
     error: {
       en: "Please complete the required fields before sending.",
       ar: "أكمل الحقول المطلوبة قبل الإرسال.",
     },
-    whatsappTemplate: {
+    mailSubject: { en: "Website contact", ar: "تواصل من الموقع" },
+    mailTemplate: {
       en: "Hello Home of Creativity, my name is {{name}}. Email: {{email}}. Phone: {{phone}}. Interest: {{interest}}.\n\n{{message}}",
       ar: "مرحباً هوم أوف كريتيفيتي، أنا {{name}}. البريد: {{email}}. الهاتف: {{phone}}. الاهتمام: {{interest}}.\n\n{{message}}",
     },
