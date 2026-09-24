@@ -170,7 +170,7 @@ function PlanCard({
           <p className="m-0 text-[0.88rem] text-[var(--brand-muted)]">{t(plan.subtitle)}</p>
         </div>
 
-        <div className="mt-5 flex items-end gap-2">
+        <div className="price-block mt-5 flex items-end gap-2">
           <p
             className="price-figure font-display m-0 text-[clamp(1.85rem,3.5vw,2.35rem)] font-semibold leading-none"
             suppressHydrationWarning

@@ -154,7 +154,30 @@ html[data-theme="dark"] #about .about-wash {
   color: var(--brand-purple-deep);
 }
 
-html[data-theme="dark"] .price-figure,
+html[data-theme="dark"] .price-block {
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
+  padding-top: 0.6rem;
+}
+
+html[data-theme="dark"] .price-block::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  inset-inline-start: 0;
+  width: min(100%, 4.75rem);
+  height: 0.3rem;
+  border-radius: 999px;
+  background: var(--brand-orange);
+}
+
+html[data-theme="dark"] .price-figure {
+  color: #fff !important;
+  -webkit-text-stroke: 1.25px var(--brand-orange);
+  paint-order: stroke fill;
+}
+
 html[data-theme="dark"] .step-index,
 html[data-theme="dark"] .contact-number,
 html[data-theme="dark"] .ig-profile-stats dd,
