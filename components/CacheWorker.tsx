@@ -5,12 +5,7 @@ import { BASE_PATH } from "@/lib/base-path";
 import { MEDIA_CACHE } from "@/lib/media-cache";
 import { rememberVisit } from "@/lib/visit-cache";
 
-const PRELOAD = [
-  "/hummingbird.svg",
-  typeof window !== "undefined" && window.matchMedia("(max-width: 799px)").matches
-    ? "/photo/hero-section-background-mobile.webp"
-    : "/photo/hero-section-background.webp",
-];
+const PRELOAD = ["/hummingbird.svg", "/video/hero-bg-poster.webp"];
 
 function whenIdle(run: () => void) {
   if (typeof window.requestIdleCallback === "function") {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Hummingbird } from "../brand";
 import { HeroBrandWriter } from "../HeroBrandWriter";
 import { hero } from "@/lib/content";
@@ -10,9 +10,32 @@ import { cn } from "@/lib/cn";
 import { useGsapScope } from "@/lib/gsap-client";
 import { shouldSkipMotion } from "@/lib/visit-cache";
 
+const HERO_POSTER = "/video/hero-bg-poster.webp";
+const HERO_VIDEO_DESKTOP = "/video/hero-bg.mp4";
+const HERO_VIDEO_MOBILE = "/video/hero-bg-mobile.mp4";
+
 export function Hero() {
   const { t, locale, ready } = useLanguage();
   const rootRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [allowVideo, setAllowVideo] = useState(false);
+  const [videoSrc, setVideoSrc] = useState(HERO_VIDEO_MOBILE);
+
+  useEffect(() => {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const desktop = window.matchMedia("(min-width: 800px)");
+    const sync = () => {
+      setAllowVideo(!reduce.matches);
+      setVideoSrc(desktop.matches ? HERO_VIDEO_DESKTOP : HERO_VIDEO_MOBILE);
+    };
+    sync();
+    reduce.addEventListener("change", sync);
+    desktop.addEventListener("change", sync);
+    return () => {
+      reduce.removeEventListener("change", sync);
+      desktop.removeEventListener("change", sync);
+    };
+  }, []);
 
   useGsapScope(
     ({ gsap, ScrollTrigger }) => {
@@ -42,6 +65,19 @@ export function Hero() {
 
           if (reduceMotion || shouldSkipMotion()) {
             if (copyNodes.length) gsap.set(copyNodes, { autoAlpha: 1, y: 0, x: 0 });
+            if (!reduceMotion && rootRef.current) {
+              ScrollTrigger.create({
+                trigger: rootRef.current,
+                start: "top bottom",
+                end: "bottom top",
+                onToggle(self) {
+                  const video = videoRef.current;
+                  if (!video) return;
+                  if (self.isActive) void video.play().catch(() => undefined);
+                  else video.pause();
+                },
+              });
+            }
             return;
           }
 
@@ -87,6 +123,10 @@ export function Hero() {
               end: "bottom top",
               onToggle(self) {
                 looping.forEach((tween) => (self.isActive ? tween.play() : tween.pause()));
+                const video = videoRef.current;
+                if (!video) return;
+                if (self.isActive) void video.play().catch(() => undefined);
+                else video.pause();
               },
             });
           }
@@ -104,39 +144,35 @@ export function Hero() {
       id="top"
       className="relative isolate flex min-h-[100svh] items-center overflow-hidden bg-[var(--brand-purple-deep)] text-[var(--brand-ivory)]"
     >
-      <link
-        rel="preload"
-        as="image"
-        href={withBasePath("/photo/hero-section-background-mobile.webp")}
-        media="(max-width: 799px)"
-        fetchPriority="high"
-      />
-      <link
-        rel="preload"
-        as="image"
-        href={withBasePath("/photo/hero-section-background.webp")}
-        media="(min-width: 800px)"
-        fetchPriority="high"
-      />
+      <link rel="preload" as="image" href={withBasePath(HERO_POSTER)} fetchPriority="high" />
       <div className="absolute inset-0 overflow-hidden">
         <div className="hero-bg absolute inset-0 md:inset-[-8%] md:h-[116%] md:w-[116%]">
-          <picture>
-            <source
-              media="(min-width: 800px)"
-              srcSet={withBasePath("/photo/hero-section-background.webp")}
-              type="image/webp"
-            />
-            <img
-              src={withBasePath("/photo/hero-section-background-mobile.webp")}
-              alt=""
-              fetchPriority="high"
-              decoding="async"
+          <img
+            src={withBasePath(HERO_POSTER)}
+            alt=""
+            fetchPriority="high"
+            decoding="async"
+            className={cn(
+              "hero-bg-media object-cover object-[50%_42%]",
+              locale === "ar" ? "md:object-[72%_48%]" : "md:object-[28%_48%]",
+            )}
+          />
+          {allowVideo ? (
+            <video
+              ref={videoRef}
               className={cn(
                 "hero-bg-media object-cover object-[50%_42%]",
                 locale === "ar" ? "md:object-[72%_48%]" : "md:object-[28%_48%]",
               )}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              poster={withBasePath(HERO_POSTER)}
+              src={withBasePath(videoSrc)}
             />
-          </picture>
+          ) : null}
         </div>
       </div>
 

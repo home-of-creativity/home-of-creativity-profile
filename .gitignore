@@ -9,6 +9,9 @@
 !.yarn/sdks
 !.yarn/versions
 
+# 4K hero master — web copies live in public/video
+/video-source/
+
 # next
 /.next/
 /out/
