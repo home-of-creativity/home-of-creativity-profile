@@ -376,6 +376,8 @@ export function Contact() {
                       className={cn(fieldClass, "text-start", fieldErrors.email && "border-[#9a2b2b]")}
                     />
                     {fieldErrors.email ? <span className="text-[#9a2b2b]">{fieldErrors.email}</span> : null}
+                  </label>
+                </div>
                 <div className="grid gap-4 md:grid-cols-2">
                   <label className="grid gap-2 text-start text-[0.82rem]">
                     <span>{t(contact.form.phone)}</span>
