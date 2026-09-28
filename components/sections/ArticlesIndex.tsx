@@ -1,16 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { fetchArticles, type Article } from "@/lib/articles-api";
+import { Suspense, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { fetchArticle, fetchArticles, type Article } from "@/lib/articles-api";
 import { articlesPage } from "@/lib/content";
 import { pagePath } from "@/lib/base-path";
 import { useLanguage } from "@/lib/i18n";
 import { Reveal, Stagger, StaggerItem } from "../motion";
 import { SectionHeading, Shell } from "../ui";
+import { ArticleDetailStatic } from "./ArticleDetailStatic";
 
 function articleHref(slug: string) {
-  return pagePath(`articles/${slug}`);
+  return `${pagePath("articles")}?slug=${encodeURIComponent(slug)}`;
 }
 
 function localizedTitle(article: Article, locale: "en" | "ar") {
@@ -35,8 +37,47 @@ function formatDate(value: string | null | undefined, locale: "en" | "ar") {
   }).format(date);
 }
 
-/** Live list from the dashboard API. The static export cannot know slugs added after the last build. */
+/** Live list from the dashboard API. Detail is the same page with `?slug=`, so a post added after the export still opens. */
 export function ArticlesIndex() {
+  return (
+    <Suspense fallback={null}>
+      <ArticlesScreen />
+    </Suspense>
+  );
+}
+
+function ArticlesScreen() {
+  const params = useSearchParams();
+  const slug = params.get("slug")?.trim() ?? "";
+  if (slug) return <ArticleDetailLive slug={slug} />;
+  return <ArticlesList />;
+}
+
+function ArticleDetailLive({ slug }: { slug: string }) {
+  const { t } = useLanguage();
+  const [article, setArticle] = useState<Article | null | undefined>(undefined);
+
+  useEffect(() => {
+    let active = true;
+    setArticle(undefined);
+    fetchArticle(slug).then((row) => {
+      if (active) setArticle(row);
+    });
+    return () => {
+      active = false;
+    };
+  }, [slug]);
+
+  if (article === null) {
+    return <p className="bg-[var(--brand-cream)] py-28 text-center text-[0.95rem] text-[var(--brand-muted)]">{t(articlesPage.notFound)}</p>;
+  }
+  if (!article) {
+    return <p className="bg-[var(--brand-cream)] py-28 text-center text-[0.95rem] text-[var(--brand-muted)]">{t(articlesPage.loading)}</p>;
+  }
+  return <ArticleDetailStatic article={article} />;
+}
+
+function ArticlesList() {
   const { locale, t } = useLanguage();
   const [items, setItems] = useState<Article[]>([]);
   const [ready, setReady] = useState(false);

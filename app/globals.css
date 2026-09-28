@@ -1643,6 +1643,22 @@ html[lang="ar"] .article-card-date {
   color: var(--brand-orange);
 }
 
+html[data-theme="dark"] .article-card {
+  background: var(--brand-paper);
+  border-color: var(--brand-line);
+}
+
+html[data-theme="dark"] .article-card:hover {
+  border-color: color-mix(in srgb, var(--brand-orange) 55%, transparent);
+  box-shadow: 0 14px 36px rgb(0 0 0 / 0.28);
+}
+
+html[data-theme="dark"] .article-card-link,
+html[data-theme="dark"] .article-back-link,
+html[data-theme="dark"] .article-body a {
+  color: var(--brand-ivory);
+}
+
 .article-back-link {
   display: inline-flex;
   align-items: center;
