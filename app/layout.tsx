@@ -51,9 +51,6 @@ export const metadata: Metadata = {
     "visual identity Damascus",
   ],
   manifest: "/manifest.webmanifest",
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
     type: "website",
     locale: "ar_AR",

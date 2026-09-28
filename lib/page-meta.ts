@@ -143,13 +143,20 @@ export function pageMetadata({
   locale = "ar",
 }: MetaInput): Metadata {
   const url = `${SITE_URL}${path}`;
+  const languageAlternates = languages
+    ? { languages: Object.fromEntries(Object.entries(languages).map(([key, value]) => [key, `${SITE_URL}${value}`])) }
+    : {};
   return {
     title: { absolute: title },
     description,
-    alternates: {
-      canonical: url,
-      ...(languages ? { languages: Object.fromEntries(Object.entries(languages).map(([key, value]) => [key, `${SITE_URL}${value}`])) } : {}),
-    },
+    ...(noindex
+      ? {}
+      : {
+          alternates: {
+            canonical: url,
+            ...languageAlternates,
+          },
+        }),
     openGraph: {
       type,
       url,

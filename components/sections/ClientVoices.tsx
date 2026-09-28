@@ -69,32 +69,6 @@ export function ClientVoices({ initialClients }: { initialClients?: ShowcaseClie
           <p className="mt-5 text-[1.02rem] leading-relaxed text-[var(--brand-ink)]/70">{t(clientVoices.lead)}</p>
         </Reveal>
 
-        {clients.length > 0 ? (
-          <Reveal>
-            <ul
-              className="mx-auto mt-12 flex max-w-4xl list-none flex-wrap items-center justify-center gap-3 p-0 sm:gap-4"
-              aria-label={t(clientVoices.title)}
-            >
-              {clients.map((client) => (
-                <li key={client.id} className="list-none">
-                  <span className="grid h-[4.25rem] w-[4.25rem] place-items-center overflow-hidden rounded-full border border-[var(--brand-ink)]/8 bg-white shadow-[0_10px_24px_rgb(26_18_36/0.08)] sm:h-[4.75rem] sm:w-[4.75rem]">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={client.logo_url ?? ""}
-                      alt={clientLogoAlt(client.name, locale)}
-                      width={76}
-                      height={76}
-                      loading="lazy"
-                      decoding="async"
-                      className="h-full w-full object-contain p-2"
-                    />
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </Reveal>
-        ) : null}
-
         <Stagger className="mt-16 grid gap-16 md:mt-20 md:grid-cols-3 md:gap-6 lg:gap-8">
           {quotes.map((item, index) => {
             const logo = item.client?.logo_url;

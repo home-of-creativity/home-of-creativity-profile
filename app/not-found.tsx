@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
 import { NotFoundView } from "@/components/sections/NotFoundView";
-import { pageMetadata, pageSeo } from "@/lib/page-meta";
+import { pageSeo } from "@/lib/page-meta";
 
 export const metadata: Metadata = {
-  ...pageMetadata({ ...pageSeo.notFound, path: "/404/", noindex: true }),
-  robots: {
-    index: false,
-    follow: false,
-    googleBot: { index: false, follow: false },
-  },
+  title: { absolute: pageSeo.notFound.title },
+  description: pageSeo.notFound.description,
+  // Next inserts its own noindex meta while rendering this page. Another robots field duplicates it.
+  robots: null,
 };
 
 export default function NotFound() {
