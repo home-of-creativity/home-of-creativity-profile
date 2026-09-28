@@ -44,6 +44,7 @@ function ReelCard({
         <AutoplayVideo
           className="reel-card-video"
           src={reel.video_url}
+          poster={reel.poster_url ?? undefined}
           preload="metadata"
           onReady={(video) => {
             setState("ready");
@@ -61,20 +62,24 @@ function ReelCard({
   );
 }
 
-export function Reels() {
+/**
+ * `initialReels` comes from the build, so the static HTML and the first client render
+ * agree (reading localStorage here made returning visits hydrate a different grid, React #418).
+ */
+export function Reels({ initialReels }: { initialReels?: LandingReel[] } = {}) {
   const { locale, t } = useLanguage();
-  // Always start empty so SSR HTML matches the first client render.
-  // Reading localStorage here made returning visits hydrate a reel grid
-  // (React #418) while the static HTML still had the loading lottie.
-  const [items, setItems] = useState<LandingReel[]>([]);
-  const [ready, setReady] = useState(false);
+  const [items, setItems] = useState<LandingReel[]>(initialReels ?? []);
+  const [ready, setReady] = useState(initialReels !== undefined);
 
   useEffect(() => {
     let active = true;
-    const cached = peekLandingReels();
-    if (cached.length > 0) {
-      setItems(cached);
-      setReady(true);
+    // Reels uploaded after the last build still appear once the list refreshes.
+    if (initialReels === undefined) {
+      const cached = peekLandingReels();
+      if (cached.length > 0) {
+        setItems(cached);
+        setReady(true);
+      }
     }
     fetchLandingReels()
       .then((rows) => {
@@ -86,7 +91,7 @@ export function Reels() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [initialReels]);
 
   const loadingLabel = t(copy.loading);
   const cardLoadingLabel = t(copy.cardLoading);

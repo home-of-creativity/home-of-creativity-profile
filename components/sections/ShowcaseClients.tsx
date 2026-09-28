@@ -10,6 +10,11 @@ import { useLanguage } from "@/lib/i18n";
 import { cn } from "@/lib/cn";
 import { SectionHeading, Shell } from "../ui";
 
+/** Alt text in one pattern, with the client's own spelling from the CMS. */
+export function clientLogoAlt(name: string, locale: "ar" | "en") {
+  return locale === "ar" ? `شعار ${name}` : `${name} logo`;
+}
+
 
 function ClientLogoDisc({
   client,
@@ -18,11 +23,12 @@ function ClientLogoDisc({
   client: ShowcaseClient;
   decorative?: boolean;
 }) {
+  const { locale } = useLanguage();
   const initials = client.name.slice(0, 2).toUpperCase();
   const content = client.logo_url ? (
     <img
       src={client.logo_url}
-      alt={decorative ? "" : client.name}
+      alt={decorative ? "" : clientLogoAlt(client.name, locale)}
       width={120}
       height={120}
       draggable={false}
@@ -140,12 +146,14 @@ function ClientLogoMarquee({ clients }: { clients: ShowcaseClient[] }) {
   );
 }
 
-export function ShowcaseClients() {
+/** `initialClients` comes from the build (names and optimized logos in the static HTML). */
+export function ShowcaseClients({ initialClients }: { initialClients?: ShowcaseClient[] } = {}) {
   const { t } = useLanguage();
-  const [clients, setClients] = useState<ShowcaseClient[]>([]);
-  const [ready, setReady] = useState(false);
+  const [clients, setClients] = useState<ShowcaseClient[]>(initialClients ?? []);
+  const [ready, setReady] = useState(initialClients !== undefined);
 
   useEffect(() => {
+    if (initialClients !== undefined) return;
     let active = true;
 
     fetchShowcaseClients()
@@ -163,7 +171,7 @@ export function ShowcaseClients() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [initialClients]);
 
   return (
     <section

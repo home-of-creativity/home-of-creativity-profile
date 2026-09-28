@@ -9,27 +9,31 @@ import {
   loadGoogleMapsApi,
   type GoogleMapHandle,
 } from "@/lib/google-maps";
+import { officeById, officeMapUrl, type Office, type OfficeId } from "@/lib/offices";
 import { SITE_NAME } from "@/lib/site";
-import { officesGeo } from "@/lib/seo";
 import { useLanguage } from "@/lib/i18n";
 import { useInViewOnce } from "@/lib/use-in-view";
 
-const office = contact.offices[0];
-const geo = officesGeo.syr;
-
-export function ContactMap() {
+/**
+ * Map of one office. Only offices with coordinates have a map (Damascus today); callers
+ * check `office.geo` first. Defaults to Damascus, the map the site has always shown.
+ */
+export function ContactMap({ officeId = "syr" }: { officeId?: OfficeId } = {}) {
+  const office: Office = officeById(officeId);
+  const geo = office.geo ?? { latitude: 0, longitude: 0, zoom: 17 };
+  const mapsUrl = officeMapUrl(office);
   const { t, locale } = useLanguage();
   const [interactive, setInteractive] = useState(Boolean(googleMapsApiKey()));
   const hostRef = useRef<HTMLDivElement>(null);
   const mapNodeRef = useRef<HTMLDivElement>(null);
   const mapHandleRef = useRef<GoogleMapHandle | null>(null);
   const near = useInViewOnce(hostRef, { rootMargin: "240px 0px" });
-  const cityLabel = t(office.city);
+  const cityLabel = office.address ? t(office.address) : t(office.country);
   const cityRef = useRef(cityLabel);
   cityRef.current = cityLabel;
   const embedSrc = useMemo(
-    () => googleMapsClassicEmbedSrc(geo.latitude, geo.longitude, locale, geo.zoom, geo.mapsQuery),
-    [locale],
+    () => googleMapsClassicEmbedSrc(geo.latitude, geo.longitude, locale, geo.zoom, office.mapsQuery ?? undefined),
+    [locale, geo.latitude, geo.longitude, geo.zoom, office.mapsQuery],
   );
 
   useEffect(() => {
@@ -58,11 +62,11 @@ export function ContactMap() {
       cancelled = true;
       mapHandleRef.current = null;
     };
-  }, [interactive, near]);
+  }, [interactive, near, geo.latitude, geo.longitude, geo.zoom]);
 
   useEffect(() => {
     mapHandleRef.current?.setMarker({ lat: geo.latitude, lng: geo.longitude }, `${SITE_NAME} — ${cityLabel}`);
-  }, [cityLabel]);
+  }, [cityLabel, geo.latitude, geo.longitude]);
 
   return (
     <div ref={hostRef} className="relative mx-auto mt-14 max-w-3xl">
@@ -88,14 +92,16 @@ export function ContactMap() {
 
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--brand-line)] px-4 py-3 sm:px-5">
           <p className="m-0 text-[0.92rem] font-medium text-[var(--brand-ink)]">{cityLabel}</p>
+          {mapsUrl ? (
           <a
-            href={geo.mapsUrl}
+            href={mapsUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="text-[0.82rem] font-semibold text-[var(--brand-purple)] transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
           >
             {t(contact.map.open)}
           </a>
+          ) : null}
         </div>
       </div>
     </div>

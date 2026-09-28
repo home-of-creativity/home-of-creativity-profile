@@ -1,3 +1,4 @@
+import { apiGet } from "@/lib/api-fetch";
 import { rememberLoadedMedia } from "@/lib/media-cache";
 
 export type LandingReel = {
@@ -44,6 +45,12 @@ function rememberReels(rows: LandingReel[]) {
 }
 
 export async function fetchLandingReels(): Promise<LandingReel[]> {
+  if (typeof window === "undefined") {
+    // Build time: the published reels go into the static HTML of the homepage.
+    const payload = await apiGet<{ data?: LandingReel[] }>("/reels");
+    return Array.isArray(payload?.data) ? payload.data.filter(isReel) : [];
+  }
+
   const api = reelsApiUrl();
   if (!api) return peekLandingReels();
 

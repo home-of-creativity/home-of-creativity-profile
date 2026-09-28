@@ -7,6 +7,7 @@ import { useLanguage } from "@/lib/i18n";
 import { fetchShowcaseClients, type ShowcaseClient } from "@/lib/portfolio-api";
 import { Reveal, Stagger, StaggerItem } from "../motion";
 import { SectionHeading, Shell } from "../ui";
+import { clientLogoAlt } from "./ShowcaseClients";
 
 function normalizeName(value: string) {
   return value.toLowerCase().replace(/[&]/g, " ").replace(/\s+/g, " ").trim();
@@ -25,11 +26,14 @@ function matchClient(item: (typeof clientVoices.items)[number], clients: Showcas
   );
 }
 
-export function ClientVoices() {
-  const { t } = useLanguage();
-  const [clients, setClients] = useState<ShowcaseClient[]>([]);
+export function ClientVoices({ initialClients }: { initialClients?: ShowcaseClient[] } = {}) {
+  const { t, locale } = useLanguage();
+  const [clients, setClients] = useState<ShowcaseClient[]>(
+    (initialClients ?? []).filter((client) => Boolean(client.logo_url)),
+  );
 
   useEffect(() => {
+    if (initialClients !== undefined) return;
     let active = true;
     fetchShowcaseClients()
       .then((rows) => {
@@ -39,7 +43,7 @@ export function ClientVoices() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [initialClients]);
 
   const quotes = useMemo(
     () =>
@@ -77,7 +81,7 @@ export function ClientVoices() {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={client.logo_url ?? ""}
-                      alt={client.name}
+                      alt={clientLogoAlt(client.name, locale)}
                       width={76}
                       height={76}
                       loading="lazy"
@@ -95,6 +99,7 @@ export function ClientVoices() {
           {quotes.map((item, index) => {
             const logo = item.client?.logo_url;
             const name = t(item.name);
+            const logoAlt = item.client ? clientLogoAlt(item.client.name, locale) : name;
             return (
               <StaggerItem key={item.id} className="h-full">
                 <figure
@@ -108,7 +113,7 @@ export function ClientVoices() {
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={logo}
-                        alt={name}
+                        alt={logoAlt}
                         width={88}
                         height={88}
                         loading="lazy"

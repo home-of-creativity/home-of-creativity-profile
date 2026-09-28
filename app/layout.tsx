@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Sans_Arabic, Inter } from "next/font/google";
 import { SeoJsonLd } from "@/components/SeoJsonLd";
-import { BASE_PATH, withBasePath } from "@/lib/base-path";
+import { BASE_PATH } from "@/lib/base-path";
 import { LOCALE_BOOT_SCRIPT } from "@/lib/locale-boot";
 import { THEME_BOOT_SCRIPT } from "@/lib/theme-boot";
-import { officesGeo } from "@/lib/seo";
-import { GOOGLE_SITE_VERIFICATION, OG_IMAGE_PATH, SITE_NAME, SITE_NAME_AR, SITE_URL, seoCopy, seoMetaDescription, seoMetaTitle } from "@/lib/site";
+import { pageSeo, TITLE_BRAND } from "@/lib/page-meta";
+import { GOOGLE_SITE_VERIFICATION, OG_IMAGE_PATH, SITE_NAME, SITE_URL } from "@/lib/site";
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -24,14 +24,14 @@ const ibmPlexArabic = IBM_Plex_Sans_Arabic({
   fallback: ["Geeza Pro", "Tahoma", "Arial", "sans-serif"],
 });
 
-const homeTitle = seoMetaTitle(seoCopy.homeTitle);
-const homeDescription = seoMetaDescription(seoCopy.homeDescription);
+const homeTitle = pageSeo.home.title;
+const homeDescription = pageSeo.home.description;
 
 export const metadata: Metadata = {
   metadataBase: new URL(`${SITE_URL}/`),
   title: {
     default: homeTitle,
-    template: `%s — ${SITE_NAME} | ${SITE_NAME_AR}`,
+    template: `%s | ${TITLE_BRAND}`,
   },
   description: homeDescription,
   applicationName: "Home of Creativity",
@@ -95,16 +95,13 @@ export const metadata: Metadata = {
         },
       }
     : {}),
-  other: {
-    "geo.region": officesGeo.syr.region,
-    "geo.placename": "Damascus, Al Hamra",
-    "geo.position": `${officesGeo.syr.latitude};${officesGeo.syr.longitude}`,
-    ICBM: `${officesGeo.syr.latitude}, ${officesGeo.syr.longitude}`,
-  },
   icons: {
-    icon: [{ url: `${BASE_PATH}/hummingbird.svg`, type: "image/svg+xml" }],
-    shortcut: `${BASE_PATH}/hummingbird.svg`,
-    apple: `${BASE_PATH}/hummingbird.svg`,
+    icon: [
+      { url: `${BASE_PATH}/favicon.ico`, sizes: "any" },
+      { url: `${BASE_PATH}/hummingbird.svg`, type: "image/svg+xml" },
+    ],
+    shortcut: `${BASE_PATH}/favicon.ico`,
+    apple: `${BASE_PATH}/apple-touch-icon.png`,
   },
 };
 
@@ -127,20 +124,6 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <link
-          rel="preload"
-          as="image"
-          href={withBasePath("/photo/hero-section-background-mobile.webp")}
-          media="(max-width: 799px)"
-          fetchPriority="high"
-        />
-        <link
-          rel="preload"
-          as="image"
-          href={withBasePath("/photo/hero-section-background.webp")}
-          media="(min-width: 800px)"
-          fetchPriority="high"
-        />
         <script dangerouslySetInnerHTML={{ __html: LOCALE_BOOT_SCRIPT }} />
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
       </head>

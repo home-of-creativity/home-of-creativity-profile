@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { fetchLegalPage, type LegalPage } from "@/lib/legal-api";
+import { legalFallback } from "@/lib/legal-fallback";
 import { useLanguage } from "@/lib/i18n";
 import { Reveal } from "../motion";
 import { SectionHeading, Shell } from "../ui";
@@ -16,7 +17,10 @@ export function LegalDocument({ slug }: { slug: "privacy" | "terms" }) {
     setReady(false);
     fetchLegalPage(slug)
       .then((data) => {
-        if (active) setPage(data);
+        if (active) setPage(data ?? legalFallback[slug]);
+      })
+      .catch(() => {
+        if (active) setPage(legalFallback[slug]);
       })
       .finally(() => {
         if (active) setReady(true);
@@ -48,13 +52,9 @@ export function LegalDocument({ slug }: { slug: "privacy" | "terms" }) {
           <p className="mx-auto max-w-2xl text-center text-[0.95rem] text-[var(--brand-ink)]/70">
             {locale === "ar" ? "جاري التحميل…" : "Loading…"}
           </p>
-        ) : !page ? (
-          <p className="mx-auto max-w-2xl text-center text-[0.95rem] text-[var(--brand-ink)]/70">
-            {locale === "ar" ? "تعذر تحميل هذه الصفحة." : "This page could not be loaded."}
-          </p>
         ) : (
           <article className="legal-doc mx-auto max-w-2xl text-start">
-            {page.sections.map((section) => {
+            {(page ?? legalFallback[slug]).sections.map((section) => {
               const heading = (locale === "ar" ? section.heading_ar : section.heading_en).trim();
               const html = locale === "ar" ? section.html_ar : section.html_en;
               return (

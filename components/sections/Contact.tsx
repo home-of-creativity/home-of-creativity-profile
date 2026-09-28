@@ -1,9 +1,11 @@
 "use client";
 
 import { Great_Vibes } from "next/font/google";
-import { FormEvent, useEffect, useRef, useState } from "react";
-import { contact, services } from "@/lib/content";
-import { fetchContactChannels, mergeContactChannels, sendContactMessage } from "@/lib/contact-api";
+import { FormEvent, useRef, useState } from "react";
+import { contact, nav, services } from "@/lib/content";
+import { sendContactMessage } from "@/lib/contact-api";
+import { officeHeading, offices, phoneLabels } from "@/lib/offices";
+import { officialSocialProfiles } from "@/lib/social-embeds";
 
 const greatVibes = Great_Vibes({
   subsets: ["latin"],
@@ -11,7 +13,7 @@ const greatVibes = Great_Vibes({
   display: "swap",
   variable: "--font-great-vibes",
 });
-import { useLanguage, type Copy } from "@/lib/i18n";
+import { useLanguage } from "@/lib/i18n";
 import { whatsappHref } from "@/lib/whatsapp";
 import { ContactMap } from "@/components/ContactMap";
 import { Hummingbird } from "../brand";
@@ -23,10 +25,6 @@ import { useGsapScope } from "@/lib/gsap-client";
 
 function telHref(digits: string) {
   return `tel:+${digits.replace(/\D/g, "")}`;
-}
-
-function lineText(text: string | Copy, t: (copy: Copy) => string) {
-  return typeof text === "string" ? text : t(text);
 }
 
 function BinderClip({ className }: { className?: string }) {
@@ -57,24 +55,7 @@ function BinderClip({ className }: { className?: string }) {
   );
 }
 
-function ChannelIcon({ id }: { id: (typeof contact.channels)[number]["id"] }) {
-  if (id === "mobile") {
-    return (
-      <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden fill="none">
-        <rect x="7" y="2.5" width="10" height="19" rx="2.2" stroke="#3d6cb9" strokeWidth="1.7" />
-        <path d="M11 18.5h2" stroke="#3d6cb9" strokeWidth="1.7" strokeLinecap="round" />
-      </svg>
-    );
-  }
-
-  if (id === "whatsapp") {
-    return (
-      <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden fill="#25D366">
-        <path d="M12 3.2c-4.7 0-8.5 3.7-8.5 8.4 0 1.5.4 2.9 1.1 4.1L3.4 20.6l5-1.3c1.2.6 2.5 1 3.6 1 4.7 0 8.5-3.7 8.5-8.4S16.7 3.2 12 3.2Zm4.7 11.8c-.2.5-1.1 1-1.6 1.1-.4.1-.9.1-1.5-.1-.3-.1-.8-.3-1.3-.5-2.3-1-3.8-3.3-3.9-3.5-.1-.2-1-1.3-1-2.5s.6-1.8.9-2c.2-.2.5-.3.8-.3h.6c.2 0 .4 0 .6.5.2.6.8 2 .8 2.1.1.1.1.3 0 .4l-.4.5c-.1.1-.2.3-.1.5.1.2.5 1 .1.2 1.7.8 1.5.4 1.8.3.2-.1.5-.4.7-.6.2-.2.4-.2.6-.1.2.1 1.4.7 1.6.8.2.1.4.2.4.3 0 .2 0 .8-.3 1.3Z" />
-      </svg>
-    );
-  }
-
+function ChannelIcon({ id }: { id: "social" | "location" }) {
   if (id === "social") {
     return (
       <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden fill="none">
@@ -118,21 +99,10 @@ export function Contact() {
   const { t, locale, ready } = useLanguage();
   const listRef = useRef<HTMLUListElement>(null);
   const [form, setForm] = useState<FormState>(emptyForm);
-  const [errorKind, setErrorKind] = useState<"fields" | "send" | "config" | null>(null);
+  const [errorKind, setErrorKind] = useState<"send" | "config" | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<"name" | "email" | "message", string>>>({});
   const [sending, setSending] = useState(false);
   const [sentTo, setSentTo] = useState<"support" | "sales" | null>(null);
-  const [channels, setChannels] = useState(contact.channels);
-
-  useEffect(() => {
-    let active = true;
-    fetchContactChannels().then((data) => {
-      if (active) setChannels(mergeContactChannels(data));
-    });
-    return () => {
-      active = false;
-    };
-  }, [locale]);
-
   useGsapScope(
     ({ gsap }) => {
       const root = listRef.current;
@@ -175,7 +145,7 @@ export function Contact() {
 
       return () => mm.revert();
     },
-    { scope: listRef, dependencies: [ready, locale, channels] },
+    { scope: listRef, dependencies: [ready, locale] },
   );
 
   const fieldClass =
@@ -189,12 +159,18 @@ export function Contact() {
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (sending) return;
-    const valid = form.name.trim() && form.email.trim() && form.message.trim();
-    if (!valid) {
-      setErrorKind("fields");
+    const nextErrors: Partial<Record<"name" | "email" | "message", string>> = {};
+    if (!form.name.trim()) nextErrors.name = t(contact.form.nameRequired);
+    if (!form.email.trim()) nextErrors.email = t(contact.form.emailRequired);
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) nextErrors.email = t(contact.form.emailInvalid);
+    if (!form.message.trim()) nextErrors.message = t(contact.form.messageRequired);
+    if (Object.keys(nextErrors).length > 0) {
+      setFieldErrors(nextErrors);
+      setErrorKind(null);
       setSentTo(null);
       return;
     }
+    setFieldErrors({});
     setErrorKind(null);
     setSending(true);
     const result = await sendContactMessage({
@@ -208,6 +184,15 @@ export function Contact() {
     });
     setSending(false);
     if (!result.ok) {
+      if (result.reason === "validation") {
+        setFieldErrors({
+          name: result.fields.name?.[0],
+          email: result.fields.email ? t(contact.form.emailInvalid) : undefined,
+          message: result.fields.message?.[0],
+        });
+        setSentTo(null);
+        return;
+      }
       setErrorKind(result.reason === "config" || result.reason === "unavailable" ? "config" : "send");
       setSentTo(null);
       return;
@@ -257,12 +242,12 @@ export function Contact() {
               ref={listRef}
               className="relative mx-auto grid max-w-3xl list-none gap-5 p-0 sm:grid-cols-2"
             >
-                {channels.filter((channel) => channel.lines.length > 0).map((channel) => (
-                  <li key={channel.id} className="contact-channel list-none">
+                {offices.map((office) => (
+                  <li key={office.id} className="contact-channel list-none">
                     <article className="relative flex items-center">
                       <span className="relative z-10 grid h-14 w-14 shrink-0 place-items-center rounded-full border border-[var(--brand-ink)]/12 bg-white shadow-[0_8px_20px_rgb(10_6_24/0.08)]">
-                        <span className="sr-only">{t(channel.label)}</span>
-                        <ChannelIcon id={channel.id} />
+                        <span className="sr-only">{t(contact.map.title)}</span>
+                        <ChannelIcon id="location" />
                       </span>
                       <div className="relative -ms-7 min-w-0 flex-1 rounded-2xl border border-[var(--brand-ink)]/12 bg-white py-3.5 ps-10 pe-4 shadow-[0_10px_24px_rgb(10_6_24/0.05)]">
                         <span
@@ -270,67 +255,56 @@ export function Contact() {
                           className="absolute end-3 bottom-0 h-1 w-14 rounded-full bg-[linear-gradient(90deg,var(--brand-teal),var(--brand-purple))]"
                         />
                         <div className="grid gap-1.5 text-start">
-                          {channel.lines.map((line) => {
-                            const text = lineText("text" in line ? line.text : "", t);
-                            const platform = "platform" in line ? line.platform : undefined;
-                            const label = `${platform ?? ("region" in line ? line.region : "")} ${text}`;
-                            if (channel.kind === "whatsapp" && "digits" in line && line.digits) {
-                              return (
-                                <a
-                                  key={label}
-                                  href={whatsappHref(t(contact.greeting), line.digits)}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-[0.95rem] font-medium transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
-                                >
-                                  <span className="text-[var(--brand-muted)]">{line.region}</span>{" "}
-                                  <span className="contact-number" dir="ltr">{text}</span>
-                                </a>
-                              );
-                            }
-
-                            if (channel.kind === "tel" && "digits" in line && line.digits) {
-                              return (
-                                <a
-                                  key={label}
-                                  href={telHref(line.digits)}
-                                  className="text-[0.95rem] font-medium transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
-                                >
-                                  <span className="text-[var(--brand-muted)]">{line.region}</span>{" "}
-                                  <span className="contact-number" dir="ltr">{text}</span>
-                                </a>
-                              );
-                            }
-
-                            if (channel.kind === "link" && "href" in line && line.href) {
-                              return (
-                                <a
-                                  key={label}
-                                  href={line.href}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-2 text-[0.95rem] font-medium transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
-                                >
-                                  {platform ? <SocialBrandIcon platform={platform} className="h-4 w-4 shrink-0" /> : null}
-                                  <span>{text}</span>
-                                </a>
-                              );
-                            }
-
-                            return (
-                              <p key={label} className="m-0 text-[0.95rem] font-medium">
-                                {"region" in line && line.region ? (
-                                  <span className="text-[var(--brand-muted)]">{line.region} </span>
-                                ) : null}
-                                {text}
-                              </p>
-                            );
-                          })}
+                          <p className="m-0 text-[0.95rem] font-semibold">
+                            {officeHeading(office, locale)}
+                          </p>
+                          {office.address ? <p className="m-0 text-[0.95rem] font-medium">{t(office.address)}</p> : null}
+                          {office.phones.map((phone) => (
+                            <a
+                              key={`${phone.kind}-${phone.digits}`}
+                              href={phone.kind === "whatsapp" ? whatsappHref(t(contact.greeting), phone.digits) : telHref(phone.digits)}
+                              {...(phone.kind === "whatsapp" ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                              className="text-[0.95rem] font-medium transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
+                            >
+                              <span className="text-[var(--brand-muted)]">{t(phoneLabels[phone.kind])}</span>{" "}
+                              <span className="contact-number" dir="ltr">{phone.display}</span>
+                            </a>
+                          ))}
                         </div>
                       </div>
                     </article>
                   </li>
                 ))}
+                <li className="contact-channel list-none">
+                  <article className="relative flex items-center">
+                    <span className="relative z-10 grid h-14 w-14 shrink-0 place-items-center rounded-full border border-[var(--brand-ink)]/12 bg-white shadow-[0_8px_20px_rgb(10_6_24/0.08)]">
+                      <span className="sr-only">{t(nav.social)}</span>
+                      <ChannelIcon id="social" />
+                    </span>
+                    <div className="relative -ms-7 min-w-0 flex-1 rounded-2xl border border-[var(--brand-ink)]/12 bg-white py-3.5 ps-10 pe-4 shadow-[0_10px_24px_rgb(10_6_24/0.05)]">
+                      <span
+                        aria-hidden
+                        className="absolute end-3 bottom-0 h-1 w-14 rounded-full bg-[linear-gradient(90deg,var(--brand-teal),var(--brand-purple))]"
+                      />
+                      <div className="grid gap-1.5 text-start">
+                        {officialSocialProfiles()
+                          .filter((profile) => profile.platform !== "telegram")
+                          .map((profile) => (
+                            <a
+                              key={profile.platform}
+                              href={profile.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 text-[0.95rem] font-medium transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
+                            >
+                              <SocialBrandIcon platform={profile.platform} className="h-4 w-4 shrink-0" />
+                              <span>{profile.name}</span>
+                            </a>
+                          ))}
+                      </div>
+                    </div>
+                  </article>
+                </li>
                 {contact.emails
                   .filter((email) => email.id !== "sales")
                   .map((email) => (
@@ -385,8 +359,9 @@ export function Contact() {
                       dir={locale === "ar" ? "rtl" : "ltr"}
                       value={form.name}
                       onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
-                      className={cn(fieldClass, "text-start")}
+                      className={cn(fieldClass, "text-start", fieldErrors.name && "border-[#9a2b2b]")}
                     />
+                    {fieldErrors.name ? <span className="text-[#9a2b2b]">{fieldErrors.name}</span> : null}
                   </label>
                   <label className="grid gap-2 text-start text-[0.82rem]">
                     <span>{t(contact.form.email)}</span>
@@ -398,10 +373,9 @@ export function Contact() {
                       dir="ltr"
                       value={form.email}
                       onChange={(e) => setForm((prev) => ({ ...prev, email: e.target.value }))}
-                      className={cn(fieldClass, "text-start")}
+                      className={cn(fieldClass, "text-start", fieldErrors.email && "border-[#9a2b2b]")}
                     />
-                  </label>
-                </div>
+                    {fieldErrors.email ? <span className="text-[#9a2b2b]">{fieldErrors.email}</span> : null}
                 <div className="grid gap-4 md:grid-cols-2">
                   <label className="grid gap-2 text-start text-[0.82rem]">
                     <span>{t(contact.form.phone)}</span>
@@ -442,19 +416,14 @@ export function Contact() {
                     dir={locale === "ar" ? "rtl" : "ltr"}
                     value={form.message}
                     onChange={(e) => setForm((prev) => ({ ...prev, message: e.target.value }))}
-                    className={cn(fieldClass, "min-h-[8.5rem] resize-y text-start")}
+                    className={cn(fieldClass, "min-h-[8.5rem] resize-y text-start", fieldErrors.message && "border-[#9a2b2b]")}
                   />
+                  {fieldErrors.message ? <span className="text-[#9a2b2b]">{fieldErrors.message}</span> : null}
                 </label>
 
                 {errorKind ? (
                   <p role="alert" className="m-0 text-[0.9rem] text-[#9a2b2b]">
-                    {t(
-                      errorKind === "fields"
-                        ? contact.form.error
-                        : errorKind === "config"
-                          ? contact.form.errorConfig
-                          : contact.form.errorSend,
-                    )}
+                    {t(errorKind === "config" ? contact.form.errorConfig : contact.form.errorSend)}
                   </p>
                 ) : null}
                 <button

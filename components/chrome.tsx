@@ -12,10 +12,12 @@ import {
   normalizePathname,
   pagePath,
   sectionPath,
+  withBasePath,
 } from "@/lib/base-path";
 import { contact, footer, nav } from "@/lib/content";
-import { fetchContactChannels, mergeContactChannels } from "@/lib/contact-api";
+import { officeHeading, officePath, offices, phoneHref, phoneLabels } from "@/lib/offices";
 import { fetchProfilePdf } from "@/lib/profile-pdf-api";
+import { officialSocialProfiles } from "@/lib/social-embeds";
 import { useLanguage, type Copy } from "@/lib/i18n";
 import { useTheme } from "@/lib/theme";
 import { cn } from "@/lib/cn";
@@ -39,7 +41,7 @@ const navLinkDefs: SiteLinkDef[] = [
 ];
 
 const footerLinkDefs: SiteLinkDef[] = [
-  { key: "about", section: "about", label: nav.about },
+  { key: "about", page: "about", label: nav.about },
   { key: "services", section: "services", label: nav.services },
   { key: "clients", section: "clients", label: nav.clientLogos },
   { key: "client-story", page: "client-story", label: nav.clientStory },
@@ -592,22 +594,13 @@ export function Footer() {
   const pathname = usePathname();
   const onHome = isHomePathname(pathname);
   const reduce = useReducedMotion();
-  const [channels, setChannels] = useState(contact.channels);
   const [profilePdfUrl, setProfilePdfUrl] = useState<string | null>(null);
   const footerLinks = useMemo(
     () => footerLinkDefs.map((def) => ({ ...def, href: resolveHref(def, onHome) })),
     [onHome],
   );
-
-  useEffect(() => {
-    let active = true;
-    fetchContactChannels().then((data) => {
-      if (active) setChannels(mergeContactChannels(data));
-    });
-    return () => {
-      active = false;
-    };
-  }, [locale]);
+  const linkClass =
+    "text-[0.88rem] text-white/70 transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]";
 
   useEffect(() => {
     let cancelled = false;
@@ -665,71 +658,52 @@ export function Footer() {
             {t(footer.reach)}
           </p>
           <ul className="mt-4 grid list-none gap-3 p-0">
-            {channels.map((channel) => (
-              <li key={channel.id} className="list-none text-start">
-                <p className="m-0 text-[0.78rem] text-[var(--brand-orange)]">{t(channel.label)}</p>
-                <div className="mt-1 flex flex-col gap-1">
-                  {channel.lines.map((line) => {
-                    const value = typeof line.text === "string" ? line.text : t(line.text as Copy);
-                    const platform = "platform" in line ? line.platform : undefined;
-                    const label = `${t(channel.label)} ${platform ?? ("region" in line ? line.region : "")} ${value}`;
-                    const body = platform ? (
-                      <span className="inline-flex items-center gap-2">
-                        <SocialBrandIcon platform={platform} className="h-4 w-4 shrink-0" />
-                        <span>{value}</span>
-                      </span>
+            {offices.map((office) => {
+              const path = officePath(office);
+              const heading = officeHeading(office, locale);
+              return (
+                <li key={office.id} className="list-none text-start">
+                  <p className="m-0 text-[0.78rem] text-[var(--brand-orange)]">
+                    {path ? (
+                      <a href={withBasePath(path)} className="transition-colors hover:text-white">
+                        {heading}
+                      </a>
                     ) : (
-                      <>
-                        {"region" in line && line.region ? <span className="text-white/80">{line.region} </span> : null}
-                        <span dir={channel.kind === "tel" || channel.kind === "whatsapp" ? "ltr" : undefined}>{value}</span>
-                      </>
-                    );
-                    if (channel.kind === "whatsapp" && "digits" in line && line.digits) {
-                      return (
-                        <a
-                          key={label}
-                          href={whatsappHref(t(contact.greeting), line.digits)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-[0.88rem] text-white/70 transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
-                        >
-                          {body}
-                        </a>
-                      );
-                    }
-                    if (channel.kind === "tel" && "digits" in line && line.digits) {
-                      return (
-                        <a
-                          key={label}
-                          href={`tel:+${line.digits}`}
-                          className="text-[0.88rem] text-white/70 transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
-                        >
-                          {body}
-                        </a>
-                      );
-                    }
-                    if (channel.kind === "link" && "href" in line && line.href) {
-                      return (
-                        <a
-                          key={label}
-                          href={line.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-[0.88rem] text-white/70 transition-colors hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
-                        >
-                          {body}
-                        </a>
-                      );
-                    }
-                    return (
-                      <p key={label} className="m-0 text-[0.88rem] text-white/70">
-                        {body}
-                      </p>
-                    );
-                  })}
-                </div>
-              </li>
-            ))}
+                      heading
+                    )}
+                  </p>
+                  <div className="mt-1 flex flex-col gap-1">
+                    {office.address ? <p className="m-0 text-[0.88rem] text-white/70">{t(office.address)}</p> : null}
+                    {office.phones.map((phone) => (
+                      <a
+                        key={`${phone.kind}-${phone.digits}`}
+                        href={phone.kind === "whatsapp" ? whatsappHref(t(contact.greeting), phone.digits) : phoneHref(phone)}
+                        {...(phone.kind === "whatsapp" ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                        className={linkClass}
+                      >
+                        <span className="text-white/80">{t(phoneLabels[phone.kind])} </span>
+                        <span dir="ltr">{phone.display}</span>
+                      </a>
+                    ))}
+                  </div>
+                </li>
+              );
+            })}
+            <li className="list-none text-start">
+              <p className="m-0 text-[0.78rem] text-[var(--brand-orange)]">{t(nav.social)}</p>
+              <div className="mt-1 flex flex-col gap-1">
+                {officialSocialProfiles()
+                  .filter((profile) => profile.platform !== "telegram")
+                  .map((profile) => (
+                    <a key={profile.platform} href={profile.url} target="_blank" rel="noopener noreferrer" className={linkClass}>
+                      <span className="inline-flex items-center gap-2">
+                        <SocialBrandIcon platform={profile.platform} className="h-4 w-4 shrink-0" />
+                        <span>{profile.name}</span>
+                      </span>
+                    </a>
+                  ))}
+              </div>
+            </li>
           </ul>
         </div>
 

@@ -1,6 +1,6 @@
 # Marketing site (Next.js static export)
 
-Last updated: 22 September 2026 (non-branded GEO — `/services/branding/`, `/services/brand-identity/`, retitled `/services/visual-identity/`, `/locations/damascus/`, six static articles, article index in the first HTML)
+Last updated: 28 September 2026 (QA: legal fallback, article slug URLs, one h1 on articles, contact field errors, Damascus-only about line, favicon)
 
 Path: `design/`  
 Installed: Next **15.5.25**, React **19.2.8**, Tailwind **4.3.3**, GSAP **3.15.0**, Framer Motion **12.x**  

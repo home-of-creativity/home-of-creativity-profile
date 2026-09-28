@@ -5,7 +5,7 @@ import { ProjectDetailView } from "@/components/sections/ProjectDetailView";
 import { publicApiUrl } from "@/lib/public-api";
 import { fetchPortfolioProject, fetchPortfolioProjects } from "@/lib/portfolio-api";
 import { projectJsonLd } from "@/lib/seo";
-import { pageDescription, pageTitle } from "@/lib/site";
+import { OG_IMAGE_PATH, SITE_URL, pageDescription, pageTitle } from "@/lib/site";
 
 /**
  * Demo/static deploys (no real backend configured) intentionally get zero
@@ -17,7 +17,12 @@ import { pageDescription, pageTitle } from "@/lib/site";
 export async function generateStaticParams() {
   if (!publicApiUrl()) return [{ id: "__none__" }];
   const projects = await fetchPortfolioProjects();
-  if (projects.length === 0) return [{ id: "__none__" }];
+  if (projects.length === 0) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("Portfolio API returned no projects. Refusing to export /projects without real ids.");
+    }
+    return [{ id: "__none__" }];
+  }
   return projects.map((project) => ({ id: String(project.id) }));
 }
 
@@ -41,7 +46,12 @@ export async function generateMetadata({
     title: { absolute: title },
     description,
     alternates: { canonical: url },
-    openGraph: { title, description, url },
+    openGraph: {
+      title,
+      description,
+      url,
+      images: [{ url: `${SITE_URL}${OG_IMAGE_PATH}`, width: 1920, height: 1080, alt: title }],
+    },
   };
 }
 
@@ -51,7 +61,8 @@ export default async function ProjectDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const project = await fetchPortfolioProject(id);
+  const listed = (await fetchPortfolioProjects()).find((item) => String(item.id) === id) ?? null;
+  const project = (await fetchPortfolioProject(id)) ?? listed;
   if (!project) notFound();
 
   return (

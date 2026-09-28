@@ -146,16 +146,18 @@ function categoryLabel(category: PortfolioCategory | undefined, locale: "en" | "
   return locale === "ar" ? category.name_ar : category.name_en;
 }
 
-export function Projects() {
+/** `initialProjects` comes from the build so the project cards are in the static HTML. */
+export function Projects({ initialProjects }: { initialProjects?: PortfolioProject[] } = {}) {
   const { t, locale } = useLanguage();
-  const [items, setItems] = useState<PortfolioProject[]>([]);
-  const [ready, setReady] = useState(false);
+  const [items, setItems] = useState<PortfolioProject[]>(initialProjects ?? []);
+  const [ready, setReady] = useState(initialProjects !== undefined);
   const [filter, setFilter] = useState<string>("all");
   const [expanded, setExpanded] = useState(false);
   const backdropSrc = backdropFor(filter);
   const gridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (initialProjects !== undefined) return;
     let active = true;
     fetchPortfolioProjects()
       .then((rows) => {
@@ -170,7 +172,7 @@ export function Projects() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [initialProjects]);
 
   const categories = useMemo(() => {
     const map = new Map<string, PortfolioCategory>();

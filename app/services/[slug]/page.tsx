@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Footer, Nav } from "@/components/chrome";
-import { SeoServiceDetailJsonLd } from "@/components/SeoServiceDetailJsonLd";
+import { JsonLd } from "@/components/JsonLd";
 import { ServiceDetailPage } from "@/components/sections/ServiceDetailPage";
+import { pageMetadata } from "@/lib/page-meta";
+import { serviceDetailJsonLd } from "@/lib/seo";
 import { findServiceDetail, serviceDetails } from "@/lib/service-details";
-import { OG_IMAGE_PATH, seoMetaDescription, seoMetaTitle } from "@/lib/site";
 
 export const dynamicParams = false;
 
@@ -19,22 +20,12 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const detail = findServiceDetail(slug);
   if (!detail) return {};
 
-  const title = seoMetaTitle(detail.metaTitle);
-  const description = seoMetaDescription(detail.metaDescription);
-  const url = `/services/${detail.slug}/`;
-
-  return {
-    title: { absolute: title },
-    description,
-    alternates: { canonical: url },
-    openGraph: {
-      title,
-      description,
-      url,
-      images: [{ url: OG_IMAGE_PATH, width: 1920, height: 1080, alt: detail.title.en }],
-    },
-    twitter: { card: "summary_large_image", title, description },
-  };
+  return pageMetadata({
+    title: detail.metaTitle.ar,
+    description: detail.metaDescription.ar,
+    path: `/services/${detail.slug}/`,
+    image: { url: `/og/services/${detail.slug}.jpg`, width: 1200, height: 630, alt: detail.title.ar },
+  });
 }
 
 export default async function ServiceRoutePage({ params }: Params) {
@@ -43,7 +34,7 @@ export default async function ServiceRoutePage({ params }: Params) {
 
   return (
     <>
-      <SeoServiceDetailJsonLd slug={slug} />
+      <JsonLd data={serviceDetailJsonLd(slug)} />
       <Nav />
       <main id="top">
         <ServiceDetailPage slug={slug} />

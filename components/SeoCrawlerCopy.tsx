@@ -1,7 +1,8 @@
-import { about, contact, faq, hero, services } from "@/lib/content";
-import { officesGeo } from "@/lib/seo";
+import { about, faq, hero, services } from "@/lib/content";
+import { officeMapUrl, officePath, offices, phoneLabels } from "@/lib/offices";
+import { pageSeo } from "@/lib/page-meta";
 import { serviceDetailById } from "@/lib/service-details";
-import { SITE_NAME, SITE_NAME_AR, seoCopy, seoMetaTitle } from "@/lib/site";
+import { SITE_NAME, SITE_NAME_AR } from "@/lib/site";
 import { officialSocialProfiles } from "@/lib/social-embeds";
 
 function escapeHtml(value: string) {
@@ -13,20 +14,26 @@ function escapeHtml(value: string) {
 }
 
 function crawlerHtml() {
-  const syr = contact.offices.find((office) => office.id === "syr");
   const profiles = officialSocialProfiles()
     .map(
       (profile) =>
         `<li><a href="${escapeHtml(profile.url)}" rel="me">${escapeHtml(profile.name)}</a></li>`,
     )
     .join("");
-  const offices = contact.offices
+  const officeList = offices
     .map((office) => {
-      const phone = office.phones[0] ? ` — ${escapeHtml(office.phones[0])}` : "";
-      return `<p>${escapeHtml(SITE_NAME)}, ${escapeHtml(office.city.ar)} ${escapeHtml(office.city.en)}${phone}</p>`;
+      const name = office.city ? `${office.city.ar} / ${office.city.en}` : `${office.country.ar} / ${office.country.en}`;
+      const path = officePath(office);
+      const mapUrl = officeMapUrl(office);
+      const heading = path ? `<a href="${path}">${escapeHtml(name)}</a>` : escapeHtml(name);
+      const address = office.address ? `<p>${escapeHtml(office.address.ar)} — ${escapeHtml(office.address.en)}</p>` : "";
+      const phones = office.phones
+        .map((phone) => `<li>${escapeHtml(phoneLabels[phone.kind].ar)}: <span dir="ltr">${escapeHtml(phone.display)}</span></li>`)
+        .join("");
+      const map = mapUrl ? `<p><a href="${escapeHtml(mapUrl)}">Google Maps</a></p>` : "";
+      return `<article><h3>${heading}</h3>${address}${phones ? `<ul>${phones}</ul>` : ""}${map}</article>`;
     })
     .join("");
-  const syrPhone = syr?.phones[0] ? ` — ${escapeHtml(syr.phones[0])}` : "";
   const servicesList = services.items
     .map((item) => {
       const label = `${escapeHtml(item.ar)} / ${escapeHtml(item.en)}`;
@@ -43,42 +50,33 @@ function crawlerHtml() {
 
   return [
     "<header>",
-    `<p>${escapeHtml(SITE_NAME_AR)}</p>`,
+    `<p>${escapeHtml(SITE_NAME_AR)} — ${escapeHtml(SITE_NAME)}</p>`,
     `<p>${escapeHtml(`${hero.titleLead.en} ${hero.titleAccent.en} — ${hero.titleLead.ar} ${hero.titleAccent.ar}`)}</p>`,
-    `<p>${escapeHtml(seoCopy.homeDescription.ar)}</p>`,
-    `<p>${escapeHtml(seoCopy.homeDescription.en)}</p>`,
+    `<p>${escapeHtml(pageSeo.home.description)}</p>`,
     "</header>",
     "<section>",
     `<h2>${escapeHtml(`${about.title.ar} — ${about.title.en}`)}</h2>`,
     `<p>${escapeHtml(about.body.ar)}</p>`,
+    `<p><a href="/about/">${escapeHtml(about.readMore.ar)}</a></p>`,
     "</section>",
     "<section>",
     `<h2>${escapeHtml(`${services.title.ar} — ${services.title.en}`)}</h2>`,
     `<ul>${servicesList}</ul>`,
+    `<p><a href="/pricing/">الباقات والأسعار — Packages and prices</a></p>`,
     "</section>",
     "<section>",
-    `<h2>${escapeHtml(seoMetaTitle(seoCopy.socialTitle))}</h2>`,
-    `<p>${escapeHtml(seoCopy.socialDescription.ar)} ${escapeHtml(seoCopy.socialDescription.en)}</p>`,
+    `<h2>${escapeHtml(pageSeo.social.title)}</h2>`,
     `<ul>${profiles}</ul>`,
     "</section>",
     "<section>",
-    `<h2>${escapeHtml(`${seoCopy.locationsTitle.ar} — ${seoCopy.locationsTitle.en}`)}</h2>`,
-    `<p><a href="/locations/damascus/">${escapeHtml(`${contact.map.pageTitle.ar} / ${contact.map.pageTitle.en}`)}</a></p>`,
-    `<p><a href="/services/branding/">Branding Agency in Damascus</a></p>`,
-    `<p><a href="/services/visual-identity/">Visual Identity Design in Damascus</a></p>`,
-    syr
-      ? `<p><a href="${escapeHtml(officesGeo.syr.mapsUrl)}">${escapeHtml(SITE_NAME)}, ${escapeHtml(syr.city.ar)} ${escapeHtml(syr.city.en)}</a>${syrPhone}</p>`
-      : "",
+    `<h2>${escapeHtml(pageSeo.locations.title)}</h2>`,
+    officeList,
     "</section>",
     "<section>",
     `<h2>${escapeHtml(`${faq.title.ar} — ${faq.title.en}`)}</h2>`,
     `<p>${escapeHtml(faq.lead.ar)} ${escapeHtml(faq.lead.en)}</p>`,
     faqList,
     `<p><a href="/llms.txt">llms.txt</a> · <a href="/llms-full.txt">llms-full.txt</a></p>`,
-    "</section>",
-    "<section>",
-    "<h2>Contact — تواصل</h2>",
-    offices,
     "</section>",
   ].join("");
 }

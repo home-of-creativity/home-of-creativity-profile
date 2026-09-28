@@ -1,30 +1,31 @@
 "use client";
 
-import { Suspense } from "react";
+import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { Footer, Nav } from "@/components/chrome";
-import { ArticleDetailLive } from "@/components/sections/ArticleDetailLive";
-import { articlesPage } from "@/lib/content";
-import { useLanguage } from "@/lib/i18n";
+import { pagePath } from "@/lib/base-path";
 
-function ArticleByQuery() {
+function LegacyArticleRedirect() {
   const params = useSearchParams();
   const slug = params.get("slug")?.trim() ?? "";
-  return <ArticleDetailLive slug={slug} />;
+
+  useEffect(() => {
+    const next = slug ? pagePath(`articles/${slug}`) : pagePath("articles");
+    window.location.replace(next);
+  }, [slug]);
+
+  return null;
 }
 
-function LoadingLine() {
-  const { t } = useLanguage();
-  return <p className="px-6 py-28 text-center text-[0.95rem] text-[var(--brand-muted)]">{t(articlesPage.loading)}</p>;
-}
-
+/** Old `?slug=` links. Caddy also 301s this path; this covers static hosts. */
 export default function ArticleQueryPage() {
   return (
     <>
       <Nav />
       <main id="top">
-        <Suspense fallback={<LoadingLine />}>
-          <ArticleByQuery />
+        <Suspense fallback={null}>
+          <LegacyArticleRedirect />
         </Suspense>
       </main>
       <Footer />

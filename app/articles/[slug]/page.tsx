@@ -4,7 +4,7 @@ import { Footer, Nav } from "@/components/chrome";
 import { ArticleDetailStatic } from "@/components/sections/ArticleDetailStatic";
 import { fetchArticle, fetchArticles } from "@/lib/articles-api";
 import { articleJsonLd } from "@/lib/seo";
-import { pageDescription, pageTitle } from "@/lib/site";
+import { OG_IMAGE_PATH, SITE_URL, pageDescription, pageTitle } from "@/lib/site";
 
 /**
  * Next's static export requires a non-empty array here even when zero
@@ -43,7 +43,12 @@ export async function generateMetadata({
     title: { absolute: title },
     description,
     alternates: { canonical: url },
-    openGraph: { title, description, url },
+    openGraph: {
+      title,
+      description,
+      url,
+      images: [{ url: `${SITE_URL}${OG_IMAGE_PATH}`, width: 1920, height: 1080, alt: title }],
+    },
   };
 }
 

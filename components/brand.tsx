@@ -150,9 +150,9 @@ export function Wordmark({
   size?: "sm" | "md" | "lg";
 }) {
   const sizes = {
-    sm: "text-[0.82rem] tracking-[0.16em]",
-    md: "text-[1.05rem] tracking-[0.22em]",
-    lg: "text-[clamp(1.4rem,3vw,2.2rem)] tracking-[0.28em]",
+    sm: "text-[0.68rem] tracking-[0.06em] md:text-[0.78rem] md:tracking-[0.1em]",
+    md: "text-[0.9rem] tracking-[0.1em] xl:text-[1rem] xl:tracking-[0.16em]",
+    lg: "text-[clamp(1.15rem,2.4vw,1.8rem)] tracking-[0.12em] xl:tracking-[0.2em]",
   };
 
   return (
@@ -192,7 +192,7 @@ export function LogoLockup({
       <Wordmark
         invert={invert}
         size={compact ? "sm" : "md"}
-        className={compact ? "max-md:hidden" : undefined}
+        className="whitespace-nowrap"
       />
     </span>
   );

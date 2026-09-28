@@ -1,20 +1,10 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { seoCopy, seoMetaDescription, seoMetaTitle } from "@/lib/site";
+import { pageMetadata, pageSeo } from "@/lib/page-meta";
 
-const title = seoMetaTitle(seoCopy.articlesTitle);
-const description = seoMetaDescription(seoCopy.articlesDescription);
+const metadata: Metadata = pageMetadata({ ...pageSeo.articles, path: "/articles/" });
 
-export const metadata: Metadata = {
-  title: { absolute: title },
-  description,
-  alternates: { canonical: "/articles/" },
-  openGraph: {
-    title,
-    description,
-    url: "/articles/",
-  },
-};
+export { metadata };
 
 export default function ArticlesLayout({ children }: { children: ReactNode }) {
   return children;

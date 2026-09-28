@@ -58,6 +58,12 @@ export function officialSocialProfiles(): OfficialSocialProfile[] {
   ];
 }
 
+/**
+ * Profiles for JSON-LD `sameAs`: Instagram and Facebook only. The Telegram link is the
+ * client bot (a contact channel, not a profile of the organization), so it stays out.
+ */
 export function officialSocialUrls(): string[] {
-  return officialSocialProfiles().map((profile) => profile.url);
+  return officialSocialProfiles()
+    .filter((profile) => profile.platform !== "telegram")
+    .map((profile) => profile.url);
 }

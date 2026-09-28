@@ -1,61 +1,101 @@
 import type { Article } from "./articles-api";
-import { aboutPage, articlesPage, brandIdentityPage, brandingPage, contact, damascusPage, faq, projects, serviceDetails, services, servicesPage, WHATSAPP_NUMBER } from "./content";
+import { aboutPage, articlesPage, brandIdentityPage, brandingPage, faq, officePages, projects, serviceDetails, services, servicesPage, type TopicPageCopy } from "./content";
+import { emails, officeMapUrl, offices, officesSentence, officeTelephones, type Office } from "./offices";
 import type { PortfolioProject } from "./portfolio-api";
-import { SITE_ALTERNATE, SITE_NAME, SITE_NAME_AR, SITE_SHORT, SITE_URL, absoluteUrl, OG_IMAGE_PATH, seoCopy, seoMetaDescription, seoMetaTitle } from "./site";
-import { officialSocialProfiles, officialSocialUrls } from "./social-embeds";
+import type { PricingCategory } from "./pricing-catalog";
+import { SITE_ALTERNATE, SITE_NAME, SITE_NAME_AR, SITE_SHORT, SITE_URL, absoluteUrl, OG_IMAGE_PATH } from "./site";
+import { officialSocialUrls } from "./social-embeds";
 
-export const officesGeo = {
-  syr: {
-    latitude: 33.5188338,
-    longitude: 36.2916993,
-    region: "SY-DI",
-    countryCode: "SY",
-    locality: "Al Hamra",
-    regionName: "Damascus",
-    mapsQuery: "Home of Creativity, Al Hamra, Damascus, Syria",
-    mapsUrl:
-      "https://www.google.com/maps/search/?api=1&query=Home%20of%20Creativity%2C%20Al%20Hamra%2C%20Damascus%2C%20Syria",
-    zoom: 17,
-  },
-} as const;
+const ORG_ID = `${SITE_URL}/#organization`;
+const WEBSITE_ID = `${SITE_URL}/#website`;
+const ALTERNATE_NAMES = [SITE_SHORT, SITE_NAME_AR, "بيت الابداع", SITE_ALTERNATE];
 
-const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}`;
+/** Factual one-liner shared by `description` and `disambiguatingDescription` (no affiliation claims). */
+export const ORGANIZATION_DESCRIPTION = `Branding, marketing and creative agency with offices in ${officesSentence("en")}.`;
+
+/** Markets HOC serves today. TODO(UAE): add the UAE once HOC confirms it is a served market. */
+const AREA_SERVED = [
+  { "@type": "Country", name: "Syria" },
+  { "@type": "Country", name: "Saudi Arabia" },
+];
+
+export function officeId(office: Office): string {
+  return `${SITE_URL}/#place-${office.id}`;
+}
+
+function contactPoints(office: Office) {
+  return office.phones
+    .filter((phone) => phone.kind === "whatsapp")
+    .map((phone) => ({
+      "@type": "ContactPoint",
+      contactType: "customer service",
+      telephone: `+${phone.digits}`,
+      url: `https://wa.me/${phone.digits}`,
+      areaServed: office.countryCode,
+      availableLanguage: ["ar", "en"],
+    }));
+}
 
 /**
- * There is only one mapped `Place`: the Damascus office. Saudi Arabia /
- * Riyadh is an `areaServed` market, not a second `Place` — see
- * `contact.offices` in `lib/content.ts`, which intentionally has one entry.
+ * One node per office. Unknown fields are left out, never filled with placeholders:
+ * the UAE node carries its country only until HOC supplies the city, address and phones.
  */
-function placeNode(id: "syr") {
-  const office = contact.offices.find((item) => item.id === id);
-  const geo = officesGeo[id];
-  if (!office) return null;
+function officeNode(office: Office) {
+  const telephones = officeTelephones(office).filter((number) =>
+    office.phones.some((phone) => phone.kind !== "whatsapp" && `+${phone.digits}` === number),
+  );
+  const points = contactPoints(office);
+  const mapUrl = officeMapUrl(office);
+  const url = office.slug ? `${SITE_URL}/locations/${office.slug}/` : null;
 
   return {
-    "@type": "Place",
-    "@id": `${SITE_URL}/#place-${id}`,
-    name: `${SITE_NAME} — ${office.city.en}`,
+    "@type": "ProfessionalService",
+    "@id": officeId(office),
+    name: `${SITE_NAME} — ${office.city?.en ?? office.country.en}`,
+    alternateName: `${SITE_NAME_AR} — ${office.city?.ar ?? office.country.ar}`,
+    ...(url ? { url } : {}),
+    image: absoluteUrl(OG_IMAGE_PATH),
+    parentOrganization: { "@id": ORG_ID },
     address: {
       "@type": "PostalAddress",
-      addressLocality: geo.locality,
-      addressRegion: geo.regionName,
-      addressCountry: geo.countryCode,
+      ...(office.district ? { streetAddress: office.district.en } : {}),
+      ...(office.city ? { addressLocality: office.city.en } : {}),
+      addressCountry: office.countryCode,
     },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: geo.latitude,
-      longitude: geo.longitude,
-    },
-    hasMap: geo.mapsUrl,
-    telephone: office.phones[0]?.replace(/\s+/g, "") ?? `+${WHATSAPP_NUMBER}`,
+    ...(telephones.length === 1 ? { telephone: telephones[0] } : telephones.length > 1 ? { telephone: telephones } : {}),
+    ...(points.length ? { contactPoint: points } : {}),
+    ...(office.geo
+      ? { geo: { "@type": "GeoCoordinates", latitude: office.geo.latitude, longitude: office.geo.longitude } }
+      : {}),
+    ...(mapUrl ? { hasMap: mapUrl } : {}),
+    ...(office.openingHours ? { openingHours: office.openingHours } : {}),
+  };
+}
+
+function serviceCatalog() {
+  return {
+    "@type": "OfferCatalog",
+    name: "Services",
+    itemListElement: services.items.map((item, index) => {
+      const detail = serviceDetails.find((entry) => entry.id === item.id);
+      return {
+        "@type": "ListItem",
+        position: index + 1,
+        item: {
+          "@type": "Service",
+          name: item.en,
+          alternateName: item.ar,
+          provider: { "@id": ORG_ID },
+          ...(detail ? { url: `${SITE_URL}/services/${detail.slug}/` } : {}),
+        },
+      };
+    }),
   };
 }
 
 /**
- * Site-wide graph: Organization + WebSite. Rendered on every page (`SeoJsonLd`
- * in the root layout). Kept free of page-specific claims (no LocalBusiness
- * address/geo, no FAQPage) so it stays valid regardless of which page it is
- * read from.
+ * Site-wide graph, on every page from the root layout: the Organization, the WebSite and
+ * the three offices. Page graphs point at these nodes by `@id` instead of repeating them.
  */
 export function siteJsonLd() {
   return {
@@ -63,190 +103,150 @@ export function siteJsonLd() {
     "@graph": [
       {
         "@type": "Organization",
-        "@id": `${SITE_URL}/#organization`,
+        "@id": ORG_ID,
         name: SITE_NAME,
-        alternateName: [SITE_SHORT, SITE_NAME_AR, "بيت الابداع", SITE_ALTERNATE],
-        description: seoMetaDescription(seoCopy.homeDescription),
-        knowsAbout: ["Branding", "Visual identity", "Brand identity", "Damascus"],
+        alternateName: ALTERNATE_NAMES,
+        description: ORGANIZATION_DESCRIPTION,
+        disambiguatingDescription: ORGANIZATION_DESCRIPTION,
+        knowsAbout: ["Branding", "Visual identity", "Marketing", "Social media management", "Websites and ecommerce"],
         url: `${SITE_URL}/`,
         logo: absoluteUrl("/hummingbird.svg"),
         image: absoluteUrl(OG_IMAGE_PATH),
+        email: emails[0].address,
         sameAs: officialSocialUrls(),
+        areaServed: AREA_SERVED,
+        department: offices.map((office) => ({ "@id": officeId(office) })),
+        contactPoint: offices.flatMap(contactPoints),
+        hasOfferCatalog: serviceCatalog(),
       },
       {
         "@type": "WebSite",
-        "@id": `${SITE_URL}/#website`,
+        "@id": WEBSITE_ID,
         url: `${SITE_URL}/`,
         name: SITE_NAME,
-        alternateName: [SITE_SHORT, SITE_NAME_AR, "بيت الابداع", SITE_ALTERNATE],
-        description: seoMetaDescription(seoCopy.homeDescription),
-        inLanguage: ["en", "ar"],
-        publisher: { "@id": `${SITE_URL}/#organization` },
+        alternateName: ALTERNATE_NAMES,
+        description: ORGANIZATION_DESCRIPTION,
+        inLanguage: ["ar", "en"],
+        publisher: { "@id": ORG_ID },
       },
+      ...offices.map(officeNode),
     ],
   };
 }
 
 /**
- * Home-only graph: LocalBusiness + FAQPage. Only `/` renders the visible
- * `#faq` section these questions describe, so FAQPage must not ship on any
- * other page (Google requires FAQ markup to match visible page content).
- * `location` only lists the Damascus studio that `/locations/` maps — Riyadh
- * is a served market (`areaServed`), not a second mapped office, so it has
- * no `Place`/`geo` node here.
+ * Home-only graph: the FAQPage. Only `/` renders the visible `#faq` section these
+ * questions describe (Arabic, matching the default `lang="ar"` document).
  */
 export function homeJsonLd() {
-  const syr = placeNode("syr");
-
   return {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": ["ProfessionalService", "LocalBusiness"],
-        "@id": `${SITE_URL}/#business`,
-        name: SITE_NAME,
-        alternateName: [SITE_SHORT, SITE_NAME_AR, "بيت الابداع", SITE_ALTERNATE],
-        url: `${SITE_URL}/`,
-        image: absoluteUrl(OG_IMAGE_PATH),
-        sameAs: officialSocialUrls(),
-        telephone: `+${WHATSAPP_NUMBER}`,
-        parentOrganization: { "@id": `${SITE_URL}/#organization` },
-        address: syr?.address,
-        geo: syr?.geo,
-        hasMap: officesGeo.syr.mapsUrl,
-        areaServed: [
-          { "@type": "Country", "name": "Syria" },
-          { "@type": "Country", "name": "Saudi Arabia" },
-        ],
-        location: [syr].filter(Boolean),
-        contactPoint: [
-          {
-            "@type": "ContactPoint",
-            contactType: "sales",
-            telephone: "+963954187154",
-            areaServed: "SY",
-            availableLanguage: ["ar", "en"],
-            url: whatsappUrl,
-          },
-          {
-            "@type": "ContactPoint",
-            contactType: "sales",
-            telephone: "+966550350295",
-            areaServed: "SA",
-            availableLanguage: ["ar", "en"],
-          },
-        ],
-        hasOfferCatalog: {
-          "@type": "OfferCatalog",
-          name: "Services",
-          itemListElement: services.items.map((item, index) => {
-            const detail = serviceDetails.find((entry) => entry.id === item.id);
-            return {
-              "@type": "ListItem",
-              position: index + 1,
-              item: {
-                "@type": "Service",
-                name: item.en,
-                alternateName: item.ar,
-                provider: { "@id": `${SITE_URL}/#organization` },
-                ...(detail ? { url: `${SITE_URL}/services/${detail.slug}/` } : {}),
-              },
-            };
-          }),
-        },
-      },
-      {
-        // Arabic only: the default (non-JS-toggled) page is `lang="ar"`, and
-        // FAQ markup must match what is actually visible on that document.
         "@type": "FAQPage",
         "@id": `${SITE_URL}/#faq`,
         url: `${SITE_URL}/#faq`,
         name: faq.title.ar,
         inLanguage: "ar",
-        isPartOf: { "@id": `${SITE_URL}/#website` },
-        about: { "@id": `${SITE_URL}/#organization` },
+        isPartOf: { "@id": WEBSITE_ID },
+        about: { "@id": ORG_ID },
         mainEntity: faq.items.map((item) => ({
           "@type": "Question",
           name: item.q.ar,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: item.a.ar,
-          },
+          acceptedAnswer: { "@type": "Answer", text: item.a.ar },
         })),
       },
     ],
   };
 }
 
-export function locationsPageJsonLd() {
-  const offices = (["syr"] as const)
-    .map((id) => {
-      const place = placeNode(id);
-      if (!place) return null;
-      return {
-        "@type": ["ProfessionalService", "LocalBusiness"],
-        "@id": `${SITE_URL}/#place-${id}`,
-        name: place.name,
-        alternateName: SITE_NAME_AR,
-        url: `${SITE_URL}/locations/damascus/`,
-        image: absoluteUrl(OG_IMAGE_PATH),
-        telephone: place.telephone,
-        address: place.address,
-        geo: place.geo,
-        hasMap: place.hasMap,
-        parentOrganization: { "@id": `${SITE_URL}/#organization` },
-        sameAs: officialSocialUrls(),
-      };
-    })
-    .filter((office): office is NonNullable<typeof office> => office !== null);
+function breadcrumb(url: string, trail: { name: string; path: string }[]) {
+  return {
+    "@type": "BreadcrumbList",
+    "@id": `${url}#breadcrumb`,
+    itemListElement: [{ name: SITE_NAME, path: "/" }, ...trail].map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: `${SITE_URL}${item.path}`,
+    })),
+  };
+}
 
+/** `/locations/` — the office index. */
+export function locationsPageJsonLd(title: string, description: string) {
+  const url = `${SITE_URL}/locations/`;
   return {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "CollectionPage",
-        "@id": `${SITE_URL}/locations/#page`,
-        url: `${SITE_URL}/locations/`,
-        name: `${seoCopy.locationsTitle.ar} | ${seoCopy.locationsTitle.en}`,
-        description: `${seoCopy.locationsDescription.ar} ${seoCopy.locationsDescription.en}`,
-        inLanguage: ["ar", "en"],
-        isPartOf: { "@id": `${SITE_URL}/#website` },
-        about: { "@id": `${SITE_URL}/#organization` },
-        publisher: { "@id": `${SITE_URL}/#organization` },
+        "@id": `${url}#page`,
+        url,
+        name: title,
+        description,
+        inLanguage: "ar",
+        isPartOf: { "@id": WEBSITE_ID },
+        about: { "@id": ORG_ID },
         mainEntity: {
           "@type": "ItemList",
-          name: `${SITE_NAME} locations`,
+          name: `${SITE_NAME} offices`,
           itemListElement: offices.map((office, index) => ({
             "@type": "ListItem",
             position: index + 1,
-            item: { "@id": office["@id"] },
+            item: { "@id": officeId(office) },
           })),
         },
       },
-      ...offices,
+      breadcrumb(url, [{ name: "Locations", path: "/locations/" }]),
     ],
   };
 }
 
-export function socialPageJsonLd() {
-  const profiles = officialSocialProfiles();
+/** `/locations/{slug}/` — one office page; the office node itself is in the site graph. */
+export function officePageJsonLd(office: Office, title: string, description: string) {
+  const url = `${SITE_URL}/locations/${office.slug}/`;
+  const pageTitle = officePages[office.slug as "damascus" | "riyadh"]?.title.en ?? office.city?.en ?? office.country.en;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": `${url}#page`,
+        url,
+        name: title,
+        description,
+        inLanguage: "ar",
+        isPartOf: { "@id": WEBSITE_ID },
+        about: { "@id": officeId(office) },
+        publisher: { "@id": ORG_ID },
+        breadcrumb: { "@id": `${url}#breadcrumb` },
+      },
+      breadcrumb(url, [
+        { name: "Locations", path: "/locations/" },
+        { name: pageTitle, path: `/locations/${office.slug}/` },
+      ]),
+    ],
+  };
+}
 
+export function socialPageJsonLd(title: string, description: string, profiles: { name: string; url: string }[]) {
+  const url = `${SITE_URL}/social/`;
   return {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "CollectionPage",
-        "@id": `${SITE_URL}/social/#page`,
-        url: `${SITE_URL}/social/`,
-        name: seoMetaTitle(seoCopy.socialTitle),
-        description: seoMetaDescription(seoCopy.socialDescription),
-        inLanguage: ["ar", "en"],
-        isPartOf: { "@id": `${SITE_URL}/#website` },
-        about: { "@id": `${SITE_URL}/#organization` },
-        publisher: { "@id": `${SITE_URL}/#organization` },
+        "@id": `${url}#page`,
+        url,
+        name: title,
+        description,
+        inLanguage: "ar",
+        isPartOf: { "@id": WEBSITE_ID },
+        about: { "@id": ORG_ID },
         mainEntity: {
           "@type": "ItemList",
-          name: `${SITE_NAME} social profiles`,
+          name: `${SITE_NAME} official profiles`,
           itemListElement: profiles.map((profile, index) => ({
             "@type": "ListItem",
             position: index + 1,
@@ -259,61 +259,65 @@ export function socialPageJsonLd() {
   };
 }
 
-/** `/about/` — the canonical, factual description page (no narrative fluff). */
-export function aboutPageJsonLd() {
+/** `/about/` — the canonical, factual description page. */
+export function aboutPageJsonLd(title: string) {
+  const url = `${SITE_URL}/about/`;
   return {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "AboutPage",
-        "@id": `${SITE_URL}/about/#page`,
-        url: `${SITE_URL}/about/`,
-        name: `${aboutPage.title.ar} | ${aboutPage.title.en}`,
-        description: aboutPage.lead.en,
-        inLanguage: ["ar", "en"],
-        isPartOf: { "@id": `${SITE_URL}/#website` },
-        about: { "@id": `${SITE_URL}/#organization` },
-        mainEntity: { "@id": `${SITE_URL}/#organization` },
+        "@id": `${url}#page`,
+        url,
+        name: title,
+        description: aboutPage.lead.ar,
+        inLanguage: "ar",
+        isPartOf: { "@id": WEBSITE_ID },
+        about: { "@id": ORG_ID },
+        mainEntity: { "@id": ORG_ID },
       },
     ],
   };
 }
 
-/** `/services/` — index of the published practices, linking to detail pages once they exist. */
-export function servicesPageJsonLd() {
+/** `/services/` — index of all fourteen practices, each with its own page. */
+export function servicesPageJsonLd(title: string, description: string) {
+  const url = `${SITE_URL}/services/`;
   return {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "CollectionPage",
-        "@id": `${SITE_URL}/services/#page`,
-        url: `${SITE_URL}/services/`,
-        name: `${servicesPage.title.ar} | ${servicesPage.title.en}`,
-        description: `${servicesPage.lead.ar} ${servicesPage.lead.en}`,
-        inLanguage: ["ar", "en"],
-        isPartOf: { "@id": `${SITE_URL}/#website` },
-        about: { "@id": `${SITE_URL}/#organization` },
-        publisher: { "@id": `${SITE_URL}/#organization` },
+        "@id": `${url}#page`,
+        url,
+        name: title,
+        description,
+        inLanguage: "ar",
+        isPartOf: { "@id": WEBSITE_ID },
+        about: { "@id": ORG_ID },
         mainEntity: {
           "@type": "ItemList",
           name: `${SITE_NAME} services`,
-          itemListElement: services.items.map((item, index) => {
-            const detail = serviceDetails.find((entry) => entry.id === item.id);
-            return {
-              "@type": "ListItem",
-              position: index + 1,
-              item: {
-                "@type": "Service",
-                name: item.en,
-                alternateName: item.ar,
-                provider: { "@id": `${SITE_URL}/#organization` },
-                ...(detail ? { url: `${SITE_URL}/services/${detail.slug}/` } : {}),
-              },
-            };
-          }),
+          itemListElement: serviceCatalog().itemListElement,
         },
       },
+      breadcrumb(url, [{ name: servicesPage.title.en, path: "/services/" }]),
     ],
+  };
+}
+
+function faqNode(url: string, items: { q: { ar: string }; a: { ar: string } }[]) {
+  return {
+    // Arabic only: matches the default `lang="ar"` document.
+    "@type": "FAQPage",
+    "@id": `${url}#faq`,
+    url: `${url}#faq`,
+    inLanguage: "ar",
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.q.ar,
+      acceptedAnswer: { "@type": "Answer", text: item.a.ar },
+    })),
   };
 }
 
@@ -323,7 +327,6 @@ export function serviceDetailJsonLd(slug: string) {
   if (!detail) return null;
 
   const url = `${SITE_URL}/services/${detail.slug}/`;
-
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -331,10 +334,10 @@ export function serviceDetailJsonLd(slug: string) {
         "@type": "WebPage",
         "@id": `${url}#page`,
         url,
-        name: seoMetaTitle(detail.metaTitle),
-        description: seoMetaDescription(detail.metaDescription),
-        inLanguage: ["ar", "en"],
-        isPartOf: { "@id": `${SITE_URL}/#website` },
+        name: detail.metaTitle.ar,
+        description: detail.metaDescription.ar,
+        inLanguage: "ar",
+        isPartOf: { "@id": WEBSITE_ID },
         about: { "@id": `${url}#service` },
         breadcrumb: { "@id": `${url}#breadcrumb` },
       },
@@ -345,15 +348,12 @@ export function serviceDetailJsonLd(slug: string) {
         alternateName: detail.title.ar,
         serviceType: detail.title.en,
         url,
-        description: `${detail.definition.ar} ${detail.definition.en}`,
-        provider: { "@id": `${SITE_URL}/#organization` },
-        areaServed: [
-          { "@type": "Country", name: "Syria" },
-          { "@type": "Country", name: "Saudi Arabia" },
-        ],
+        description: detail.definition.ar,
+        provider: { "@id": ORG_ID },
+        areaServed: AREA_SERVED,
         hasOfferCatalog: {
           "@type": "OfferCatalog",
-          name: `${detail.title.ar} | ${detail.title.en}`,
+          name: detail.title.ar,
           itemListElement: detail.covers.map((item, index) => ({
             "@type": "ListItem",
             position: index + 1,
@@ -361,41 +361,17 @@ export function serviceDetailJsonLd(slug: string) {
           })),
         },
       },
-      {
-        "@type": "BreadcrumbList",
-        "@id": `${url}#breadcrumb`,
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: SITE_NAME, item: `${SITE_URL}/` },
-          { "@type": "ListItem", position: 2, name: servicesPage.title.en, item: `${SITE_URL}/services/` },
-          { "@type": "ListItem", position: 3, name: detail.title.en, item: url },
-        ],
-      },
-      {
-        // Arabic only: matches the default `lang="ar"` document, same as the
-        // homepage FAQPage in `homeJsonLd()`.
-        "@type": "FAQPage",
-        "@id": `${url}#faq`,
-        url: `${url}#faq`,
-        inLanguage: "ar",
-        mainEntity: detail.faqs.map((item) => ({
-          "@type": "Question",
-          name: item.q.ar,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: item.a.ar,
-          },
-        })),
-      },
+      breadcrumb(url, [
+        { name: servicesPage.title.en, path: "/services/" },
+        { name: detail.title.en, path: `/services/${detail.slug}/` },
+      ]),
+      faqNode(url, detail.faqs),
     ],
   };
 }
 
-function topicPageJsonLd(
-  copy: { title: { en: string; ar: string }; lead: { en: string }; faqs: { q: { ar: string }; a: { ar: string } }[] },
-  path: string,
-) {
+function topicPageJsonLd(copy: TopicPageCopy, path: string) {
   const url = `${SITE_URL}${path}`;
-
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -405,33 +381,15 @@ function topicPageJsonLd(
         name: copy.title.en,
         alternateName: copy.title.ar,
         url,
-        description: copy.lead.en,
-        provider: { "@id": `${SITE_URL}/#organization` },
-        areaServed: [
-          { "@type": "Country", name: "Syria" },
-          { "@type": "Country", name: "Saudi Arabia" },
-        ],
+        description: copy.lead.ar,
+        provider: { "@id": ORG_ID },
+        areaServed: AREA_SERVED,
       },
-      {
-        "@type": "BreadcrumbList",
-        "@id": `${url}#breadcrumb`,
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: SITE_NAME, item: `${SITE_URL}/` },
-          { "@type": "ListItem", position: 2, name: servicesPage.title.en, item: `${SITE_URL}/services/` },
-          { "@type": "ListItem", position: 3, name: copy.title.en, item: url },
-        ],
-      },
-      {
-        "@type": "FAQPage",
-        "@id": `${url}#faq`,
-        url: `${url}#faq`,
-        inLanguage: "ar",
-        mainEntity: copy.faqs.map((item) => ({
-          "@type": "Question",
-          name: item.q.ar,
-          acceptedAnswer: { "@type": "Answer", text: item.a.ar },
-        })),
-      },
+      breadcrumb(url, [
+        { name: servicesPage.title.en, path: "/services/" },
+        { name: copy.title.en, path },
+      ]),
+      faqNode(url, copy.faqs),
     ],
   };
 }
@@ -446,10 +404,37 @@ export function brandIdentityPageJsonLd() {
   return topicPageJsonLd(brandIdentityPage, "/services/brand-identity/");
 }
 
-/** Canonical URL for the one published office. */
-export function damascusPageJsonLd() {
-  const place = placeNode("syr");
-  const url = `${SITE_URL}/locations/damascus/`;
+/**
+ * `/pricing/` — an OfferCatalog of the monthly subscription prices. Only prices the page
+ * shows in its HTML are included: the default (monthly) price of each subscription plan.
+ */
+export function pricingPageJsonLd(categories: PricingCategory[], title: string, description: string) {
+  const url = `${SITE_URL}/pricing/`;
+  const offers = categories.flatMap((category) =>
+    category.subcategories
+      .filter((subcategory) => !subcategory.oneTime)
+      .flatMap((subcategory) =>
+        subcategory.plans
+          .filter((plan) => plan.prices?.monthly)
+          .map((plan) => ({
+            "@type": "Offer",
+            name: plan.name.en,
+            description: plan.subtitle.ar,
+            category: subcategory.name.en,
+            price: plan.prices!.monthly,
+            priceCurrency: "USD",
+            priceSpecification: {
+              "@type": "UnitPriceSpecification",
+              price: plan.prices!.monthly,
+              priceCurrency: "USD",
+              billingDuration: "P1M",
+              unitCode: "MON",
+            },
+            seller: { "@id": ORG_ID },
+            url,
+          })),
+      ),
+  );
 
   return {
     "@context": "https://schema.org",
@@ -458,42 +443,32 @@ export function damascusPageJsonLd() {
         "@type": "WebPage",
         "@id": `${url}#page`,
         url,
-        name: damascusPage.title.en,
-        description: damascusPage.lead.en,
-        inLanguage: ["ar", "en"],
-        isPartOf: { "@id": `${SITE_URL}/#website` },
-        about: { "@id": `${SITE_URL}/#place-syr` },
-        publisher: { "@id": `${SITE_URL}/#organization` },
+        name: title,
+        description,
+        inLanguage: "ar",
+        isPartOf: { "@id": WEBSITE_ID },
+        about: { "@id": ORG_ID },
+        ...(offers.length ? { mainEntity: { "@id": `${url}#offers` } } : {}),
       },
-      {
-        "@type": "BreadcrumbList",
-        "@id": `${url}#breadcrumb`,
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: SITE_NAME, item: `${SITE_URL}/` },
-          { "@type": "ListItem", position: 2, name: seoCopy.locationsTitle.en, item: `${SITE_URL}/locations/` },
-          { "@type": "ListItem", position: 3, name: "Damascus", item: url },
-        ],
-      },
-      place
-        ? {
-            ...place,
-            "@type": ["ProfessionalService", "LocalBusiness"],
-            url,
-            parentOrganization: { "@id": `${SITE_URL}/#organization` },
-            areaServed: [
-              { "@type": "Country", name: "Syria" },
-              { "@type": "Country", name: "Saudi Arabia" },
-            ],
-          }
-        : null,
-    ].filter(Boolean),
+      ...(offers.length
+        ? [
+            {
+              "@type": "OfferCatalog",
+              "@id": `${url}#offers`,
+              name: `${SITE_NAME} subscription packages`,
+              itemListElement: offers,
+            },
+          ]
+        : []),
+    ],
   };
 }
 
 /** `/articles/{slug}/` — one canonical URL per real article, server-rendered at build time. */
-export function articleJsonLd(article: Article) {
+export function articleJsonLd(article: Article, description: string) {
   const url = `${SITE_URL}/articles/${article.slug}/`;
   const published = article.published_at ?? article.created_at ?? undefined;
+  const modified = article.updated_at ?? published;
 
   return {
     "@context": "https://schema.org",
@@ -504,24 +479,20 @@ export function articleJsonLd(article: Article) {
         url,
         headline: article.title_ar,
         alternativeHeadline: article.title_en,
-        description: article.excerpt_en ?? article.excerpt_ar ?? undefined,
+        description,
         image: absoluteUrl(OG_IMAGE_PATH),
-        mainEntityOfPage: { "@type": "WebPage", "@id": url },
-        ...(published ? { datePublished: published, dateModified: published } : {}),
+        mainEntityOfPage: { "@id": url },
+        ...(published ? { datePublished: published } : {}),
+        ...(modified ? { dateModified: modified } : {}),
         inLanguage: "ar",
-        isPartOf: { "@id": `${SITE_URL}/#website` },
-        author: { "@id": `${SITE_URL}/#organization` },
-        publisher: { "@id": `${SITE_URL}/#organization` },
+        isPartOf: { "@id": WEBSITE_ID },
+        author: { "@id": ORG_ID },
+        publisher: { "@id": ORG_ID },
       },
-      {
-        "@type": "BreadcrumbList",
-        "@id": `${url}#breadcrumb`,
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: SITE_NAME, item: `${SITE_URL}/` },
-          { "@type": "ListItem", position: 2, name: articlesPage.title.en, item: `${SITE_URL}/articles/` },
-          { "@type": "ListItem", position: 3, name: article.title_en, item: url },
-        ],
-      },
+      breadcrumb(url, [
+        { name: articlesPage.title.en, path: "/articles/" },
+        { name: article.title_en, path: `/articles/${article.slug}/` },
+      ]),
     ],
   };
 }
@@ -529,7 +500,6 @@ export function articleJsonLd(article: Article) {
 /** `/projects/{id}/` — one canonical URL per real portfolio project, server-rendered at build time. */
 export function projectJsonLd(project: PortfolioProject) {
   const url = `${SITE_URL}/projects/${project.id}/`;
-
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -539,19 +509,19 @@ export function projectJsonLd(project: PortfolioProject) {
         url,
         name: project.title_ar,
         alternateName: project.title_en,
-        ...(project.summary_en ? { description: project.summary_en } : {}),
+        ...(project.summary_ar ? { description: project.summary_ar } : {}),
         ...(project.image_url ? { image: project.image_url } : {}),
-        creator: { "@id": `${SITE_URL}/#organization` },
+        creator: { "@id": ORG_ID },
       },
-      {
-        "@type": "BreadcrumbList",
-        "@id": `${url}#breadcrumb`,
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: SITE_NAME, item: `${SITE_URL}/` },
-          { "@type": "ListItem", position: 2, name: projects.title.en, item: `${SITE_URL}/#projects` },
-          { "@type": "ListItem", position: 3, name: project.title_en, item: url },
-        ],
-      },
+      breadcrumb(url, [
+        { name: projects.title.en, path: "/#projects" },
+        { name: project.title_en, path: `/projects/${project.id}/` },
+      ]),
     ],
   };
+}
+
+/** Serialise for `<script type="application/ld+json">`, escaping `<` so no content can close the tag. */
+export function jsonLdScript(data: unknown): string {
+  return JSON.stringify(data).replace(/</g, "\\u003c");
 }
