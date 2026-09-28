@@ -6,6 +6,7 @@ import { ServiceDetailPage } from "@/components/sections/ServiceDetailPage";
 import { pageMetadata } from "@/lib/page-meta";
 import { serviceDetailJsonLd } from "@/lib/seo";
 import { findServiceDetail, serviceDetails } from "@/lib/service-details";
+import { OG_IMAGE_PATH } from "@/lib/site";
 
 export const dynamicParams = false;
 
@@ -24,7 +25,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     title: detail.metaTitle.ar,
     description: detail.metaDescription.ar,
     path: `/services/${detail.slug}/`,
-    image: { url: `/og/services/${detail.slug}.jpg`, width: 1200, height: 630, alt: detail.title.ar },
+    image: { url: OG_IMAGE_PATH, width: 1920, height: 1080, alt: detail.title.ar },
   });
 }
 
