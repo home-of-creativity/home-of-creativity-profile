@@ -8,32 +8,55 @@ import { useLanguage } from "@/lib/i18n";
 import { withBasePath } from "@/lib/base-path";
 import { cn } from "@/lib/cn";
 import { useGsapScope } from "@/lib/gsap-client";
+import {
+  HERO_POSTER_DESKTOP,
+  HERO_POSTER_MOBILE,
+  HERO_VIDEO_DESKTOP,
+  HERO_VIDEO_MOBILE,
+} from "@/lib/hero-media";
 import { shouldSkipMotion } from "@/lib/visit-cache";
-
-const HERO_POSTER = "/video/hero-bg-poster.webp";
-const HERO_VIDEO_DESKTOP = "/video/hero-bg.mp4";
-const HERO_VIDEO_MOBILE = "/video/hero-bg-mobile.mp4";
 
 export function Hero() {
   const { t, locale, ready } = useLanguage();
   const rootRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [allowVideo, setAllowVideo] = useState(false);
-  const [videoSrc, setVideoSrc] = useState(HERO_VIDEO_MOBILE);
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const desktop = window.matchMedia("(min-width: 800px)");
-    const sync = () => {
-      setAllowVideo(!reduce.matches);
-      setVideoSrc(desktop.matches ? HERO_VIDEO_DESKTOP : HERO_VIDEO_MOBILE);
+    let idle = 0;
+    let timer = 0;
+    let cancelled = false;
+
+    const start = () => {
+      if (cancelled || reduce.matches) return;
+      const arm = () => {
+        if (!cancelled && !reduce.matches) setAllowVideo(true);
+      };
+      if (typeof window.requestIdleCallback === "function") {
+        idle = window.requestIdleCallback(arm, { timeout: 2000 });
+        return;
+      }
+      timer = window.setTimeout(arm, 1);
     };
-    sync();
-    reduce.addEventListener("change", sync);
-    desktop.addEventListener("change", sync);
+
+    if (document.readyState === "complete") start();
+    else window.addEventListener("load", start, { once: true });
+
+    const onChange = () => {
+      if (reduce.matches) {
+        setAllowVideo(false);
+        return;
+      }
+      start();
+    };
+    reduce.addEventListener("change", onChange);
     return () => {
-      reduce.removeEventListener("change", sync);
-      desktop.removeEventListener("change", sync);
+      cancelled = true;
+      window.removeEventListener("load", start);
+      reduce.removeEventListener("change", onChange);
+      if (idle) window.cancelIdleCallback(idle);
+      if (timer) window.clearTimeout(timer);
     };
   }, []);
 
@@ -144,19 +167,27 @@ export function Hero() {
       id="top"
       className="relative isolate flex min-h-[100svh] items-center overflow-hidden bg-[var(--brand-purple-deep)] text-[var(--brand-ivory)]"
     >
-      <link rel="preload" as="image" href={withBasePath(HERO_POSTER)} fetchPriority="high" />
       <div className="absolute inset-0 overflow-hidden">
         <div className="hero-bg absolute inset-0 md:inset-[-8%] md:h-[116%] md:w-[116%]">
-          <img
-            src={withBasePath(HERO_POSTER)}
-            alt=""
-            fetchPriority="high"
-            decoding="async"
-            className={cn(
-              "hero-bg-media object-cover object-[50%_42%]",
-              locale === "ar" ? "md:object-[72%_48%]" : "md:object-[28%_48%]",
-            )}
-          />
+          <picture>
+            <source
+              media="(min-width: 800px)"
+              srcSet={withBasePath(HERO_POSTER_DESKTOP)}
+              type="image/webp"
+            />
+            <img
+              src={withBasePath(HERO_POSTER_MOBILE)}
+              alt=""
+              width={800}
+              height={450}
+              fetchPriority="high"
+              decoding="async"
+              className={cn(
+                "hero-bg-media object-cover object-[50%_42%]",
+                locale === "ar" ? "md:object-[72%_48%]" : "md:object-[28%_48%]",
+              )}
+            />
+          </picture>
           {allowVideo ? (
             <video
               ref={videoRef}
@@ -168,10 +199,11 @@ export function Hero() {
               muted
               loop
               playsInline
-              preload="auto"
-              poster={withBasePath(HERO_POSTER)}
-              src={withBasePath(videoSrc)}
-            />
+              preload="none"
+            >
+              <source media="(min-width: 800px)" src={withBasePath(HERO_VIDEO_DESKTOP)} type="video/mp4" />
+              <source src={withBasePath(HERO_VIDEO_MOBILE)} type="video/mp4" />
+            </video>
           ) : null}
         </div>
       </div>

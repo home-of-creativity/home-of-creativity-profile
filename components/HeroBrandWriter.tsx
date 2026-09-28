@@ -29,7 +29,6 @@ const PECK = {
   bend: 0.16, // swoop in from above and lean over the first letter
   move: 0.08, // horizontal hop to the next letter (stays bent)
   down: 0.09, // the strike itself — quick downward + rotational drop
-  reveal: 0.07, // letter pop-in, timed to the strike's contact instant
   up: 0.11, // rise back to the hover height (with a tiny recoil overshoot)
   lift: 0.2, // raise the head and unbend once a whole word is finished
 };
@@ -100,26 +99,55 @@ export function HeroBrandWriter({ className }: { className?: string }) {
           const creativityEl = wrap.querySelector<HTMLElement>('[data-word="creativity"]');
           if (!letters.length || !homeEl || !ofEl || !creativityEl) return;
 
-          const rectOf = (el: Element) => {
+          const homeLetters = [...homeEl.querySelectorAll<HTMLElement>(".hero-letter")];
+          const ofLetters = [...ofEl.querySelectorAll<HTMLElement>(".hero-letter")];
+          const creativityLetters = [...creativityEl.querySelectorAll<HTMLElement>(".hero-letter")];
+
+          type Peck = { x: number; contactY: number };
+
+          const readLayout = () => {
             const wrapRect = wrap.getBoundingClientRect();
-            const r = el.getBoundingClientRect();
+            const birdBox = bird.getBoundingClientRect();
+            const birdW = birdBox.width;
+            const birdH = birdBox.height;
+            const beakToX = (beakX: number) => beakX - birdW * BEAK_X_RATIO;
+            const beakToY = (beakY: number) => beakY - birdH * BEAK_Y_RATIO;
+            const boxOf = (el: Element) => {
+              const r = el.getBoundingClientRect();
+              return {
+                left: r.left - wrapRect.left,
+                top: r.top - wrapRect.top,
+                width: r.width,
+                height: r.height,
+              };
+            };
+            const pecks = (nodes: HTMLElement[]): Peck[] =>
+              nodes.map((el) => {
+                const r = boxOf(el);
+                return {
+                  x: beakToX(r.left + r.width / 2),
+                  contactY: beakToY(r.top + r.height / 2),
+                };
+              });
             return {
-              left: r.left - wrapRect.left,
-              right: r.right - wrapRect.left,
-              top: r.top - wrapRect.top,
-              width: r.width,
-              height: r.height,
+              birdW,
+              birdH,
+              home: boxOf(homeEl),
+              of: boxOf(ofEl),
+              homePecks: pecks(homeLetters),
+              ofPecks: pecks(ofLetters),
+              creativityPecks: pecks(creativityLetters),
+              beakToY,
             };
           };
 
           if (context.conditions?.reduceMotion || playedRef.current) {
+            const layout = readLayout();
             gsap.set(letters, { autoAlpha: 1, scale: 1 });
-            const birdBox = bird.getBoundingClientRect();
-            const of = rectOf(ofEl);
             gsap.set(bird, {
               autoAlpha: 1,
-              x: of.left + of.width / 2 - birdBox.width * REST_CENTER_RATIO,
-              y: of.top - birdBox.height * 0.86,
+              x: layout.of.left + layout.of.width / 2 - layout.birdW * REST_CENTER_RATIO,
+              y: layout.of.top - layout.birdH * 0.86,
               rotate: 0,
             });
             gsap.set(wings, { rotate: 4 });
@@ -130,56 +158,22 @@ export function HeroBrandWriter({ className }: { className?: string }) {
           playedRef.current = true;
 
           const run = () => {
-            const birdBox = bird.getBoundingClientRect();
-            const birdW = birdBox.width;
-            const birdH = birdBox.height;
+            const layout = readLayout();
+            const { birdW, birdH, home, of } = layout;
 
-            const home = rectOf(homeEl);
-            const of = rectOf(ofEl);
-
-            const beakToX = (beakX: number) => beakX - birdW * BEAK_X_RATIO;
-            const beakToY = (beakY: number) => beakY - birdH * BEAK_Y_RATIO;
-
-            const homeLetters = homeEl.querySelectorAll(".hero-letter");
-            const ofLetters = ofEl.querySelectorAll(".hero-letter");
-            const creativityLetters = creativityEl.querySelectorAll(".hero-letter");
-
-            gsap.set(letters, { autoAlpha: 0, scale: 0.9, transformOrigin: "50% 100%" });
             gsap.set(bird, {
               autoAlpha: 1,
               x: 0,
-              y: beakToY(home.top + home.height / 2),
+              y: layout.beakToY(home.top + home.height / 2),
               rotate: REST_ROTATE,
-              // Pivot every rotation around the beak tip itself so the
-              // strike lands exactly on target at any bend angle.
               transformOrigin: BEAK_ORIGIN,
             });
             gsap.set(wings, { transformOrigin: "388px 308px", rotate: 4 });
 
             const tl = gsap.timeline();
 
-            /**
-             * Types one word left-to-right by "pecking" each letter into
-             * place with the beak: swoop in from above and lean over the
-             * first letter, then for every letter — hop to its position
-             * (still bent), strike down, reveal the letter at the exact
-             * contact instant, rise with a tiny recoil, move to the next.
-             * Once the word is done, lift the head and unbend before
-             * returning the timeline position the next word should start
-             * at.
-             */
-            const typeWord = (wordLetters: NodeListOf<Element>, startTime: number) => {
-              const order = [...wordLetters] as HTMLElement[];
-              if (order.length === 0) return startTime;
-
-              const targets = order.map((el) => {
-                const r = rectOf(el);
-                return {
-                  el,
-                  x: beakToX(r.left + r.width / 2),
-                  contactY: beakToY(r.top + r.height / 2),
-                };
-              });
+            const typeWord = (targets: Peck[], startTime: number) => {
+              if (targets.length === 0) return startTime;
 
               let cursor = startTime;
               const first = targets[0];
@@ -214,14 +208,6 @@ export function HeroBrandWriter({ className }: { className?: string }) {
                   ease: "power2.in",
                 }, cursor);
                 cursor += PECK.down;
-
-                // Beak just touched down — the letter appears now.
-                tl.to(target.el, {
-                  autoAlpha: 1,
-                  scale: 1,
-                  duration: PECK.reveal,
-                  ease: "power1.out",
-                }, cursor);
 
                 // Rise back to hover height with a tiny recoil overshoot.
                 tl.to(bird, {
@@ -272,9 +258,9 @@ export function HeroBrandWriter({ className }: { className?: string }) {
 
             // 2) Write "Home", then "of", then "Creativity" — reading
             // order, each pecked one letter at a time.
-            const homeEnd = typeWord(homeLetters, 1.03);
-            const ofEnd = typeWord(ofLetters, homeEnd);
-            const creativityEnd = typeWord(creativityLetters, ofEnd);
+            const homeEnd = typeWord(layout.homePecks, 1.03);
+            const ofEnd = typeWord(layout.ofPecks, homeEnd);
+            const creativityEnd = typeWord(layout.creativityPecks, ofEnd);
 
             // 3) Settle above "of", reset to a natural angle, and stop for good — no loop.
             tl.to(bird, {

@@ -1,6 +1,6 @@
 # Marketing site (Next.js static export)
 
-Last updated: 28 September 2026 (service og:image uses the hero photo; 404 is one noindex tag with no canonical; priority images are visible before onLoad)
+Last updated: 28 September 2026 (hero poster is the LCP; video starts after idle; nav drawer is CSS)
 
 Path: `design/`  
 Installed: Next **15.5.25**, React **19.2.8**, Tailwind **4.3.3**, GSAP **3.15.0**, Framer Motion **12.x**  
@@ -83,7 +83,7 @@ Contact form posts to `POST /api/contact/messages` (no mailto). Interest «مش�
 - Looping motion (hero Ken Burns, hummingbird) pauses off-screen. Client logos stay painted while scrolling: no `contain: paint`, no `will-change` toggle, images are not lazy. The marquee only pauses its transform when the row is a full viewport away, and resumes before it re-enters so scroll-back does not wait on a repaint. Arabic reverses the loop. It also pauses on hover. Nav scroll listeners are rAF-throttled and do not use `backdrop-filter`.
 - Contact channel cards (`#contact`) swing right → left → center once when they enter the viewport on scroll-down (GSAP transform only; skipped under `prefers-reduced-motion`).
 - `#social` phone screens are dark (`#0c0c10` / ivory type): bezel, feed, Instagram and Facebook profile chrome, and iframe background. Unselected posts/reels tabs use the secondary orange (`--brand-orange`); the selected tab stays ivory with an orange underline. The section behind them stays deep purple.
-- `components/CacheWorker.tsx` + `public/sw.js` cache `hoc-design-v12` (same-origin images/fonts only; cache-first). Cross-origin `api.hoc.agency/storage` logos, Facebook/Instagram/Google CDNs, and video never go through the worker (CORS/opaque mismatch). Hero poster + mark are precached; the hero video streams from `public/video/hero-bg.mp4` (1080p) or `hero-bg-mobile.mp4` (720p) and pauses offscreen. Reduced motion keeps the poster. Maps loads with `loading=async` + Advanced Marker.
+- `components/CacheWorker.tsx` + `public/sw.js` cache `hoc-design-v13` (same-origin images/fonts only; cache-first). Cross-origin `api.hoc.agency/storage` logos, Facebook/Instagram/Google CDNs, and video never go through the worker (CORS/opaque mismatch). The mobile and desktop hero posters are precached. The hero video (`hero-bg.mp4` on viewports from 800px, otherwise `hero-bg-mobile.mp4`) starts after load and idle, with `preload="none"` until then, and pauses offscreen. Reduced motion keeps the poster. Maps loads with `loading=async` + Advanced Marker.
 
 ## Env (`.env.example`)
 

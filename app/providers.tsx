@@ -1,6 +1,5 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { CacheWorker } from "@/components/CacheWorker";
 import { LanguageProvider, useLanguage } from "@/lib/i18n";
@@ -21,19 +20,7 @@ function LocaleFlash() {
     return () => window.clearTimeout(id);
   }, [locale]);
 
-  return (
-    <AnimatePresence>
-      {flash ? (
-        <motion.div
-          className="pointer-events-none fixed inset-0 z-[70] bg-[var(--brand-purple)]"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.12 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        />
-      ) : null}
-    </AnimatePresence>
-  );
+  return flash ? <div className="locale-flash" /> : null;
 }
 
 export function Providers({ children }: { children: ReactNode }) {

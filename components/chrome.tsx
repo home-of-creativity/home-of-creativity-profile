@@ -1,6 +1,5 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { LogoLockup } from "./brand";
@@ -62,6 +61,18 @@ function resolveHref(def: SiteLinkDef, onHome: boolean) {
   if (def.key === "home") return homePath(onHome);
   if (def.page) return pagePath(def.page);
   return sectionPath(def.section!, onHome);
+}
+
+function usePrefersReducedMotion() {
+  const [reduce, setReduce] = useState(false);
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setReduce(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
+  return reduce;
 }
 
 function scrollToHash(href: string, reduce: boolean | null) {
@@ -219,7 +230,7 @@ export function Nav() {
   const onHome = isHomePathname(pathname);
   const onPricing = isPagePathname(pathname, "pricing");
   const onArticles = normalizePathname(pathname).startsWith("/articles");
-  const reduce = useReducedMotion();
+  const reduce = usePrefersReducedMotion();
   const headerRef = useRef<HTMLElement>(null);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -526,79 +537,65 @@ export function Nav() {
           className="nav-progress pointer-events-none absolute inset-x-0 bottom-0 h-px origin-start scale-x-0 bg-[var(--brand-orange)]"
         />
       </header>
-      <AnimatePresence>
-        {open ? (
-          <motion.nav
-            id="mobile-nav"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={reduce ? { duration: 0 } : undefined}
-            className="fixed inset-x-0 bottom-0 z-40 overflow-y-auto bg-[var(--brand-purple-deep)] lg:hidden"
-            style={{ top: "calc(var(--nav-height) + env(safe-area-inset-top, 0px))" }}
+      {open ? (
+        <nav
+          id="mobile-nav"
+          className="mobile-nav fixed inset-x-0 bottom-0 z-40 overflow-y-auto bg-[var(--brand-purple-deep)] lg:hidden"
+          style={{ top: "calc(var(--nav-height) + env(safe-area-inset-top, 0px))" }}
+        >
+          <div
+            dir={locale === "ar" ? "rtl" : "ltr"}
+            className="mx-auto flex min-h-full w-[min(1280px,calc(100%-1.5rem))] flex-col pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-2"
           >
-            <div
-              dir={locale === "ar" ? "rtl" : "ltr"}
-              className="mx-auto flex min-h-full w-[min(1280px,calc(100%-1.5rem))] flex-col pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-2"
-            >
-              {navLinks.map((link, i) => (
-                <motion.a
-                  key={link.key}
-                  href={link.href}
-                  aria-current={isLinkActive(link.key, link.href) ? "page" : undefined}
-                  onClick={(event) => handleNavLinkClick(event, link.href)}
-                  initial={reduce ? false : { opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={reduce ? { duration: 0 } : { delay: 0.04 * i }}
-                  className={linkClass(link.key, link.href, true)}
-                >
-                  {t(link.label)}
-                </motion.a>
-              ))}
-              <div className="mt-auto grid gap-3 pt-8">
-                <motion.a
-                  href={CLIENT_TELEGRAM_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  initial={reduce ? false : { opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={reduce ? { duration: 0 } : { delay: 0.16 }}
-                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#229ED9] px-5 py-3 text-[0.95rem] font-semibold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                >
-                  <TelegramIcon className="h-5 w-5 shrink-0" />
-                  {t(nav.telegram)}
-                </motion.a>
-                <motion.a
-                  href={whatsappUrl}
+            {navLinks.map((link, i) => (
+              <a
+                key={link.key}
+                href={link.href}
+                aria-current={isLinkActive(link.key, link.href) ? "page" : undefined}
+                onClick={(event) => handleNavLinkClick(event, link.href)}
+                className={cn("mobile-nav-link", linkClass(link.key, link.href, true))}
+                style={{ animationDelay: `${0.04 * i}s` }}
+              >
+                {t(link.label)}
+              </a>
+            ))}
+            <div className="mt-auto grid gap-3 pt-8">
+              <a
+                href={CLIENT_TELEGRAM_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="mobile-nav-link inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#229ED9] px-5 py-3 text-[0.95rem] font-semibold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                style={{ animationDelay: "0.16s" }}
+              >
+                <TelegramIcon className="h-5 w-5 shrink-0" />
+                {t(nav.telegram)}
+              </a>
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mobile-nav-link inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-3 text-[0.95rem] font-semibold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                style={{ animationDelay: "0.2s" }}
+              >
+                <WhatsAppIcon className="h-5 w-5 shrink-0" />
+                {t(nav.whatsapp)}
+              </a>
+              {profilePdfUrl ? (
+                <a
+                  href={profilePdfUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  initial={reduce ? false : { opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={reduce ? { duration: 0 } : { delay: 0.2 }}
-                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-3 text-[0.95rem] font-semibold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  className="mobile-nav-link inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[var(--brand-orange)] px-5 py-3 text-[0.95rem] font-semibold text-[var(--brand-purple-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  style={{ animationDelay: "0.24s" }}
                 >
-                  <WhatsAppIcon className="h-5 w-5 shrink-0" />
-                  {t(nav.whatsapp)}
-                </motion.a>
-                {profilePdfUrl ? (
-                  <motion.a
-                    href={profilePdfUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    initial={reduce ? false : { opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={reduce ? { duration: 0 } : { delay: 0.24 }}
-                    className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[var(--brand-orange)] px-5 py-3 text-[0.95rem] font-semibold text-[var(--brand-purple-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                  >
-                    <PdfIcon className="h-5 w-5 shrink-0" />
-                    {t(nav.profilePdf)}
-                  </motion.a>
-                ) : null}
-              </div>
+                  <PdfIcon className="h-5 w-5 shrink-0" />
+                  {t(nav.profilePdf)}
+                </a>
+              ) : null}
             </div>
-          </motion.nav>
-        ) : null}
-      </AnimatePresence>
+          </div>
+        </nav>
+      ) : null}
     </>
   );
 }
@@ -607,7 +604,7 @@ export function Footer() {
   const { t, locale } = useLanguage();
   const pathname = usePathname();
   const onHome = isHomePathname(pathname);
-  const reduce = useReducedMotion();
+  const reduce = usePrefersReducedMotion();
   const [profilePdfUrl, setProfilePdfUrl] = useState<string | null>(null);
   const footerLinks = useMemo(
     () => footerLinkDefs.map((def) => ({ ...def, href: resolveHref(def, onHome) })),
