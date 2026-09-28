@@ -1,6 +1,6 @@
 # Marketing site (Next.js static export)
 
-Last updated: 28 September 2026 (hero background is a muted looping mp4; poster still for reduced motion)
+Last updated: 28 September 2026 (service og:image uses the hero photo; 404 is one noindex tag with no canonical; priority images are visible before onLoad)
 
 Path: `design/`  
 Installed: Next **15.5.25**, React **19.2.8**, Tailwind **4.3.3**, GSAP **3.15.0**, Framer Motion **12.x**  

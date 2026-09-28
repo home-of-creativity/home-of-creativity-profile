@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState, type ImgHTMLAttributes, type RefObject } from "react";
+import { useEffect, useRef, useState, type ImgHTMLAttributes, type RefObject } from "react";
 import { rememberLoadedMedia } from "@/lib/media-cache";
 import { useInViewOnce } from "@/lib/use-in-view";
 import { cn } from "@/lib/cn";
@@ -38,15 +38,25 @@ export function ProgressiveImage({
   rootMargin?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
   const inView = useInViewOnce(ref, { disabled: priority, root, rootMargin });
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(priority);
   const active = Boolean(src) && (priority || inView);
+
+  useEffect(() => {
+    const img = imgRef.current;
+    if (priority || (img?.complete && img.naturalWidth > 0)) {
+      setLoaded(true);
+      if (img?.complete && img.naturalWidth > 0) markLoaded(src ?? undefined);
+    }
+  }, [src, active, priority]);
 
   return (
     <div ref={ref} className={cn("h-full w-full", className)}>
       {active ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
+          ref={imgRef}
           src={src ?? ""}
           alt={alt}
           width={width}
