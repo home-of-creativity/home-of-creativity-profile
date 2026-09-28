@@ -1,5 +1,6 @@
 # Marketing site (Next.js static export)
 
+Last updated: 28 September 2026 (service og:image uses the hero photo; 404 is one noindex tag with no canonical; priority images are visible before onLoad)
 Last updated: 28 September 2026 (hero poster is the LCP; video starts after idle; nav drawer is CSS)
 
 Path: `design/`  
