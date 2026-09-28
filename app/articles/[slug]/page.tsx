@@ -61,11 +61,14 @@ export default async function ArticleDetailPage({
   const article = await fetchArticle(slug);
   if (!article) notFound();
 
+  const excerpt = excerptFor(article);
+  const description = pageDescription(excerpt.en, excerpt.ar);
+
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd(article)) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd(article, description)) }}
       />
       <Nav />
       <main id="top" data-article-slug={article.slug}>
