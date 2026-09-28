@@ -5,7 +5,8 @@ import { pageSeo } from "@/lib/page-meta";
 export const metadata: Metadata = {
   title: { absolute: pageSeo.notFound.title },
   description: pageSeo.notFound.description,
-  robots: { index: false, follow: false },
+  // Next inserts its own noindex meta while rendering this page. Another robots field duplicates it.
+  robots: null,
 };
 
 export default function NotFound() {
