@@ -487,19 +487,52 @@ html[dir="rtl"] .lux-rule {
 }
 
 .hero-letter {
-  opacity: 0;
-  transform: scale(0.9);
-  transform-origin: 50% 100%;
+  opacity: 1;
+  transform: none;
 }
 
 .hero-brand-bird {
   will-change: transform;
 }
 
+@keyframes mobile-nav-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes mobile-nav-item {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+.mobile-nav {
+  animation: mobile-nav-in 0.2s ease;
+}
+
+.mobile-nav-link {
+  animation: mobile-nav-item 0.35s ease both;
+}
+
+.locale-flash {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: var(--brand-purple);
+  animation: locale-flash 280ms ease;
+}
+
+@keyframes locale-flash {
+  0% { opacity: 0; }
+  40% { opacity: 0.12; }
+  100% { opacity: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .hero-letter {
-    opacity: 1;
-    transform: none;
+  .mobile-nav,
+  .mobile-nav-link,
+  .locale-flash {
+    animation: none;
   }
 
   .loading-lottie__player {
@@ -1641,6 +1674,22 @@ html[lang="ar"] .article-card-date {
 
 .article-card-link:hover {
   color: var(--brand-orange);
+}
+
+html[data-theme="dark"] .article-card {
+  background: var(--brand-paper);
+  border-color: var(--brand-line);
+}
+
+html[data-theme="dark"] .article-card:hover {
+  border-color: color-mix(in srgb, var(--brand-orange) 55%, transparent);
+  box-shadow: 0 14px 36px rgb(0 0 0 / 0.28);
+}
+
+html[data-theme="dark"] .article-card-link,
+html[data-theme="dark"] .article-back-link,
+html[data-theme="dark"] .article-body a {
+  color: var(--brand-ivory);
 }
 
 .article-back-link {

@@ -1,6 +1,5 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { LogoLockup } from "./brand";
@@ -64,6 +63,18 @@ function resolveHref(def: SiteLinkDef, onHome: boolean) {
   return sectionPath(def.section!, onHome);
 }
 
+function usePrefersReducedMotion() {
+  const [reduce, setReduce] = useState(false);
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setReduce(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
+  return reduce;
+}
+
 function scrollToHash(href: string, reduce: boolean | null) {
   if (!href.startsWith("#")) return;
   const behavior: ScrollBehavior = reduce ? "auto" : "smooth";
@@ -117,7 +128,7 @@ function NavChatLink({
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        "group/navchat relative hidden items-center gap-2 rounded-full px-3 py-2 text-[0.72rem] font-semibold uppercase text-white transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white min-[480px]:inline-flex lg:size-9 lg:justify-center lg:gap-0 lg:px-0 lg:py-0 lg:text-[0.78rem]",
+        "group/navchat relative hidden items-center gap-2 rounded-full px-3 py-2 text-[0.72rem] font-semibold uppercase text-white transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white lg:inline-flex lg:size-9 lg:justify-center lg:gap-0 lg:px-0 lg:py-0 lg:text-[0.78rem]",
         className,
       )}
     >
@@ -219,7 +230,7 @@ export function Nav() {
   const onHome = isHomePathname(pathname);
   const onPricing = isPagePathname(pathname, "pricing");
   const onArticles = normalizePathname(pathname).startsWith("/articles");
-  const reduce = useReducedMotion();
+  const reduce = usePrefersReducedMotion();
   const headerRef = useRef<HTMLElement>(null);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -403,10 +414,19 @@ export function Nav() {
     };
   }, [open]);
 
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
   const linkClass = (key: string, href: string, mobile = false) =>
     cn(
       mobile
-        ? "border-b border-white/15 py-4 text-start text-[1.35rem] text-white"
+        ? "flex min-h-12 items-center border-b border-white/12 py-3 text-start text-[1.05rem] font-semibold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
         : "relative grid h-11 place-items-center rounded-full px-1.5 text-[0.82rem] font-semibold text-[var(--brand-ivory)] transition-colors hover:bg-white/10 hover:text-[var(--brand-orange)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)] xl:text-[0.9rem]",
       !mobile && locale === "ar" ? "tracking-normal" : !mobile && "tracking-[0.08em]",
       mobile && locale === "ar" ? "tracking-normal" : mobile && "tracking-[0.14em]",
@@ -475,7 +495,7 @@ export function Nav() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={cn(
-                  "inline-flex items-center gap-2 rounded-full bg-[var(--brand-orange)] px-2.5 py-2 text-[0.72rem] font-semibold uppercase text-[var(--brand-purple-deep)] transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white min-[480px]:px-3 lg:px-4 lg:text-[0.78rem]",
+                  "hidden items-center gap-2 rounded-full bg-[var(--brand-orange)] px-2.5 py-2 text-[0.72rem] font-semibold uppercase text-[var(--brand-purple-deep)] transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white lg:inline-flex lg:px-4 lg:text-[0.78rem]",
                   locale === "ar" ? "tracking-normal" : "tracking-[0.14em]",
                 )}
               >
@@ -494,17 +514,18 @@ export function Nav() {
               onClick={() => setOpen((v) => !v)}
             >
               <span className="sr-only">{t(nav.menu)}</span>
-              <span className="flex w-5 flex-col gap-1.5">
+              <span className="flex w-5 flex-col gap-[5px]">
                 <span
                   className={cn(
                     "h-px w-full bg-current transition",
-                    open && "translate-y-[3.5px] rotate-45",
+                    open && "translate-y-[6px] rotate-45",
                   )}
                 />
+                <span className={cn("h-px w-full bg-current transition", open && "opacity-0")} />
                 <span
                   className={cn(
                     "h-px w-full bg-current transition",
-                    open && "-translate-y-[3.5px] -rotate-45",
+                    open && "-translate-y-[6px] -rotate-45",
                   )}
                 />
               </span>
@@ -516,75 +537,65 @@ export function Nav() {
           className="nav-progress pointer-events-none absolute inset-x-0 bottom-0 h-px origin-start scale-x-0 bg-[var(--brand-orange)]"
         />
       </header>
-      <AnimatePresence>
-        {open ? (
-          <motion.nav
-            id="mobile-nav"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-x-0 top-[var(--nav-height)] bottom-0 z-40 bg-[var(--brand-purple-deep)] lg:hidden"
+      {open ? (
+        <nav
+          id="mobile-nav"
+          className="mobile-nav fixed inset-x-0 bottom-0 z-40 overflow-y-auto bg-[var(--brand-purple-deep)] lg:hidden"
+          style={{ top: "calc(var(--nav-height) + env(safe-area-inset-top, 0px))" }}
+        >
+          <div
+            dir={locale === "ar" ? "rtl" : "ltr"}
+            className="mx-auto flex min-h-full w-[min(1280px,calc(100%-1.5rem))] flex-col pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-2"
           >
-            <div
-              dir={locale === "ar" ? "rtl" : "ltr"}
-              className="mx-auto flex h-full w-[min(1280px,calc(100%-1.5rem))] flex-col justify-center gap-2"
-            >
-              {navLinks.map((link, i) => (
-                <motion.a
-                  key={link.key}
-                  href={link.href}
-                  aria-current={isLinkActive(link.key, link.href) ? "page" : undefined}
-                  onClick={(event) => handleNavLinkClick(event, link.href)}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.05 * i }}
-                  className={linkClass(link.key, link.href, true)}
-                >
-                  {t(link.label)}
-                </motion.a>
-              ))}
-              <motion.a
+            {navLinks.map((link, i) => (
+              <a
+                key={link.key}
+                href={link.href}
+                aria-current={isLinkActive(link.key, link.href) ? "page" : undefined}
+                onClick={(event) => handleNavLinkClick(event, link.href)}
+                className={cn("mobile-nav-link", linkClass(link.key, link.href, true))}
+                style={{ animationDelay: `${0.04 * i}s` }}
+              >
+                {t(link.label)}
+              </a>
+            ))}
+            <div className="mt-auto grid gap-3 pt-8">
+              <a
                 href={CLIENT_TELEGRAM_URL}
                 target="_blank"
                 rel="noreferrer"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.24 }}
-                className="mt-4 inline-flex w-fit items-center gap-2 rounded-full bg-[#229ED9] px-5 py-3 text-[1rem] font-semibold text-white"
+                className="mobile-nav-link inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#229ED9] px-5 py-3 text-[0.95rem] font-semibold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                style={{ animationDelay: "0.16s" }}
               >
                 <TelegramIcon className="h-5 w-5 shrink-0" />
                 {t(nav.telegram)}
-              </motion.a>
-              <motion.a
+              </a>
+              <a
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.28 }}
-                className="mt-2 inline-flex w-fit items-center gap-2 rounded-full bg-[#25D366] px-5 py-3 text-[1rem] font-semibold text-white"
+                className="mobile-nav-link inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-3 text-[0.95rem] font-semibold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                style={{ animationDelay: "0.2s" }}
               >
                 <WhatsAppIcon className="h-5 w-5 shrink-0" />
                 {t(nav.whatsapp)}
-              </motion.a>
+              </a>
               {profilePdfUrl ? (
-                <motion.a
+                <a
                   href={profilePdfUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.32 }}
-                  className="mt-2 inline-flex w-fit items-center gap-2 rounded-full bg-[var(--brand-orange)] px-5 py-3 text-[1rem] font-semibold text-[var(--brand-purple-deep)]"
+                  className="mobile-nav-link inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[var(--brand-orange)] px-5 py-3 text-[0.95rem] font-semibold text-[var(--brand-purple-deep)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  style={{ animationDelay: "0.24s" }}
                 >
                   <PdfIcon className="h-5 w-5 shrink-0" />
                   {t(nav.profilePdf)}
-                </motion.a>
+                </a>
               ) : null}
             </div>
-          </motion.nav>
-        ) : null}
-      </AnimatePresence>
+          </div>
+        </nav>
+      ) : null}
     </>
   );
 }
@@ -593,7 +604,7 @@ export function Footer() {
   const { t, locale } = useLanguage();
   const pathname = usePathname();
   const onHome = isHomePathname(pathname);
-  const reduce = useReducedMotion();
+  const reduce = usePrefersReducedMotion();
   const [profilePdfUrl, setProfilePdfUrl] = useState<string | null>(null);
   const footerLinks = useMemo(
     () => footerLinkDefs.map((def) => ({ ...def, href: resolveHref(def, onHome) })),

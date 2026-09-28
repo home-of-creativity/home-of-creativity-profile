@@ -5,7 +5,7 @@ import { BASE_PATH } from "@/lib/base-path";
 import { MEDIA_CACHE } from "@/lib/media-cache";
 import { rememberVisit } from "@/lib/visit-cache";
 
-const PRELOAD = ["/hummingbird.svg", "/video/hero-bg-poster.webp"];
+const PRELOAD = ["/hummingbird.svg", "/video/hero-bg-poster-mobile.webp", "/video/hero-bg-poster.webp"];
 
 function whenIdle(run: () => void) {
   if (typeof window.requestIdleCallback === "function") {

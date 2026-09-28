@@ -6,6 +6,8 @@ import { withOptimizedLogos } from "@/lib/client-logos";
 import { pageMetadata, pageSeo } from "@/lib/page-meta";
 import { fetchPortfolioProjects, fetchShowcaseClients } from "@/lib/portfolio-api";
 import { fetchLandingReels } from "@/lib/reels-api";
+import { withBasePath } from "@/lib/base-path";
+import { HERO_POSTER_DESKTOP, HERO_POSTER_MOBILE } from "@/lib/hero-media";
 import { homeJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({ ...pageSeo.home, path: "/" });
@@ -20,6 +22,20 @@ export default async function HomePage() {
 
   return (
     <>
+      <link
+        rel="preload"
+        as="image"
+        href={withBasePath(HERO_POSTER_MOBILE)}
+        media="(max-width: 799px)"
+        fetchPriority="high"
+      />
+      <link
+        rel="preload"
+        as="image"
+        href={withBasePath(HERO_POSTER_DESKTOP)}
+        media="(min-width: 800px)"
+        fetchPriority="high"
+      />
       <JsonLd data={homeJsonLd()} />
       <SeoCrawlerCopy />
       <HomeView clients={withOptimizedLogos(clients)} projects={projects} reels={reels} />
