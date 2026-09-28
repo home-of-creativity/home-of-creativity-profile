@@ -13,6 +13,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { pricing, WHATSAPP_NUMBER } from "@/lib/content";
+import { officeById, paymentMarkets } from "@/lib/offices";
 import { fetchPricingCategories } from "@/lib/pricing-api";
 import {
   isOneTimePlan,
@@ -471,12 +472,17 @@ function SubcategoryLead({
   );
 }
 
-export function Pricing() {
+/**
+ * `initialCategories` comes from the build, so every package family, subcategory and price is
+ * in the static HTML (inactive tabs are `hidden`, not missing). The list refreshes from the
+ * API after hydration so dashboard edits show before the next build.
+ */
+export function Pricing({ initialCategories }: { initialCategories?: PricingCategory[] } = {}) {
   const { t, locale } = useLanguage();
-  const [categories, setCategories] = useState<PricingCategory[]>([]);
-  const [ready, setReady] = useState(false);
-  const [activeCategory, setActiveCategory] = useState("");
-  const [activeSubcategory, setActiveSubcategory] = useState("");
+  const [categories, setCategories] = useState<PricingCategory[]>(initialCategories ?? []);
+  const [ready, setReady] = useState(initialCategories !== undefined);
+  const [activeCategory, setActiveCategory] = useState(initialCategories?.[0]?.id ?? "");
+  const [activeSubcategories, setActiveSubcategories] = useState<Record<string, string>>({});
   const [activeBilling, setActiveBilling] = useState<BillingPeriod>("monthly");
   const [inquirySelection, setInquirySelection] = useState<InquirySelection | null>(null);
   const closeInquiry = useCallback(() => setInquirySelection(null), []);
@@ -486,17 +492,11 @@ export function Pricing() {
 
     fetchPricingCategories()
       .then((items) => {
-        if (!active) return;
+        if (!active || items.length === 0) return;
         setCategories(items);
-        setActiveCategory(items[0]?.id ?? "");
-        setActiveSubcategory(items[0]?.subcategories[0]?.id ?? "");
+        setActiveCategory((current) => (items.some((item) => item.id === current) ? current : items[0].id));
       })
-      .catch(() => {
-        if (!active) return;
-        setCategories([]);
-        setActiveCategory("");
-        setActiveSubcategory("");
-      })
+      .catch(() => undefined)
       .finally(() => {
         if (active) setReady(true);
       });
@@ -511,27 +511,15 @@ export function Pricing() {
     [categories, activeCategory],
   );
 
-  const subcategory = useMemo(() => {
-    if (!category) return undefined;
-    return (
-      category.subcategories.find((entry) => entry.id === activeSubcategory) ??
-      category.subcategories[0]
-    );
-  }, [category, activeSubcategory]);
+  function subcategoryFor(entry: PricingCategory): PricingSubcategory | undefined {
+    return entry.subcategories.find((sub) => sub.id === activeSubcategories[entry.id]) ?? entry.subcategories[0];
+  }
 
+  const subcategory = category ? subcategoryFor(category) : undefined;
   const oneTime = subcategory?.oneTime ?? false;
 
-  const sortedPlans = useMemo(() => {
-    if (!subcategory) return [];
-    return [...subcategory.plans].sort(
-      (a, b) => resolvePlanPrice(a, activeBilling) - resolvePlanPrice(b, activeBilling),
-    );
-  }, [subcategory, activeBilling]);
-
-  function onCategoryChange(id: string) {
-    setActiveCategory(id);
-    const next = categories.find((entry) => entry.id === id);
-    if (next?.subcategories[0]) setActiveSubcategory(next.subcategories[0].id);
+  function sortedPlans(entry: PricingSubcategory) {
+    return [...entry.plans].sort((a, b) => resolvePlanPrice(a, activeBilling) - resolvePlanPrice(b, activeBilling));
   }
 
   return (
@@ -566,7 +554,7 @@ export function Pricing() {
           <p className="mt-10 text-center text-[0.95rem] text-[var(--brand-muted)]">{t(pricing.empty)}</p>
         ) : null}
 
-        {ready && category && subcategory ? (
+        {ready && category ? (
           <>
         <Reveal className="mt-10">
           <p
@@ -583,14 +571,16 @@ export function Pricing() {
             className="mx-auto flex max-w-4xl flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-center"
           >
             {categories.map((entry) => {
-              const selected = entry.id === activeCategory;
+              const selected = entry.id === category.id;
               return (
                 <button
                   key={entry.id}
                   type="button"
                   role="tab"
+                  id={`pricing-tab-${entry.id}`}
                   aria-selected={selected}
-                  onClick={() => onCategoryChange(entry.id)}
+                  aria-controls={`pricing-panel-${entry.id}`}
+                  onClick={() => setActiveCategory(entry.id)}
                   className={cn(
                     "cursor-pointer rounded-full border px-4 py-2.5 text-[0.82rem] font-semibold transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)] sm:px-5",
                     selected
@@ -605,124 +595,143 @@ export function Pricing() {
           </div>
         </Reveal>
 
-        <Reveal className="mt-8 mx-auto max-w-3xl text-center">
-          <p className="mt-3 text-[0.95rem] leading-relaxed text-[var(--brand-ink)]/72">{t(category.lead)}</p>
-        </Reveal>
+        <div className="mt-8" hidden={oneTime}>
+          <p
+            className={cn(
+              "mb-3 text-center text-[0.72rem] text-[var(--brand-muted)]",
+              locale === "en" && "tracking-[0.18em] uppercase",
+            )}
+          >
+            {t(pricing.chooseBilling)}
+          </p>
+          <div
+            role="tablist"
+            aria-label={t(pricing.chooseBilling)}
+            className="mx-auto flex max-w-3xl flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-center"
+          >
+            {billingPeriods.map((period) => {
+              const selected = period === activeBilling;
+              return (
+                <button
+                  key={period}
+                  type="button"
+                  role="tab"
+                  aria-selected={selected}
+                  onClick={() => setActiveBilling(period)}
+                  className={cn(
+                    "inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border px-5 py-2.5 text-[0.82rem] font-semibold transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]",
+                    selected
+                      ? "border-[var(--brand-orange)] bg-[var(--brand-orange)] text-[var(--brand-purple-deep)]"
+                      : "border-[var(--brand-line)] bg-white/80 text-[var(--brand-ink)] hover:border-[var(--brand-orange)]/50",
+                  )}
+                >
+                  <span>{t(pricing.billing[period].label)}</span>
+                  {billingDiscount(period) ? (
+                    <DiscountBadge>{t(billingDiscount(period)!)}</DiscountBadge>
+                  ) : null}
+                </button>
+              );
+            })}
+          </div>
+          <div className="mx-auto mt-4 max-w-xl rounded-xl bg-[var(--brand-teal-deep)] px-5 py-3 text-center shadow-[0_8px_24px_rgb(26_127_120/0.22)]">
+            <p className="m-0 text-[0.84rem] leading-relaxed text-white">{t(pricing.billingSave)}</p>
+          </div>
+        </div>
 
-        {category.subcategories.length > 1 ? (
-          <Reveal className="mt-8">
-            <p
-              className={cn(
-                "mb-3 text-center text-[0.72rem] text-[var(--brand-muted)]",
-                locale === "en" && "tracking-[0.18em] uppercase",
-              )}
-            >
-              {t(pricing.chooseSubcategory)}
-            </p>
+        {categories.map((entry) => {
+          const selectedSub = subcategoryFor(entry);
+          return (
             <div
-              role="tablist"
-              aria-label={t(pricing.chooseSubcategory)}
-              className="mx-auto flex max-w-3xl flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-center"
+              key={entry.id}
+              id={`pricing-panel-${entry.id}`}
+              role="tabpanel"
+              aria-labelledby={`pricing-tab-${entry.id}`}
+              hidden={entry.id !== category.id}
             >
-              {category.subcategories.map((entry) => {
-                const selected = entry.id === activeSubcategory;
-                return (
-                  <button
-                    key={entry.id}
-                    type="button"
-                    role="tab"
-                    aria-selected={selected}
-                    onClick={() => setActiveSubcategory(entry.id)}
+              <h2 className="sr-only">{t(entry.name)}</h2>
+              <Reveal className="mt-8 mx-auto max-w-3xl text-center">
+                <p className="mt-3 text-[0.95rem] leading-relaxed text-[var(--brand-ink)]/72">{t(entry.lead)}</p>
+              </Reveal>
+
+              {entry.subcategories.length > 1 ? (
+                <Reveal className="mt-8">
+                  <p
                     className={cn(
-                      "cursor-pointer rounded-full border px-4 py-2.5 text-[0.82rem] font-semibold transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)] sm:px-5",
-                      selected
-                        ? "border-[var(--brand-teal-deep)] bg-[var(--brand-teal-deep)] text-white"
-                        : "border-[var(--brand-line)] bg-white/80 text-[var(--brand-ink)] hover:border-[var(--brand-teal)]/50",
+                      "mb-3 text-center text-[0.72rem] text-[var(--brand-muted)]",
+                      locale === "en" && "tracking-[0.18em] uppercase",
                     )}
                   >
-                    {t(entry.name)}
-                  </button>
+                    {t(pricing.chooseSubcategory)}
+                  </p>
+                  <div
+                    role="tablist"
+                    aria-label={t(pricing.chooseSubcategory)}
+                    className="mx-auto flex max-w-3xl flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-center"
+                  >
+                    {entry.subcategories.map((sub) => {
+                      const selected = sub.id === selectedSub?.id;
+                      return (
+                        <button
+                          key={sub.id}
+                          type="button"
+                          role="tab"
+                          aria-selected={selected}
+                          onClick={() => setActiveSubcategories((current) => ({ ...current, [entry.id]: sub.id }))}
+                          className={cn(
+                            "cursor-pointer rounded-full border px-4 py-2.5 text-[0.82rem] font-semibold transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)] sm:px-5",
+                            selected
+                              ? "border-[var(--brand-teal-deep)] bg-[var(--brand-teal-deep)] text-white"
+                              : "border-[var(--brand-line)] bg-white/80 text-[var(--brand-ink)] hover:border-[var(--brand-teal)]/50",
+                          )}
+                        >
+                          {t(sub.name)}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </Reveal>
+              ) : null}
+
+              {entry.subcategories.map((sub) => {
+                const plans = sortedPlans(sub);
+                const subOneTime = sub.oneTime;
+                return (
+                  <div key={sub.id} hidden={sub.id !== selectedSub?.id}>
+                    <SubcategoryLead subcategory={sub} t={t} />
+                    <Stagger
+                      key={`${entry.id}-${sub.id}-${activeBilling}`}
+                      className={cn(
+                        "pricing-cards mt-10",
+                        plans.length === 5 && "pricing-cards-5",
+                        plans.length <= 3 && "pricing-cards-3",
+                        plans.length > 3 && plans.length !== 5 && "pricing-cards-many",
+                      )}
+                    >
+                      {plans.map((plan) => (
+                        <StaggerItem key={plan.id}>
+                          <PlanCard
+                            plan={plan}
+                            billing={activeBilling}
+                            oneTime={subOneTime || isOneTimePlan(plan)}
+                            locale={locale}
+                            t={t}
+                            onChoose={() =>
+                              setInquirySelection({
+                                plan,
+                                billing: activeBilling,
+                                oneTime: subOneTime || isOneTimePlan(plan),
+                              })
+                            }
+                          />
+                        </StaggerItem>
+                      ))}
+                    </Stagger>
+                  </div>
                 );
               })}
             </div>
-          </Reveal>
-        ) : null}
-
-        {!oneTime ? (
-          <Reveal className="mt-8">
-            <p
-              className={cn(
-                "mb-3 text-center text-[0.72rem] text-[var(--brand-muted)]",
-                locale === "en" && "tracking-[0.18em] uppercase",
-              )}
-            >
-              {t(pricing.chooseBilling)}
-            </p>
-            <div
-              role="tablist"
-              aria-label={t(pricing.chooseBilling)}
-              className="mx-auto flex max-w-3xl flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-center"
-            >
-              {billingPeriods.map((period) => {
-                const selected = period === activeBilling;
-                return (
-                  <button
-                    key={period}
-                    type="button"
-                    role="tab"
-                    aria-selected={selected}
-                    onClick={() => setActiveBilling(period)}
-                    className={cn(
-                      "inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border px-5 py-2.5 text-[0.82rem] font-semibold transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]",
-                      selected
-                        ? "border-[var(--brand-orange)] bg-[var(--brand-orange)] text-[var(--brand-purple-deep)]"
-                        : "border-[var(--brand-line)] bg-white/80 text-[var(--brand-ink)] hover:border-[var(--brand-orange)]/50",
-                    )}
-                  >
-                    <span>{t(pricing.billing[period].label)}</span>
-                    {billingDiscount(period) ? (
-                      <DiscountBadge>{t(billingDiscount(period)!)}</DiscountBadge>
-                    ) : null}
-                  </button>
-                );
-              })}
-            </div>
-            <div className="mx-auto mt-4 max-w-xl rounded-xl bg-[var(--brand-teal-deep)] px-5 py-3 text-center shadow-[0_8px_24px_rgb(26_127_120/0.22)]">
-              <p className="m-0 text-[0.84rem] leading-relaxed text-white">{t(pricing.billingSave)}</p>
-            </div>
-          </Reveal>
-        ) : null}
-
-        <SubcategoryLead subcategory={subcategory} t={t} />
-
-        <Stagger
-          key={`${category.id}-${subcategory.id}-${activeBilling}`}
-          className={cn(
-            "pricing-cards mt-10",
-            sortedPlans.length === 5 && "pricing-cards-5",
-            sortedPlans.length <= 3 && "pricing-cards-3",
-            sortedPlans.length > 3 && sortedPlans.length !== 5 && "pricing-cards-many",
-          )}
-        >
-          {sortedPlans.map((plan) => (
-            <StaggerItem key={plan.id}>
-              <PlanCard
-                plan={plan}
-                billing={activeBilling}
-                oneTime={oneTime || isOneTimePlan(plan)}
-                locale={locale}
-                t={t}
-                onChoose={() =>
-                  setInquirySelection({
-                    plan,
-                    billing: activeBilling,
-                    oneTime: oneTime || isOneTimePlan(plan),
-                  })
-                }
-              />
-            </StaggerItem>
-          ))}
-        </Stagger>
+          );
+        })}
 
         <Reveal className="mt-10 space-y-3 text-center">
           <p className="m-0 text-[0.88rem] leading-relaxed text-[var(--brand-muted)]">
@@ -796,6 +805,19 @@ export function Pricing() {
           <p className="relative mt-8 text-center text-[0.88rem] text-white/55">
             {t(pricing.payment.note)}
           </p>
+          {(["ksa", "uae"] as const).map((market) => {
+            // Rendered only for methods HOC has confirmed for that market (none yet).
+            const methods = paymentMarkets[market];
+            if (!methods?.length) return null;
+            const country = officeById(market).country;
+            return (
+              <p key={market} className="relative mt-3 text-center text-[0.88rem] text-white/70">
+                {locale === "ar"
+                  ? `للعملاء في ${country.ar}: ${methods.map((method) => method.ar).join("، ")}`
+                  : `Clients in ${country.en}: ${methods.map((method) => method.en).join(", ")}`}
+              </p>
+            );
+          })}
           <div className="relative mt-6 flex justify-center">
             <a
               href={whatsappHref(

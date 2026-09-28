@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
 import { Footer, Nav } from "@/components/chrome";
 import { LegalDocument } from "@/components/sections/LegalDocument";
-import { pageDescription, seoCopy } from "@/lib/site";
+import { pageMetadata, pageSeo } from "@/lib/page-meta";
 
-export const metadata: Metadata = {
-  title: `${seoCopy.termsTitle.ar} | ${seoCopy.termsTitle.en}`,
-  description: pageDescription(seoCopy.termsDescription.en, seoCopy.termsDescription.ar),
-  alternates: { canonical: "/terms/" },
-};
+export const metadata: Metadata = pageMetadata({ ...pageSeo.terms, path: "/terms/" });
 
 export default function TermsPage() {
   return (

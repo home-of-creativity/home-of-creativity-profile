@@ -10,7 +10,7 @@ import { Reveal, Stagger, StaggerItem } from "../motion";
 import { SectionHeading, Shell } from "../ui";
 
 function articleHref(slug: string) {
-  return `${pagePath("articles/detail")}?slug=${encodeURIComponent(slug)}`;
+  return pagePath(`articles/${slug}`);
 }
 
 function localizedTitle(article: Article, locale: "en" | "ar") {

@@ -6,15 +6,21 @@ import { pagePath } from "@/lib/base-path";
 import { cn } from "@/lib/cn";
 import { useLanguage } from "@/lib/i18n";
 import { findServiceDetail, serviceDetailLabels as labels, serviceProcess } from "@/lib/service-details";
+import { officeName, officePath, publishedOffices, whatsappDigits } from "@/lib/offices";
 import { whatsappHref } from "@/lib/whatsapp";
 import { Reveal, Stagger, StaggerItem } from "../motion";
 import { Shell } from "../ui";
 import { FaqList } from "./Faq";
 
 const identityLinks = [
-  { href: "services/branding", en: "Branding services in Damascus", ar: "خدمات الهوية في دمشق" },
+  { href: "services/branding", en: "Branding services in Damascus and Riyadh", ar: "خدمات الهوية في دمشق والرياض" },
   { href: "services/brand-identity", en: "Brand identity services", ar: "خدمات الهوية التجارية" },
-  { href: "locations/damascus", en: "The Damascus office", ar: "مكتب دمشق" },
+];
+
+/** WhatsApp numbers for the service CTA, Syrian first; both carry the same service text. */
+const ctaNumbers = [
+  { id: "syr" as const, label: labels.ctaSyria },
+  { id: "ksa" as const, label: labels.ctaSaudi },
 ];
 
 export function ServiceDetailPage({ slug }: { slug: string }) {
@@ -58,24 +64,30 @@ export function ServiceDetailPage({ slug }: { slug: string }) {
               <p className="mt-5 text-[1.15rem] font-semibold text-[var(--brand-orange)]">{detail.tagline.ar}</p>
             </div>
             <div data-lang="en" lang="en" dir="ltr">
-              <h1 className="font-display m-0 text-[clamp(2.1rem,5.5vw,3.8rem)] font-semibold leading-[1.1]">
+              {/* One <h1> per page: the Arabic title. The English one stays a subtitle-weight paragraph. */}
+              <p className="font-display m-0 text-[clamp(2.1rem,5.5vw,3.8rem)] font-semibold leading-[1.1]">
                 {detail.title.en}
-              </h1>
+              </p>
               <p className="mt-5 text-[1.15rem] font-semibold text-[var(--brand-orange)]">{detail.tagline.en}</p>
             </div>
             <p className="mx-auto mt-6 max-w-2xl text-[1.05rem] leading-[1.85] text-white/78">{t(detail.definition)}</p>
-            <a
-              href={whatsappHref(t(detail.title))}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cn(
-                "mt-9 inline-flex items-center gap-2 rounded-full bg-[var(--brand-orange)] px-7 py-3 text-[0.85rem] font-semibold text-[var(--brand-purple-deep)] transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
-                locale === "en" && "tracking-[0.1em] uppercase",
-              )}
-            >
-              {t(labels.cta)}
-              <span aria-hidden className={cn(locale === "ar" && "inline-block rotate-180")}>→</span>
-            </a>
+            <div className="mt-9 flex flex-wrap justify-center gap-3">
+              {ctaNumbers.map((cta) => (
+                <a
+                  key={cta.id}
+                  href={whatsappHref(t(detail.title), whatsappDigits(cta.id))}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(
+                    "inline-flex items-center gap-2 rounded-full bg-[var(--brand-orange)] px-7 py-3 text-[0.85rem] font-semibold text-[var(--brand-purple-deep)] transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
+                    locale === "en" && "tracking-[0.1em] uppercase",
+                  )}
+                >
+                  {t(cta.label)}
+                  <span aria-hidden className={cn(locale === "ar" && "inline-block rotate-180")}>→</span>
+                </a>
+              ))}
+            </div>
           </Reveal>
         </Shell>
       </section>
@@ -84,7 +96,12 @@ export function ServiceDetailPage({ slug }: { slug: string }) {
         <Shell>
           <Reveal className="mx-auto mb-10 max-w-2xl text-center">
             <h2 className="font-display m-0 text-[clamp(1.6rem,3vw,2.2rem)] font-semibold">{t(labels.covers)}</h2>
-            <p className="mt-3 text-[0.92rem] text-[var(--brand-ink)]/60">{t(labels.coversNote)}</p>
+            <p className="mt-3 text-[0.92rem] text-[var(--brand-ink)]/70">
+              {t(labels.coversNote)}{" "}
+              <Link href={pagePath("pricing")} className="font-semibold text-[var(--brand-purple)] hover:text-[var(--brand-orange)]">
+                {t(labels.pricing)}
+              </Link>
+            </p>
           </Reveal>
           <Stagger className="mx-auto grid max-w-4xl gap-4 sm:grid-cols-2">
             {detail.covers.map((item, index) => (
@@ -135,7 +152,7 @@ export function ServiceDetailPage({ slug }: { slug: string }) {
 
           <Reveal className="mx-auto mt-14 max-w-4xl">
             <h2 className="font-display m-0 text-center text-[1.3rem] font-semibold">{t(labels.related)}</h2>
-            <ul className="mt-6 grid gap-3 p-0 sm:grid-cols-3">
+            <ul className="mt-6 grid gap-3 p-0 sm:grid-cols-2 lg:grid-cols-4">
               {related.map((entry) => (
                 <li key={entry.slug} className="list-none">
                   <Link
@@ -148,6 +165,20 @@ export function ServiceDetailPage({ slug }: { slug: string }) {
                 </li>
               ))}
             </ul>
+            <p className="mt-6 text-center text-[0.9rem] text-[var(--brand-ink)]/75">
+              {t(labels.offices)}:{" "}
+              {publishedOffices().map((office, index) => (
+                <span key={office.id}>
+                  {index > 0 ? (locale === "ar" ? "، " : ", ") : null}
+                  <Link
+                    href={pagePath(officePath(office)!)}
+                    className="font-semibold text-[var(--brand-purple)] hover:text-[var(--brand-orange)]"
+                  >
+                    {officeName(office, locale)}
+                  </Link>
+                </span>
+              ))}
+            </p>
             {slug === "visual-identity" ? (
               <ul className="mt-5 flex flex-wrap justify-center gap-x-5 gap-y-2 p-0">
                 {identityLinks.map((link) => (

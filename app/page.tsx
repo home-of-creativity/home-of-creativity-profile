@@ -1,75 +1,28 @@
-"use client";
-
-import dynamic from "next/dynamic";
-import { useEffect, useState, type ReactNode } from "react";
-import { Footer, Nav } from "@/components/chrome";
+import type { Metadata } from "next";
+import { HomeView } from "@/components/HomeView";
+import { JsonLd } from "@/components/JsonLd";
 import { SeoCrawlerCopy } from "@/components/SeoCrawlerCopy";
-import { SeoHomeJsonLd } from "@/components/SeoHomeJsonLd";
-import { About } from "@/components/sections/About";
-import { ClientVoices } from "@/components/sections/ClientVoices";
-import { ShowcaseClients } from "@/components/sections/ShowcaseClients";
-import { Hero } from "@/components/sections/Hero";
-import { Services } from "@/components/sections/Services";
+import { withOptimizedLogos } from "@/lib/client-logos";
+import { pageMetadata, pageSeo } from "@/lib/page-meta";
+import { fetchPortfolioProjects, fetchShowcaseClients } from "@/lib/portfolio-api";
+import { fetchLandingReels } from "@/lib/reels-api";
+import { homeJsonLd } from "@/lib/seo";
 
-const ClientJourney = dynamic(() => import("@/components/sections/ClientJourney").then((mod) => mod.ClientJourney));
-const Reels = dynamic(() => import("@/components/sections/Reels").then((mod) => mod.Reels));
-const SocialPhones = dynamic(() => import("@/components/sections/SocialPhones").then((mod) => mod.SocialPhones));
-const Projects = dynamic(() => import("@/components/sections/Projects").then((mod) => mod.Projects));
-const Finance = dynamic(() => import("@/components/sections/Finance").then((mod) => mod.Finance));
-const Faq = dynamic(() => import("@/components/sections/Faq").then((mod) => mod.Faq));
-const Contact = dynamic(() => import("@/components/sections/Contact").then((mod) => mod.Contact));
+export const metadata: Metadata = pageMetadata({ ...pageSeo.home, path: "/" });
 
-function AfterPaint({ children }: { children: ReactNode }) {
-  const [show, setShow] = useState(false);
+/** Client names, projects and reels are read at build time so they are in the static HTML. */
+export default async function HomePage() {
+  const [clients, projects, reels] = await Promise.all([
+    fetchShowcaseClients(),
+    fetchPortfolioProjects(),
+    fetchLandingReels(),
+  ]);
 
-  useEffect(() => {
-    const start = () => {
-      if (typeof window.requestIdleCallback === "function") {
-        window.requestIdleCallback(() => setShow(true), { timeout: 1200 });
-        return;
-      }
-      window.setTimeout(() => setShow(true), 1);
-    };
-    if (document.readyState === "complete") start();
-    else window.addEventListener("load", start, { once: true });
-  }, []);
-
-  return show ? children : null;
-}
-
-export default function HomePage() {
   return (
     <>
-      <SeoHomeJsonLd />
+      <JsonLd data={homeJsonLd()} />
       <SeoCrawlerCopy />
-      <Nav />
-      <main>
-        <Hero />
-        <About />
-        <div className="relative isolate overflow-hidden bg-[var(--brand-purple)] text-[var(--brand-ivory)]">
-          <div
-            aria-hidden
-            className="radial-burst pointer-events-none absolute inset-0 opacity-30"
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgb(231_153_58/0.16),transparent_42%)]"
-          />
-          <Services />
-          <ShowcaseClients />
-        </div>
-        <ClientVoices />
-        <AfterPaint>
-          <ClientJourney />
-          <Reels />
-          <SocialPhones />
-          <Projects />
-          <Finance />
-        </AfterPaint>
-        <Faq />
-        <Contact />
-      </main>
-      <Footer />
+      <HomeView clients={withOptimizedLogos(clients)} projects={projects} reels={reels} />
     </>
   );
 }

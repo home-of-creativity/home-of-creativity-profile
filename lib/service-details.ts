@@ -1,4 +1,5 @@
 import type { Copy } from "./i18n";
+import { officesSentence } from "./offices";
 
 type ServiceFaq = { q: Copy; a: Copy };
 
@@ -28,14 +29,19 @@ export const serviceDetailLabels = {
   related: { en: "Related services", ar: "خدمات ذات صلة" },
   allServices: { en: "All services", ar: "كل الخدمات" },
   cta: { en: "Start on WhatsApp", ar: "ابدأ عبر واتساب" },
+  ctaSyria: { en: "WhatsApp Syria", ar: "واتساب سوريا" },
+  ctaSaudi: { en: "WhatsApp Saudi Arabia", ar: "واتساب السعودية" },
+  offices: { en: "Our offices", ar: "مكاتبنا" },
+  pricing: { en: "Packages and prices", ar: "الباقات والأسعار" },
   breadcrumb: { en: "Breadcrumb", ar: "مسار التصفح" },
 };
 
 export const serviceProcess: Copy = {
-  en: "Share your project on Telegram or WhatsApp — text or a file. HOC Agency reviews the requirements and sends a clear PDF quotation. Once you approve it and payment is confirmed in the same conversation, our marketing, content, and design teams start work, and the final outputs are delivered on Telegram with revisions handled flexibly.",
-  ar: "شاركنا مشروعك عبر تيليجرام أو واتساب — نصاً أو ملفاً. يراجع فريق HOC Agency المتطلبات ويرسل عرض سعر واضحاً بصيغة PDF. بعد اعتمادك للعرض وتأكيد الدفع في نفس المحادثة، تبدأ فرق التسويق والمحتوى والتصميم العمل، وتُسلَّم المخرجات النهائية عبر تيليجرام مع إدارة التعديلات بمرونة.",
+  en: "Share your project on Telegram or WhatsApp — text or a file. Home of Creativity reviews the requirements and sends a clear PDF quotation. Once you approve it and payment is confirmed in the same conversation, our marketing, content, and design teams start work, and the final outputs are delivered on Telegram with revisions handled flexibly.",
+  ar: "شاركنا مشروعك عبر تيليجرام أو واتساب — نصاً أو ملفاً. يراجع فريق بيت الإبداع المتطلبات ويرسل عرض سعر واضحاً بصيغة PDF. بعد اعتمادك للعرض وتأكيد الدفع في نفس المحادثة، تبدأ فرق التسويق والمحتوى والتصميم العمل، وتُسلَّم المخرجات النهائية عبر تيليجرام مع إدارة التعديلات بمرونة.",
 };
 
+/** Names the service so the answer is not the same sentence on every page. */
 function scopeFaq(service: Copy): ServiceFaq {
   return {
     q: {
@@ -43,8 +49,8 @@ function scopeFaq(service: Copy): ServiceFaq {
       ar: `ماذا تشمل خدمة ${service.ar} وكم تستغرق؟`,
     },
     a: {
-      en: "Scope and timeline depend on your brief. HOC Agency confirms both in the quotation before payment — they are not published as a fixed list.",
-      ar: "يعتمد النطاق والمدة على موجز مشروعك. تؤكدهما HOC Agency في عرض السعر قبل الدفع، ولا يُنشران كقائمة ثابتة.",
+      en: `The scope and timeline of ${service.en.toLowerCase()} for your project are set in the quotation before payment. Monthly subscription package prices are published at hoc.agency/pricing/.`,
+      ar: `يُحدَّد نطاق خدمة ${service.ar} ومدتها لمشروعك في عرض السعر قبل الدفع. أسعار باقات الاشتراك الشهرية منشورة في hoc.agency/pricing/.`,
     },
   };
 }
@@ -56,15 +62,15 @@ function ksaFaq(service: Copy): ServiceFaq {
       ar: `هل تقدمون خدمة ${service.ar} لعملاء في السعودية؟`,
     },
     a: {
-      en: "Yes. We work with clients in Syria and Saudi Arabia, including Riyadh. Riyadh is a market we serve; our physical office is in Al Hamra, Damascus.",
-      ar: "نعم. نعمل مع عملاء في سوريا والسعودية بما في ذلك الرياض، وهي سوق نخدمها؛ مكتبنا المادي في الحمراء بدمشق.",
+      en: `Yes. We provide ${service.en.toLowerCase()} for clients in Syria and Saudi Arabia from our offices in ${officesSentence("en")}.`,
+      ar: `نعم. نقدّم خدمة ${service.ar} لعملائنا في سوريا والسعودية من مكاتبنا في ${officesSentence("ar")}.`,
     },
   };
 }
 
-/** Joined as `ar | en` by `seoMetaTitle`, so the brand appears once at the end. */
+/** Full titles: `[service] | بيت الإبداع HOC` and `[service] | Home of Creativity`, at most 65 characters. */
 function metaTitle(ar: string, en: string): Copy {
-  return { ar, en: `${en} | HOC Agency` };
+  return { ar: `${ar} | بيت الإبداع HOC`, en: `${en} | Home of Creativity` };
 }
 
 const marketing: Copy = { en: "Marketing", ar: "التسويق" };
@@ -88,18 +94,18 @@ export const serviceDetails: ServiceDetail[] = [
     id: "marketing",
     slug: "marketing",
     title: marketing,
-    metaTitle: metaTitle("خدمات التسويق | خطة تصنع الفرق", "Marketing Services | A plan that makes the difference"),
+    metaTitle: metaTitle("خدمات التسويق في دمشق والرياض", "Marketing Services in Damascus & Riyadh"),
     metaDescription: {
-      ar: "خدمات تسويق من HOC Agency تبدأ بفهم مشروعك وسوقه وجمهوره، ثم تبني خطة ورسائل واضحة تربط الإبداع بالنتائج، لعملاء في سوريا والسعودية.",
-      en: "Marketing services from HOC Agency that start with understanding your project, market, and audience, then build a clear plan and messaging that ties creativity to results — for clients in Syria and Saudi Arabia.",
+      ar: "خدمات تسويق من بيت الإبداع HOC تبدأ بدراسة سوقك وجمهورك وتنتهي بخطة ورسائل واضحة لحملاتك، لعملائنا في دمشق والرياض. اطلب عرض سعر عبر واتساب.",
+      en: "Marketing services from Home of Creativity (HOC): market and audience research, a clear plan and campaign messaging for clients in Damascus and Riyadh.",
     },
     tagline: {
       ar: "تسويق يبدأ من الفهم، وينتهي بأثر يمكن قياسه.",
       en: "Marketing that starts with understanding and ends with measurable impact.",
     },
     definition: {
-      ar: "التسويق في HOC Agency ليس نشراً عشوائياً ولا ضجيجاً مؤقتاً. نبدأ بتحليل مشروعك ومنافسيك وجمهورك، ثم نحدد الرسالة المناسبة والقنوات الأقرب للوصول إليه، ونحوّل ذلك إلى خطة عملية يربط فيها الإبداع بالأهداف التجارية.",
-      en: "Marketing at HOC Agency is not random posting or temporary noise. We start by analyzing your project, competitors, and audience, then define the right message and the channels closest to that audience, and turn it into a practical plan that ties creativity to business goals.",
+      ar: "التسويق في بيت الإبداع ليس نشراً عشوائياً ولا ضجيجاً مؤقتاً. نبدأ بتحليل مشروعك ومنافسيك وجمهورك، ثم نحدد الرسالة المناسبة والقنوات الأقرب للوصول إليه، ونحوّل ذلك إلى خطة عملية يربط فيها الإبداع بالأهداف التجارية.",
+      en: "Marketing at Home of Creativity is not random posting or temporary noise. We start by analyzing your project, competitors, and audience, then define the right message and the channels closest to that audience, and turn it into a practical plan that ties creativity to business goals.",
     },
     covers: [
       { ar: "دراسة السوق والمنافسين والجمهور المستهدف", en: "Market, competitor, and target audience research" },
@@ -122,16 +128,16 @@ export const serviceDetails: ServiceDetail[] = [
       scopeFaq(marketing),
       ksaFaq(marketing),
     ],
-    related: ["paid-ads", "social-media", "account-management"],
+    related: ["paid-ads", "social-media", "roadside-ads", "financial-analysis"],
   },
   {
     id: "ads",
     slug: "paid-ads",
     title: ads,
-    metaTitle: metaTitle("الحملات الممولة | وصول أدق لجمهورك", "Paid Ads | Reach your audience with precision"),
+    metaTitle: metaTitle("الحملات الإعلانية الممولة في دمشق والرياض", "Paid Social Ads in Damascus & Riyadh"),
     metaDescription: {
-      ar: "حملات إعلانية ممولة على منصات التواصل من HOC Agency: استهداف مدروس، إعلانات مصممة بعناية، ومتابعة للأداء لتصل رسالتك إلى الجمهور الصحيح.",
-      en: "Paid social media campaigns from HOC Agency: considered targeting, carefully designed ads, and performance follow-up so your message reaches the right audience.",
+      ar: "حملات ممولة على منصات التواصل من بيت الإبداع HOC: هدف واضح واستهداف مدروس وتصميم إعلانات ومتابعة للأداء، لعملائنا في دمشق والرياض. ابدأ عبر واتساب.",
+      en: "Paid social campaigns from Home of Creativity (HOC): a clear goal, considered targeting, ad design and performance follow-up for clients in Damascus and Riyadh.",
     },
     tagline: {
       ar: "ميزانية إعلانية تعمل بذكاء، لا بصوت عالٍ.",
@@ -162,16 +168,16 @@ export const serviceDetails: ServiceDetail[] = [
       scopeFaq(ads),
       ksaFaq(ads),
     ],
-    related: ["marketing", "social-media", "filming-editing"],
+    related: ["marketing", "social-media", "filming-editing", "roadside-ads"],
   },
   {
     id: "social",
     slug: "social-media",
     title: social,
-    metaTitle: metaTitle("إدارة السوشال ميديا | حضور يصنع فرقًا", "Social Media Management | Presence that makes a difference"),
+    metaTitle: metaTitle("إدارة السوشال ميديا في دمشق والرياض", "Social Media Management in Damascus & Riyadh"),
     metaDescription: {
-      ar: "نصنع حضورًا متكاملًا لعلامتك على منصات التواصل الاجتماعي، من التخطيط وصناعة الأفكار وكتابة المحتوى إلى النشر وإدارة الحسابات.",
-      en: "We build an integrated presence for your brand on social platforms — from planning, ideation, and copywriting to publishing and account management.",
+      ar: "إدارة السوشال ميديا من بيت الإبداع HOC: خطة محتوى شهرية وتصميم منشورات وقصص وريلز ونشر منتظم، لعلامات في دمشق والرياض. الباقات والأسعار منشورة.",
+      en: "Social media management from Home of Creativity (HOC): a monthly content plan, posts, stories, reels and steady publishing for brands in Damascus and Riyadh.",
     },
     tagline: {
       ar: "صفحات تعبّر عن مشروعك، وتبني علاقة حقيقية مع جمهورك.",
@@ -208,16 +214,16 @@ export const serviceDetails: ServiceDetail[] = [
       },
       ksaFaq(social),
     ],
-    related: ["account-management", "filming-editing", "paid-ads"],
+    related: ["account-management", "filming-editing", "paid-ads", "visual-identity"],
   },
   {
     id: "accounts",
     slug: "account-management",
     title: accounts,
-    metaTitle: metaTitle("إدارة الحسابات | علامتك حاضرة كل يوم", "Account Management | Your brand, present every day"),
+    metaTitle: metaTitle("إدارة حسابات السوشال ميديا في دمشق والرياض", "Account Management in Damascus & Riyadh"),
     metaDescription: {
-      ar: "إدارة يومية لحسابات علامتك على منصات التواصل من HOC Agency: نشر منتظم، رد على الرسائل والتعليقات، ومتابعة الأداء بلغة تشبه علامتك.",
-      en: "Daily management of your brand's social accounts from HOC Agency: consistent publishing, replies to messages and comments, and performance follow-up in a voice that sounds like your brand.",
+      ar: "إدارة يومية لحسابات علامتك من بيت الإبداع HOC: جدولة النشر والرد على الرسائل والتعليقات ومتابعة التفاعل وتقارير دورية، لعملائنا في دمشق والرياض.",
+      en: "Daily account management from Home of Creativity (HOC): scheduled publishing, replies to messages and comments, engagement monitoring and periodic reports.",
     },
     tagline: {
       ar: "نتابع حساباتك كأنها حساباتنا.",
@@ -248,16 +254,16 @@ export const serviceDetails: ServiceDetail[] = [
       scopeFaq(accounts),
       ksaFaq(accounts),
     ],
-    related: ["social-media", "marketing", "paid-ads"],
+    related: ["social-media", "marketing", "paid-ads", "filming-editing"],
   },
   {
     id: "outdoor",
     slug: "roadside-ads",
     title: outdoor,
-    metaTitle: metaTitle("الإعلانات الطرقية | حضور في الشارع لا يُنسى", "Roadside Ads | Street presence that sticks"),
+    metaTitle: metaTitle("الإعلانات الطرقية في دمشق والرياض", "Billboard Ads in Damascus & Riyadh"),
     metaDescription: {
-      ar: "تصميم وتنفيذ الإعلانات الطرقية واللوحات الخارجية من HOC Agency: رسالة قصيرة، تصميم واضح من بعيد، وهوية متسقة مع حضورك الرقمي.",
-      en: "Roadside ads and outdoor billboards from HOC Agency: a short message, a design readable from a distance, and an identity consistent with your digital presence.",
+      ar: "تصميم الإعلانات الطرقية واللوحات الخارجية من بيت الإبداع HOC: رسالة قصيرة تُقرأ من بعيد وملفات جاهزة للطباعة، لعملائنا في دمشق والرياض. اطلب عرض سعر.",
+      en: "Roadside and billboard advertising from Home of Creativity (HOC): a short message that reads from a distance and print-ready files, for Damascus and Riyadh.",
     },
     tagline: {
       ar: "ثوانٍ قليلة تكفي، إذا كانت الرسالة صحيحة.",
@@ -288,16 +294,16 @@ export const serviceDetails: ServiceDetail[] = [
       scopeFaq(outdoor),
       ksaFaq(outdoor),
     ],
-    related: ["marketing", "promo-gifts", "visual-identity"],
+    related: ["marketing", "promo-gifts", "visual-identity", "paid-ads"],
   },
   {
     id: "gifts",
     slug: "promo-gifts",
     title: gifts,
-    metaTitle: metaTitle("الهدايا الدعائية | علامتك بين أيدي عملائك", "Promo Gifts | Your brand in your clients' hands"),
+    metaTitle: metaTitle("الهدايا الدعائية في دمشق والرياض", "Promotional Gifts in Damascus & Riyadh"),
     metaDescription: {
-      ar: "تصميم وتجهيز الهدايا الدعائية من HOC Agency: قطع مختارة تحمل هويتك وتترك انطباعاً يبقى لدى عملائك وشركائك وفريقك.",
-      en: "Promotional gift design and preparation from HOC Agency: selected pieces that carry your identity and leave a lasting impression on clients, partners, and your team.",
+      ar: "هدايا دعائية تحمل هويتك من بيت الإبداع HOC: اختيار القطع وتصميم تطبيق الهوية والتغليف ومتابعة التنفيذ، للشركات في دمشق والرياض. اطلب عرض سعر عبر واتساب.",
+      en: "Branded promotional gifts from Home of Creativity (HOC): choosing pieces, applying your identity, packaging and production follow-up, in Damascus and Riyadh.",
     },
     tagline: {
       ar: "هدية صغيرة، وأثر طويل.",
@@ -328,16 +334,16 @@ export const serviceDetails: ServiceDetail[] = [
       scopeFaq(gifts),
       ksaFaq(gifts),
     ],
-    related: ["event-management", "exhibitions-conferences", "visual-identity"],
+    related: ["event-management", "exhibitions-conferences", "booth-design", "roadside-ads"],
   },
   {
     id: "film",
     slug: "filming-editing",
     title: film,
-    metaTitle: metaTitle("التصوير والمونتاج | قصة علامتك بالصورة", "Filming & Editing | Your brand's story on camera"),
+    metaTitle: metaTitle("التصوير والمونتاج في دمشق والرياض", "Filming & Video Editing in Damascus & Riyadh"),
     metaDescription: {
-      ar: "تصوير فوتوغرافي وفيديو ومونتاج من HOC Agency: ريلز، إعلانات، وتغطيات تحكي قصة علامتك بصورة احترافية تناسب كل منصة.",
-      en: "Photography, video, and editing from HOC Agency: reels, ads, and coverage that tell your brand's story professionally and fit every platform.",
+      ar: "تصوير فوتوغرافي وفيديو ومونتاج ريلز وإعلانات من بيت الإبداع HOC، من كتابة الفكرة حتى تجهيز المقاسات لكل منصة، لعلامات في دمشق والرياض. ابدأ عبر واتساب.",
+      en: "Photo, video and reel editing from Home of Creativity (HOC), from the concept and script to formats for each platform, for brands in Damascus and Riyadh.",
     },
     tagline: {
       ar: "لقطة واحدة صحيحة تختصر ألف كلمة.",
@@ -368,24 +374,24 @@ export const serviceDetails: ServiceDetail[] = [
       scopeFaq(film),
       ksaFaq(film),
     ],
-    related: ["social-media", "paid-ads", "event-management"],
+    related: ["social-media", "paid-ads", "event-management", "exhibitions-conferences"],
   },
   {
     id: "identity",
     slug: "visual-identity",
     title: identity,
-    metaTitle: metaTitle("تصميم الهوية البصرية في دمشق", "Visual Identity Design in Damascus"),
+    metaTitle: metaTitle("تصميم الهوية البصرية في دمشق والرياض", "Visual Identity Design in Damascus & Riyadh"),
     metaDescription: {
-      ar: "تصميم الهوية البصرية من HOC Agency في الحمراء بدمشق: الشعار والألوان والخطوط وتطبيقاتها، لعلامات في سوريا والسعودية.",
-      en: "Visual identity design from HOC Agency in Al Hamra, Damascus: logo, colors, typography, and applications, for brands in Syria and Saudi Arabia.",
+      ar: "تصميم الهوية البصرية من بيت الإبداع HOC: الشعار ولوحة الألوان والخطوط وتطبيقات الهوية ودليل الاستخدام، لعلامات في دمشق والرياض. ابدأ مشروعك عبر واتساب.",
+      en: "Visual identity design from Home of Creativity (HOC): logo, color palette, typography, applications and brand guidelines for brands in Damascus and Riyadh.",
     },
     tagline: {
       ar: "هوية تُعرّف بك قبل أن تتكلم.",
       en: "An identity that introduces you before you speak.",
     },
     definition: {
-      ar: "الهوية البصرية هي النظام الذي يحمل علامتك في كل مكان: الشعار والألوان والخطوط وطريقة تطبيقها على المطبوعات والمنصات الرقمية والمساحات الفعلية. نصممها في HOC Agency من فهم عميق لقصة مشروعك، لتكون متسقة وقابلة للنمو معه.",
-      en: "Visual identity is the system that carries your brand everywhere: the logo, colors, typography, and how they apply to print, digital platforms, and physical spaces. At HOC Agency we design it from a deep understanding of your project's story, so it stays consistent and grows with you.",
+      ar: "الهوية البصرية هي النظام الذي يحمل علامتك في كل مكان: الشعار والألوان والخطوط وطريقة تطبيقها على المطبوعات والمنصات الرقمية والمساحات الفعلية. نصممها في بيت الإبداع من فهم عميق لقصة مشروعك، لتكون متسقة وقابلة للنمو معه.",
+      en: "Visual identity is the system that carries your brand everywhere: the logo, colors, typography, and how they apply to print, digital platforms, and physical spaces. At Home of Creativity we design it from a deep understanding of your project's story, so it stays consistent and grows with you.",
     },
     covers: [
       { ar: "تصميم الشعار ونظامه", en: "Logo and logo system" },
@@ -408,16 +414,16 @@ export const serviceDetails: ServiceDetail[] = [
       scopeFaq({ en: "Visual identity", ar: "الهوية البصرية" }),
       ksaFaq({ en: "Visual identity design", ar: "تصميم الهوية البصرية" }),
     ],
-    related: ["social-media", "booth-design", "websites-ecommerce"],
+    related: ["websites-ecommerce", "social-media", "booth-design", "promo-gifts"],
   },
   {
     id: "exhibitions",
     slug: "exhibitions-conferences",
     title: exhibitions,
-    metaTitle: metaTitle("تنظيم المعارض والمؤتمرات | حضور يليق بعلامتك", "Exhibitions & Conferences | A presence worthy of your brand"),
+    metaTitle: metaTitle("تنظيم المعارض والمؤتمرات في دمشق والرياض", "Exhibition Organizing in Damascus & Riyadh"),
     metaDescription: {
-      ar: "تنظيم المعارض والمؤتمرات من HOC Agency: من الفكرة والتخطيط إلى التجهيز والتنفيذ في يوم الحدث، بهوية متسقة وتجربة منظمة للزوار.",
-      en: "Exhibition and conference organization from HOC Agency: from concept and planning to setup and execution on the day, with a consistent identity and an organized visitor experience.",
+      ar: "تنظيم المعارض والمؤتمرات من بيت الإبداع HOC: التخطيط وهوية الحدث والمطبوعات وتجهيز المكان والتنسيق في يوم الحدث، في دمشق والرياض. اطلب عرض سعر.",
+      en: "Exhibition and conference organizing from Home of Creativity (HOC): planning, event branding, printed materials, venue setup and on-the-day coordination.",
     },
     tagline: {
       ar: "حدث منظم يترك انطباعاً احترافياً من اللحظة الأولى.",
@@ -448,16 +454,16 @@ export const serviceDetails: ServiceDetail[] = [
       scopeFaq(exhibitions),
       ksaFaq(exhibitions),
     ],
-    related: ["booth-design", "event-management", "promo-gifts"],
+    related: ["booth-design", "event-management", "promo-gifts", "filming-editing"],
   },
   {
     id: "events",
     slug: "event-management",
     title: events,
-    metaTitle: metaTitle("إدارة الفعاليات | تفاصيل مدروسة وتجربة تُتذكر", "Event Management | Considered details, a memorable experience"),
+    metaTitle: metaTitle("إدارة الفعاليات في دمشق والرياض", "Event Management in Damascus & Riyadh"),
     metaDescription: {
-      ar: "إدارة الفعاليات من HOC Agency: إطلاقات منتجات، افتتاحات، وفعاليات خاصة بتخطيط دقيق وهوية متسقة وتنفيذ منظم في كل تفصيل.",
-      en: "Event management from HOC Agency: product launches, openings, and private events with precise planning, a consistent identity, and organized execution in every detail.",
+      ar: "إدارة الفعاليات من بيت الإبداع HOC: إطلاق المنتجات والافتتاحات والفعاليات الخاصة، من الفكرة والبرنامج إلى إدارة يوم الحدث وتغطيته، في دمشق والرياض.",
+      en: "Event management from Home of Creativity (HOC): product launches, openings and private events, from concept and program to running and covering the day.",
     },
     tagline: {
       ar: "نهتم بالتفاصيل، لتستمتع أنت بالحدث.",
@@ -488,16 +494,16 @@ export const serviceDetails: ServiceDetail[] = [
       scopeFaq(events),
       ksaFaq(events),
     ],
-    related: ["exhibitions-conferences", "filming-editing", "promo-gifts"],
+    related: ["exhibitions-conferences", "filming-editing", "promo-gifts", "booth-design"],
   },
   {
     id: "booths",
     slug: "booth-design",
     title: booths,
-    metaTitle: metaTitle("تصميم البوثات | جناح يجذب الزوار", "Booth Design | A stand that draws visitors in"),
+    metaTitle: metaTitle("تصميم البوثات وأجنحة المعارض في دمشق والرياض", "Exhibition Booth Design in Damascus & Riyadh"),
     metaDescription: {
-      ar: "تصميم بوثات وأجنحة المعارض من HOC Agency: تصميم ثلاثي الأبعاد، توزيع مدروس للمساحة، وهوية واضحة تلفت انتباه الزوار من بعيد.",
-      en: "Exhibition booth and stand design from HOC Agency: 3D design, a considered use of space, and a clear identity that catches visitors' attention from afar.",
+      ar: "تصميم بوثات وأجنحة المعارض من بيت الإبداع HOC: توزيع المساحة وتصميم ثلاثي الأبعاد وتطبيق الهوية وملفات التنفيذ، للشركات في دمشق والرياض. اطلب عرض سعر.",
+      en: "Exhibition booth and stand design from Home of Creativity (HOC): space planning, 3D design, identity graphics and production files, in Damascus and Riyadh.",
     },
     tagline: {
       ar: "مساحة صغيرة، وحضور كبير.",
@@ -528,16 +534,16 @@ export const serviceDetails: ServiceDetail[] = [
       scopeFaq(booths),
       ksaFaq(booths),
     ],
-    related: ["exhibitions-conferences", "event-management", "visual-identity"],
+    related: ["exhibitions-conferences", "event-management", "promo-gifts", "visual-identity"],
   },
   {
     id: "web",
     slug: "websites-ecommerce",
     title: web,
-    metaTitle: metaTitle("تصميم المواقع والمتاجر الإلكترونية", "Website & Ecommerce Design"),
+    metaTitle: metaTitle("مواقع ومتاجر إلكترونية في دمشق والرياض", "Websites & Ecommerce in Damascus & Riyadh"),
     metaDescription: {
-      ar: "تصميم وتطوير المواقع والمتاجر الإلكترونية من HOC Agency: تجربة استخدام واضحة، تصميم يعكس هويتك، وأداء سريع على الجوال.",
-      en: "Website and online store design and development from HOC Agency: clear user experience, design that reflects your identity, and fast mobile performance.",
+      ar: "تصميم وتطوير المواقع والمتاجر الإلكترونية من بيت الإبداع HOC: تخطيط الصفحات وتصميم الواجهات بهويتك وتطوير سريع على الجوال، في دمشق والرياض.",
+      en: "Website and online store design and development from Home of Creativity (HOC): page planning, on-brand interfaces and fast mobile builds, Damascus and Riyadh.",
     },
     tagline: {
       ar: "موقعك هو فرعك المفتوح على مدار الساعة.",
@@ -568,16 +574,16 @@ export const serviceDetails: ServiceDetail[] = [
       scopeFaq(web),
       ksaFaq(web),
     ],
-    related: ["app-design", "visual-identity", "marketing"],
+    related: ["app-design", "visual-identity", "social-media", "financial-analysis"],
   },
   {
     id: "apps",
     slug: "app-design",
     title: apps,
-    metaTitle: metaTitle("تصميم التطبيقات | تجربة سهلة من أول لمسة", "App Design | An easy experience from the first tap"),
+    metaTitle: metaTitle("تصميم التطبيقات في دمشق والرياض", "App UI & UX Design in Damascus & Riyadh"),
     metaDescription: {
-      ar: "تصميم واجهات وتجربة استخدام التطبيقات من HOC Agency: رحلة مستخدم واضحة، تصميم متسق مع هويتك، ونماذج تفاعلية قبل التطوير.",
-      en: "App UI and UX design from HOC Agency: a clear user journey, design consistent with your identity, and interactive prototypes before development.",
+      ar: "تصميم واجهات التطبيقات وتجربة استخدامها من بيت الإبداع HOC: رحلة المستخدم وتصميم الواجهات ونموذج تفاعلي وملفات التسليم، لمشاريع في دمشق والرياض.",
+      en: "App UI and UX design from Home of Creativity (HOC): user journeys, interface design, an interactive prototype and handoff files, in Damascus and Riyadh.",
     },
     tagline: {
       ar: "تطبيق يفهمه المستخدم دون شرح.",
@@ -608,16 +614,16 @@ export const serviceDetails: ServiceDetail[] = [
       scopeFaq(apps),
       ksaFaq(apps),
     ],
-    related: ["websites-ecommerce", "visual-identity", "marketing"],
+    related: ["websites-ecommerce", "visual-identity", "marketing", "account-management"],
   },
   {
     id: "finance",
     slug: "financial-analysis",
     title: finance,
-    metaTitle: metaTitle("التحليل المالي | قرارات مبنية على لغة الأرقام", "Financial Analysis | Decisions built on numbers"),
+    metaTitle: metaTitle("التحليل المالي ولوحات التحكم في دمشق والرياض", "Financial Analysis in Damascus & Riyadh"),
     metaDescription: {
-      ar: "التحليل المالي من HOC Agency: نحوّل البيانات الخام إلى لوحات تحكم تفاعلية وقصة واضحة للسيولة والأرباح تدعم قراراتك الاستراتيجية.",
-      en: "Financial analysis from HOC Agency: we turn raw data into interactive dashboards and a clear story of liquidity and profit that supports your strategic decisions.",
+      ar: "التحليل المالي من بيت الإبداع HOC: تنظيم السجلات واستخراج قصة السيولة والأرباح ولوحات تحكم تفاعلية تدعم قراراتك، لشركات في دمشق والرياض.",
+      en: "Financial analysis from Home of Creativity (HOC): organized records, a clear story of liquidity and profit, and interactive dashboards for decisions.",
     },
     tagline: {
       ar: "الإبداع الحقيقي لا يكتمل دون أساس مالي واضح.",
@@ -647,7 +653,7 @@ export const serviceDetails: ServiceDetail[] = [
       scopeFaq(finance),
       ksaFaq(finance),
     ],
-    related: ["marketing", "websites-ecommerce", "app-design"],
+    related: ["marketing", "websites-ecommerce", "app-design", "account-management"],
   },
 ];
 

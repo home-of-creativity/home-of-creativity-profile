@@ -1,4 +1,4 @@
-import { publicApiUrl } from "./public-api";
+import { apiGet } from "./api-fetch";
 
 export type LegalSection = {
   id: string;
@@ -24,24 +24,9 @@ function hasContent(page: LegalPage): boolean {
   });
 }
 
+/** The page from the dashboard (`/privacy`, `/terms` editors), or null while HOC has not published it. */
 export async function fetchLegalPage(slug: "privacy" | "terms"): Promise<LegalPage | null> {
-  const api = publicApiUrl();
-  if (!api) return null;
-
-  try {
-    const response = await fetch(`${api}/legal/${slug}`, {
-      method: "GET",
-      headers: { Accept: "application/json" },
-      cache: "no-store",
-      signal: AbortSignal.timeout(4000),
-    });
-    if (!response.ok) return null;
-    const payload = (await response.json()) as { data?: LegalPage };
-    if (!payload.data?.sections?.length || !hasContent(payload.data)) {
-      return null;
-    }
-    return payload.data;
-  } catch {
-    return null;
-  }
+  const payload = await apiGet<{ data?: LegalPage }>(`/legal/${slug}`, { allowStatus: [404] });
+  if (!payload?.data?.sections?.length || !hasContent(payload.data)) return null;
+  return payload.data;
 }

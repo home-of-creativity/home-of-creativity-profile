@@ -4,7 +4,7 @@ import { Fragment, type ReactNode } from "react";
 import { DeferredFillImage } from "@/components/ProgressiveImage";
 import { about } from "@/lib/content";
 import { useLanguage, type Copy } from "@/lib/i18n";
-import { withBasePath } from "@/lib/base-path";
+import { pagePath, withBasePath } from "@/lib/base-path";
 import { cn } from "@/lib/cn";
 import { Reveal, Stagger, StaggerItem } from "../motion";
 import { SectionHeading, Shell } from "../ui";
@@ -54,6 +54,13 @@ export function About() {
           <p className="mt-8 max-w-2xl text-[1.08rem] leading-[1.75] text-[var(--brand-ink)]/78">
             {t(about.body)}
           </p>
+          <a
+            href={pagePath("about")}
+            className="mt-6 inline-flex items-center gap-2 text-[0.95rem] font-semibold text-[var(--brand-purple)] underline-offset-4 transition-colors hover:text-[var(--brand-orange)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
+          >
+            {t(about.readMore)}
+            <span aria-hidden>{locale === "ar" ? "←" : "→"}</span>
+          </a>
         </Reveal>
 
         <Stagger className="mt-14 grid gap-16 md:mt-16 md:grid-cols-2 md:gap-12 lg:gap-20">

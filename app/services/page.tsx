@@ -1,11 +1,16 @@
+import type { Metadata } from "next";
 import { Footer, Nav } from "@/components/chrome";
-import { SeoServicesJsonLd } from "@/components/SeoServicesJsonLd";
+import { JsonLd } from "@/components/JsonLd";
 import { ServicesPage } from "@/components/sections/ServicesPage";
+import { pageMetadata, pageSeo } from "@/lib/page-meta";
+import { servicesPageJsonLd } from "@/lib/seo";
+
+export const metadata: Metadata = pageMetadata({ ...pageSeo.services, path: "/services/" });
 
 export default function ServicesRoutePage() {
   return (
     <>
-      <SeoServicesJsonLd />
+      <JsonLd data={servicesPageJsonLd(pageSeo.services.title, pageSeo.services.description)} />
       <Nav />
       <main id="top">
         <ServicesPage />

@@ -1,3 +1,4 @@
+import { apiGet } from "./api-fetch";
 import { demoPortfolioProject, demoPortfolioProjects, demoShowcaseClients } from "./demo-data";
 import { isDemoDataEnabled } from "./demo-mode";
 import { publicApiUrl } from "./public-api";
@@ -59,66 +60,21 @@ export function fetchShowcaseClients(): Promise<ShowcaseClient[]> {
 }
 
 async function requestShowcaseClients(): Promise<ShowcaseClient[]> {
-  const api = publicApiUrl();
-  if (!api) return isDemoDataEnabled() ? demoShowcaseClients() : [];
-
-  try {
-    const response = await fetch(`${api}/portfolio/clients`, {
-      method: "GET",
-      headers: { Accept: "application/json" },
-      cache: "no-store",
-    });
-    if (response.ok) {
-      const payload = (await response.json()) as { data?: ShowcaseClient[] };
-      const rows = Array.isArray(payload.data) ? payload.data : [];
-      if (rows.length > 0) return rows;
-    }
-  } catch {
-    // Static deploy without the VPS API.
-  }
-
-  return isDemoDataEnabled() ? demoShowcaseClients() : [];
+  if (!publicApiUrl()) return isDemoDataEnabled() ? demoShowcaseClients() : [];
+  const payload = await apiGet<{ data?: ShowcaseClient[] }>("/portfolio/clients");
+  return Array.isArray(payload?.data) ? payload.data : [];
 }
 
 export async function fetchPortfolioProjects(): Promise<PortfolioProject[]> {
-  const api = publicApiUrl();
-  if (!api) return isDemoDataEnabled() ? demoPortfolioProjects() : [];
-
-  try {
-    const response = await fetch(`${api}/portfolio/projects`, {
-      method: "GET",
-      headers: { Accept: "application/json" },
-      cache: "no-store",
-    });
-    if (response.ok) {
-      const payload = (await response.json()) as { data?: { projects?: PortfolioProject[] } };
-      const rows = Array.isArray(payload.data?.projects) ? payload.data.projects : [];
-      if (rows.length > 0) return rows;
-    }
-  } catch {
-    // Static deploy without the VPS API.
-  }
-
-  return isDemoDataEnabled() ? demoPortfolioProjects() : [];
+  if (!publicApiUrl()) return isDemoDataEnabled() ? demoPortfolioProjects() : [];
+  const payload = await apiGet<{ data?: { projects?: PortfolioProject[] } }>("/portfolio/projects");
+  return Array.isArray(payload?.data?.projects) ? payload.data.projects : [];
 }
 
 export async function fetchPortfolioProject(id: string | number): Promise<PortfolioProject | null> {
-  const api = publicApiUrl();
-  if (!api) return isDemoDataEnabled() ? demoPortfolioProject(id) : null;
-
-  try {
-    const response = await fetch(`${api}/portfolio/projects/${id}`, {
-      method: "GET",
-      headers: { Accept: "application/json" },
-      cache: "no-store",
-    });
-    if (response.ok) {
-      const payload = (await response.json()) as { data?: PortfolioProject };
-      if (payload.data) return payload.data;
-    }
-  } catch {
-    // Static deploy without the VPS API.
-  }
-
-  return isDemoDataEnabled() ? demoPortfolioProject(id) : null;
+  if (!publicApiUrl()) return isDemoDataEnabled() ? demoPortfolioProject(id) : null;
+  const payload = await apiGet<{ data?: PortfolioProject }>(`/portfolio/projects/${encodeURIComponent(String(id))}`, {
+    allowStatus: [404],
+  });
+  return payload?.data ?? null;
 }

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { TopicPageCopy } from "@/lib/content";
 import { pagePath } from "@/lib/base-path";
+import { whatsappDigits } from "@/lib/offices";
+import { serviceDetailLabels } from "@/lib/service-details";
 import { whatsappHref } from "@/lib/whatsapp";
 import { FaqList } from "./Faq";
 
@@ -21,6 +23,7 @@ export function TopicPage({ copy }: { copy: TopicPageCopy }) {
 
 function TopicLocale({ copy, lang }: { copy: TopicPageCopy; lang: "ar" | "en" }) {
   const dir = lang === "ar" ? "rtl" : "ltr";
+  const TitleTag = lang === "ar" ? "h1" : "p";
 
   return (
     <div data-lang={lang} lang={lang} dir={dir}>
@@ -38,9 +41,10 @@ function TopicLocale({ copy, lang }: { copy: TopicPageCopy; lang: "ar" | "en" })
 
       <header className="mx-auto mb-10 max-w-2xl text-center">
         <span aria-hidden className="mx-auto mb-3 block h-px w-9 bg-[var(--brand-orange)]" />
-        <h1 className="font-display m-0 text-[clamp(2rem,5vw,3.6rem)] font-semibold leading-[1.05] text-[var(--brand-ink)]">
+        {/* One <h1> per page: the Arabic title; the English block repeats it as a paragraph. */}
+        <TitleTag className="font-display m-0 text-[clamp(2rem,5vw,3.6rem)] font-semibold leading-[1.05] text-[var(--brand-ink)]">
           {copy.title[lang]}
-        </h1>
+        </TitleTag>
         <p className="mt-6 text-[1.05rem] leading-[1.75] text-[var(--brand-ink)]/80">{copy.lead[lang]}</p>
       </header>
 
@@ -68,15 +72,18 @@ function TopicLocale({ copy, lang }: { copy: TopicPageCopy; lang: "ar" | "en" })
           </section>
         ) : null}
 
-        <p className="m-0">
-          <a
-            href={whatsappHref(copy.title.en)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex w-fit items-center gap-2 rounded-full bg-[var(--brand-purple)] px-6 py-3 text-[0.82rem] font-semibold uppercase text-[var(--brand-ivory)] transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
-          >
-            {lang === "ar" ? "ابدأ عبر واتساب" : "Start on WhatsApp"}
-          </a>
+        <p className="m-0 flex flex-wrap gap-3">
+          {(["syr", "ksa"] as const).map((id) => (
+            <a
+              key={id}
+              href={whatsappHref(copy.title[lang], whatsappDigits(id))}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex w-fit items-center gap-2 rounded-full bg-[var(--brand-purple)] px-6 py-3 text-[0.82rem] font-semibold uppercase text-[var(--brand-ivory)] transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
+            >
+              {id === "syr" ? serviceDetailLabels.ctaSyria[lang] : serviceDetailLabels.ctaSaudi[lang]}
+            </a>
+          ))}
         </p>
 
         {copy.links.length ? (

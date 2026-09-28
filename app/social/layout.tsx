@@ -1,27 +1,17 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { SeoSocialJsonLd } from "@/components/SeoSocialJsonLd";
-import { seoCopy, seoMetaDescription, seoMetaTitle } from "@/lib/site";
+import { JsonLd } from "@/components/JsonLd";
+import { pageMetadata, pageSeo } from "@/lib/page-meta";
+import { socialPageJsonLd } from "@/lib/seo";
+import { officialSocialProfiles } from "@/lib/social-embeds";
 
-const title = seoMetaTitle(seoCopy.socialTitle);
-const description = seoMetaDescription(seoCopy.socialDescription);
-
-export const metadata: Metadata = {
-  title: { absolute: title },
-  description,
-  keywords: ["Instagram", "Facebook", "Telegram", "إنستغرام", "فيسبوك", "تيليجرام", "بيت الإبداع"],
-  alternates: { canonical: "/social/" },
-  openGraph: {
-    title,
-    description,
-    url: "/social/",
-  },
-};
+/** The official-profiles index, titled apart from `/services/social-media/` (T21). */
+export const metadata: Metadata = pageMetadata({ ...pageSeo.social, path: "/social/" });
 
 export default function SocialLayout({ children }: { children: ReactNode }) {
   return (
     <>
-      <SeoSocialJsonLd />
+      <JsonLd data={socialPageJsonLd(pageSeo.social.title, pageSeo.social.description, officialSocialProfiles())} />
       {children}
     </>
   );

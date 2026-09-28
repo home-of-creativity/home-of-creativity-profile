@@ -21,6 +21,7 @@ function PhoneFrame({
   href,
   openLabel,
   hideChrome,
+  captionHeading = false,
   children,
 }: {
   platform: "facebook" | "instagram";
@@ -28,8 +29,15 @@ function PhoneFrame({
   href: string;
   openLabel: string;
   hideChrome?: boolean;
+  /** On `/social/` each profile link is a section heading (the page's H2s). */
+  captionHeading?: boolean;
   children: ReactNode;
 }) {
+  const link = (
+    <a href={href} target="_blank" rel="me noreferrer" className="social-phone-open">
+      {openLabel}
+    </a>
+  );
   return (
     <figure className="social-phone">
       <div className="social-phone-bezel">
@@ -45,9 +53,7 @@ function PhoneFrame({
         </div>
       </div>
       <figcaption className="social-phone-caption">
-        <a href={href} target="_blank" rel="me noreferrer" className="social-phone-open">
-          {openLabel}
-        </a>
+        {captionHeading ? <h2 className="m-0 text-[length:inherit] font-[inherit]">{link}</h2> : link}
       </figcaption>
     </figure>
   );
@@ -73,6 +79,7 @@ export function SocialPhones({ headingLevel = 2 }: { headingLevel?: 1 | 2 } = {}
             href={facebookPageUrl()}
             openLabel={t(copy.openFacebook)}
             hideChrome
+            captionHeading={headingLevel === 1}
           >
             {showFeeds ? <FacebookPhoneFeed title={t(copy.facebookTitle)} /> : null}
           </PhoneFrame>
@@ -83,6 +90,7 @@ export function SocialPhones({ headingLevel = 2 }: { headingLevel?: 1 | 2 } = {}
             href={instagramProfileUrl()}
             openLabel={t(copy.openInstagram)}
             hideChrome
+            captionHeading={headingLevel === 1}
           >
             {showFeeds ? <InstagramPhoneFeed title={t(copy.instagramTitle)} /> : null}
           </PhoneFrame>

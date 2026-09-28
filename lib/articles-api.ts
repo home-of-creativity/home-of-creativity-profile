@@ -1,4 +1,4 @@
-import { publicApiUrl } from "./public-api";
+import { apiGet } from "./api-fetch";
 
 export type Article = {
   id: number;
@@ -11,53 +11,18 @@ export type Article = {
   body_ar: string;
   published_at: string | null;
   created_at?: string | null;
+  updated_at?: string | null;
 };
-
-async function fetchRemoteArticles(): Promise<Article[]> {
-  const api = publicApiUrl();
-  if (!api) return [];
-
-  try {
-    const response = await fetch(`${api}/articles`, {
-      method: "GET",
-      headers: { Accept: "application/json" },
-      cache: "no-store",
-      signal: AbortSignal.timeout(8000),
-    });
-    if (!response.ok) return [];
-    const payload = (await response.json()) as { data?: Article[] };
-    return Array.isArray(payload.data) ? payload.data : [];
-  } catch {
-    return [];
-  }
-}
 
 /** Dashboard articles only (`GET /articles`). No bundled stand-in posts. */
 export async function fetchArticles(): Promise<Article[]> {
-  return fetchRemoteArticles();
+  const payload = await apiGet<{ data?: Article[] }>("/articles");
+  return Array.isArray(payload?.data) ? payload.data.filter((article) => article.slug.trim().length > 0) : [];
 }
 
 export async function fetchArticle(slug: string): Promise<Article | null> {
   const trimmed = slug.trim();
   if (!trimmed || trimmed === "__none__") return null;
-
-  const api = publicApiUrl();
-  if (api) {
-    try {
-      const response = await fetch(`${api}/articles/${encodeURIComponent(trimmed)}`, {
-        method: "GET",
-        headers: { Accept: "application/json" },
-        cache: "no-store",
-        signal: AbortSignal.timeout(8000),
-      });
-      if (response.ok) {
-        const payload = (await response.json()) as { data?: Article };
-        if (payload.data) return payload.data;
-      }
-    } catch {
-      // Fall through to the static cluster.
-    }
-  }
-
-  return null;
+  const payload = await apiGet<{ data?: Article }>(`/articles/${encodeURIComponent(trimmed)}`, { allowStatus: [404] });
+  return payload?.data ?? null;
 }

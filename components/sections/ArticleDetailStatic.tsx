@@ -48,7 +48,7 @@ export function ArticleDetailStatic({ article }: { article: Article }) {
           </Link>
           <header className="article-detail-head">
             {dateEn ? <time className="article-card-date">{dateEn}</time> : null}
-            <h1 className="article-detail-title">{article.title_en}</h1>
+            <p className="article-detail-title">{article.title_en}</p>
           </header>
           <article
             className="article-body mx-auto max-w-3xl"

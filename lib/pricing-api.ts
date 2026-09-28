@@ -1,3 +1,4 @@
+import { apiGet } from "./api-fetch";
 import { demoPricingCategories } from "./demo-data";
 import { isDemoDataEnabled } from "./demo-mode";
 import { publicApiUrl } from "./public-api";
@@ -127,25 +128,8 @@ function mapCategory(category: ApiPricingCategory): PricingCategory {
 }
 
 export async function fetchPricingCategories(): Promise<PricingCategory[]> {
-  const api = publicApiUrl();
-  if (!api) return isDemoDataEnabled() ? demoPricingCategories : [];
-
-  try {
-    const response = await fetch(`${api}/pricing`, {
-      method: "GET",
-      headers: { Accept: "application/json" },
-      cache: "no-store",
-    });
-
-    if (response.ok) {
-      const payload = (await response.json()) as { data?: ApiPricingCategory[] };
-      const rows = Array.isArray(payload.data) ? payload.data : [];
-      const mapped = rows.map(mapCategory).filter((category) => category.subcategories.length > 0);
-      if (mapped.length > 0) return mapped;
-    }
-  } catch {
-    // Static deploy without the VPS API.
-  }
-
-  return isDemoDataEnabled() ? demoPricingCategories : [];
+  if (!publicApiUrl()) return isDemoDataEnabled() ? demoPricingCategories : [];
+  const payload = await apiGet<{ data?: ApiPricingCategory[] }>("/pricing");
+  const rows = Array.isArray(payload?.data) ? payload.data : [];
+  return rows.map(mapCategory).filter((category) => category.subcategories.length > 0);
 }
