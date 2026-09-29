@@ -7,6 +7,7 @@ import { projectDetail } from "@/lib/content";
 import type { PortfolioProject, PortfolioProjectImage } from "@/lib/portfolio-api";
 import { useLanguage } from "@/lib/i18n";
 import { cn } from "@/lib/cn";
+import { liveWebsiteUrl } from "@/lib/live-url";
 import { Shell } from "../ui";
 
 const SOCIAL_ORDER = ["instagram", "facebook", "linkedin", "x", "tiktok", "youtube"] as const;
@@ -53,6 +54,7 @@ export function ProjectDetailView({ project }: { project: PortfolioProject }) {
     [project],
   );
 
+  const website = liveWebsiteUrl(project.website_url);
   const activeImage = images[activeIndex] ?? images[0];
 
   return (
@@ -82,9 +84,9 @@ export function ProjectDetailView({ project }: { project: PortfolioProject }) {
             ) : null}
 
             <div className="flex flex-wrap gap-3 pt-2">
-              {project.website_url ? (
+              {website ? (
                 <a
-                  href={project.website_url}
+                  href={website}
                   target="_blank"
                   rel="noreferrer noopener"
                   className="project-detail-link project-detail-link--primary"

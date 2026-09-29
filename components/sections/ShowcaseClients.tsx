@@ -8,6 +8,7 @@ import {
 } from "@/lib/portfolio-api";
 import { useLanguage } from "@/lib/i18n";
 import { cn } from "@/lib/cn";
+import { liveWebsiteUrl } from "@/lib/live-url";
 import { SectionHeading, Shell } from "../ui";
 
 /** Alt text in one pattern, with the client's own spelling from the CMS. */
@@ -41,10 +42,11 @@ function ClientLogoDisc({
     </span>
   );
 
-  if (client.website_url) {
+  const website = liveWebsiteUrl(client.website_url);
+  if (website) {
     return (
       <a
-        href={client.website_url}
+        href={website}
         target="_blank"
         rel="noreferrer noopener"
         className="client-logo-disc"

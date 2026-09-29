@@ -13,15 +13,6 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ["*.trycloudflare.com", "hoc.agency", "www.hoc.agency", "api.hoc.agency"],
   ...(BASE_PATH ? { basePath: BASE_PATH, assetPrefix: BASE_PATH } : {}),
   trailingSlash: true,
-  async redirects() {
-    return [
-      {
-        source: "/articles/:slug",
-        destination: "/articles/?slug=:slug",
-        permanent: false,
-      },
-    ];
-  },
   serverExternalPackages: ["gsap", "@gsap/react"],
   images: {
     unoptimized: true,

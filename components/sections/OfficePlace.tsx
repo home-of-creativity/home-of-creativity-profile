@@ -11,7 +11,8 @@ type OfficeSlug = keyof Omit<typeof officePages, "labels">;
 /**
  * `/locations/{slug}/` for one office: title, lead, services, address and every number,
  * the map when coordinates exist, and links to the other offices. Both languages are in
- * the static HTML (`data-lang`); only the Arabic title is an `<h1>`.
+ * the static HTML (`data-lang`). Each language block has its own `<h1>`;
+ * CSS hides the inactive language so one heading is visible.
  */
 export function OfficePlace({ office }: { office: Office }) {
   const mapUrl = officeMapUrl(office);
@@ -45,7 +46,6 @@ export function OfficePlace({ office }: { office: Office }) {
 function PlaceCopy({ office, lang }: { office: Office; lang: "ar" | "en" }) {
   const copy = officePages[office.slug as OfficeSlug];
   const others = offices.filter((entry) => entry.id !== office.id);
-  const TitleTag = lang === "ar" ? "h1" : "p";
 
   return (
     <div data-lang={lang} lang={lang} dir={lang === "ar" ? "rtl" : "ltr"}>
@@ -62,9 +62,9 @@ function PlaceCopy({ office, lang }: { office: Office; lang: "ar" | "en" }) {
       </nav>
 
       <header className="mx-auto mb-10 max-w-2xl text-center">
-        <TitleTag className="font-display m-0 text-[clamp(2rem,5vw,3.6rem)] font-semibold leading-[1.05] text-[var(--brand-ink)]">
+        <h1 className="font-display m-0 text-[clamp(2rem,5vw,3.6rem)] font-semibold leading-[1.05] text-[var(--brand-ink)]">
           {copy.title[lang]}
-        </TitleTag>
+        </h1>
         <p className="mt-6 text-[1.05rem] leading-[1.75] text-[var(--brand-ink)]/80">{copy.lead[lang]}</p>
       </header>
 

@@ -12,14 +12,15 @@ import "./globals.css";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
-  display: "swap",
+  display: "optional",
+  adjustFontFallback: true,
 });
 
 const ibmPlexArabic = IBM_Plex_Sans_Arabic({
   subsets: ["arabic", "latin"],
   weight: ["400", "700"],
   variable: "--font-ibm-plex-arabic",
-  display: "swap",
+  display: "optional",
   adjustFontFallback: true,
   fallback: ["Geeza Pro", "Tahoma", "Arial", "sans-serif"],
 });

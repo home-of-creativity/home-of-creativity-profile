@@ -1599,10 +1599,22 @@ html[dir="rtl"] .client-marquee-track {
   color: var(--brand-orange);
 }
 
+.articles-page {
+  min-height: 70vh;
+}
+
 .articles-grid {
   display: grid;
   gap: 1.25rem;
   grid-template-columns: 1fr;
+  min-height: 28rem;
+}
+
+.article-card-skeleton {
+  min-height: 14rem;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--brand-ink) 8%, transparent);
+  background: color-mix(in srgb, var(--brand-ink) 5%, var(--brand-ivory));
 }
 
 @media (min-width: 640px) {
@@ -1778,10 +1790,15 @@ html[data-theme="dark"] .article-body a {
 }
 
 .article-body img {
+  display: block;
+  width: 100%;
   max-width: 100%;
   height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
   margin: 1rem 0;
   border-radius: 0.65rem;
+  background: color-mix(in srgb, var(--brand-ink) 6%, var(--brand-ivory));
 }
 
 .article-body a {

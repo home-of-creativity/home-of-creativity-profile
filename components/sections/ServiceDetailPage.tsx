@@ -64,10 +64,9 @@ export function ServiceDetailPage({ slug }: { slug: string }) {
               <p className="mt-5 text-[1.15rem] font-semibold text-[var(--brand-orange)]">{detail.tagline.ar}</p>
             </div>
             <div data-lang="en" lang="en" dir="ltr">
-              {/* One <h1> per page: the Arabic title. The English one stays a subtitle-weight paragraph. */}
-              <p className="font-display m-0 text-[clamp(2.1rem,5.5vw,3.8rem)] font-semibold leading-[1.1]">
+              <h1 className="font-display m-0 text-[clamp(2.1rem,5.5vw,3.8rem)] font-semibold leading-[1.1]">
                 {detail.title.en}
-              </p>
+              </h1>
               <p className="mt-5 text-[1.15rem] font-semibold text-[var(--brand-orange)]">{detail.tagline.en}</p>
             </div>
             <p className="mx-auto mt-6 max-w-2xl text-[1.05rem] leading-[1.85] text-white/78">{t(detail.definition)}</p>

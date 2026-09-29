@@ -3,16 +3,15 @@
 import Link from "next/link";
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { fetchArticle, fetchArticles, type Article } from "@/lib/articles-api";
+import { fetchArticles, type Article } from "@/lib/articles-api";
 import { articlesPage } from "@/lib/content";
 import { pagePath } from "@/lib/base-path";
 import { useLanguage } from "@/lib/i18n";
 import { Reveal, Stagger, StaggerItem } from "../motion";
 import { SectionHeading, Shell } from "../ui";
-import { ArticleDetailStatic } from "./ArticleDetailStatic";
 
 function articleHref(slug: string) {
-  return `${pagePath("articles")}?slug=${encodeURIComponent(slug)}`;
+  return pagePath(`articles/${slug}`);
 }
 
 function localizedTitle(article: Article, locale: "en" | "ar") {
@@ -37,44 +36,40 @@ function formatDate(value: string | null | undefined, locale: "en" | "ar") {
   }).format(date);
 }
 
-/** Live list from the dashboard API. Detail is the same page with `?slug=`, so a post added after the export still opens. */
+/** Live list from the dashboard API. Each post links to `/articles/{slug}/`. */
 export function ArticlesIndex() {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<ArticlesSkeleton />}>
       <ArticlesScreen />
     </Suspense>
+  );
+}
+
+function ArticlesSkeleton() {
+  return (
+    <section className="articles-page bg-[var(--brand-cream)] py-24 md:py-28" aria-busy="true">
+      <Shell>
+        <div className="articles-grid">
+          {Array.from({ length: 6 }, (_, index) => (
+            <div key={index} className="article-card article-card-skeleton" />
+          ))}
+        </div>
+      </Shell>
+    </section>
   );
 }
 
 function ArticlesScreen() {
   const params = useSearchParams();
   const slug = params.get("slug")?.trim() ?? "";
-  if (slug) return <ArticleDetailLive slug={slug} />;
-  return <ArticlesList />;
-}
-
-function ArticleDetailLive({ slug }: { slug: string }) {
-  const { t } = useLanguage();
-  const [article, setArticle] = useState<Article | null | undefined>(undefined);
 
   useEffect(() => {
-    let active = true;
-    setArticle(undefined);
-    fetchArticle(slug).then((row) => {
-      if (active) setArticle(row);
-    });
-    return () => {
-      active = false;
-    };
+    if (!slug) return;
+    window.location.replace(pagePath(`articles/${slug}`));
   }, [slug]);
 
-  if (article === null) {
-    return <p className="bg-[var(--brand-cream)] py-28 text-center text-[0.95rem] text-[var(--brand-muted)]">{t(articlesPage.notFound)}</p>;
-  }
-  if (!article) {
-    return <p className="bg-[var(--brand-cream)] py-28 text-center text-[0.95rem] text-[var(--brand-muted)]">{t(articlesPage.loading)}</p>;
-  }
-  return <ArticleDetailStatic article={article} />;
+  if (slug) return <ArticlesSkeleton />;
+  return <ArticlesList />;
 }
 
 function ArticlesList() {
@@ -105,7 +100,12 @@ function ArticlesList() {
         </Reveal>
 
         {!ready ? (
-          <p className="text-center text-[0.95rem] text-[var(--brand-muted)]">{t(articlesPage.loading)}</p>
+          <div className="articles-grid" aria-busy="true">
+            {Array.from({ length: 6 }, (_, index) => (
+              <div key={index} className="article-card article-card-skeleton" />
+            ))}
+            <p className="sr-only">{t(articlesPage.loading)}</p>
+          </div>
         ) : items.length === 0 ? (
           <p className="text-center text-[0.95rem] text-[var(--brand-muted)]">{t(articlesPage.empty)}</p>
         ) : (

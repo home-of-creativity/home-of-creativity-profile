@@ -99,7 +99,7 @@ export function Contact() {
   const { t, locale, ready } = useLanguage();
   const listRef = useRef<HTMLUListElement>(null);
   const [form, setForm] = useState<FormState>(emptyForm);
-  const [errorKind, setErrorKind] = useState<"send" | "config" | null>(null);
+  const [errorKind, setErrorKind] = useState<"send" | "config" | "empty" | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<"name" | "email" | "message", string>>>({});
   const [sending, setSending] = useState(false);
   const [sentTo, setSentTo] = useState<"support" | "sales" | null>(null);
@@ -159,11 +159,20 @@ export function Contact() {
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (sending) return;
+    const name = form.name.trim();
+    const email = form.email.trim();
+    const message = form.message.trim();
+    if (!name && !email && !message) {
+      setFieldErrors({});
+      setErrorKind("empty");
+      setSentTo(null);
+      return;
+    }
     const nextErrors: Partial<Record<"name" | "email" | "message", string>> = {};
-    if (!form.name.trim()) nextErrors.name = t(contact.form.nameRequired);
-    if (!form.email.trim()) nextErrors.email = t(contact.form.emailRequired);
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) nextErrors.email = t(contact.form.emailInvalid);
-    if (!form.message.trim()) nextErrors.message = t(contact.form.messageRequired);
+    if (!name) nextErrors.name = t(contact.form.nameRequired);
+    if (!email) nextErrors.email = t(contact.form.emailRequired);
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) nextErrors.email = t(contact.form.emailInvalid);
+    if (!message) nextErrors.message = t(contact.form.messageRequired);
     if (Object.keys(nextErrors).length > 0) {
       setFieldErrors(nextErrors);
       setErrorKind(null);
@@ -425,7 +434,13 @@ export function Contact() {
 
                 {errorKind ? (
                   <p role="alert" className="m-0 text-[0.9rem] text-[#9a2b2b]">
-                    {t(errorKind === "config" ? contact.form.errorConfig : contact.form.errorSend)}
+                    {t(
+                      errorKind === "empty"
+                        ? contact.form.error
+                        : errorKind === "config"
+                          ? contact.form.errorConfig
+                          : contact.form.errorSend,
+                    )}
                   </p>
                 ) : null}
                 <button
