@@ -487,8 +487,9 @@ html[dir="rtl"] .lux-rule {
 }
 
 .hero-letter {
-  opacity: 1;
-  transform: none;
+  opacity: 0;
+  transform: scale(0.9);
+  transform-origin: 50% 100%;
 }
 
 .hero-brand-bird {
@@ -529,6 +530,11 @@ html[dir="rtl"] .lux-rule {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hero-letter {
+    opacity: 1;
+    transform: none;
+  }
+
   .mobile-nav,
   .mobile-nav-link,
   .locale-flash {

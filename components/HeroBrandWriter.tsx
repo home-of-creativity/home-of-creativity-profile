@@ -29,6 +29,7 @@ const PECK = {
   bend: 0.16, // swoop in from above and lean over the first letter
   move: 0.08, // horizontal hop to the next letter (stays bent)
   down: 0.09, // the strike itself — quick downward + rotational drop
+  reveal: 0.07, // letter pop-in, timed to the strike's contact instant
   up: 0.11, // rise back to the hover height (with a tiny recoil overshoot)
   lift: 0.2, // raise the head and unbend once a whole word is finished
 };
@@ -103,7 +104,7 @@ export function HeroBrandWriter({ className }: { className?: string }) {
           const ofLetters = [...ofEl.querySelectorAll<HTMLElement>(".hero-letter")];
           const creativityLetters = [...creativityEl.querySelectorAll<HTMLElement>(".hero-letter")];
 
-          type Peck = { x: number; contactY: number };
+          type Peck = { el: HTMLElement; x: number; contactY: number };
 
           const readLayout = () => {
             const wrapRect = wrap.getBoundingClientRect();
@@ -125,6 +126,7 @@ export function HeroBrandWriter({ className }: { className?: string }) {
               nodes.map((el) => {
                 const r = boxOf(el);
                 return {
+                  el,
                   x: beakToX(r.left + r.width / 2),
                   contactY: beakToY(r.top + r.height / 2),
                 };
@@ -161,6 +163,7 @@ export function HeroBrandWriter({ className }: { className?: string }) {
             const layout = readLayout();
             const { birdW, birdH, home, of } = layout;
 
+            gsap.set(letters, { autoAlpha: 0, scale: 0.9, transformOrigin: "50% 100%" });
             gsap.set(bird, {
               autoAlpha: 1,
               x: 0,
@@ -208,6 +211,13 @@ export function HeroBrandWriter({ className }: { className?: string }) {
                   ease: "power2.in",
                 }, cursor);
                 cursor += PECK.down;
+
+                tl.to(target.el, {
+                  autoAlpha: 1,
+                  scale: 1,
+                  duration: PECK.reveal,
+                  ease: "power1.out",
+                }, cursor);
 
                 // Rise back to hover height with a tiny recoil overshoot.
                 tl.to(bird, {
