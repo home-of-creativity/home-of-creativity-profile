@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { ProgressiveImage } from "@/components/ProgressiveImage";
+import { pagePath } from "@/lib/base-path";
 import { projectDetail } from "@/lib/content";
-import type { PortfolioProject, PortfolioProjectImage } from "@/lib/portfolio-api";
+import type { PortfolioProject, PortfolioProjectImage, PortfolioRelatedProject } from "@/lib/portfolio-api";
 import { useLanguage } from "@/lib/i18n";
 import { cn } from "@/lib/cn";
 import { liveWebsiteUrl } from "@/lib/live-url";
@@ -20,7 +21,11 @@ function localizedSummary(project: PortfolioProject, locale: "en" | "ar") {
   return locale === "ar" ? project.summary_ar : project.summary_en;
 }
 
-function localizedCategory(project: PortfolioProject, locale: "en" | "ar") {
+function localizedBody(project: PortfolioProject, locale: "en" | "ar") {
+  return (locale === "ar" ? project.body_ar : project.body_en)?.trim() ?? "";
+}
+
+function localizedCategory(project: { category?: PortfolioProject["category"] | null }, locale: "en" | "ar") {
   if (!project.category) return "";
   return locale === "ar" ? project.category.name_ar : project.category.name_en;
 }
@@ -56,6 +61,8 @@ export function ProjectDetailView({ project }: { project: PortfolioProject }) {
 
   const website = liveWebsiteUrl(project.website_url);
   const activeImage = images[activeIndex] ?? images[0];
+  const body = localizedBody(project, locale);
+  const related: PortfolioRelatedProject[] = project.related ?? [];
 
   return (
     <section className="project-detail-page pb-20 pt-[calc(var(--nav-height)+2rem)]">
@@ -122,6 +129,15 @@ export function ProjectDetailView({ project }: { project: PortfolioProject }) {
           ) : null}
         </div>
 
+        {body ? (
+          <article
+            className="article-body mt-14 max-w-3xl"
+            dir={locale === "ar" ? "rtl" : "ltr"}
+            // Cleaned by the API: only headings, paragraphs, lists, links and tables reach here.
+            dangerouslySetInnerHTML={{ __html: body }}
+          />
+        ) : null}
+
         {images.length > 0 ? (
           <div className="mt-14">
             <h2 className="font-display m-0 text-[1.8rem] font-semibold text-[var(--brand-ink)]">
@@ -149,6 +165,43 @@ export function ProjectDetailView({ project }: { project: PortfolioProject }) {
                   />
                 </button>
               ))}
+            </div>
+          </div>
+        ) : null}
+
+        {related.length > 0 ? (
+          <div className="mt-14">
+            <h2 className="font-display m-0 text-[1.8rem] font-semibold text-[var(--brand-ink)]">
+              {t(projectDetail.related)}
+            </h2>
+            <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {related.map((item) => {
+                const title = locale === "ar" ? item.title_ar : item.title_en;
+                const category = localizedCategory(item, locale);
+                return (
+                  <Link
+                    key={item.id}
+                    href={pagePath(`projects/${item.id}`)}
+                    className="project-detail-thumb group block overflow-hidden rounded-2xl border border-[var(--brand-line)] bg-white text-start transition-transform duration-300 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
+                  >
+                    {item.image_url ? (
+                      <ProgressiveImage
+                        src={item.image_url}
+                        alt={title}
+                        referrerPolicy="no-referrer"
+                        className="aspect-[4/3]"
+                        imgClassName="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <span className="block aspect-[4/3] bg-[var(--brand-purple)]" />
+                    )}
+                    <span className="block p-4">
+                      {category ? <span className="block text-[0.75rem] text-[var(--brand-orange)]">{category}</span> : null}
+                      <span className="font-display mt-1 block text-[1.1rem] font-semibold leading-snug text-[var(--brand-ink)]">{title}</span>
+                    </span>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         ) : null}

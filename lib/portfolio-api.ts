@@ -32,6 +32,16 @@ export type PortfolioSocialLinks = Partial<
   Record<"instagram" | "facebook" | "linkedin" | "x" | "tiktok" | "youtube", string>
 >;
 
+export type PortfolioRelatedProject = {
+  id: number;
+  title_en: string;
+  title_ar: string;
+  summary_en: string | null;
+  summary_ar: string | null;
+  image_url: string | null;
+  category: PortfolioCategory | null;
+};
+
 export type PortfolioProject = {
   id: number;
   category_id: number;
@@ -40,10 +50,15 @@ export type PortfolioProject = {
   title_ar: string;
   summary_en: string | null;
   summary_ar: string | null;
+  /** Rich text for the project page, cleaned by the API (headings, paragraphs, lists, links, tables). */
+  body_en?: string | null;
+  body_ar?: string | null;
   website_url: string | null;
   social_links: PortfolioSocialLinks;
   image_url: string | null;
   images: PortfolioProjectImage[];
+  /** Published projects linked from this one, in the order chosen in the dashboard (detail endpoint only). */
+  related?: PortfolioRelatedProject[];
   sort_order: number;
   featured: boolean;
 };
