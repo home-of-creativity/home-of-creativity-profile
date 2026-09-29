@@ -1,4 +1,4 @@
-const CACHE = "hoc-design-v13";
+const CACHE = "hoc-design-v14";
 const BASE = new URL("./", self.registration.scope).pathname.replace(/\/$/, "");
 const PRECACHE = [
   `${BASE}/hummingbird.svg`,
@@ -42,6 +42,9 @@ function shouldBypass(request) {
   if (request.headers.has("range") || isVideo(url) || isThirdPartyCdn(url)) return true;
   if (isMedia(url)) return false;
   const path = url.pathname;
+  // Hashed Next chunks must come from the network. A cached chunk from the
+  // previous deploy calls into the new webpack runtime and throws reading 'call'.
+  if (path.includes("/_next/")) return true;
   return (
     path.startsWith("/dashboard") ||
     path.startsWith("/staff") ||
@@ -89,9 +92,7 @@ self.addEventListener("fetch", (event) => {
           if (type.startsWith("video/")) {
             return response;
           }
-          if (media && !type.includes("text/html")) {
-            void cache.put(event.request, response.clone()).catch(() => undefined);
-          } else if (!type.includes("text/html") && !type.includes("application/json")) {
+          if (media && !type.includes("text/html") && !type.includes("javascript")) {
             void cache.put(event.request, response.clone()).catch(() => undefined);
           }
         }

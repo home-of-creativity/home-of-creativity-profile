@@ -1,0 +1,16 @@
+---
+description: Do not change the hero logo writing animation.
+alwaysApply: true
+---
+
+# Hero logo writing animation is locked
+
+The hummingbird peck that writes **Home**, **of**, then **Creativity** in `components/HeroBrandWriter.tsx` stays as it is.
+
+Do not change it for performance, LCP, Lighthouse, or cleanup. That includes:
+
+- Do not show the letters before the beak strikes. `.hero-letter` stays hidden (`opacity: 0`, `scale: 0.9`) until each peck, and `PECK.reveal` pops that letter in.
+- Do not remove the peck, the wing flaps, the reading order, or the final rest above **of**.
+- Reduced motion still shows the full words at once. Leave that path.
+
+Video preload, posters, and other hero layout may change. The writing animation may change only when the user explicitly asks to change it.

@@ -37,7 +37,9 @@ export function CacheWorker() {
             return cache.match(url).then((hit) => (hit ? undefined : cache.add(url).catch(() => undefined)));
           }),
         ),
-      );
+      ).catch(() => {
+        /* private mode blocks CacheStorage */
+      });
     });
   }, []);
 

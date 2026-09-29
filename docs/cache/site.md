@@ -1,6 +1,6 @@
 # Marketing site (Next.js static export)
 
-Last updated: 28 September 2026 (service og:image uses the hero photo; 404 is one noindex tag with no canonical; priority images are visible before onLoad)
+Last updated: 29 September 2026 (service worker v14 skips /_next chunks; stale bundle reloads once)
 Last updated: 28 September 2026 (hero poster is the LCP; video starts after idle; nav drawer is CSS)
 
 Path: `design/`  
@@ -23,7 +23,7 @@ Live (VPS): https://hoc.agency/ — API https://api.hoc.agency/api
 app/                 # App Router: page, about, services (+3 detail pages), pricing, articles/[slug], projects/[id], not-found
 components/          # sections/, chrome, motion, CacheWorker
 lib/                 # content.ts, i18n, *-api.ts, whatsapp, visit-cache
-public/sw.js         # Cache API hoc-design-v10 (same-origin images/fonts; cross-origin API storage, video, Facebook/Instagram/Google CDNs bypassed)
+public/sw.js         # Cache API hoc-design-v14 (same-origin images/fonts only; /_next chunks, video, and cross-origin API/CDN are not intercepted)
 e2e/                 # Playwright
 next.config.ts
 ```
