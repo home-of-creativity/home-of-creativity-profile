@@ -157,14 +157,13 @@ export function Projects({ initialProjects }: { initialProjects?: PortfolioProje
   const gridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (initialProjects !== undefined) return;
     let active = true;
     fetchPortfolioProjects()
       .then((rows) => {
         if (active) setItems(rows);
       })
       .catch(() => {
-        if (active) setItems([]);
+        if (active && initialProjects === undefined) setItems([]);
       })
       .finally(() => {
         if (active) setReady(true);

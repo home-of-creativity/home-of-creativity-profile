@@ -1,4 +1,5 @@
 import type { LegalPage } from "./legal-api";
+import { officesSentence } from "./offices";
 
 /** Shown when the legal API is missing or errors. Matches the stored defaults. */
 export const legalFallback: Record<"privacy" | "terms", LegalPage> = {
@@ -11,10 +12,8 @@ export const legalFallback: Record<"privacy" | "terms", LegalPage> = {
         id: "about",
         heading_ar: "من نحن",
         heading_en: "Who we are",
-        html_ar:
-          "<p>بيت الإبداع (Home of Creativity / HOC) وكالة هوية بصرية تعمل من دمشق. تشرح هذه السياسة كيف نجمع المعلومات الشخصية ونستخدمها ونحميها عند زيارة الموقع أو التواصل معنا.</p>",
-        html_en:
-          "<p>Home of Creativity (HOC / بيت الإبداع) is a brand studio based in Damascus. This policy explains how we collect, use, and protect personal information when you visit the site or contact us.</p>",
+        html_ar: `<p>بيت الإبداع (Home of Creativity / HOC) وكالة إبداع وهوية، مكاتبها في ${officesSentence("ar")}. تشرح هذه السياسة كيف نجمع المعلومات الشخصية ونستخدمها ونحميها عند زيارة الموقع أو التواصل معنا.</p>`,
+        html_en: `<p>Home of Creativity (HOC / بيت الإبداع) is a creative and branding agency with offices in ${officesSentence("en")}. This policy explains how we collect, use, and protect personal information when you visit the site or contact us.</p>`,
       },
       {
         id: "information-you-give",

@@ -100,16 +100,6 @@ export function ClientVoices({ initialClients }: { initialClients?: ShowcaseClie
                       </span>
                     )}
                   </div>
-                  <p className="voice-stars" role="img" aria-label={t(clientVoices.ratingLabel)}>
-                    {Array.from({ length: 5 }, (_, star) => (
-                      <svg key={star} viewBox="0 0 24 24" width="18" height="18" aria-hidden>
-                        <path
-                          fill="currentColor"
-                          d="M12 2.6 14.7 8.4l6.3.9-4.5 4.4 1.1 6.3L12 17.1 6.4 20l1.1-6.3L3 9.3l6.3-.9L12 2.6Z"
-                        />
-                      </svg>
-                    ))}
-                  </p>
                   <figcaption className="mt-5 w-full border-t border-[var(--brand-ink)]/10 pt-5">
                     <p className="font-display m-0 text-[1.25rem] leading-snug font-semibold text-[var(--brand-ink)]">
                       {name}

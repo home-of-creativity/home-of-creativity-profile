@@ -1,11 +1,18 @@
 import type { MetadataRoute } from "next";
 import { fetchArticles } from "@/lib/articles-api";
 import { serviceDetails } from "@/lib/content";
-import { fetchPortfolioProjects } from "@/lib/portfolio-api";
+import { officePath, publishedOffices } from "@/lib/offices";
+import { fetchPortfolioProjects, type PortfolioProject } from "@/lib/portfolio-api";
 import { publicApiUrl } from "@/lib/public-api";
 import { SITE_URL } from "@/lib/site";
 
 export const dynamic = "force-static";
+
+/** Project URLs stay out of the sitemap until the page has real body text. */
+function projectHasBody(project: PortfolioProject): boolean {
+  const text = `${project.body_ar ?? ""} ${project.body_en ?? ""}`.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  return text.length >= 80;
+}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
@@ -13,7 +20,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const articles = await fetchArticles();
   // Demo/static deploys with no real backend get zero project rows here —
   // real, canonical URLs only, not one per demo fallback project.
-  const projects = publicApiUrl() ? await fetchPortfolioProjects() : [];
+  const projects = (publicApiUrl() ? await fetchPortfolioProjects() : []).filter(projectHasBody);
 
   return [
     {
@@ -70,12 +77,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.8,
     },
-    {
-      url: `${SITE_URL}/locations/damascus/`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.85,
-    },
+    ...publishedOffices().flatMap((office) => {
+      const path = officePath(office);
+      return path
+        ? [{
+            url: `${SITE_URL}${path}`,
+            lastModified: now,
+            changeFrequency: "monthly" as const,
+            priority: 0.85,
+          }]
+        : [];
+    }),
     {
       url: `${SITE_URL}/client-story/`,
       lastModified: now,

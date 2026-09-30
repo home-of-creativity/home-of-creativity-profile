@@ -104,8 +104,8 @@ export const seoCopy = {
     ar: "المواقع",
   },
   locationsDescription: {
-    en: "Home of Creativity on the map — Damascus, Al Hamra.",
-    ar: "بيت الإبداع على الخريطة — دمشق، الحمراء.",
+    en: "Home of Creativity on the map — Damascus (Al Hamra), Riyadh (Al Murabaa) and the United Arab Emirates.",
+    ar: "بيت الإبداع على الخريطة — دمشق (الحمراء) والرياض (المربّع) والإمارات العربية المتحدة.",
   },
   socialTitle: {
     ar: "إدارة السوشال ميديا | حضور يصنع فرقًا",
@@ -120,8 +120,8 @@ export const seoCopy = {
     ar: "قصة عميل",
   },
   clientStoryDescription: {
-    en: "Abu Shaker and Jaddu Shaker — a Home of Creativity partnership. The average client relationship lasts two years.",
-    ar: "أبو شاكر وجدو شاكر — شراكة مع بيت الإبداع. متوسط عمر علاقة العملاء معنا سنتان.",
+    en: "Abu Shaker and Jaddu Shaker — a Home of Creativity partnership.",
+    ar: "أبو شاكر وجدو شاكر — شراكة مع بيت الإبداع.",
   },
   articlesTitle: {
     ar: "مقالات HOC Agency | أفكار تستحق أن تُقرأ",

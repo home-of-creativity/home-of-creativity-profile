@@ -1,5 +1,5 @@
 import type { Copy } from "./i18n";
-import { emails, whatsappDigits } from "./offices";
+import { emails, officesSentence, whatsappDigits } from "./offices";
 import { portfolioDriveUrl } from "./portfolio-drive-images";
 
 export const brand = {
@@ -14,7 +14,7 @@ export const nav = {
   about: { en: "About", ar: "من نحن" },
   services: { en: "Services", ar: "خدماتنا" },
   clientLogos: { en: "Partners", ar: "شركاء النجاح" },
-  voices: { en: "Client notes", ar: "آراء العملاء" },
+  voices: { en: "Selected work", ar: "من أعمالنا" },
   clients: { en: "Strategic partnership", ar: "رحلة الشراكة" },
   clientStory: { en: "A client story", ar: "قصة عميل" },
   reels: { en: "Reels", ar: "الريلز" },
@@ -111,21 +111,20 @@ export const aboutPage = {
   kicker: { en: "Home of Creativity", ar: "بيت الإبداع" },
   title: { en: "About Home of Creativity", ar: "عن بيت الإبداع" },
   lead: {
-    en: "Home of Creativity (HOC) — بيت الإبداع — is a creative and branding agency with its office in Damascus (Al Hamra). It provides visual identity, marketing, social media, websites, events, and related creative services, and works with clients in Syria.",
-    ar: "بيت الإبداع (Home of Creativity — HOC) وكالة إبداع وهوية بمكتبها في دمشق (الحمراء). تقدم الهوية البصرية والتسويق والسوشال ميديا والمواقع والفعاليات وخدمات إبداعية مرتبطة بها، وتعمل مع عملاء في سوريا.",
+    en: `Home of Creativity (HOC) — بيت الإبداع — is a creative and branding agency with offices in ${officesSentence("en")}. It provides visual identity, marketing, social media, websites, events, and related creative services.`,
+    ar: `بيت الإبداع (Home of Creativity — HOC) وكالة إبداع وهوية بمكاتبها في ${officesSentence("ar")}. تقدم الهوية البصرية والتسويق والسوشال ميديا والمواقع والفعاليات وخدمات إبداعية مرتبطة بها.`,
   },
   body: {
-    en: "Home of Creativity (HOC) — بيت الإبداع — is a creative and branding agency with its office in Damascus (Al Hamra). The published practices are visual identities, social media, account management, marketing, paid ads, exhibitions and conferences, event management, booth design, filming and editing, promotional gifts, roadside ads, websites and ecommerce, app design, and financial analysis. HOC works with organizations in Syria. A project starts on Telegram or WhatsApp. HOC sends a quotation, and payment details are confirmed on WhatsApp before work begins. Subscription packages and their monthly prices are published on the pricing page. There is no self-serve checkout.",
-    ar: "بيت الإبداع (Home of Creativity — HOC) وكالة إبداع وهوية، مكتبها في دمشق (الحمراء). الممارسات المنشورة: الهويات البصرية، السوشال ميديا، إدارة الحسابات، التسويق، الحملات الممولة، المعارض والمؤتمرات، إدارة الفعاليات، تصميم البوثات، التصوير والمونتاج، الهدايا الدعائية، الإعلانات الطرقية، المواقع والمتاجر، تصميم التطبيقات، والتحليل المالي. تعمل مع جهات في سوريا. يبدأ المشروع عبر تيليجرام أو واتساب، ويُرسل عرض سعر وتُؤكد تفاصيل الدفع قبل بدء العمل. باقات الاشتراك وأسعارها الشهرية منشورة في صفحة الأسعار. لا يوجد دفع ذاتي على الموقع.",
+    en: `Home of Creativity (HOC) — بيت الإبداع — is a creative and branding agency with offices in ${officesSentence("en")}. The published practices are visual identities, social media, account management, marketing, paid ads, exhibitions and conferences, event management, booth design, filming and editing, promotional gifts, roadside ads, websites and ecommerce, app design, and financial analysis. A project starts on Telegram or WhatsApp. HOC sends a quotation, and payment details are confirmed on WhatsApp before work begins. Subscription packages and their monthly prices are published on the pricing page. There is no self-serve checkout. The United Arab Emirates office is named; its city and street address are not published yet.`,
+    ar: `بيت الإبداع (Home of Creativity — HOC) وكالة إبداع وهوية، مكاتبها في ${officesSentence("ar")}. الممارسات المنشورة: الهويات البصرية، السوشال ميديا، إدارة الحسابات، التسويق، الحملات الممولة، المعارض والمؤتمرات، إدارة الفعاليات، تصميم البوثات، التصوير والمونتاج، الهدايا الدعائية، الإعلانات الطرقية، المواقع والمتاجر، تصميم التطبيقات، والتحليل المالي. يبدأ المشروع عبر تيليجرام أو واتساب، ويُرسل عرض سعر وتُؤكد تفاصيل الدفع قبل بدء العمل. باقات الاشتراك وأسعارها الشهرية منشورة في صفحة الأسعار. لا يوجد دفع ذاتي على الموقع. مكتب الإمارات مذكور بالاسم، ومدينته وعنوانه غير منشورين بعد.`,
   },
-  officeLabel: { en: "Office", ar: "المكتب" },
+  officeLabel: { en: "Offices", ar: "المكاتب" },
   officeValue: {
-    en: "Damascus (Al Hamra)",
-    ar: "دمشق (الحمراء)",
+    en: officesSentence("en"),
+    ar: officesSentence("ar"),
   },
   marketLabel: { en: "Markets served", ar: "الأسواق المخدومة" },
-  // TODO(UAE): add the UAE here once HOC confirms it is also a served market.
-  marketValue: { en: "Syria and Saudi Arabia", ar: "سوريا والسعودية" },
+  marketValue: { en: "Syria, Saudi Arabia and the United Arab Emirates", ar: "سوريا والسعودية والإمارات العربية المتحدة" },
   notPublishedLabel: { en: "Not published", ar: "غير منشور" },
   notPublishedValue: {
     en: "Founding year, team roster, awards, and an industries-served list",
@@ -486,14 +485,13 @@ export const showcaseClients = {
 } satisfies Record<string, Copy | string[]>;
 
 export const clientVoices = {
-  kicker: { en: "In their words", ar: "بكلماتهم" },
-  title: { en: "Client notes", ar: "آراء العملاء" },
+  kicker: { en: "Selected work", ar: "من أعمالنا" },
+  title: { en: "Brands we worked with", ar: "علامات عملنا معها" },
   lead: {
-    en: "Partners who trusted us with their brand — and what stayed with them.",
-    ar: "شركاء وثقوا بنا في علاماتهم، وهذا ما بقي معهم.",
+    en: "A few brands Home of Creativity has worked with.",
+    ar: "علامات عمل معها بيت الإبداع.",
   },
-  role: { en: "Home of Creativity client", ar: "عميل بيت الإبداع" },
-  ratingLabel: { en: "Five stars", ar: "خمس نجوم" },
+  role: { en: "Partner", ar: "شريك" },
   items: [
     {
       id: "abu-shaker",
@@ -533,8 +531,8 @@ export const clientStory = {
   kicker: { en: "A client story", ar: "قصة عميل" },
   title: { en: "Abu Shaker and Jaddu Shaker", ar: "أبو شاكر وجدو شاكر" },
   lead: {
-    en: "A partnership that lasts. The average life of our client relationships is two years.",
-    ar: "شراكة تدوم. متوسط عمر علاقة عملائنا معنا سنتان.",
+    en: "A partnership that lasts.",
+    ar: "شراكة تدوم.",
   },
   body: {
     en: "Abu Shaker and Jaddu Shaker are two of the voices that stay with Home of Creativity. Their notes sit on the homepage; this page keeps that relationship in view — not as a campaign, but as a partnership that holds.",
@@ -656,181 +654,13 @@ export const projects = {
     en: "Projects are not available right now. Please try again later.",
     ar: "المشاريع غير متاحة حالياً. يرجى المحاولة لاحقاً.",
   },
-  items: [
-    {
-      id: "events",
-      label: { en: "Live", ar: "الحدث" },
-      filter: { en: "Events", ar: "الفعاليات" },
-      tags: { en: "Events, exhibitions, booths", ar: "فعاليات، معارض، بوثات" },
-      title: { en: "Events, exhibitions & booths", ar: "المعارض والمؤتمرات والبوثات" },
-      body: {
-        en: "Stages, halls, and conferences at architectural scale — brand systems that hold a room.",
-        ar: "قاعات ومؤتمرات بمقياس معماري: أنظمة هوية تملأ القاعة.",
-      },
-      images: [
-        {
-          src: portfolioDriveUrl("p10_event_stage_01"),
-          featured: true,
-          span: "md" as const,
-          alt: {
-            en: "Conference hall with a curved LED stage for Home of Creativity",
-            ar: "قاعة مؤتمرات بشاشة مسرح منحنية لهوم أوف كريتيفيتي",
-          },
-        },
-        {
-          src: portfolioDriveUrl("p12_exhibition_booth_design"),
-          featured: true,
-          span: "sm" as const,
-          alt: {
-            en: "Exhibition booth design",
-            ar: "تصميم بوث معرض",
-          },
-        },
-      ],
-    },
-    {
-      id: "identity",
-      label: { en: "Mark", ar: "العلامة" },
-      filter: { en: "Identity", ar: "الهوية" },
-      tags: { en: "Branding, identity, print", ar: "هوية، علامة، مطبوعات" },
-      title: { en: "Visual identity & applications", ar: "الهوية البصرية وتطبيقاتها" },
-      body: {
-        en: "Marks, profiles, cards, and packaging for IZORA, Faiz Wahba, Enginety, Smart Vision, Future Line, and Riva.",
-        ar: "علامات وملفات وبطاقات وتغليف لـ IZORA وفايز وهبة وإنجنيتي وسمارت فيجن وفيوتشر لاين وريفا.",
-      },
-      images: [
-        {
-          src: portfolioDriveUrl("p16_logos"),
-          featured: true,
-          span: "lg" as const,
-          alt: {
-            en: "Client logo collection",
-            ar: "مجموعة شعارات العملاء",
-          },
-        },
-        {
-          src: portfolioDriveUrl("p21_visual_identity_application_01"),
-          featured: true,
-          span: "md" as const,
-          alt: {
-            en: "Visual identity applications, set one",
-            ar: "تطبيقات الهوية البصرية، المجموعة الأولى",
-          },
-        },
-      ],
-    },
-    {
-      id: "media",
-      label: { en: "Motion", ar: "الحركة" },
-      filter: { en: "Media", ar: "المحتوى" },
-      tags: { en: "Content, film, campaigns", ar: "محتوى، تصوير، حملات" },
-      title: { en: "Social, film & campaigns", ar: "السوشال والمحتوى والحملات" },
-      body: {
-        en: "Disciplined grids, cinematic motion, photography, and paid campaigns — proof, not stock.",
-        ar: "شبكات منضبطة وتحريك سينمائي وتصوير وحملات ممولة: برهان لا صور جاهزة.",
-      },
-      images: [
-        {
-          src: portfolioDriveUrl("p28_social_posts_01"),
-          featured: true,
-          span: "sm" as const,
-          alt: {
-            en: "Social media posts, set one",
-            ar: "منشورات سوشل ميديا، المجموعة الأولى",
-          },
-        },
-        {
-          src: portfolioDriveUrl("p32_photography_montage"),
-          featured: true,
-          span: "lg" as const,
-          alt: {
-            en: "Photography montage",
-            ar: "مونتاج تصوير",
-          },
-        },
-      ],
-    },
-    {
-      id: "promo",
-      label: { en: "Field", ar: "الميدان" },
-      filter: { en: "Outdoor", ar: "الإعلان" },
-      tags: { en: "Gifts, outdoor, roadside", ar: "هدايا، إعلان، طرق" },
-      title: { en: "Gifts & roadside ads", ar: "الهدايا والإعلانات الطرقية" },
-      body: {
-        en: "Promotional objects and roadside prestige that carry the mark into the street.",
-        ar: "هدايا دعائية وهيبة طرقية تنقل العلامة إلى الشارع.",
-      },
-      images: [
-        {
-          src: portfolioDriveUrl("p39_promotional_gifts"),
-          featured: true,
-          span: "sm" as const,
-          alt: {
-            en: "Promotional gifts",
-            ar: "هدايا دعائية",
-          },
-        },
-        {
-          src: portfolioDriveUrl("p41_roadside_advertisement"),
-          alt: {
-            en: "Roadside advertisements",
-            ar: "إعلانات طرقية",
-          },
-        },
-      ],
-    },
-    {
-      id: "digital",
-      label: { en: "Click", ar: "الرقمي" },
-      filter: { en: "Web", ar: "المواقع" },
-      tags: { en: "Web, stores, apps", ar: "مواقع، متاجر، تطبيقات" },
-      title: { en: "Websites & stores", ar: "المواقع والمتاجر" },
-      body: {
-        en: "Sites and stores with the same editorial discipline as the mark.",
-        ar: "مواقع ومتاجر بنفس انضباط العلامة.",
-      },
-      images: [
-        {
-          src: portfolioDriveUrl("p43_website_01"),
-          featured: true,
-          span: "lg" as const,
-          alt: {
-            en: "Website design, first project",
-            ar: "تصميم موقع، المشروع الأول",
-          },
-        },
-      ],
-    },
-    {
-      id: "finance",
-      label: { en: "Signal", ar: "الإشارة" },
-      filter: { en: "Finance", ar: "المالي" },
-      tags: { en: "Dashboards, Excel, Power BI", ar: "لوحات، إكسل، باور بي آي" },
-      title: { en: "Financial dashboards", ar: "لوحات التحليل المالي" },
-      body: {
-        en: "Excel and Power BI boards that turn figures into readable performance.",
-        ar: "لوحات إكسل وباور بي آي تحوّل الأرقام إلى أداء مقروء.",
-      },
-      images: [
-        {
-          src: portfolioDriveUrl("p47_dashboard_01"),
-          featured: true,
-          span: "md" as const,
-          alt: {
-            en: "Financial analysis dashboard, first board",
-            ar: "لوحة تحليل مالي، اللوحة الأولى",
-          },
-        },
-        {
-          src: portfolioDriveUrl("p48_dashboard_02"),
-          alt: {
-            en: "Financial analysis dashboard, second board",
-            ar: "لوحة تحليل مالي، اللوحة الثانية",
-          },
-        },
-      ],
-    },
-  ],
+  items: [] as {
+    id: string;
+    filter: Copy;
+    title: Copy;
+    body: Copy;
+    images: { src: string; alt: Copy; featured?: boolean }[];
+  }[],
 };
 
 export const articlesPage = {

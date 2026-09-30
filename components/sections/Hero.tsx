@@ -12,7 +12,6 @@ import {
   HERO_POSTER_DESKTOP,
   HERO_POSTER_MOBILE,
   HERO_VIDEO_DESKTOP,
-  HERO_VIDEO_MOBILE,
 } from "@/lib/hero-media";
 import { shouldSkipMotion } from "@/lib/visit-cache";
 
@@ -28,10 +27,11 @@ export function Hero() {
     let timer = 0;
     let cancelled = false;
 
+    const desktop = window.matchMedia("(min-width: 800px)");
     const start = () => {
-      if (cancelled || reduce.matches) return;
+      if (cancelled || reduce.matches || !desktop.matches) return;
       const arm = () => {
-        if (!cancelled && !reduce.matches) setAllowVideo(true);
+        if (!cancelled && !reduce.matches && desktop.matches) setAllowVideo(true);
       };
       if (typeof window.requestIdleCallback === "function") {
         idle = window.requestIdleCallback(arm, { timeout: 2000 });
@@ -201,8 +201,7 @@ export function Hero() {
               playsInline
               preload="none"
             >
-              <source media="(min-width: 800px)" src={withBasePath(HERO_VIDEO_DESKTOP)} type="video/mp4" />
-              <source src={withBasePath(HERO_VIDEO_MOBILE)} type="video/mp4" />
+              <source src={withBasePath(HERO_VIDEO_DESKTOP)} type="video/mp4" />
             </video>
           ) : null}
         </div>

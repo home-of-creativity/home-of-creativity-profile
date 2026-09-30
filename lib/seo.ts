@@ -13,10 +13,11 @@ const ALTERNATE_NAMES = [SITE_SHORT, SITE_NAME_AR, "بيت الابداع", SITE
 /** Factual one-liner shared by `description` and `disambiguatingDescription` (no affiliation claims). */
 export const ORGANIZATION_DESCRIPTION = `Branding, marketing and creative agency with offices in ${officesSentence("en")}.`;
 
-/** Markets HOC serves today. TODO(UAE): add the UAE once HOC confirms it is a served market. */
+/** Markets named on the site: the three offices in `offices.ts`. */
 const AREA_SERVED = [
   { "@type": "Country", name: "Syria" },
   { "@type": "Country", name: "Saudi Arabia" },
+  { "@type": "Country", name: "United Arab Emirates" },
 ];
 
 export function officeId(office: Office): string {
