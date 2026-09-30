@@ -1,4 +1,4 @@
-const CACHE = "hoc-design-v14";
+const CACHE = "hoc-design-v15";
 const BASE = new URL("./", self.registration.scope).pathname.replace(/\/$/, "");
 const PRECACHE = [
   `${BASE}/hummingbird.svg`,
@@ -101,6 +101,6 @@ self.addEventListener("fetch", (event) => {
         if (cached) return cached;
         throw new Error("offline");
       }
-    }),
+    }).catch(() => fetch(event.request)),
   );
 });

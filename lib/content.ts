@@ -69,7 +69,7 @@ export const about = {
   vision: {
     label: { en: "Vision", ar: "الرؤية" },
     title: { en: "Our Vision", ar: "رؤيتنا" },
-    image: "/photo/vision-hummingbird.webp",
+    image: "/photo/vision-hummingbird.webp?v=20260930",
     imageAlt: {
       en: "Home of Creativity hummingbird mark hovering like a compass over a dark horizon",
       ar: "شعار طائر بيت الإبداع كبوصلة فوق أفق داكن",
@@ -86,7 +86,7 @@ export const about = {
   mission: {
     label: { en: "Mission", ar: "الرسالة" },
     title: { en: "Our Mission", ar: "رسالتنا" },
-    image: "/photo/mission-hummingbird.webp",
+    image: "/photo/mission-hummingbird.webp?v=20260930",
     imageAlt: {
       en: "Home of Creativity hummingbird mark weaving bridges of light between distant cities",
       ar: "شعار طائر بيت الإبداع ينسج جسور ضوء بين مدن بعيدة",

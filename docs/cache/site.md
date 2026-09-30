@@ -24,7 +24,7 @@ Live (VPS): https://hoc.agency/ — API https://api.hoc.agency/api
 app/                 # App Router: page, about, services (+3 detail pages), pricing, articles/[slug], projects/[id], not-found
 components/          # sections/, chrome, motion, CacheWorker
 lib/                 # content.ts, i18n, *-api.ts, whatsapp, visit-cache
-public/sw.js         # Cache API hoc-design-v14 (same-origin images/fonts only; /_next chunks, video, and cross-origin API/CDN are not intercepted)
+public/sw.js         # Cache API hoc-design-v15 (same-origin images/fonts only; /_next chunks, video, and cross-origin API/CDN are not intercepted). Vision and mission images use ?v=20260930 so a replaced file is not stuck behind the 30-day cache.
 e2e/                 # Playwright
 next.config.ts
 ```
