@@ -1,5 +1,6 @@
 # Marketing site (Next.js static export)
 
+Last updated: 30 September 2026 (slashless pages 301 once to https://hoc.agency{path}/ in Caddy, so /social and /locations are not relative 308s)
 Last updated: 29 September 2026 (EN titles are h1; article pages are /articles/{slug}/ with meta and Article JSON-LD; list reserves height; fonts use display optional)
 Last updated: 29 September 2026 (service worker v14 skips /_next chunks; stale bundle reloads once)
 Last updated: 28 September 2026 (hero poster is the LCP; video starts after idle; nav drawer is CSS)
