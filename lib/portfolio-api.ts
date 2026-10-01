@@ -13,13 +13,17 @@ export type ShowcaseClient = {
 };
 
 /** A new upload is a new file, and this query makes the browser fetch it at once. */
+export function versionedMediaUrl(url: string | null | undefined, updatedAt?: string | null): string | null {
+  if (!url) return null;
+  if (!updatedAt) return url;
+  const version = updatedAt.replace(/\D/g, "");
+  if (!version) return url;
+  const join = url.includes("?") ? "&" : "?";
+  return `${url}${join}v=${version}`;
+}
+
 export function clientLogoSrc(client: ShowcaseClient): string | null {
-  if (!client.logo_url) return null;
-  if (!client.updated_at) return client.logo_url;
-  const version = client.updated_at.replace(/\D/g, "");
-  if (!version) return client.logo_url;
-  const join = client.logo_url.includes("?") ? "&" : "?";
-  return `${client.logo_url}${join}v=${version}`;
+  return versionedMediaUrl(client.logo_url, client.updated_at);
 }
 
 export type PortfolioCategory = {
@@ -37,6 +41,7 @@ export type PortfolioProjectImage = {
   alt_ar: string | null;
   sort_order: number;
   featured: boolean;
+  updated_at?: string | null;
 };
 
 export type PortfolioSocialLinks = Partial<
@@ -51,6 +56,7 @@ export type PortfolioRelatedProject = {
   summary_ar: string | null;
   image_url: string | null;
   category: PortfolioCategory | null;
+  updated_at?: string | null;
 };
 
 export type PortfolioProject = {
@@ -68,6 +74,7 @@ export type PortfolioProject = {
   social_links: PortfolioSocialLinks;
   image_url: string | null;
   images: PortfolioProjectImage[];
+  updated_at?: string | null;
   /** Published projects linked from this one, in the order chosen in the dashboard (detail endpoint only). */
   related?: PortfolioRelatedProject[];
   sort_order: number;

@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { LoadingLottie } from "@/components/LoadingLottie";
 import { DeferredFillImage, ProgressiveImage } from "@/components/ProgressiveImage";
 import { projects } from "@/lib/content";
-import { fetchPortfolioProjects, type PortfolioCategory, type PortfolioProject } from "@/lib/portfolio-api";
+import { fetchPortfolioProjects, versionedMediaUrl, type PortfolioCategory, type PortfolioProject } from "@/lib/portfolio-api";
 import { pagePath, withBasePath } from "@/lib/base-path";
 import { useLanguage } from "@/lib/i18n";
 import { useInViewOnce } from "@/lib/use-in-view";
@@ -323,7 +323,7 @@ export function Projects({ initialProjects }: { initialProjects?: PortfolioProje
               >
                 {project.image_url ? (
                   <ProgressiveImage
-                    src={project.image_url}
+                    src={versionedMediaUrl(project.image_url, project.updated_at)}
                     alt={title}
                     referrerPolicy="no-referrer"
                     className="absolute inset-0"

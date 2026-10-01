@@ -682,6 +682,9 @@ export const projectDetail = {
   back: { en: "Back to projects", ar: "العودة للمشاريع" },
   visitWebsite: { en: "Visit website", ar: "زيارة الموقع" },
   gallery: { en: "Gallery", ar: "معرض الصور" },
+  close: { en: "Close", ar: "إغلاق" },
+  previous: { en: "Previous", ar: "السابق" },
+  next: { en: "Next", ar: "التالي" },
   related: { en: "Related projects", ar: "مشاريع مرتبطة" },
   notFound: { en: "Project not found", ar: "المشروع غير موجود" },
   social: {
