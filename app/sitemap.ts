@@ -20,7 +20,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const articles = await fetchArticles();
   // Demo/static deploys with no real backend get zero project rows here —
   // real, canonical URLs only, not one per demo fallback project.
-  const projects = (publicApiUrl() ? await fetchPortfolioProjects() : []).filter(projectHasBody);
+  const projects = (publicApiUrl() ? await fetchPortfolioProjects() : [])
+    .filter((project) => project.id < 1 || project.id > 6)
+    .filter(projectHasBody);
 
   return [
     {

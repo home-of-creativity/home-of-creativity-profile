@@ -16,7 +16,7 @@ export const metadata: Metadata = pageMetadata({ ...pageSeo.home, path: "/" });
 export default async function HomePage() {
   const [clients, projects, reels] = await Promise.all([
     fetchShowcaseClients(),
-    fetchPortfolioProjects(),
+    fetchPortfolioProjects().then((rows) => rows.filter((project) => project.id < 1 || project.id > 6)),
     fetchLandingReels(),
   ]);
 

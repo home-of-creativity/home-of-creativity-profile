@@ -30,8 +30,8 @@ function ClientLogoDisc({
     <img
       src={client.logo_url}
       alt={decorative ? "" : clientLogoAlt(client.name, locale)}
-      width={120}
-      height={120}
+      width={80}
+      height={80}
       draggable={false}
       decoding="async"
       className="client-logo-disc-image"

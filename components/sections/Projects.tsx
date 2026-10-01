@@ -160,7 +160,7 @@ export function Projects({ initialProjects }: { initialProjects?: PortfolioProje
     let active = true;
     fetchPortfolioProjects()
       .then((rows) => {
-        if (active) setItems(rows);
+        if (active) setItems(rows.filter((project) => project.id < 1 || project.id > 6));
       })
       .catch(() => {
         if (active && initialProjects === undefined) setItems([]);

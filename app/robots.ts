@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/dashboard", "/dashboard/", "/staff", "/staff/", "/api", "/api/"],
+        disallow: ["/dashboard", "/dashboard/", "/staff", "/staff/", "/api", "/api/", "/projects/view", "/projects/view/"],
       },
       {
         userAgent: [
@@ -68,7 +68,7 @@ export default function robots(): MetadataRoute.Robots {
           "opencode",
         ],
         allow: "/",
-        disallow: ["/dashboard", "/dashboard/", "/staff", "/staff/", "/api", "/api/"],
+        disallow: ["/dashboard", "/dashboard/", "/staff", "/staff/", "/api", "/api/", "/projects/view", "/projects/view/"],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,

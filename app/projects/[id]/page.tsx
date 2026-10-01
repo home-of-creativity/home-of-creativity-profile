@@ -23,7 +23,9 @@ export async function generateStaticParams() {
     }
     return [{ id: "__none__" }];
   }
-  return projects.map((project) => ({ id: String(project.id) }));
+  return projects
+    .filter((project) => project.id < 1 || project.id > 6)
+    .map((project) => ({ id: String(project.id) }));
 }
 
 export async function generateMetadata({

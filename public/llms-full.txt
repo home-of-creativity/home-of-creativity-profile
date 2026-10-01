@@ -49,11 +49,32 @@ Home of Creativity sends a quotation. Payment details are confirmed on WhatsApp 
 - https://hoc.agency/services/websites-ecommerce/ — company sites and online stores
 - https://hoc.agency/services/app-design/ — app UX, UI, and prototypes
 - https://hoc.agency/services/financial-analysis/ — financial data into dashboards and decision support
-
-Each service page states scope areas in general terms. Exact deliverables, prices, and timelines are confirmed in the quotation and are not published.
 - https://hoc.agency/locations/damascus/ — Damascus, Al Hamra
 - https://hoc.agency/locations/riyadh/ — Riyadh, Al Murabaa
 - https://hoc.agency/articles/ — dashboard articles only; each published slug is /articles/{slug}/ after the next site build, and /articles/detail/?slug= opens it immediately
+
+Each service page states scope areas in general terms. A one-off project's exact deliverables and timeline are confirmed in the quotation.
+
+## Pricing
+
+Published at https://hoc.agency/pricing/. All figures are USD. Subscriptions can be monthly, 3 months (5% off the monthly total), 6 months (10% off), or yearly (20% off). Payment is confirmed on WhatsApp.
+
+Strategic solutions, monthly:
+- Startup Build (small business): $399
+- Business Growth (mid-size): $899
+- Elite Authority (enterprise): $1,499
+
+Flexible production, monthly:
+- Premium Pack: $399
+- Growth Pack: $599
+- Infinity Pack: $899
+- Reels Premium: $399
+- Reels Pro: $699
+
+Paid ads and reach, one-time:
+- Reach Package: $50
+- Gold Package: $100
+- Diamond Package: $200
 
 ## Official profiles
 
@@ -95,4 +116,4 @@ A: لا توجد قائمة صناعات منشورة. العملاء شركات
 
 ## English summary
 
-Home of Creativity (HOC) — بيت الإبداع — is a creative and branding agency with offices in Damascus (Al Hamra), Riyadh (Al Murabaa) and the United Arab Emirates. The UAE city and street are not published. It provides visual identities, social media, account management, marketing, paid ads, exhibitions and conferences, event management, booth design, filming and editing, promotional gifts, roadside ads, websites and ecommerce, app design, and financial analysis. Start a project on Telegram or WhatsApp from https://hoc.agency/. HOC sends a quotation; payment is confirmed on WhatsApp before work begins. No self-serve checkout, no public client portal. Official profiles: Instagram and Facebook at https://hoc.agency/social/. HOC does not publish star ratings, review counts, or ranking claims. LinkedIn and Google Business Profile URLs are not published.
+Home of Creativity (HOC) — بيت الإبداع — is a creative and branding agency with offices in Damascus (Al Hamra), Riyadh (Al Murabaa) and the United Arab Emirates. The UAE city and street are not published. It provides visual identities, social media, account management, marketing, paid ads, exhibitions and conferences, event management, booth design, filming and editing, promotional gifts, roadside ads, websites and ecommerce, app design, and financial analysis. Start a project on Telegram or WhatsApp from https://hoc.agency/. Subscription prices are published at https://hoc.agency/pricing/ (Startup Build $399, Business Growth $899, Elite Authority $1,499 per month). HOC sends a quotation; payment is confirmed on WhatsApp before work begins. No self-serve checkout, no public client portal. Official profiles: Instagram and Facebook at https://hoc.agency/social/. HOC does not publish star ratings, review counts, or ranking claims. LinkedIn and Google Business Profile URLs are not published.
