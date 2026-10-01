@@ -1,4 +1,4 @@
-const CACHE = "hoc-design-v15";
+const CACHE = "hoc-design-v16";
 const BASE = new URL("./", self.registration.scope).pathname.replace(/\/$/, "");
 const PRECACHE = [
   `${BASE}/hummingbird.svg`,
@@ -45,6 +45,8 @@ function shouldBypass(request) {
   // Hashed Next chunks must come from the network. A cached chunk from the
   // previous deploy calls into the new webpack runtime and throws reading 'call'.
   if (path.includes("/_next/")) return true;
+  // Client logos change in the dashboard. Do not keep the last build's copy.
+  if (path.includes("/generated/clients/")) return true;
   return (
     path.startsWith("/dashboard") ||
     path.startsWith("/staff") ||

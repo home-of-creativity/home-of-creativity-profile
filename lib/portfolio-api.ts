@@ -9,7 +9,18 @@ export type ShowcaseClient = {
   logo_url: string | null;
   website_url: string | null;
   sort_order: number;
+  updated_at?: string | null;
 };
+
+/** A new upload is a new file, and this query makes the browser fetch it at once. */
+export function clientLogoSrc(client: ShowcaseClient): string | null {
+  if (!client.logo_url) return null;
+  if (!client.updated_at) return client.logo_url;
+  const version = client.updated_at.replace(/\D/g, "");
+  if (!version) return client.logo_url;
+  const join = client.logo_url.includes("?") ? "&" : "?";
+  return `${client.logo_url}${join}v=${version}`;
+}
 
 export type PortfolioCategory = {
   id: number;

@@ -1,8 +1,9 @@
 # Marketing site (Next.js static export)
 
+Last updated: 1 October 2026 (client logos are requested again when the page opens, so a dashboard change is not stuck behind the 30-day image cache)
 Last updated: 1 October 2026 (`llms.txt` and `llms-full.txt` list the published USD package prices; they no longer say prices are not published)
 Last updated: 1 October 2026 (a project published after the last export still opens: Caddy serves `/projects/view/` for a missing `/projects/{id}/`, and that page loads the project from the API)
-Last updated: 30 September 2026 (articles index, privacy, and terms are in the static HTML; llms files, about copy, manifest, and areaServed name Damascus, Riyadh, and the UAE; `/locations/riyadh/` is in the sitemap; thin projects are omitted; the mobile hero does not download the background video; “بكلماتهم” and “سنتان” are gone)
+Last updated: 30 September 2026 (articles index, privacy, and terms are in the static HTML; llms files, about copy, manifest, and areaServed name Damascus, Riyadh, and the UAE; `/locations/riyadh/` is in the sitemap; thin projects are omitted; “بكلماتهم” and “سنتان” are gone)
 Last updated: 30 September 2026 (project cards load from the API after the page opens, so a dashboard project is not stuck in the build snapshot)
 Last updated: 30 September 2026 (slashless pages 301 once to https://hoc.agency{path}/ in Caddy, so /social and /locations are not relative 308s)
 Last updated: 29 September 2026 (EN titles are h1; article pages are /articles/{slug}/ with meta and Article JSON-LD; list reserves height; fonts use display optional)
@@ -29,7 +30,7 @@ Live (VPS): https://hoc.agency/ — API https://api.hoc.agency/api
 app/                 # App Router: page, about, services (+3 detail pages), pricing, articles/[slug], projects/[id], not-found
 components/          # sections/, chrome, motion, CacheWorker
 lib/                 # content.ts, i18n, *-api.ts, whatsapp, visit-cache
-public/sw.js         # Cache API hoc-design-v15 (same-origin images/fonts only; /_next chunks, video, and cross-origin API/CDN are not intercepted). Vision and mission images use ?v=20260930 so a replaced file is not stuck behind the 30-day cache.
+public/sw.js         # Cache API hoc-design-v16 (same-origin images/fonts only; /_next chunks, /generated/clients, video, and cross-origin API/CDN are not intercepted). Vision and mission images use ?v=20260930 so a replaced file is not stuck behind the 30-day cache. Client logos use the live CMS URL plus updated_at.
 e2e/                 # Playwright
 next.config.ts
 ```

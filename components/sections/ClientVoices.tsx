@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { clientVoices } from "@/lib/content";
 import { cn } from "@/lib/cn";
 import { useLanguage } from "@/lib/i18n";
-import { fetchShowcaseClients, type ShowcaseClient } from "@/lib/portfolio-api";
+import { clientLogoSrc, fetchShowcaseClients, type ShowcaseClient } from "@/lib/portfolio-api";
 import { Reveal, Stagger, StaggerItem } from "../motion";
 import { SectionHeading, Shell } from "../ui";
 import { clientLogoAlt } from "./ShowcaseClients";
@@ -33,7 +33,6 @@ export function ClientVoices({ initialClients }: { initialClients?: ShowcaseClie
   );
 
   useEffect(() => {
-    if (initialClients !== undefined) return;
     let active = true;
     fetchShowcaseClients()
       .then((rows) => {
@@ -43,7 +42,7 @@ export function ClientVoices({ initialClients }: { initialClients?: ShowcaseClie
     return () => {
       active = false;
     };
-  }, [initialClients]);
+  }, []);
 
   const quotes = useMemo(
     () =>
@@ -71,7 +70,7 @@ export function ClientVoices({ initialClients }: { initialClients?: ShowcaseClie
 
         <Stagger className="mt-16 grid gap-16 md:mt-20 md:grid-cols-3 md:gap-6 lg:gap-8">
           {quotes.map((item, index) => {
-            const logo = item.client?.logo_url;
+            const logo = item.client ? clientLogoSrc(item.client) : null;
             const name = t(item.name);
             const logoAlt = item.client ? clientLogoAlt(item.client.name, locale) : name;
             return (

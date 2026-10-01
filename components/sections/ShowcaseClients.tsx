@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { showcaseClients as copy } from "@/lib/content";
 import {
+  clientLogoSrc,
   fetchShowcaseClients,
   type ShowcaseClient,
 } from "@/lib/portfolio-api";
@@ -26,9 +27,10 @@ function ClientLogoDisc({
 }) {
   const { locale } = useLanguage();
   const initials = client.name.slice(0, 2).toUpperCase();
-  const content = client.logo_url ? (
+  const logo = clientLogoSrc(client);
+  const content = logo ? (
     <img
-      src={client.logo_url}
+      src={logo}
       alt={decorative ? "" : clientLogoAlt(client.name, locale)}
       width={80}
       height={80}
@@ -155,17 +157,14 @@ export function ShowcaseClients({ initialClients }: { initialClients?: ShowcaseC
   const [ready, setReady] = useState(initialClients !== undefined);
 
   useEffect(() => {
-    if (initialClients !== undefined) return;
     let active = true;
 
     fetchShowcaseClients()
       .then((items) => {
-        if (!active) return;
+        if (!active || items.length === 0) return;
         setClients(items);
       })
-      .catch(() => {
-        if (active) setClients([]);
-      })
+      .catch(() => undefined)
       .finally(() => {
         if (active) setReady(true);
       });
@@ -173,7 +172,7 @@ export function ShowcaseClients({ initialClients }: { initialClients?: ShowcaseC
     return () => {
       active = false;
     };
-  }, [initialClients]);
+  }, []);
 
   return (
     <section
