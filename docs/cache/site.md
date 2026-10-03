@@ -1,6 +1,6 @@
 # Marketing site (Next.js static export)
 
-Last updated: 1 October 2026 (the project gallery dialog steps to the previous and next picture)
+Last updated: 3 October 2026 (about-cover numerals stay visible in dark mode)
 Last updated: 1 October 2026 (`llms.txt` and `llms-full.txt` list the published USD package prices; they no longer say prices are not published)
 Last updated: 1 October 2026 (a project published after the last export still opens: Caddy serves `/projects/view/` for a missing `/projects/{id}/`, and that page loads the project from the API)
 Last updated: 30 September 2026 (articles index, privacy, and terms are in the static HTML; llms files, about copy, manifest, and areaServed name Damascus, Riyadh, and the UAE; `/locations/riyadh/` is in the sitemap; thin projects are omitted; “بكلماتهم” and “سنتان” are gone)

@@ -37,7 +37,7 @@ export function About() {
       <div
         aria-hidden
         className={cn(
-          "about-wash pointer-events-none absolute inset-0",
+          "about-wash about-wash-side pointer-events-none absolute inset-0",
           locale === "ar"
             ? "bg-[linear-gradient(270deg,var(--brand-off-white)_0%,color-mix(in_srgb,var(--brand-off-white)_78%,transparent)_34%,transparent_72%)]"
             : "bg-[linear-gradient(90deg,var(--brand-off-white)_0%,color-mix(in_srgb,var(--brand-off-white)_78%,transparent)_34%,transparent_72%)]",
@@ -45,7 +45,7 @@ export function About() {
       />
       <div
         aria-hidden
-        className="about-wash pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,color-mix(in_srgb,var(--brand-off-white)_28%,transparent)_0%,transparent_18%,color-mix(in_srgb,var(--brand-off-white)_55%,transparent)_58%,color-mix(in_srgb,var(--brand-off-white)_78%,transparent)_100%)]"
+        className="about-wash about-wash-fall pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,color-mix(in_srgb,var(--brand-off-white)_28%,transparent)_0%,transparent_18%,color-mix(in_srgb,var(--brand-off-white)_55%,transparent)_58%,color-mix(in_srgb,var(--brand-off-white)_78%,transparent)_100%)]"
       />
 
       <Shell className="relative z-10">

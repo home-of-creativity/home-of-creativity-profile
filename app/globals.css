@@ -143,11 +143,16 @@ html[data-theme="dark"] body {
 
 html[data-theme="dark"] #about .about-photo {
   mix-blend-mode: normal;
-  opacity: 0.85;
+  opacity: 0.92;
+  filter: invert(1) hue-rotate(180deg) contrast(1.4);
 }
 
-html[data-theme="dark"] #about .about-wash {
-  opacity: 0.42;
+html[data-theme="dark"] #about .about-wash-side {
+  opacity: 0.88;
+}
+
+html[data-theme="dark"] #about .about-wash-fall {
+  opacity: 0.35;
 }
 
 .price-figure {
