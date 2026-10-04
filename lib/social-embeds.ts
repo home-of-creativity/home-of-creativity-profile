@@ -54,7 +54,7 @@ export function officialSocialProfiles(): OfficialSocialProfile[] {
   return [
     { platform: "instagram", name: "Instagram", url: `${instagramProfileUrl()}/` },
     { platform: "facebook", name: "Facebook", url: facebookPageUrl() },
-    { platform: "telegram", name: "Telegram", url: CLIENT_TELEGRAM_URL },
+    ...(CLIENT_TELEGRAM_URL ? [{ platform: "telegram" as const, name: "Telegram", url: CLIENT_TELEGRAM_URL }] : []),
   ];
 }
 

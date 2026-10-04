@@ -13,7 +13,7 @@ Home of Creativity does not claim star ratings, review counts, or "#1 agency" ra
 - Website: https://hoc.agency/
 - Offices: Damascus (Al Hamra), Syria — https://hoc.agency/locations/damascus/ ; Riyadh (Al Murabaa), Saudi Arabia — https://hoc.agency/locations/riyadh/ ; United Arab Emirates — named, city and street not published, no location page yet
 - Markets: Syria, Saudi Arabia, and the United Arab Emirates
-- Contact: Telegram and WhatsApp from https://hoc.agency/ (Syria WhatsApp https://wa.me/963954187154 ; Saudi WhatsApp https://wa.me/966550350295)
+- Contact: WhatsApp from https://hoc.agency/ (Syria WhatsApp https://wa.me/963954187154 ; Saudi WhatsApp https://wa.me/966550350295)
 - Phones, Damascus: mobile +963 968 862 822 ; WhatsApp +963 954 187 154 ; landline +963 11 323 6255
 - Phones, Riyadh: mobile and WhatsApp +966 55 035 0295 ; landline +966 11 422 2528
 - Languages: Arabic and English on the same URLs
@@ -49,7 +49,7 @@ Visual identities; social media; account management; marketing; paid ads; exhibi
 - [Locations](https://hoc.agency/locations/): Damascus and Riyadh pages; the UAE office has no city page yet
 - [Damascus](https://hoc.agency/locations/damascus/): Al Hamra
 - [Riyadh](https://hoc.agency/locations/riyadh/): Al Murabaa
-- [Social](https://hoc.agency/social/): official Instagram, Facebook, Telegram
+- [Social](https://hoc.agency/social/): official Instagram and Facebook
 - [Articles](https://hoc.agency/articles/): articles published from the dashboard only
 - [Privacy](https://hoc.agency/privacy/)
 - [Terms](https://hoc.agency/terms/)

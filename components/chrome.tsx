@@ -477,12 +477,14 @@ export function Nav() {
           </nav>
 
           <div className="flex items-center justify-self-end gap-2 sm:gap-3">
-            <NavChatLink
-              href={CLIENT_TELEGRAM_URL}
-              label={t(nav.telegram)}
-              className={cn("bg-[#229ED9]", locale === "ar" ? "tracking-normal" : "tracking-[0.14em]")}
-              icon={<TelegramIcon className="h-4 w-4 shrink-0" />}
-            />
+            {CLIENT_TELEGRAM_URL ? (
+              <NavChatLink
+                href={CLIENT_TELEGRAM_URL}
+                label={t(nav.telegram)}
+                className={cn("bg-[#229ED9]", locale === "ar" ? "tracking-normal" : "tracking-[0.14em]")}
+                icon={<TelegramIcon className="h-4 w-4 shrink-0" />}
+              />
+            ) : null}
             <NavChatLink
               href={whatsappUrl}
               label={t(nav.whatsappStart)}
@@ -560,16 +562,18 @@ export function Nav() {
               </a>
             ))}
             <div className="mt-auto grid gap-3 pt-8">
-              <a
-                href={CLIENT_TELEGRAM_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="mobile-nav-link inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#229ED9] px-5 py-3 text-[0.95rem] font-semibold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                style={{ animationDelay: "0.16s" }}
-              >
-                <TelegramIcon className="h-5 w-5 shrink-0" />
-                {t(nav.telegram)}
-              </a>
+              {CLIENT_TELEGRAM_URL ? (
+                <a
+                  href={CLIENT_TELEGRAM_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mobile-nav-link inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#229ED9] px-5 py-3 text-[0.95rem] font-semibold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  style={{ animationDelay: "0.16s" }}
+                >
+                  <TelegramIcon className="h-5 w-5 shrink-0" />
+                  {t(nav.telegram)}
+                </a>
+              ) : null}
               <a
                 href={whatsappUrl}
                 target="_blank"

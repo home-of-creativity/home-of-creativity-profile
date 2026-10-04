@@ -8,7 +8,14 @@ function envBasePath() {
 /** GitHub Pages keeps `/home-of-creativity-profile`. VPS (`hoc.agency`) sets `NEXT_PUBLIC_BASE_PATH=none`. */
 export const BASE_PATH = envBasePath();
 
-export const CLIENT_TELEGRAM_URL = `https://t.me/${process.env.NEXT_PUBLIC_TELEGRAM_BOT ?? "pro_design_perfect_bot"}`;
+/**
+ * Client Telegram bot, or null: the site shows no Telegram link until the handle is set with
+ * NEXT_PUBLIC_TELEGRAM_BOT at build time. The deploy workflow does not set it.
+ * TODO(HOC): confirm the correct Telegram handle. pro_design_perfect_bot was removed from the
+ * site, schema and llms files (4 Oct 2026 audit).
+ */
+const telegramBot = process.env.NEXT_PUBLIC_TELEGRAM_BOT?.trim();
+export const CLIENT_TELEGRAM_URL: string | null = telegramBot ? `https://t.me/${telegramBot}` : null;
 
 export const DASHBOARD_STAFF_URL =
   process.env.NEXT_PUBLIC_DASHBOARD_URL ?? "http://127.0.0.1:5173/dashboard";

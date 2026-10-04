@@ -1,4 +1,12 @@
+import { CLIENT_TELEGRAM_URL } from "@/lib/base-path";
 import type { LegalPage } from "@/lib/legal-api";
+
+const TELEGRAM_LIST_ITEM = /<li>(?:(?!<\/li>)[\s\S])*?t\.me\/(?:(?!<\/li>)[\s\S])*?<\/li>\s*/g;
+
+/** The stored policy lists the Telegram bot under contact; drop that line while no handle is set. */
+function legalHtml(html: string): string {
+  return CLIENT_TELEGRAM_URL ? html : html.replace(TELEGRAM_LIST_ITEM, "");
+}
 import { LangHeading } from "@/components/LangHeading";
 
 /** Policy text in the static HTML, both languages, no client fetch. */
@@ -27,7 +35,7 @@ export function LegalStatic({ page }: { page: LegalPage }) {
             return (
               <section key={`${section.id}-ar`} id={section.id} className="legal-doc-section">
                 {heading ? <h2>{heading}</h2> : null}
-                <div dangerouslySetInnerHTML={{ __html: section.html_ar }} />
+                <div dangerouslySetInnerHTML={{ __html: legalHtml(section.html_ar) }} />
               </section>
             );
           })}
@@ -39,7 +47,7 @@ export function LegalStatic({ page }: { page: LegalPage }) {
             return (
               <section key={`${section.id}-en`} className="legal-doc-section">
                 {heading ? <h2>{heading}</h2> : null}
-                <div dangerouslySetInnerHTML={{ __html: section.html_en }} />
+                <div dangerouslySetInnerHTML={{ __html: legalHtml(section.html_en) }} />
               </section>
             );
           })}
