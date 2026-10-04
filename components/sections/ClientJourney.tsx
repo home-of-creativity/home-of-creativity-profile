@@ -140,8 +140,8 @@ export function ClientJourney() {
                 <img
                   src={withBasePath(step.image)}
                   alt={t(step.imageAlt)}
-                  width={1920}
-                  height={1080}
+                  width={1672}
+                  height={941}
                   className="h-full w-full object-cover object-[center_42%]"
                   draggable={false}
                 />

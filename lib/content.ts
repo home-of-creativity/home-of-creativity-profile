@@ -551,8 +551,8 @@ export const clientJourney = {
       id: "start",
       image: "/photo/journey-launch.webp",
       imageAlt: {
-        en: "The HOC hummingbird mark above a single warm light",
-        ar: "علامة الطائر الطنان فوق ضوء دافئ واحد",
+        en: "Two people reviewing a storyboard together at the studio table",
+        ar: "شخصان يراجعان لوحة القصة معاً على طاولة الاستوديو",
       },
       title: { en: "Launch and agreement", ar: "الانطلاق والاتفاق" },
       body: {
@@ -564,8 +564,8 @@ export const clientJourney = {
       id: "build",
       image: "/photo/journey-build.webp",
       imageAlt: {
-        en: "The HOC hummingbird mark within a quiet gold lattice",
-        ar: "علامة الطائر الطنان داخل شبكة ذهبية هادئة",
+        en: "A camera operator filming a product shot in the studio",
+        ar: "مصوّر يتابع لقطة منتج داخل الاستوديو",
       },
       title: { en: "Approval and engineering the work", ar: "الاعتماد وهندسة العمل" },
       body: {
@@ -577,8 +577,8 @@ export const clientJourney = {
       id: "handoff",
       image: "/photo/journey-handoff.webp",
       imageAlt: {
-        en: "The HOC hummingbird mark in flight toward a dusk horizon",
-        ar: "علامة الطائر الطنان في طيران نحو أفق الغروب",
+        en: "The team watching the finished film together",
+        ar: "الفريق يشاهد العمل النهائي معاً",
       },
       title: { en: "Delivery and the start of the journey", ar: "التسليم وبداية الرحلة" },
       body: {
