@@ -5,6 +5,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { ArticleDetailStatic } from "@/components/sections/ArticleDetailStatic";
 import { fetchArticle, fetchArticles } from "@/lib/articles-api";
 import { articleSeoTitle } from "@/lib/article-seo";
+import { articleOgImage } from "@/lib/og-images";
 import { brandedTitle, brandedTitleEn, clampDescription, pageMetadata, pageSeo } from "@/lib/page-meta";
 import { articleJsonLd } from "@/lib/seo";
 import { OG_IMAGE_PATH } from "@/lib/site";
@@ -36,7 +37,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     description,
     path: `/articles/${article.slug}/`,
     type: "article",
-    image: { url: OG_IMAGE_PATH, width: 1920, height: 1080, alt: article.title_ar },
+    image: articleOgImage(article) ?? { url: OG_IMAGE_PATH, width: 1920, height: 1080, alt: article.title_ar },
   });
 }
 

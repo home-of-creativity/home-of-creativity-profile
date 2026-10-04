@@ -4,6 +4,7 @@ import { Footer, Nav } from "@/components/chrome";
 import { JsonLd } from "@/components/JsonLd";
 import { ServiceDetailPage } from "@/components/sections/ServiceDetailPage";
 import { relatedArticleLinks } from "@/lib/article-services-server";
+import { serviceOgImage } from "@/lib/og-images";
 import { pageMetadata } from "@/lib/page-meta";
 import { serviceDetailJsonLd } from "@/lib/seo";
 import { findServiceDetail, serviceDetails } from "@/lib/service-details";
@@ -27,7 +28,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     titleEn: detail.metaTitle.en,
     description: detail.metaDescription.ar,
     path: `/services/${detail.slug}/`,
-    image: { url: OG_IMAGE_PATH, width: 1920, height: 1080, alt: detail.title.ar },
+    image: serviceOgImage(detail.slug, detail.heading.ar) ?? { url: OG_IMAGE_PATH, width: 1920, height: 1080, alt: detail.title.ar },
   });
 }
 
