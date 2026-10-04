@@ -3,7 +3,12 @@ import { notFound } from "next/navigation";
 import { Footer, Nav } from "@/components/chrome";
 import { ProjectDetailView } from "@/components/sections/ProjectDetailView";
 import { publicApiUrl } from "@/lib/public-api";
-import { fetchPortfolioProject, fetchPortfolioProjects } from "@/lib/portfolio-api";
+import {
+  fetchPortfolioProject,
+  fetchPortfolioProjects,
+  type PortfolioProject,
+  type PortfolioRelatedProject,
+} from "@/lib/portfolio-api";
 import { projectJsonLd } from "@/lib/seo";
 import { brandedTitle, brandedTitleEn, clampDescription, pageMetadata, pageSeo } from "@/lib/page-meta";
 import { OG_IMAGE_PATH } from "@/lib/site";
@@ -29,6 +34,31 @@ export async function generateStaticParams() {
     .map((project) => ({ id: String(project.id) }));
 }
 
+const RELATED_FALLBACK = 4;
+
+/**
+ * Projects without related ones picked in the dashboard show other published projects:
+ * the same category first, then the newest. Every project page then links on, so no project
+ * is reachable from the sitemap alone.
+ */
+function fallbackRelated(project: PortfolioProject, all: PortfolioProject[]): PortfolioRelatedProject[] {
+  const others = all
+    .filter((item) => item.id !== project.id && (item.id < 1 || item.id > 6))
+    .sort((a, b) => b.id - a.id);
+  const sameCategory = others.filter((item) => item.category?.slug && item.category.slug === project.category?.slug);
+  const rest = others.filter((item) => !sameCategory.includes(item));
+  return [...sameCategory, ...rest].slice(0, RELATED_FALLBACK).map((item) => ({
+    id: item.id,
+    title_en: item.title_en,
+    title_ar: item.title_ar,
+    summary_en: item.summary_en,
+    summary_ar: item.summary_ar,
+    image_url: item.image_url,
+    category: item.category ?? null,
+    updated_at: item.updated_at,
+  }));
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -44,7 +74,9 @@ export async function generateMetadata({
     description: clampDescription(project.summary_ar ?? project.title_ar, pageSeo.home.description),
     path: `/projects/${id}/`,
     type: "article",
-    image: { url: OG_IMAGE_PATH, width: 1920, height: 1080, alt: project.title_ar || project.title_en },
+    image: project.image_url
+      ? { url: project.image_url, alt: project.title_ar || project.title_en }
+      : { url: OG_IMAGE_PATH, width: 1920, height: 1080, alt: project.title_ar || project.title_en },
   });
 }
 
@@ -54,9 +86,11 @@ export default async function ProjectDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const listed = (await fetchPortfolioProjects()).find((item) => String(item.id) === id) ?? null;
-  const project = (await fetchPortfolioProject(id)) ?? listed;
-  if (!project) notFound();
+  const all = await fetchPortfolioProjects();
+  const listed = all.find((item) => String(item.id) === id) ?? null;
+  const found = (await fetchPortfolioProject(id)) ?? listed;
+  if (!found) notFound();
+  const project = found.related?.length ? found : { ...found, related: fallbackRelated(found, all) };
 
   return (
     <>

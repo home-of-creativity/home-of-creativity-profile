@@ -3,15 +3,19 @@ import { aboutPage, articlesPage, brandIdentityPage, brandingPage, faq, officePa
 import { emails, officeMapUrl, offices, officesSentence, officeTelephones, type Office } from "./offices";
 import type { PortfolioProject } from "./portfolio-api";
 import type { PricingCategory } from "./pricing-catalog";
-import { SITE_ALTERNATE, SITE_NAME, SITE_NAME_AR, SITE_SHORT, SITE_URL, absoluteUrl, OG_IMAGE_PATH } from "./site";
+import { SITE_NAME, SITE_NAME_AR, SITE_SHORT, SITE_URL, absoluteUrl, OG_IMAGE_PATH } from "./site";
 import { officialSocialUrls } from "./social-embeds";
 
 const ORG_ID = `${SITE_URL}/#organization`;
 const WEBSITE_ID = `${SITE_URL}/#website`;
-const ALTERNATE_NAMES = [SITE_SHORT, SITE_NAME_AR, "بيت الابداع", SITE_ALTERNATE];
+const ALTERNATE_NAMES = [SITE_SHORT, SITE_NAME_AR, "بيت الابداع"];
 
-/** Factual one-liner shared by `description` and `disambiguatingDescription` (no affiliation claims). */
+/** Factual one-liner for `description` (no affiliation claims). */
 export const ORGANIZATION_DESCRIPTION = `Branding, marketing and creative agency with offices in ${officesSentence("en")}.`;
+
+/** Tells this agency apart from other businesses with a similar name. */
+const ORGANIZATION_DISAMBIGUATION =
+  "The Home of Creativity (HOC, بيت الإبداع) at hoc.agency: the branding and marketing agency based in Damascus and Riyadh, not another business or school with a similar name.";
 
 /** Markets named on the site: the three offices in `offices.ts`. */
 const AREA_SERVED = [
@@ -108,7 +112,7 @@ export function siteJsonLd() {
         name: SITE_NAME,
         alternateName: ALTERNATE_NAMES,
         description: ORGANIZATION_DESCRIPTION,
-        disambiguatingDescription: ORGANIZATION_DESCRIPTION,
+        disambiguatingDescription: ORGANIZATION_DISAMBIGUATION,
         knowsAbout: ["Branding", "Visual identity", "Marketing", "Social media management", "Websites and ecommerce"],
         url: `${SITE_URL}/`,
         logo: absoluteUrl("/hummingbird.svg"),

@@ -6,6 +6,8 @@
   --brand-orange: #e7993a;
   --brand-orange-soft: #f0b56a;
   --brand-orange-hot: #f35c27;
+  /* Orange for small text on cream or white: #e7993a there is 2.2:1, this is 4.9:1 (WCAG AA). */
+  --brand-orange-ink: #a35a12;
   --brand-teal: #2bb5a8;
   --brand-teal-deep: #1a7f78;
   --brand-charcoal: #121212;
@@ -134,6 +136,7 @@ html[data-theme="dark"] {
   --brand-muted: #c2b6d4;
   --brand-charcoal: #0c0814;
   --brand-line: color-mix(in srgb, var(--brand-ivory) 16%, transparent);
+  --brand-orange-ink: var(--brand-orange);
 }
 
 html[data-theme="dark"] body {
@@ -1438,7 +1441,8 @@ html[dir="rtl"] .client-marquee-track {
 }
 
 .fb-profile-follow {
-  background: #1877f2;
+  /* Facebook blue #1877f2 is 4.2:1 behind white text; this shade is 5.5:1. */
+  background: #1464d8;
 }
 
 .fb-profile-follow:hover,
@@ -1660,7 +1664,7 @@ html[dir="rtl"] .client-marquee-track {
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--brand-orange);
+  color: var(--brand-orange-ink);
 }
 
 html[lang="ar"] .article-card-date {

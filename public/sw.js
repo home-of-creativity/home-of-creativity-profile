@@ -1,9 +1,9 @@
-const CACHE = "hoc-design-v16";
+const CACHE = "hoc-design-v17";
 const BASE = new URL("./", self.registration.scope).pathname.replace(/\/$/, "");
+// Hero posters are not precached: the worker cannot see the viewport, so a phone would
+// also download the 263 KB desktop poster. CacheWorker.tsx caches the matching one.
 const PRECACHE = [
   `${BASE}/hummingbird.svg`,
-  `${BASE}/video/hero-bg-poster-mobile.webp`,
-  `${BASE}/video/hero-bg-poster.webp`,
 ];
 
 self.addEventListener("install", (event) => {

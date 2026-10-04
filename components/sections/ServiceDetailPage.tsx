@@ -11,6 +11,7 @@ import { whatsappHref } from "@/lib/whatsapp";
 import { Reveal, Stagger, StaggerItem } from "../motion";
 import { Shell } from "../ui";
 import { FaqList } from "./Faq";
+import { PageTitle } from "@/components/PageTitle";
 
 const identityLinks = [
   { href: "services/branding", en: "Branding services in Damascus and Riyadh", ar: "خدمات الهوية في دمشق والرياض" },
@@ -61,15 +62,15 @@ export function ServiceDetailPage({ slug, articles = [] }: { slug: string; artic
             </nav>
             <span aria-hidden className="mx-auto my-5 block h-px w-10 bg-[var(--brand-orange)]" />
             <div data-lang="ar" lang="ar" dir="rtl">
-              <h1 className="font-display m-0 text-[clamp(2.1rem,5.5vw,3.8rem)] font-semibold leading-[1.1]">
+              <PageTitle lang="ar" className="font-display m-0 text-[clamp(2.1rem,5.5vw,3.8rem)] font-semibold leading-[1.1]">
                 {detail.title.ar}
-              </h1>
+              </PageTitle>
               <p className="mt-5 text-[1.15rem] font-semibold text-[var(--brand-orange)]">{detail.tagline.ar}</p>
             </div>
             <div data-lang="en" lang="en" dir="ltr">
-              <h1 className="font-display m-0 text-[clamp(2.1rem,5.5vw,3.8rem)] font-semibold leading-[1.1]">
+              <PageTitle lang="en" className="font-display m-0 text-[clamp(2.1rem,5.5vw,3.8rem)] font-semibold leading-[1.1]">
                 {detail.title.en}
-              </h1>
+              </PageTitle>
               <p className="mt-5 text-[1.15rem] font-semibold text-[var(--brand-orange)]">{detail.tagline.en}</p>
             </div>
             <p className="mx-auto mt-6 max-w-2xl text-[1.05rem] leading-[1.85] text-white/78">{t(detail.definition)}</p>

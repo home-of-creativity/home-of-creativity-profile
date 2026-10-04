@@ -1,4 +1,5 @@
 import type { LegalPage } from "@/lib/legal-api";
+import { PageTitle } from "@/components/PageTitle";
 
 /** Policy text in the static HTML, both languages, no client fetch. */
 export function LegalStatic({ page }: { page: LegalPage }) {
@@ -6,18 +7,18 @@ export function LegalStatic({ page }: { page: LegalPage }) {
     <section id={page.slug} className="px-0 pb-20 pt-28 sm:pb-24">
       <div className="mx-auto w-[var(--content)]">
         <header className="mx-auto mb-10 max-w-2xl text-center">
-          <p className="text-[0.78rem] font-semibold tracking-[0.16em] text-[var(--brand-orange)] uppercase" data-lang="ar">
+          <p className="text-[0.78rem] font-semibold tracking-[0.16em] text-[var(--brand-orange-ink)] uppercase" data-lang="ar">
             قانوني
           </p>
-          <p className="text-[0.78rem] font-semibold tracking-[0.16em] text-[var(--brand-orange)] uppercase" data-lang="en">
+          <p className="text-[0.78rem] font-semibold tracking-[0.16em] text-[var(--brand-orange-ink)] uppercase" data-lang="en">
             Legal
           </p>
-          <h1 className="font-display mt-3 text-[2rem] font-semibold text-[var(--brand-ink)]" data-lang="ar">
+          <PageTitle lang="ar" tagged className="font-display mt-3 text-[2rem] font-semibold text-[var(--brand-ink)]">
             {page.title_ar}
-          </h1>
-          <h1 className="font-display mt-3 text-[2rem] font-semibold text-[var(--brand-ink)]" data-lang="en">
+          </PageTitle>
+          <PageTitle lang="en" tagged className="font-display mt-3 text-[2rem] font-semibold text-[var(--brand-ink)]">
             {page.title_en}
-          </h1>
+          </PageTitle>
         </header>
 
         <article className="legal-doc mx-auto max-w-2xl text-start" data-lang="ar" dir="rtl" lang="ar">

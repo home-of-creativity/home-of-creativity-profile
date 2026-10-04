@@ -206,7 +206,12 @@ export function whatsappDigits(id: "syr" | "ksa"): string {
   return phone.digits;
 }
 
-/** Map link: the Business Profile once HOC supplies it, else the existing named search. */
+/**
+ * Map link: the Business Profile once HOC supplies it, else a pin on the office coordinates,
+ * else the named search. A search URL is not a map of the place (schema.org `hasMap`).
+ */
 export function officeMapUrl(office: Office): string | null {
-  return office.businessProfileUrl ?? office.mapsSearchUrl;
+  if (office.businessProfileUrl) return office.businessProfileUrl;
+  if (office.geo) return `https://www.google.com/maps/place/${office.geo.latitude},${office.geo.longitude}`;
+  return office.mapsSearchUrl;
 }

@@ -239,7 +239,7 @@ export function Contact() {
               </h2>
               <p
                 className={cn(
-                  "mt-3 text-[1.05rem] font-semibold text-[var(--brand-orange)]",
+                  "mt-3 text-[1.05rem] font-semibold text-[var(--brand-orange-ink)]",
                   locale === "en" && "tracking-[0.18em] uppercase",
                 )}
               >

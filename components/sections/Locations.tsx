@@ -34,7 +34,7 @@ export function Locations() {
                 className="flex flex-col rounded-2xl border border-[var(--brand-ink)]/12 bg-white px-5 py-5 shadow-[0_10px_28px_rgb(10_6_24/0.06)]"
               >
                 {office.city ? (
-                  <p className="m-0 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-[var(--brand-orange)]">
+                  <p className="m-0 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-[var(--brand-orange-ink)]">
                     {t(office.country)}
                   </p>
                 ) : null}

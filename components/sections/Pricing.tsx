@@ -794,7 +794,7 @@ export function Pricing({ initialCategories }: { initialCategories?: PricingCate
                   <p className="m-0 font-display text-[clamp(1rem,3vw,1.35rem)] font-semibold text-[var(--brand-ivory)]">
                     {t(method.name)}
                   </p>
-                  <p className="mt-1 m-0 text-[0.72rem] text-white/40 sm:text-[0.82rem]" dir={locale === "ar" ? "ltr" : "rtl"}>
+                  <p className="mt-1 m-0 text-[0.72rem] text-white/60 sm:text-[0.82rem]" dir={locale === "ar" ? "ltr" : "rtl"}>
                     {locale === "ar" ? method.name.en : method.name.ar}
                   </p>
                 </div>

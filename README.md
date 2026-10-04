@@ -1,6 +1,6 @@
 # Home of Creativity — Company Profile
 
-Premium bilingual (Arabic / English) company profile for **Home of Creativity (Creativation Source)**.
+Premium bilingual (Arabic / English) company profile for **Home of Creativity (HOC)**.
 
 ## Live site
 

@@ -114,10 +114,13 @@ export const pageSeo = {
   },
 } satisfies Record<string, PageSeo>;
 
-/** `[title] | بيت الإبداع HOC`, dropping the suffix when it would pass 65 characters. */
+/**
+ * `[title] | بيت الإبداع HOC`, dropping the suffix when it would pass 65 characters. A longer
+ * title stays whole: a cut title with "…" reads as broken in results and in the tab.
+ */
 export function brandedTitle(title: string): string {
   const full = `${title} | ${TITLE_BRAND}`;
-  return full.length <= 65 ? full : title.length <= 65 ? title : `${title.slice(0, 64)}…`;
+  return full.length <= 65 ? full : title;
 }
 
 /** English counterpart of `brandedTitle`: `[title] | Home of Creativity`. */
@@ -147,7 +150,8 @@ export type MetaInput = {
   /** Site path with trailing slash, e.g. `/pricing/`. */
   path: string;
   type?: "website" | "article" | "profile";
-  image?: { url: string; width: number; height: number; alt: string };
+  /** Width and height when known; a CMS upload has none. */
+  image?: { url: string; width?: number; height?: number; alt: string };
   noindex?: boolean;
   /** Per-language URLs for hreflang, e.g. `{ ar: "/pricing/", en: "/en/pricing/" }`. */
   languages?: Record<string, string>;

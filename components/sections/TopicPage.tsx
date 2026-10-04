@@ -5,28 +5,38 @@ import { whatsappDigits } from "@/lib/offices";
 import { serviceDetailLabels } from "@/lib/service-details";
 import { whatsappHref } from "@/lib/whatsapp";
 import { FaqList } from "./Faq";
+import type { ServiceArticleLink } from "./ServiceDetailPage";
+import { PageTitle } from "@/components/PageTitle";
 
 /**
  * Bilingual category page. Both languages are in the static HTML;
  * `[data-lang]` shows the one that matches the visitor's locale.
  */
-export function TopicPage({ copy }: { copy: TopicPageCopy }) {
+export function TopicPage({ copy, articles = [] }: { copy: TopicPageCopy; articles?: ServiceArticleLink[] }) {
   return (
     <section id="topic" className="px-0 pb-20 pt-28 sm:pb-24">
       <div className="mx-auto w-[var(--content)]">
-        <TopicLocale copy={copy} lang="ar" />
-        <TopicLocale copy={copy} lang="en" />
+        <TopicLocale copy={copy} articles={articles} lang="ar" />
+        <TopicLocale copy={copy} articles={articles} lang="en" />
       </div>
     </section>
   );
 }
 
-function TopicLocale({ copy, lang }: { copy: TopicPageCopy; lang: "ar" | "en" }) {
+function TopicLocale({
+  copy,
+  articles,
+  lang,
+}: {
+  copy: TopicPageCopy;
+  articles: ServiceArticleLink[];
+  lang: "ar" | "en";
+}) {
   const dir = lang === "ar" ? "rtl" : "ltr";
 
   return (
     <div data-lang={lang} lang={lang} dir={dir}>
-      <nav aria-label={lang === "ar" ? "مسار التصفح" : "Breadcrumb"} className="mb-8 text-center text-[0.8rem] text-[var(--brand-ink)]/50">
+      <nav aria-label={lang === "ar" ? "مسار التصفح" : "Breadcrumb"} className="mb-8 text-center text-[0.8rem] text-[var(--brand-ink)]/70">
         <Link href={pagePath("/")} className="hover:text-[var(--brand-orange)]">
           {lang === "ar" ? "الرئيسية" : "Home"}
         </Link>
@@ -40,9 +50,9 @@ function TopicLocale({ copy, lang }: { copy: TopicPageCopy; lang: "ar" | "en" })
 
       <header className="mx-auto mb-10 max-w-2xl text-center">
         <span aria-hidden className="mx-auto mb-3 block h-px w-9 bg-[var(--brand-orange)]" />
-        <h1 className="font-display m-0 text-[clamp(2rem,5vw,3.6rem)] font-semibold leading-[1.05] text-[var(--brand-ink)]">
+        <PageTitle lang={lang} className="font-display m-0 text-[clamp(2rem,5vw,3.6rem)] font-semibold leading-[1.05] text-[var(--brand-ink)]">
           {copy.title[lang]}
-        </h1>
+        </PageTitle>
         <p className="mt-6 text-[1.05rem] leading-[1.75] text-[var(--brand-ink)]/80">{copy.lead[lang]}</p>
       </header>
 
@@ -83,6 +93,26 @@ function TopicLocale({ copy, lang }: { copy: TopicPageCopy; lang: "ar" | "en" })
             </a>
           ))}
         </p>
+
+        {articles.length ? (
+          <nav aria-label={serviceDetailLabels.articles[lang]}>
+            <h2 className="font-display m-0 text-[1.1rem] font-semibold text-[var(--brand-ink)]">
+              {serviceDetailLabels.articles[lang]}
+            </h2>
+            <ul className="mt-3 flex flex-wrap gap-3 p-0">
+              {articles.map((article) => (
+                <li key={article.slug} className="list-none">
+                  <Link
+                    href={pagePath(`articles/${article.slug}`)}
+                    className="text-[0.9rem] font-semibold text-[var(--brand-purple)] hover:text-[var(--brand-orange)]"
+                  >
+                    {lang === "ar" ? article.title_ar : article.title_en || article.title_ar}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ) : null}
 
         {copy.links.length ? (
           <nav aria-label={lang === "ar" ? "صفحات ذات صلة" : "Related pages"}>

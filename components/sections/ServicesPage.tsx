@@ -31,11 +31,11 @@ export function ServicesPage() {
             const label = locale === "ar" ? item.ar : item.en;
             const content = (
               <>
-                <span className="text-[1rem] font-semibold text-[var(--brand-ink)]">{label}</span>
+                <h2 className="m-0 text-[1rem] font-semibold text-[var(--brand-ink)]">{label}</h2>
                 {detail ? (
                   <>
                     <span className="mt-1 text-[0.86rem] leading-snug text-[var(--brand-ink)]/65">{t(detail.tagline)}</span>
-                    <span className="mt-2 text-[0.82rem] font-semibold text-[var(--brand-orange)]">
+                    <span className="mt-2 text-[0.82rem] font-semibold text-[var(--brand-orange-ink)]">
                       {t(servicesPage.viewPage)} →
                     </span>
                   </>

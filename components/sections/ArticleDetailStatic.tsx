@@ -1,9 +1,10 @@
 import Link from "next/link";
 import type { Article } from "@/lib/articles-api";
 import { pagePath } from "@/lib/base-path";
-import { servicesForArticle } from "@/lib/article-services";
+import { serviceLinksForArticle } from "@/lib/article-services";
 import { articlesPage } from "@/lib/content";
-import { findServiceDetail, serviceDetailLabels } from "@/lib/service-details";
+import { serviceDetailLabels } from "@/lib/service-details";
+import { PageTitle } from "@/components/PageTitle";
 
 function formatDate(value: string | null | undefined, locale: "en" | "ar") {
   if (!value) return "";
@@ -26,19 +27,30 @@ function withLiveProjectLinks(html: string): string {
   return html.replace(REMOVED_PROJECT_HREF, 'href="/#projects"');
 }
 
+/** The first image in a CMS body is the article's main picture (its LCP): load it at once. */
+function withEagerLeadImage(html: string): string {
+  return html.replace(/<img\b[^>]*>/i, (tag) =>
+    tag
+      .replace(/\s(?:loading|fetchpriority)\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, "")
+      .replace(/^<img\b/i, '<img loading="eager" fetchpriority="high"'),
+  );
+}
+
+function articleHtml(html: string): string {
+  return withEagerLeadImage(withLiveProjectLinks(html));
+}
+
 function RelatedServices({ slug, locale }: { slug: string; locale: "en" | "ar" }) {
-  const services = servicesForArticle(slug)
-    .map((serviceSlug) => findServiceDetail(serviceSlug))
-    .filter((detail) => detail !== undefined);
+  const services = serviceLinksForArticle(slug);
   if (services.length === 0) return null;
 
   return (
     <nav className="article-related mx-auto mt-10 max-w-3xl" aria-label={serviceDetailLabels.related[locale]}>
       <h2 className="article-related-title">{serviceDetailLabels.related[locale]}</h2>
       <ul>
-        {services.map((detail) => (
-          <li key={detail.slug}>
-            <Link href={pagePath(`services/${detail.slug}`)}>{detail.title[locale]}</Link>
+        {services.map((service) => (
+          <li key={service.slug}>
+            <Link href={pagePath(`services/${service.slug}`)}>{service.title[locale]}</Link>
           </li>
         ))}
       </ul>
@@ -65,12 +77,12 @@ export function ArticleDetailStatic({ article }: { article: Article }) {
           </Link>
           <header className="article-detail-head">
             {dateAr ? <time className="article-card-date">{dateAr}</time> : null}
-            <h1 className="article-detail-title">{article.title_ar}</h1>
+            <PageTitle lang="ar" className="article-detail-title">{article.title_ar}</PageTitle>
           </header>
           <article
             className="article-body mx-auto max-w-3xl"
             dir="rtl"
-            dangerouslySetInnerHTML={{ __html: withLiveProjectLinks(article.body_ar) }}
+            dangerouslySetInnerHTML={{ __html: articleHtml(article.body_ar) }}
           />
           <RelatedServices slug={article.slug} locale="ar" />
         </div>
@@ -81,12 +93,12 @@ export function ArticleDetailStatic({ article }: { article: Article }) {
           </Link>
           <header className="article-detail-head">
             {dateEn ? <time className="article-card-date">{dateEn}</time> : null}
-            <h1 className="article-detail-title">{article.title_en}</h1>
+            <PageTitle lang="en" className="article-detail-title">{article.title_en}</PageTitle>
           </header>
           <article
             className="article-body mx-auto max-w-3xl"
             dir="ltr"
-            dangerouslySetInnerHTML={{ __html: withLiveProjectLinks(article.body_en) }}
+            dangerouslySetInnerHTML={{ __html: articleHtml(article.body_en) }}
           />
           <RelatedServices slug={article.slug} locale="en" />
         </div>

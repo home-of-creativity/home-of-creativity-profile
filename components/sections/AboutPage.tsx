@@ -12,7 +12,7 @@ import { SectionHeading, Shell } from "../ui";
 function Fact({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="rounded-2xl border border-[var(--brand-ink)]/12 bg-white px-5 py-4 shadow-[0_10px_28px_rgb(10_6_24/0.06)]">
-      <h2 className="m-0 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-[var(--brand-orange)]">
+      <h2 className="m-0 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-[var(--brand-orange-ink)]">
         {label}
       </h2>
       <div className="mt-2 m-0 text-[0.95rem] text-[var(--brand-ink)]/80">{children}</div>

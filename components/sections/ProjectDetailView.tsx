@@ -193,13 +193,14 @@ export function ProjectDetailView({ project }: { project: PortfolioProject }) {
     let active = true;
     fetchPortfolioProject(project.id)
       .then((row) => {
-        if (active && row) setCurrent(row);
+        // Keep the build's fallback related projects when the dashboard picked none.
+        if (active && row) setCurrent(row.related?.length ? row : { ...row, related: project.related });
       })
       .catch(() => undefined);
     return () => {
       active = false;
     };
-  }, [project.id]);
+  }, [project.id, project.related]);
 
   const images = useMemo(() => allImages(current, locale), [current, locale]);
   const socialEntries = useMemo(

@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Article } from "@/lib/articles-api";
 import { pagePath } from "@/lib/base-path";
 import { articlesPage } from "@/lib/content";
+import { PageTitle } from "@/components/PageTitle";
 
 function excerpt(article: Article, locale: "ar" | "en") {
   const raw = locale === "ar" ? article.excerpt_ar : article.excerpt_en;
@@ -30,18 +31,18 @@ export function ArticlesIndexStatic({ articles }: { articles: Article[] }) {
     <section className="articles-page bg-[var(--brand-cream)] py-24 md:py-28">
       <div className="mx-auto w-[var(--content)]">
         <header className="mx-auto mb-12 max-w-2xl text-center md:mb-14">
-          <p className="text-[0.78rem] font-semibold tracking-[0.16em] text-[var(--brand-orange)] uppercase" data-lang="ar">
+          <p className="text-[0.78rem] font-semibold tracking-[0.16em] text-[var(--brand-orange-ink)] uppercase" data-lang="ar">
             {articlesPage.kicker.ar}
           </p>
-          <p className="text-[0.78rem] font-semibold tracking-[0.16em] text-[var(--brand-orange)] uppercase" data-lang="en">
+          <p className="text-[0.78rem] font-semibold tracking-[0.16em] text-[var(--brand-orange-ink)] uppercase" data-lang="en">
             {articlesPage.kicker.en}
           </p>
-          <h1 className="font-display mt-3 text-[2rem] font-semibold text-[var(--brand-ink)] md:text-[2.6rem]" data-lang="ar">
+          <PageTitle lang="ar" tagged className="font-display mt-3 text-[2rem] font-semibold text-[var(--brand-ink)] md:text-[2.6rem]">
             {articlesPage.title.ar}
-          </h1>
-          <h1 className="font-display mt-3 text-[2rem] font-semibold text-[var(--brand-ink)] md:text-[2.6rem]" data-lang="en">
+          </PageTitle>
+          <PageTitle lang="en" tagged className="font-display mt-3 text-[2rem] font-semibold text-[var(--brand-ink)] md:text-[2.6rem]">
             {articlesPage.title.en}
-          </h1>
+          </PageTitle>
           <p className="mt-5 text-[0.98rem] leading-[1.7] text-[var(--brand-ink)]/75" data-lang="ar">
             {articlesPage.lead.ar}
           </p>

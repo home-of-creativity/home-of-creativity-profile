@@ -3,8 +3,7 @@ import { notFound } from "next/navigation";
 import { Footer, Nav } from "@/components/chrome";
 import { JsonLd } from "@/components/JsonLd";
 import { ServiceDetailPage } from "@/components/sections/ServiceDetailPage";
-import { articlesForService } from "@/lib/article-services";
-import { fetchArticles } from "@/lib/articles-api";
+import { relatedArticleLinks } from "@/lib/article-services-server";
 import { pageMetadata } from "@/lib/page-meta";
 import { serviceDetailJsonLd } from "@/lib/seo";
 import { findServiceDetail, serviceDetails } from "@/lib/service-details";
@@ -35,11 +34,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 export default async function ServiceRoutePage({ params }: Params) {
   const { slug } = await params;
   if (!findServiceDetail(slug)) notFound();
-  const articles = articlesForService(slug, await fetchArticles()).map(({ slug: articleSlug, title_ar, title_en }) => ({
-    slug: articleSlug,
-    title_ar,
-    title_en,
-  }));
+  const articles = await relatedArticleLinks(slug);
 
   return (
     <>

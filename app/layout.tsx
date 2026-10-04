@@ -44,7 +44,6 @@ export const metadata: Metadata = {
     "Home of Creativity",
     "HOC",
     "hoc.agency",
-    "Creativation Source",
     "بيت الإبداع",
     "بيت الابداع",
     "وكالة هوية بصرية دمشق",
@@ -96,6 +95,7 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: `${BASE_PATH}/favicon.ico`, sizes: "any" },
+      { url: `${BASE_PATH}/icon-192.png`, type: "image/png", sizes: "192x192" },
       { url: `${BASE_PATH}/hummingbird.svg`, type: "image/svg+xml" },
     ],
     shortcut: `${BASE_PATH}/favicon.ico`,

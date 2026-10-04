@@ -3,7 +3,6 @@ export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://hoc.agency
 export const SITE_NAME = "Home of Creativity";
 export const SITE_NAME_AR = "بيت الإبداع";
 export const SITE_SHORT = "HOC";
-export const SITE_ALTERNATE = "Creativation Source";
 
 export const OG_IMAGE_PATH = "/photo/hero-section-background.webp";
 

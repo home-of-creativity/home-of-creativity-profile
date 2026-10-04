@@ -5,7 +5,6 @@ import { portfolioDriveUrl } from "./portfolio-drive-images";
 export const brand = {
   name: "Home of Creativity",
   of: "of",
-  secondary: "Creativation Source",
   mark: "S",
 };
 
