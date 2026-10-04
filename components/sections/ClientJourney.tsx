@@ -128,7 +128,7 @@ export function ClientJourney() {
                 panels.current[index] = node;
               }}
               dir={locale === "ar" ? "rtl" : "ltr"}
-              className="journey-nivx-slide relative h-[100dvh] w-screen shrink-0 overflow-hidden"
+              className="journey-nivx-slide relative h-[100dvh] shrink-0 overflow-hidden"
               aria-hidden={index !== 0}
             >
               <div
@@ -145,7 +145,7 @@ export function ClientJourney() {
                     width={1672}
                     height={941}
                     sizes="(max-width: 899px) 100vw, 100vw"
-                    loading="lazy"
+                    loading={step.image.includes(".gif") ? "eager" : "lazy"}
                     decoding="async"
                     className="h-full w-full object-cover object-[center_42%]"
                     draggable={false}

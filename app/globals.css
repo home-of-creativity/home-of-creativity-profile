@@ -1870,6 +1870,13 @@ html[data-theme="dark"] .article-related a {
 
 .journey-nivx-pin {
   overflow: hidden;
+  container-type: inline-size;
+}
+
+/* Match the pin width, not 100vw, so the sideways track lands on each photo
+   with no gap and no sliver of the previous stage. */
+.journey-nivx-slide {
+  width: 100cqw;
 }
 
 .journey-slide-veil {
