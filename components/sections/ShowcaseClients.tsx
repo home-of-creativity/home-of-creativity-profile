@@ -14,6 +14,12 @@ import { liveWebsiteUrl } from "@/lib/live-url";
 import { SectionHeading, Shell } from "../ui";
 
 /** Alt text in one pattern, with the client's own spelling from the CMS. */
+/**
+ * Alt text from the dashboard client name. Client 1 was "Abo shakir"; backend migration
+ * 2026_10_04_120000 renames it to «أبو شاكر».
+ * TODO(HOC): confirm the client's one official name. The site also uses "Abo Shaker",
+ * "Abu Shaker" and the domain aboshaker.sa; its sister brand is «جدو شاكر».
+ */
 export function clientLogoAlt(name: string, locale: "ar" | "en") {
   return locale === "ar" ? `شعار ${name}` : `${name} logo`;
 }
