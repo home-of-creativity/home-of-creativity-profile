@@ -577,8 +577,8 @@ export const clientJourney = {
     },
     {
       id: "handoff",
-      image: "/photo/journey-handoff.gif?v=20261004d",
-      imageMobile: "/photo/journey-handoff.gif?v=20261004d",
+      image: "/photo/journey-handoff.gif?v=20261004e",
+      imageMobile: "/photo/journey-handoff.gif?v=20261004e",
       imageAlt: {
         en: "The team watching the finished film together",
         ar: "الفريق يشاهد العمل النهائي معاً",
