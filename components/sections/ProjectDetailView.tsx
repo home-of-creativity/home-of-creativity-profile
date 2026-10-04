@@ -10,6 +10,7 @@ import { fetchPortfolioProject, versionedMediaUrl, type PortfolioProject, type P
 import { useLanguage } from "@/lib/i18n";
 import { cn } from "@/lib/cn";
 import { liveWebsiteUrl } from "@/lib/live-url";
+import { SocialBrandIcon } from "../SocialBrandIcon";
 import { Shell } from "../ui";
 
 const SOCIAL_ORDER = ["instagram", "facebook", "linkedin", "x", "tiktok", "youtube"] as const;
@@ -260,9 +261,10 @@ export function ProjectDetailView({ project }: { project: PortfolioProject }) {
                   href={url}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="project-detail-link"
+                  className="project-detail-link gap-2"
                 >
-                  {t(projectDetail.social[platform])}
+                  <SocialBrandIcon platform={platform} className="h-4 w-4 shrink-0" />
+                  <span>{t(projectDetail.social[platform])}</span>
                 </a>
               ))}
             </div>
