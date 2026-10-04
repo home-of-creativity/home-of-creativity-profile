@@ -7,6 +7,9 @@ import { SITE_NAME, SITE_NAME_AR, SITE_SHORT, SITE_URL, absoluteUrl, OG_IMAGE_PA
 import { officialSocialUrls } from "./social-embeds";
 
 const ORG_ID = `${SITE_URL}/#organization`;
+
+/** Article byline and schema author until HOC names a person. */
+export const ARTICLE_AUTHOR = { ar: SITE_NAME_AR, en: SITE_NAME } as const;
 const WEBSITE_ID = `${SITE_URL}/#website`;
 const ALTERNATE_NAMES = [SITE_SHORT, SITE_NAME_AR, "بيت الابداع"];
 
@@ -490,7 +493,8 @@ export function articleJsonLd(article: Article, description: string) {
         ...(modified ? { dateModified: modified } : {}),
         inLanguage: "ar",
         isPartOf: { "@id": WEBSITE_ID },
-        author: { "@id": ORG_ID },
+        // TODO(HOC): a named person per article once supplied; the byline on the page matches this.
+        author: { "@type": "Organization", "@id": ORG_ID, name: ARTICLE_AUTHOR.ar, alternateName: ARTICLE_AUTHOR.en, url: `${SITE_URL}/` },
         publisher: { "@id": ORG_ID },
       },
       breadcrumb(url, [

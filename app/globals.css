@@ -1667,6 +1667,12 @@ html[dir="rtl"] .client-marquee-track {
   color: var(--brand-orange-ink);
 }
 
+.article-byline {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+  color: color-mix(in srgb, var(--brand-ink) 72%, transparent);
+}
+
 html[lang="ar"] .article-card-date {
   letter-spacing: normal;
   text-transform: none;

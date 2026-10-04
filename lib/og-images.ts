@@ -28,6 +28,9 @@ const SERVICE_COVERS: Record<string, string> = {
   "financial-analysis": "finance",
 };
 
+// TODO(HOC): photos of the Damascus and Riyadh offices for /locations/ og:image; until then
+// those pages use the site default.
+
 export function serviceOgImage(slug: string, alt: string): OgImage | undefined {
   const cover = SERVICE_COVERS[slug];
   return cover ? { url: `/og/service-${cover}.jpg`, width: OG_WIDTH, height: OG_HEIGHT, alt } : undefined;

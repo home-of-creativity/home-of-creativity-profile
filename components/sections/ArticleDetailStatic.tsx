@@ -3,6 +3,7 @@ import type { Article } from "@/lib/articles-api";
 import { pagePath } from "@/lib/base-path";
 import { serviceLinksForArticle } from "@/lib/article-services";
 import { articlesPage } from "@/lib/content";
+import { ARTICLE_AUTHOR } from "@/lib/seo";
 import { serviceDetailLabels } from "@/lib/service-details";
 import { LangHeading } from "@/components/LangHeading";
 
@@ -78,6 +79,7 @@ export function ArticleDetailStatic({ article }: { article: Article }) {
           <header className="article-detail-head">
             {dateAr ? <time className="article-card-date">{dateAr}</time> : null}
             <LangHeading lang="ar" className="article-detail-title">{article.title_ar}</LangHeading>
+            <p className="article-byline">{`بقلم: ${ARTICLE_AUTHOR.ar}`}</p>
           </header>
           <article
             className="article-body mx-auto max-w-3xl"
@@ -94,6 +96,7 @@ export function ArticleDetailStatic({ article }: { article: Article }) {
           <header className="article-detail-head">
             {dateEn ? <time className="article-card-date">{dateEn}</time> : null}
             <LangHeading lang="en" className="article-detail-title">{article.title_en}</LangHeading>
+            <p className="article-byline">{`By ${ARTICLE_AUTHOR.en}`}</p>
           </header>
           <article
             className="article-body mx-auto max-w-3xl"
