@@ -30,3 +30,6 @@ npm-debug.log*
 /playwright-report/
 /test-results/
 /blob-report/
+
+# client logos converted by scripts/prebuild.mjs
+/public/generated/

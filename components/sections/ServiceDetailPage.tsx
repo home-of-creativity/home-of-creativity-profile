@@ -23,7 +23,10 @@ const ctaNumbers = [
   { id: "ksa" as const, label: labels.ctaSaudi },
 ];
 
-export function ServiceDetailPage({ slug }: { slug: string }) {
+export type ServiceArticleLink = { slug: string; title_ar: string; title_en: string };
+
+/** `articles` are the CMS articles that point at this service (see lib/article-services.ts). */
+export function ServiceDetailPage({ slug, articles = [] }: { slug: string; articles?: ServiceArticleLink[] }) {
   const { t, locale } = useLanguage();
   const detail = findServiceDetail(slug);
 
@@ -148,6 +151,24 @@ export function ServiceDetailPage({ slug }: { slug: string }) {
               }))}
             />
           </Reveal>
+
+          {articles.length > 0 ? (
+            <Reveal className="mx-auto mt-14 max-w-4xl">
+              <h2 className="font-display m-0 text-center text-[1.3rem] font-semibold">{t(labels.articles)}</h2>
+              <ul className="mt-6 grid gap-3 p-0 sm:grid-cols-2">
+                {articles.map((article) => (
+                  <li key={article.slug} className="list-none">
+                    <Link
+                      href={pagePath(`articles/${article.slug}`)}
+                      className="flex h-full items-center rounded-2xl border border-[var(--brand-ink)]/12 bg-white px-5 py-4 text-[1rem] font-semibold transition-transform hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
+                    >
+                      {locale === "ar" ? article.title_ar : article.title_en || article.title_ar}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+          ) : null}
 
           <Reveal className="mx-auto mt-14 max-w-4xl">
             <h2 className="font-display m-0 text-center text-[1.3rem] font-semibold">{t(labels.related)}</h2>

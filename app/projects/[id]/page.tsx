@@ -5,7 +5,8 @@ import { ProjectDetailView } from "@/components/sections/ProjectDetailView";
 import { publicApiUrl } from "@/lib/public-api";
 import { fetchPortfolioProject, fetchPortfolioProjects } from "@/lib/portfolio-api";
 import { projectJsonLd } from "@/lib/seo";
-import { OG_IMAGE_PATH, SITE_URL, pageDescription, pageTitle } from "@/lib/site";
+import { brandedTitle, brandedTitleEn, clampDescription, pageMetadata, pageSeo } from "@/lib/page-meta";
+import { OG_IMAGE_PATH } from "@/lib/site";
 
 /**
  * Demo/static deploys (no real backend configured) intentionally get zero
@@ -37,24 +38,14 @@ export async function generateMetadata({
   const project = await fetchPortfolioProject(id);
   if (!project) return {};
 
-  const title = pageTitle(project.title_en, project.title_ar);
-  const description = pageDescription(
-    project.summary_en ?? project.title_en,
-    project.summary_ar ?? project.title_ar,
-  );
-  const url = `/projects/${id}/`;
-
-  return {
-    title: { absolute: title },
-    description,
-    alternates: { canonical: url },
-    openGraph: {
-      title,
-      description,
-      url,
-      images: [{ url: `${SITE_URL}${OG_IMAGE_PATH}`, width: 1920, height: 1080, alt: title }],
-    },
-  };
+  return pageMetadata({
+    title: brandedTitle(project.title_ar || project.title_en),
+    titleEn: project.title_en ? brandedTitleEn(project.title_en) : undefined,
+    description: clampDescription(project.summary_ar ?? project.title_ar, pageSeo.home.description),
+    path: `/projects/${id}/`,
+    type: "article",
+    image: { url: OG_IMAGE_PATH, width: 1920, height: 1080, alt: project.title_ar || project.title_en },
+  });
 }
 
 export default async function ProjectDetailPage({

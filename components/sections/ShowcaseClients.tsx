@@ -5,6 +5,7 @@ import { showcaseClients as copy } from "@/lib/content";
 import {
   clientLogoSrc,
   fetchShowcaseClients,
+  keepBuildLogos,
   type ShowcaseClient,
 } from "@/lib/portfolio-api";
 import { useLanguage } from "@/lib/i18n";
@@ -162,7 +163,7 @@ export function ShowcaseClients({ initialClients }: { initialClients?: ShowcaseC
     fetchShowcaseClients()
       .then((items) => {
         if (!active || items.length === 0) return;
-        setClients(items);
+        setClients(keepBuildLogos(items, initialClients));
       })
       .catch(() => undefined)
       .finally(() => {
@@ -172,7 +173,7 @@ export function ShowcaseClients({ initialClients }: { initialClients?: ShowcaseC
     return () => {
       active = false;
     };
-  }, []);
+  }, [initialClients]);
 
   return (
     <section

@@ -160,7 +160,11 @@ export function Projects({ initialProjects }: { initialProjects?: PortfolioProje
     let active = true;
     fetchPortfolioProjects()
       .then((rows) => {
-        if (active) setItems(rows.filter((project) => project.id < 1 || project.id > 6));
+        if (!active) return;
+        // Only projects with an exported /projects/{id}/ page. A project published after the
+        // build has no page yet (404) until the scheduled rebuild picks it up.
+        const built = initialProjects ? new Set(initialProjects.map((project) => project.id)) : null;
+        setItems(rows.filter((project) => (built ? built.has(project.id) : project.id < 1 || project.id > 6)));
       })
       .catch(() => {
         if (active && initialProjects === undefined) setItems([]);

@@ -21,7 +21,7 @@ function pricingDescription(categories: PricingCategory[]): string {
 
 export async function generateMetadata(): Promise<Metadata> {
   const categories = await fetchPricingCategories();
-  return pageMetadata({ title: pageSeo.pricing.title, description: pricingDescription(categories), path: "/pricing/" });
+  return pageMetadata({ title: pageSeo.pricing.title, titleEn: pageSeo.pricing.titleEn, description: pricingDescription(categories), path: "/pricing/" });
 }
 
 export default async function PricingPage() {

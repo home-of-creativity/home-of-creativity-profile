@@ -22,6 +22,19 @@ export function versionedMediaUrl(url: string | null | undefined, updatedAt?: st
   return `${url}${join}v=${version}`;
 }
 
+/**
+ * The browser re-reads the client list after load. Keep the build's optimized 240px WebP for
+ * every logo that has not changed since the build; only a re-uploaded logo uses the CMS file.
+ */
+export function keepBuildLogos(live: ShowcaseClient[], build: ShowcaseClient[] | undefined): ShowcaseClient[] {
+  if (!build?.length) return live;
+  const built = new Map(build.map((client) => [client.id, client]));
+  return live.map((client) => {
+    const prior = built.get(client.id);
+    return prior && prior.updated_at === client.updated_at ? { ...client, logo_url: prior.logo_url } : client;
+  });
+}
+
 export function clientLogoSrc(client: ShowcaseClient): string | null {
   return versionedMediaUrl(client.logo_url, client.updated_at);
 }

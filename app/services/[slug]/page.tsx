@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { Footer, Nav } from "@/components/chrome";
 import { JsonLd } from "@/components/JsonLd";
 import { ServiceDetailPage } from "@/components/sections/ServiceDetailPage";
+import { articlesForService } from "@/lib/article-services";
+import { fetchArticles } from "@/lib/articles-api";
 import { pageMetadata } from "@/lib/page-meta";
 import { serviceDetailJsonLd } from "@/lib/seo";
 import { findServiceDetail, serviceDetails } from "@/lib/service-details";
@@ -23,6 +25,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
   return pageMetadata({
     title: detail.metaTitle.ar,
+    titleEn: detail.metaTitle.en,
     description: detail.metaDescription.ar,
     path: `/services/${detail.slug}/`,
     image: { url: OG_IMAGE_PATH, width: 1920, height: 1080, alt: detail.title.ar },
@@ -32,13 +35,18 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 export default async function ServiceRoutePage({ params }: Params) {
   const { slug } = await params;
   if (!findServiceDetail(slug)) notFound();
+  const articles = articlesForService(slug, await fetchArticles()).map(({ slug: articleSlug, title_ar, title_en }) => ({
+    slug: articleSlug,
+    title_ar,
+    title_en,
+  }));
 
   return (
     <>
       <JsonLd data={serviceDetailJsonLd(slug)} />
       <Nav />
       <main id="top">
-        <ServiceDetailPage slug={slug} />
+        <ServiceDetailPage slug={slug} articles={articles} />
       </main>
       <Footer />
     </>

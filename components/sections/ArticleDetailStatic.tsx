@@ -1,7 +1,9 @@
 import Link from "next/link";
 import type { Article } from "@/lib/articles-api";
 import { pagePath } from "@/lib/base-path";
+import { servicesForArticle } from "@/lib/article-services";
 import { articlesPage } from "@/lib/content";
+import { findServiceDetail, serviceDetailLabels } from "@/lib/service-details";
 
 function formatDate(value: string | null | undefined, locale: "en" | "ar") {
   if (!value) return "";
@@ -12,6 +14,36 @@ function formatDate(value: string | null | undefined, locale: "en" | "ar") {
     month: "long",
     year: "numeric",
   }).format(date);
+}
+
+/**
+ * Projects 1–6 were removed (the server answers 410), but older article bodies in the CMS
+ * still link to them. Point those links at the live projects section instead.
+ */
+const REMOVED_PROJECT_HREF = /href="(?:https?:\/\/(?:www\.)?hoc\.agency)?\/projects\/[1-6]\/?"/g;
+
+function withLiveProjectLinks(html: string): string {
+  return html.replace(REMOVED_PROJECT_HREF, 'href="/#projects"');
+}
+
+function RelatedServices({ slug, locale }: { slug: string; locale: "en" | "ar" }) {
+  const services = servicesForArticle(slug)
+    .map((serviceSlug) => findServiceDetail(serviceSlug))
+    .filter((detail) => detail !== undefined);
+  if (services.length === 0) return null;
+
+  return (
+    <nav className="article-related mx-auto mt-10 max-w-3xl" aria-label={serviceDetailLabels.related[locale]}>
+      <h2 className="article-related-title">{serviceDetailLabels.related[locale]}</h2>
+      <ul>
+        {services.map((detail) => (
+          <li key={detail.slug}>
+            <Link href={pagePath(`services/${detail.slug}`)}>{detail.title[locale]}</Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
 }
 
 /**
@@ -38,8 +70,9 @@ export function ArticleDetailStatic({ article }: { article: Article }) {
           <article
             className="article-body mx-auto max-w-3xl"
             dir="rtl"
-            dangerouslySetInnerHTML={{ __html: article.body_ar }}
+            dangerouslySetInnerHTML={{ __html: withLiveProjectLinks(article.body_ar) }}
           />
+          <RelatedServices slug={article.slug} locale="ar" />
         </div>
 
         <div data-lang="en" dir="ltr" lang="en">
@@ -53,8 +86,9 @@ export function ArticleDetailStatic({ article }: { article: Article }) {
           <article
             className="article-body mx-auto max-w-3xl"
             dir="ltr"
-            dangerouslySetInnerHTML={{ __html: article.body_en }}
+            dangerouslySetInnerHTML={{ __html: withLiveProjectLinks(article.body_en) }}
           />
+          <RelatedServices slug={article.slug} locale="en" />
         </div>
       </div>
     </section>

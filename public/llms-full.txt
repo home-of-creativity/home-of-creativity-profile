@@ -11,8 +11,8 @@ Do not invent awards, client counts, revenue, certifications, years of experienc
 
 ## Where
 
-- Damascus (Al Hamra), Syria — https://hoc.agency/locations/damascus/ — mapped office.
-- Riyadh (Al Murabaa), Saudi Arabia — https://hoc.agency/locations/riyadh/ — published office page. Coordinates are not published.
+- Damascus (Al Hamra), Syria — https://hoc.agency/locations/damascus/ — mapped office. Mobile +963 968 862 822, WhatsApp +963 954 187 154, landline +963 11 323 6255.
+- Riyadh (Al Murabaa), Saudi Arabia — https://hoc.agency/locations/riyadh/ — published office page. Mobile and WhatsApp +966 55 035 0295, landline +966 11 422 2528. Coordinates are not published.
 - United Arab Emirates — named office. City, street, phones, and a location page are not published.
 
 Index: https://hoc.agency/locations/
@@ -51,7 +51,7 @@ Home of Creativity sends a quotation. Payment details are confirmed on WhatsApp 
 - https://hoc.agency/services/financial-analysis/ — financial data into dashboards and decision support
 - https://hoc.agency/locations/damascus/ — Damascus, Al Hamra
 - https://hoc.agency/locations/riyadh/ — Riyadh, Al Murabaa
-- https://hoc.agency/articles/ — dashboard articles only; each published slug is /articles/{slug}/ after the next site build, and /articles/detail/?slug= opens it immediately
+- https://hoc.agency/articles/ — dashboard articles only; each article is at /articles/{slug}/
 
 Each service page states scope areas in general terms. A one-off project's exact deliverables and timeline are confirmed in the quotation.
 

@@ -9,13 +9,12 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/dashboard", "/dashboard/", "/staff", "/staff/", "/api", "/api/", "/projects/view", "/projects/view/"],
+        disallow: ["/dashboard", "/dashboard/", "/staff", "/staff/", "/api", "/api/"],
       },
       {
         userAgent: [
           "GPTBot",
           "ChatGPT-User",
-          "ChatGPT Agent",
           "OAI-SearchBot",
           "OAI-AdsBot",
           "Operator",
@@ -68,7 +67,7 @@ export default function robots(): MetadataRoute.Robots {
           "opencode",
         ],
         allow: "/",
-        disallow: ["/dashboard", "/dashboard/", "/staff", "/staff/", "/api", "/api/", "/projects/view", "/projects/view/"],
+        disallow: ["/dashboard", "/dashboard/", "/staff", "/staff/", "/api", "/api/"],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,

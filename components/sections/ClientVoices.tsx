@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { clientVoices } from "@/lib/content";
 import { cn } from "@/lib/cn";
 import { useLanguage } from "@/lib/i18n";
-import { clientLogoSrc, fetchShowcaseClients, type ShowcaseClient } from "@/lib/portfolio-api";
+import { clientLogoSrc, fetchShowcaseClients, keepBuildLogos, type ShowcaseClient } from "@/lib/portfolio-api";
 import { Reveal, Stagger, StaggerItem } from "../motion";
 import { SectionHeading, Shell } from "../ui";
 import { clientLogoAlt } from "./ShowcaseClients";
@@ -36,13 +36,13 @@ export function ClientVoices({ initialClients }: { initialClients?: ShowcaseClie
     let active = true;
     fetchShowcaseClients()
       .then((rows) => {
-        if (active) setClients(rows.filter((client) => Boolean(client.logo_url)));
+        if (active) setClients(keepBuildLogos(rows, initialClients).filter((client) => Boolean(client.logo_url)));
       })
       .catch(() => undefined);
     return () => {
       active = false;
     };
-  }, []);
+  }, [initialClients]);
 
   const quotes = useMemo(
     () =>

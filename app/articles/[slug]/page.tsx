@@ -4,7 +4,7 @@ import { Footer, Nav } from "@/components/chrome";
 import { JsonLd } from "@/components/JsonLd";
 import { ArticleDetailStatic } from "@/components/sections/ArticleDetailStatic";
 import { fetchArticle, fetchArticles } from "@/lib/articles-api";
-import { brandedTitle, clampDescription, pageMetadata, pageSeo } from "@/lib/page-meta";
+import { brandedTitle, brandedTitleEn, clampDescription, pageMetadata, pageSeo } from "@/lib/page-meta";
 import { articleJsonLd } from "@/lib/seo";
 import { OG_IMAGE_PATH } from "@/lib/site";
 
@@ -31,6 +31,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
   return pageMetadata({
     title: brandedTitle(article.title_ar),
+    titleEn: article.title_en ? brandedTitleEn(article.title_en) : undefined,
     description,
     path: `/articles/${article.slug}/`,
     type: "article",

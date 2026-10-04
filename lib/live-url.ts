@@ -1,5 +1,8 @@
-/** Drop links that no longer resolve. aboshaker.sa returns Cloudflare 1014. */
-const DEAD_HOSTS = new Set(["aboshaker.sa"]);
+/**
+ * Drop links that no longer resolve. aboshaker.sa returns Cloudflare 1014; baytlawha.com has a
+ * lame DNS delegation (SERVFAIL since October 2026).
+ */
+const DEAD_HOSTS = new Set(["aboshaker.sa", "baytlawha.com"]);
 
 export function liveWebsiteUrl(url: string | null | undefined): string | null {
   const value = url?.trim();

@@ -59,8 +59,8 @@ export const about = {
   title: { en: "About us", ar: "من نحن" },
   readMore: { en: "More about Home of Creativity", ar: "المزيد عن بيت الإبداع" },
   body: {
-    en: "Behind every distinctive brand is an ally who refuses the superficial. Some shout in the market to be heard; others arrive and everyone listens. At Home of Creativity (HOC), we build the second kind. Our aim is not to sell you images to post or view-counts without value. We take your brand out of the crowd, distinguish it by what already sets it apart, and strengthen your commercial identity with advanced marketing intelligence. From our office in Damascus (Al Hamra), we came to be part of your entity — together we turn the language of numbers and facts into a distinctive reality. Our mission is not to find your brand a seat among competitors, but to build it a distinctive entity that becomes the reference that sets the rules.",
-    ar: "وراء كل علامة تجارية مُميزة، حليف لا يقبل بالسطحية. هناك من يصرخ في السوق ليُسمع، وهناك من يحضُر فيُنصت له الجميع.. في بيت الإبداع HOC، نتقن صناعة النوع الثاني. ليس هدفنا أن نبيعكم صوراً تُنشر أو أرقام مشاهدات بلا فائدة، نأخذ علامتكم من زحام السوق، نُميزها بما تمتاز به، ونعزز هويتكم التجارية بذكاء تسويقي مُتطور. من مكتبنا في دمشق (الحمراء)، أتينا لنكون جزءاً من كيانكم، لنحوّل معاً لغة الأرقام والحقائق إلى واقع مميز. مهمتنا أن لا نبحث لعلامتك عن مقعد بين المنافسين، بل نبني لها كياناً مميزاً يجعلها المرجع الذي يُملي قواعد اللعبة.",
+    en: "Behind every distinctive brand is an ally who refuses the superficial. Some shout in the market to be heard; others arrive and everyone listens. At Home of Creativity (HOC), we build the second kind. Our aim is not to sell you images to post or view-counts without value. We take your brand out of the crowd, distinguish it by what already sets it apart, and strengthen your commercial identity with advanced marketing intelligence. From our offices in Damascus (Al Hamra), Riyadh (Al Murabba) and the UAE, we came to be part of your entity — together we turn the language of numbers and facts into a distinctive reality. Our mission is not to find your brand a seat among competitors, but to build it a distinctive entity that becomes the reference that sets the rules.",
+    ar: "وراء كل علامة تجارية مُميزة، حليف لا يقبل بالسطحية. هناك من يصرخ في السوق ليُسمع، وهناك من يحضُر فيُنصت له الجميع.. في بيت الإبداع HOC، نتقن صناعة النوع الثاني. ليس هدفنا أن نبيعكم صوراً تُنشر أو أرقام مشاهدات بلا فائدة، نأخذ علامتكم من زحام السوق، نُميزها بما تمتاز به، ونعزز هويتكم التجارية بذكاء تسويقي مُتطور. من مكاتبنا في دمشق (الحمراء) والرياض (المربّع) والإمارات، أتينا لنكون جزءاً من كيانكم، لنحوّل معاً لغة الأرقام والحقائق إلى واقع مميز. مهمتنا أن لا نبحث لعلامتك عن مقعد بين المنافسين، بل نبني لها كياناً مميزاً يجعلها المرجع الذي يُملي قواعد اللعبة.",
   },
   imageAlt: {
     en: "A lone figure at the far end of a vast, geometrically lit hall",
@@ -535,8 +535,8 @@ export const clientStory = {
     ar: "شراكة تدوم.",
   },
   body: {
-    en: "Abu Shaker and Jaddu Shaker are two of the voices that stay with Home of Creativity. Their notes sit on the homepage; this page keeps that relationship in view — not as a campaign, but as a partnership that holds.",
-    ar: "أبو شاكر وجدو شاكر صوتان يبقيان مع بيت الإبداع. كلماتهما على الصفحة الرئيسية، وهذه الصفحة تُبقي تلك العلاقة ظاهرة: ليست حملة عابرة، بل شراكة تصمد.",
+    en: "Abu Shaker and Jaddu Shaker are two of the voices that stay with Home of Creativity. This page keeps that relationship in view — not as a campaign, but as a partnership that holds.",
+    ar: "أبو شاكر وجدو شاكر صوتان يبقيان مع بيت الإبداع، وهذه الصفحة تُبقي علاقتهما ظاهرة: ليست حملة عابرة، بل شراكة تصمد.",
   },
 };
 
@@ -678,7 +678,6 @@ export const articlesPage = {
 };
 
 export const projectDetail = {
-  loading: { en: "Loading…", ar: "جارٍ التحميل…" },
   back: { en: "Back to projects", ar: "العودة للمشاريع" },
   visitWebsite: { en: "Visit website", ar: "زيارة الموقع" },
   gallery: { en: "Gallery", ar: "معرض الصور" },
@@ -686,7 +685,6 @@ export const projectDetail = {
   previous: { en: "Previous", ar: "السابق" },
   next: { en: "Next", ar: "التالي" },
   related: { en: "Related projects", ar: "مشاريع مرتبطة" },
-  notFound: { en: "Project not found", ar: "المشروع غير موجود" },
   social: {
     instagram: { en: "Instagram", ar: "إنستغرام" },
     facebook: { en: "Facebook", ar: "فيسبوك" },

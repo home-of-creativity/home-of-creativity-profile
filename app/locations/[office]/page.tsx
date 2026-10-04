@@ -4,7 +4,7 @@ import { Footer, Nav } from "@/components/chrome";
 import { JsonLd } from "@/components/JsonLd";
 import { OfficePlace } from "@/components/sections/OfficePlace";
 import { publishedOffices } from "@/lib/offices";
-import { pageMetadata, pageSeo } from "@/lib/page-meta";
+import { TITLE_EN_META, pageMetadata, pageSeo } from "@/lib/page-meta";
 import { officePageJsonLd } from "@/lib/seo";
 
 export const dynamicParams = false;
@@ -38,6 +38,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     ...(office.geo && office.address
       ? {
           other: {
+            [TITLE_EN_META]: seo.titleEn,
             "geo.region": office.countryCode,
             "geo.placename": office.address.en,
             "geo.position": `${office.geo.latitude};${office.geo.longitude}`,

@@ -27,6 +27,7 @@ export const serviceDetailLabels = {
   process: { en: "How it works", ar: "طريقة العمل" },
   faq: { en: "FAQ", ar: "أسئلة شائعة" },
   related: { en: "Related services", ar: "خدمات ذات صلة" },
+  articles: { en: "Related articles", ar: "مقالات ذات صلة" },
   allServices: { en: "All services", ar: "كل الخدمات" },
   cta: { en: "Start on WhatsApp", ar: "ابدأ عبر واتساب" },
   ctaSyria: { en: "WhatsApp Syria", ar: "واتساب سوريا" },

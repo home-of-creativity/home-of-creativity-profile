@@ -12,7 +12,6 @@ import {
   HERO_POSTER_DESKTOP,
   HERO_POSTER_MOBILE,
   HERO_VIDEO_DESKTOP,
-  HERO_VIDEO_MOBILE,
 } from "@/lib/hero-media";
 import { shouldSkipMotion } from "@/lib/visit-cache";
 
@@ -24,14 +23,16 @@ export function Hero() {
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    // Phones keep the poster: the mobile clip alone was 2.7 MB of the home page.
+    const desktop = window.matchMedia("(min-width: 800px)");
     let idle = 0;
     let timer = 0;
     let cancelled = false;
 
     const start = () => {
-      if (cancelled || reduce.matches) return;
+      if (cancelled || reduce.matches || !desktop.matches) return;
       const arm = () => {
-        if (!cancelled && !reduce.matches) setAllowVideo(true);
+        if (!cancelled && !reduce.matches && desktop.matches) setAllowVideo(true);
       };
       if (typeof window.requestIdleCallback === "function") {
         idle = window.requestIdleCallback(arm, { timeout: 2000 });
@@ -44,17 +45,19 @@ export function Hero() {
     else window.addEventListener("load", start, { once: true });
 
     const onChange = () => {
-      if (reduce.matches) {
+      if (reduce.matches || !desktop.matches) {
         setAllowVideo(false);
         return;
       }
       start();
     };
     reduce.addEventListener("change", onChange);
+    desktop.addEventListener("change", onChange);
     return () => {
       cancelled = true;
       window.removeEventListener("load", start);
       reduce.removeEventListener("change", onChange);
+      desktop.removeEventListener("change", onChange);
       if (idle) window.cancelIdleCallback(idle);
       if (timer) window.clearTimeout(timer);
     };
@@ -201,8 +204,7 @@ export function Hero() {
               playsInline
               preload="none"
             >
-              <source media="(min-width: 800px)" src={withBasePath(HERO_VIDEO_DESKTOP)} type="video/mp4" />
-              <source src={withBasePath(HERO_VIDEO_MOBILE)} type="video/mp4" />
+              <source src={withBasePath(HERO_VIDEO_DESKTOP)} type="video/mp4" />
             </video>
           ) : null}
         </div>

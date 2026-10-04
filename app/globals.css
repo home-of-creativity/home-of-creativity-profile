@@ -1816,6 +1816,40 @@ html[data-theme="dark"] .article-body a {
   color: var(--brand-orange);
 }
 
+.article-related {
+  border-top: 1px solid color-mix(in srgb, var(--brand-ink) 12%, transparent);
+  padding-top: 1.5rem;
+}
+
+.article-related-title {
+  margin: 0 0 0.75rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.article-related ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.article-related a {
+  font-weight: 600;
+  color: var(--brand-purple);
+  transition: color 0.2s ease;
+}
+
+.article-related a:hover {
+  color: var(--brand-orange);
+}
+
+html[data-theme="dark"] .article-related a {
+  color: var(--brand-ivory);
+}
+
 .voice-stars {
   display: flex;
   justify-content: center;

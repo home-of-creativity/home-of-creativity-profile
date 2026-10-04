@@ -1,11 +1,17 @@
 # Deploy static landing site to VPS over SSH.
 # Secrets: SSH_PRIVATE_KEY (+ SSH_PASSPHRASE if the key is encrypted).
+#
+# The site is a static export of CMS data. Every 30 minutes the schedule compares a hash of
+# the API responses the build reads with /cms-version.txt on the live site, and rebuilds only
+# when they differ, so a project or article published in the dashboard gets its page.
 name: Deploy (SSH)
 
 on:
   workflow_dispatch:
   push:
     branches: ["main"]
+  schedule:
+    - cron: "*/30 * * * *"
 
 concurrency:
   group: design-production-ssh
@@ -15,10 +21,47 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Fingerprint CMS content
+        id: cms
+        env:
+          API: ${{ secrets.NEXT_PUBLIC_API_URL }}
+        run: |
+          set -euo pipefail
+          api="${API%/}"
+          body=""
+          ok=true
+          for path in articles portfolio/projects portfolio/clients pricing reels legal/privacy legal/terms; do
+            if ! part="$(curl -fsS --retry 3 --max-time 30 -H 'Accept: application/json' "$api/$path")"; then
+              ok=false
+              break
+            fi
+            body="$body$part"
+          done
+          hash=""
+          if [ "$ok" = true ]; then
+            hash="$(printf '%s' "$body" | sha256sum | cut -c1-64)"
+          fi
+          echo "hash=$hash" >> "$GITHUB_OUTPUT"
+
+          skip=false
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            live="$(curl -fsS --max-time 30 -H 'Cache-Control: no-cache' https://hoc.agency/cms-version.txt 2>/dev/null | tr -d '[:space:]' || true)"
+            if [ -z "$hash" ]; then
+              echo "API unreachable; keep the live site"
+              skip=true
+            elif [ "$hash" = "$live" ]; then
+              echo "CMS content unchanged since the last build"
+              skip=true
+            fi
+          fi
+          echo "skip=$skip" >> "$GITHUB_OUTPUT"
+
       - name: Checkout
+        if: steps.cms.outputs.skip != 'true'
         uses: actions/checkout@v5
 
       - name: Setup Node
+        if: steps.cms.outputs.skip != 'true'
         uses: actions/setup-node@v5
         with:
           node-version: "22"
@@ -26,6 +69,7 @@ jobs:
           cache-dependency-path: package-lock.json
 
       - name: Build static export
+        if: steps.cms.outputs.skip != 'true'
         env:
           NEXT_PUBLIC_USE_DEMO_DATA: "false"
           NEXT_PUBLIC_BASE_PATH: "none"
@@ -39,8 +83,10 @@ jobs:
           npm ci
           npm run build
           test -d out
+          echo "${{ steps.cms.outputs.hash }}" > out/cms-version.txt
 
       - name: Start SSH agent
+        if: steps.cms.outputs.skip != 'true'
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
@@ -71,6 +117,7 @@ jobs:
           fi
 
       - name: Sync to server
+        if: steps.cms.outputs.skip != 'true'
         env:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
