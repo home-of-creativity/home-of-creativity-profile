@@ -1912,9 +1912,17 @@ html[data-theme="dark"] .article-related a {
   .journey-nivx-frame {
     position: relative;
     inset: auto;
-    aspect-ratio: 4 / 5;
+    /* Same 1280×720 frame as the file, so the photo is not cropped to 4:5. */
+    aspect-ratio: 16 / 9;
     width: 100%;
+    height: auto;
     transform: none !important;
+  }
+
+  .journey-nivx-frame img {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 16 / 9;
   }
 
   .journey-slide-veil {

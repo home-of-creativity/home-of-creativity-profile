@@ -357,7 +357,7 @@ export const brandingPage: TopicPageCopy = {
 
 /** Explains logo, visual identity, and brand identity without adding a new practice. */
 export const brandIdentityPage: TopicPageCopy = {
-  title: { en: "Brand Identity Services", ar: "خدمات الهوية التجارية" },
+  title: { en: "Brand Identity Services in Damascus and Riyadh", ar: "خدمات الهوية التجارية في دمشق والرياض" },
   metaTitle: "Brand Identity Services in Damascus & Riyadh | Home of Creativity",
   metaDescription: {
     en: "A logo, a visual identity and a brand identity are not the same thing. How Home of Creativity (HOC) designs the system, from Damascus, Riyadh and the UAE.",
@@ -549,7 +549,7 @@ export const clientJourney = {
   steps: [
     {
       id: "start",
-      image: "/photo/journey-launch.webp?v=20261004",
+      image: "/photo/journey-launch.webp?v=20261004b",
       imageAlt: {
         en: "Two people reviewing a storyboard together at the studio table",
         ar: "شخصان يراجعان لوحة القصة معاً على طاولة الاستوديو",
@@ -562,7 +562,7 @@ export const clientJourney = {
     },
     {
       id: "build",
-      image: "/photo/journey-build.webp?v=20261004",
+      image: "/photo/journey-build.webp?v=20261004b",
       imageAlt: {
         en: "A camera operator filming a product shot in the studio",
         ar: "مصوّر يتابع لقطة منتج داخل الاستوديو",
@@ -575,7 +575,7 @@ export const clientJourney = {
     },
     {
       id: "handoff",
-      image: "/photo/journey-handoff.webp?v=20261004",
+      image: "/photo/journey-handoff.webp?v=20261004b",
       imageAlt: {
         en: "The team watching the finished film together",
         ar: "الفريق يشاهد العمل النهائي معاً",

@@ -13,9 +13,11 @@ export function LoadingLottie({
   className?: string;
 }) {
   const [reduce, setReduce] = useState(false);
+  const [named, setNamed] = useState(false);
 
   useEffect(() => {
     setReduce(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    setNamed(true);
   }, []);
 
   return (
@@ -23,7 +25,7 @@ export function LoadingLottie({
       className={cn("loading-lottie", className)}
       role="status"
       aria-live="polite"
-      aria-label={label}
+      aria-label={named ? label : undefined}
     >
       {reduce ? null : (
         <Lottie
