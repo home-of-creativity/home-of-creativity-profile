@@ -13,9 +13,8 @@ const ALTERNATE_NAMES = [SITE_SHORT, SITE_NAME_AR, "بيت الابداع"];
 /** Factual one-liner for `description` (no affiliation claims). */
 export const ORGANIZATION_DESCRIPTION = `Branding, marketing and creative agency with offices in ${officesSentence("en")}.`;
 
-/** Tells this agency apart from other businesses with a similar name. */
-const ORGANIZATION_DISAMBIGUATION =
-  "The Home of Creativity (HOC, بيت الإبداع) at hoc.agency: the branding and marketing agency based in Damascus and Riyadh, not another business or school with a similar name.";
+/** Identifies this agency by its site, Arabic name and offices. No "not affiliated" wording. */
+const ORGANIZATION_DISAMBIGUATION = `The Home of Creativity (HOC, بيت الإبداع) at hoc.agency: the branding and marketing agency with offices in ${officesSentence("en")}.`;
 
 /** Markets named on the site: the three offices in `offices.ts`. */
 const AREA_SERVED = [
