@@ -137,17 +137,20 @@ export function ClientJourney() {
                 }}
                 className="journey-nivx-frame absolute inset-0"
               >
-                <img
-                  src={withBasePath(step.image)}
-                  alt={t(step.imageAlt)}
-                  width={1280}
-                  height={720}
-                  sizes="(max-width: 899px) 100vw, 100vw"
-                  loading="lazy"
-                  decoding="async"
-                  className="h-full w-full object-cover object-[center_42%]"
-                  draggable={false}
-                />
+                <picture>
+                  <source media="(max-width: 899px)" srcSet={withBasePath(step.imageMobile)} />
+                  <img
+                    src={withBasePath(step.image)}
+                    alt={t(step.imageAlt)}
+                    width={1672}
+                    height={941}
+                    sizes="(max-width: 899px) 100vw, 100vw"
+                    loading="lazy"
+                    decoding="async"
+                    className="h-full w-full object-cover object-[center_42%]"
+                    draggable={false}
+                  />
+                </picture>
               </div>
               <div aria-hidden className="journey-slide-veil" />
               <div className="journey-nivx-copy absolute inset-x-0 bottom-0 z-10 px-5 pb-10 md:px-12 md:pb-16">

@@ -1,7 +1,7 @@
 # Marketing site (Next.js static export)
 
 Last updated: 4 October 2026 (project detail contact row shows each project's social link with its SVG icon)
-Last updated: 4 October 2026 (journey stages use journey-launch.webp, journey-build.webp, and journey-handoff.webp at 1280×720, `?v=20261004b`, `loading="lazy"`; brand-identity H1 names Damascus and Riyadh; reel loading label is not in the first HTML)
+Last updated: 4 October 2026 (journey stages: desktop `journey-*.webp` 1672×941, mobile `journey-*-mobile.webp` 1280×720, `?v=20261004c`, `loading="lazy"`; brand-identity H1 names Damascus and Riyadh; reel loading label is not in the first HTML)
 Last updated: 3 October 2026 (about-cover numerals stay visible in dark mode)
 Last updated: 1 October 2026 (`llms.txt` and `llms-full.txt` list the published USD package prices; they no longer say prices are not published)
 Last updated: 1 October 2026 (a project published after the last export still opens: Caddy serves `/projects/view/` for a missing `/projects/{id}/`, and that page loads the project from the API)

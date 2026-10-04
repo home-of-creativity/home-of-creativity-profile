@@ -549,7 +549,8 @@ export const clientJourney = {
   steps: [
     {
       id: "start",
-      image: "/photo/journey-launch.webp?v=20261004b",
+      image: "/photo/journey-launch.webp?v=20261004c",
+      imageMobile: "/photo/journey-launch-mobile.webp?v=20261004c",
       imageAlt: {
         en: "Two people reviewing a storyboard together at the studio table",
         ar: "شخصان يراجعان لوحة القصة معاً على طاولة الاستوديو",
@@ -562,7 +563,8 @@ export const clientJourney = {
     },
     {
       id: "build",
-      image: "/photo/journey-build.webp?v=20261004b",
+      image: "/photo/journey-build.webp?v=20261004c",
+      imageMobile: "/photo/journey-build-mobile.webp?v=20261004c",
       imageAlt: {
         en: "A camera operator filming a product shot in the studio",
         ar: "مصوّر يتابع لقطة منتج داخل الاستوديو",
@@ -575,7 +577,8 @@ export const clientJourney = {
     },
     {
       id: "handoff",
-      image: "/photo/journey-handoff.webp?v=20261004b",
+      image: "/photo/journey-handoff.webp?v=20261004c",
+      imageMobile: "/photo/journey-handoff-mobile.webp?v=20261004c",
       imageAlt: {
         en: "The team watching the finished film together",
         ar: "الفريق يشاهد العمل النهائي معاً",

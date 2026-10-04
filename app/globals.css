@@ -1912,7 +1912,7 @@ html[data-theme="dark"] .article-related a {
   .journey-nivx-frame {
     position: relative;
     inset: auto;
-    /* Same 1280×720 frame as the file, so the photo is not cropped to 4:5. */
+    /* 16:9, matching the photo, so it is not cropped to 4:5. */
     aspect-ratio: 16 / 9;
     width: 100%;
     height: auto;
