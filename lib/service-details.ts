@@ -7,6 +7,8 @@ export type ServiceDetail = {
   id: string;
   slug: string;
   title: Copy;
+  /** Page H1: the service and the cities it is offered in. */
+  heading: Copy;
   metaTitle: Copy;
   metaDescription: Copy;
   tagline: Copy;
@@ -69,9 +71,15 @@ function ksaFaq(service: Copy): ServiceFaq {
   };
 }
 
-/** Full titles: `[service] | بيت الإبداع HOC` and `[service] | Home of Creativity`, at most 65 characters. */
-function metaTitle(ar: string, en: string): Copy {
-  return { ar: `${ar} | بيت الإبداع HOC`, en: `${en} | Home of Creativity` };
+/**
+ * H1 and full titles from one phrase per language that names Damascus and Riyadh, where every
+ * service is offered (both office pages list all of them). Titles stay at most 65 characters.
+ */
+function titles(ar: string, en: string): { heading: Copy; metaTitle: Copy } {
+  return {
+    heading: { ar, en: en.replace(" & Riyadh", " and Riyadh") },
+    metaTitle: { ar: `${ar} | بيت الإبداع HOC`, en: `${en} | Home of Creativity` },
+  };
 }
 
 const marketing: Copy = { en: "Marketing", ar: "التسويق" };
@@ -81,7 +89,7 @@ const accounts: Copy = { en: "Account Management", ar: "إدارة الحساب�
 const outdoor: Copy = { en: "Roadside Ads", ar: "الإعلانات الطرقية" };
 const gifts: Copy = { en: "Promo Gifts", ar: "الهدايا الدعائية" };
 const film: Copy = { en: "Filming & Editing", ar: "التصوير والمونتاج" };
-const identity: Copy = { en: "Visual Identity Design in Damascus", ar: "تصميم الهوية البصرية في دمشق" };
+const identity: Copy = { en: "Visual Identity Design", ar: "تصميم الهوية البصرية" };
 const exhibitions: Copy = { en: "Exhibitions & Conferences", ar: "تنظيم المعارض والمؤتمرات" };
 const events: Copy = { en: "Event Management", ar: "إدارة الفعاليات" };
 const booths: Copy = { en: "Booth Design", ar: "تصميم البوثات" };
@@ -95,7 +103,7 @@ export const serviceDetails: ServiceDetail[] = [
     id: "marketing",
     slug: "marketing",
     title: marketing,
-    metaTitle: metaTitle("خدمات التسويق في دمشق والرياض", "Marketing Services in Damascus & Riyadh"),
+    ...titles("خدمات التسويق في دمشق والرياض", "Marketing Services in Damascus & Riyadh"),
     metaDescription: {
       ar: "خدمات تسويق من بيت الإبداع HOC تبدأ بدراسة سوقك وجمهورك وتنتهي بخطة ورسائل واضحة لحملاتك، لعملائنا في دمشق والرياض. اطلب عرض سعر عبر واتساب.",
       en: "Marketing services from Home of Creativity (HOC): market and audience research, a clear plan and campaign messaging for clients in Damascus and Riyadh.",
@@ -135,7 +143,7 @@ export const serviceDetails: ServiceDetail[] = [
     id: "ads",
     slug: "paid-ads",
     title: ads,
-    metaTitle: metaTitle("الحملات الإعلانية الممولة في دمشق والرياض", "Paid Social Ads in Damascus & Riyadh"),
+    ...titles("الحملات الإعلانية الممولة في دمشق والرياض", "Paid Social Ads in Damascus & Riyadh"),
     metaDescription: {
       ar: "حملات ممولة على منصات التواصل من بيت الإبداع HOC: هدف واضح واستهداف مدروس وتصميم إعلانات ومتابعة للأداء، لعملائنا في دمشق والرياض. ابدأ عبر واتساب.",
       en: "Paid social campaigns from Home of Creativity (HOC): a clear goal, considered targeting, ad design and performance follow-up for clients in Damascus and Riyadh.",
@@ -175,7 +183,7 @@ export const serviceDetails: ServiceDetail[] = [
     id: "social",
     slug: "social-media",
     title: social,
-    metaTitle: metaTitle("إدارة السوشال ميديا في دمشق والرياض", "Social Media Management in Damascus & Riyadh"),
+    ...titles("إدارة السوشال ميديا في دمشق والرياض", "Social Media Management in Damascus & Riyadh"),
     metaDescription: {
       ar: "إدارة السوشال ميديا من بيت الإبداع HOC: خطة محتوى شهرية وتصميم منشورات وقصص وريلز ونشر منتظم، لعلامات في دمشق والرياض. الباقات والأسعار منشورة.",
       en: "Social media management from Home of Creativity (HOC): a monthly content plan, posts, stories, reels and steady publishing for brands in Damascus and Riyadh.",
@@ -221,7 +229,7 @@ export const serviceDetails: ServiceDetail[] = [
     id: "accounts",
     slug: "account-management",
     title: accounts,
-    metaTitle: metaTitle("إدارة حسابات السوشال ميديا في دمشق والرياض", "Account Management in Damascus & Riyadh"),
+    ...titles("إدارة حسابات السوشال ميديا في دمشق والرياض", "Account Management in Damascus & Riyadh"),
     metaDescription: {
       ar: "إدارة يومية لحسابات علامتك من بيت الإبداع HOC: جدولة النشر والرد على الرسائل والتعليقات ومتابعة التفاعل وتقارير دورية، لعملائنا في دمشق والرياض.",
       en: "Daily account management from Home of Creativity (HOC): scheduled publishing, replies to messages and comments, engagement monitoring and periodic reports.",
@@ -261,7 +269,7 @@ export const serviceDetails: ServiceDetail[] = [
     id: "outdoor",
     slug: "roadside-ads",
     title: outdoor,
-    metaTitle: metaTitle("الإعلانات الطرقية في دمشق والرياض", "Billboard Ads in Damascus & Riyadh"),
+    ...titles("الإعلانات الطرقية في دمشق والرياض", "Billboard Ads in Damascus & Riyadh"),
     metaDescription: {
       ar: "تصميم الإعلانات الطرقية واللوحات الخارجية من بيت الإبداع HOC: رسالة قصيرة تُقرأ من بعيد وملفات جاهزة للطباعة، لعملائنا في دمشق والرياض. اطلب عرض سعر.",
       en: "Roadside and billboard advertising from Home of Creativity (HOC): a short message that reads from a distance and print-ready files, for Damascus and Riyadh.",
@@ -301,7 +309,7 @@ export const serviceDetails: ServiceDetail[] = [
     id: "gifts",
     slug: "promo-gifts",
     title: gifts,
-    metaTitle: metaTitle("الهدايا الدعائية في دمشق والرياض", "Promotional Gifts in Damascus & Riyadh"),
+    ...titles("الهدايا الدعائية في دمشق والرياض", "Promotional Gifts in Damascus & Riyadh"),
     metaDescription: {
       ar: "هدايا دعائية تحمل هويتك من بيت الإبداع HOC: اختيار القطع وتصميم تطبيق الهوية والتغليف ومتابعة التنفيذ، للشركات في دمشق والرياض. اطلب عرض سعر عبر واتساب.",
       en: "Branded promotional gifts from Home of Creativity (HOC): choosing pieces, applying your identity, packaging and production follow-up, in Damascus and Riyadh.",
@@ -341,7 +349,7 @@ export const serviceDetails: ServiceDetail[] = [
     id: "film",
     slug: "filming-editing",
     title: film,
-    metaTitle: metaTitle("التصوير والمونتاج في دمشق والرياض", "Filming & Video Editing in Damascus & Riyadh"),
+    ...titles("التصوير والمونتاج في دمشق والرياض", "Filming & Video Editing in Damascus & Riyadh"),
     metaDescription: {
       ar: "تصوير فوتوغرافي وفيديو ومونتاج ريلز وإعلانات من بيت الإبداع HOC، من كتابة الفكرة حتى تجهيز المقاسات لكل منصة، لعلامات في دمشق والرياض. ابدأ عبر واتساب.",
       en: "Photo, video and reel editing from Home of Creativity (HOC), from the concept and script to formats for each platform, for brands in Damascus and Riyadh.",
@@ -381,7 +389,7 @@ export const serviceDetails: ServiceDetail[] = [
     id: "identity",
     slug: "visual-identity",
     title: identity,
-    metaTitle: metaTitle("تصميم الهوية البصرية في دمشق والرياض", "Visual Identity Design in Damascus & Riyadh"),
+    ...titles("تصميم الهوية البصرية في دمشق والرياض", "Visual Identity Design in Damascus & Riyadh"),
     metaDescription: {
       ar: "تصميم الهوية البصرية من بيت الإبداع HOC: الشعار ولوحة الألوان والخطوط وتطبيقات الهوية ودليل الاستخدام، لعلامات في دمشق والرياض. ابدأ مشروعك عبر واتساب.",
       en: "Visual identity design from Home of Creativity (HOC): logo, color palette, typography, applications and brand guidelines for brands in Damascus and Riyadh.",
@@ -421,7 +429,7 @@ export const serviceDetails: ServiceDetail[] = [
     id: "exhibitions",
     slug: "exhibitions-conferences",
     title: exhibitions,
-    metaTitle: metaTitle("تنظيم المعارض والمؤتمرات في دمشق والرياض", "Exhibition Organizing in Damascus & Riyadh"),
+    ...titles("تنظيم المعارض والمؤتمرات في دمشق والرياض", "Exhibition Organizing in Damascus & Riyadh"),
     metaDescription: {
       ar: "تنظيم المعارض والمؤتمرات من بيت الإبداع HOC: التخطيط وهوية الحدث والمطبوعات وتجهيز المكان والتنسيق في يوم الحدث، في دمشق والرياض. اطلب عرض سعر.",
       en: "Exhibition and conference organizing from Home of Creativity (HOC): planning, event branding, printed materials, venue setup and on-the-day coordination.",
@@ -461,7 +469,7 @@ export const serviceDetails: ServiceDetail[] = [
     id: "events",
     slug: "event-management",
     title: events,
-    metaTitle: metaTitle("إدارة الفعاليات في دمشق والرياض", "Event Management in Damascus & Riyadh"),
+    ...titles("إدارة الفعاليات في دمشق والرياض", "Event Management in Damascus & Riyadh"),
     metaDescription: {
       ar: "إدارة الفعاليات من بيت الإبداع HOC: إطلاق المنتجات والافتتاحات والفعاليات الخاصة، من الفكرة والبرنامج إلى إدارة يوم الحدث وتغطيته، في دمشق والرياض.",
       en: "Event management from Home of Creativity (HOC): product launches, openings and private events, from concept and program to running and covering the day.",
@@ -501,7 +509,7 @@ export const serviceDetails: ServiceDetail[] = [
     id: "booths",
     slug: "booth-design",
     title: booths,
-    metaTitle: metaTitle("تصميم البوثات وأجنحة المعارض في دمشق والرياض", "Exhibition Booth Design in Damascus & Riyadh"),
+    ...titles("تصميم البوثات وأجنحة المعارض في دمشق والرياض", "Exhibition Booth Design in Damascus & Riyadh"),
     metaDescription: {
       ar: "تصميم بوثات وأجنحة المعارض من بيت الإبداع HOC: توزيع المساحة وتصميم ثلاثي الأبعاد وتطبيق الهوية وملفات التنفيذ، للشركات في دمشق والرياض. اطلب عرض سعر.",
       en: "Exhibition booth and stand design from Home of Creativity (HOC): space planning, 3D design, identity graphics and production files, in Damascus and Riyadh.",
@@ -541,7 +549,7 @@ export const serviceDetails: ServiceDetail[] = [
     id: "web",
     slug: "websites-ecommerce",
     title: web,
-    metaTitle: metaTitle("مواقع ومتاجر إلكترونية في دمشق والرياض", "Websites & Ecommerce in Damascus & Riyadh"),
+    ...titles("مواقع ومتاجر إلكترونية في دمشق والرياض", "Websites & Ecommerce in Damascus & Riyadh"),
     metaDescription: {
       ar: "تصميم وتطوير المواقع والمتاجر الإلكترونية من بيت الإبداع HOC: تخطيط الصفحات وتصميم الواجهات بهويتك وتطوير سريع على الجوال، في دمشق والرياض.",
       en: "Website and online store design and development from Home of Creativity (HOC): page planning, on-brand interfaces and fast mobile builds, Damascus and Riyadh.",
@@ -581,7 +589,7 @@ export const serviceDetails: ServiceDetail[] = [
     id: "apps",
     slug: "app-design",
     title: apps,
-    metaTitle: metaTitle("تصميم التطبيقات في دمشق والرياض", "App UI & UX Design in Damascus & Riyadh"),
+    ...titles("تصميم التطبيقات في دمشق والرياض", "App UI & UX Design in Damascus & Riyadh"),
     metaDescription: {
       ar: "تصميم واجهات التطبيقات وتجربة استخدامها من بيت الإبداع HOC: رحلة المستخدم وتصميم الواجهات ونموذج تفاعلي وملفات التسليم، لمشاريع في دمشق والرياض.",
       en: "App UI and UX design from Home of Creativity (HOC): user journeys, interface design, an interactive prototype and handoff files, in Damascus and Riyadh.",
@@ -621,7 +629,7 @@ export const serviceDetails: ServiceDetail[] = [
     id: "finance",
     slug: "financial-analysis",
     title: finance,
-    metaTitle: metaTitle("التحليل المالي ولوحات التحكم في دمشق والرياض", "Financial Analysis in Damascus & Riyadh"),
+    ...titles("التحليل المالي ولوحات التحكم في دمشق والرياض", "Financial Analysis in Damascus & Riyadh"),
     metaDescription: {
       ar: "التحليل المالي من بيت الإبداع HOC: تنظيم السجلات واستخراج قصة السيولة والأرباح ولوحات تحكم تفاعلية تدعم قراراتك، لشركات في دمشق والرياض.",
       en: "Financial analysis from Home of Creativity (HOC): organized records, a clear story of liquidity and profit, and interactive dashboards for decisions.",

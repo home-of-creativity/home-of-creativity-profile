@@ -63,13 +63,13 @@ export function ServiceDetailPage({ slug, articles = [] }: { slug: string; artic
             <span aria-hidden className="mx-auto my-5 block h-px w-10 bg-[var(--brand-orange)]" />
             <div data-lang="ar" lang="ar" dir="rtl">
               <LangHeading lang="ar" className="font-display m-0 text-[clamp(2.1rem,5.5vw,3.8rem)] font-semibold leading-[1.1]">
-                {detail.title.ar}
+                {detail.heading.ar}
               </LangHeading>
               <p className="mt-5 text-[1.15rem] font-semibold text-[var(--brand-orange)]">{detail.tagline.ar}</p>
             </div>
             <div data-lang="en" lang="en" dir="ltr">
               <LangHeading lang="en" className="font-display m-0 text-[clamp(2.1rem,5.5vw,3.8rem)] font-semibold leading-[1.1]">
-                {detail.title.en}
+                {detail.heading.en}
               </LangHeading>
               <p className="mt-5 text-[1.15rem] font-semibold text-[var(--brand-orange)]">{detail.tagline.en}</p>
             </div>
