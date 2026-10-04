@@ -15,7 +15,7 @@ import {
 } from "@/lib/base-path";
 import { contact, footer, nav } from "@/lib/content";
 import { officeHeading, officePath, offices, phoneHref, phoneLabels } from "@/lib/offices";
-import { fetchProfilePdf } from "@/lib/profile-pdf-api";
+import { fetchProfilePdf, profilePdfHref } from "@/lib/profile-pdf-api";
 import { officialSocialProfiles } from "@/lib/social-embeds";
 import { useLanguage, type Copy } from "@/lib/i18n";
 import { useTheme } from "@/lib/theme";
@@ -341,9 +341,8 @@ export function Nav() {
   useEffect(() => {
     let cancelled = false;
     fetchProfilePdf().then((pdf) => {
-      if (cancelled || !pdf?.url) return;
-      const stamp = pdf.updated_at ? `?t=${encodeURIComponent(pdf.updated_at)}` : "";
-      setProfilePdfUrl(`${pdf.url}${stamp}`);
+      if (cancelled || !pdf) return;
+      setProfilePdfUrl(profilePdfHref(pdf));
     });
     return () => {
       cancelled = true;
@@ -620,9 +619,8 @@ export function Footer() {
   useEffect(() => {
     let cancelled = false;
     fetchProfilePdf().then((pdf) => {
-      if (cancelled || !pdf?.url) return;
-      const stamp = pdf.updated_at ? `?t=${encodeURIComponent(pdf.updated_at)}` : "";
-      setProfilePdfUrl(`${pdf.url}${stamp}`);
+      if (cancelled || !pdf) return;
+      setProfilePdfUrl(profilePdfHref(pdf));
     });
     return () => {
       cancelled = true;
