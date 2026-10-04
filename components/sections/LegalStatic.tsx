@@ -1,5 +1,5 @@
 import type { LegalPage } from "@/lib/legal-api";
-import { PageTitle } from "@/components/PageTitle";
+import { LangHeading } from "@/components/LangHeading";
 
 /** Policy text in the static HTML, both languages, no client fetch. */
 export function LegalStatic({ page }: { page: LegalPage }) {
@@ -13,12 +13,12 @@ export function LegalStatic({ page }: { page: LegalPage }) {
           <p className="text-[0.78rem] font-semibold tracking-[0.16em] text-[var(--brand-orange-ink)] uppercase" data-lang="en">
             Legal
           </p>
-          <PageTitle lang="ar" tagged className="font-display mt-3 text-[2rem] font-semibold text-[var(--brand-ink)]">
+          <LangHeading lang="ar" tagged className="font-display mt-3 text-[2rem] font-semibold text-[var(--brand-ink)]">
             {page.title_ar}
-          </PageTitle>
-          <PageTitle lang="en" tagged className="font-display mt-3 text-[2rem] font-semibold text-[var(--brand-ink)]">
+          </LangHeading>
+          <LangHeading lang="en" tagged className="font-display mt-3 text-[2rem] font-semibold text-[var(--brand-ink)]">
             {page.title_en}
-          </PageTitle>
+          </LangHeading>
         </header>
 
         <article className="legal-doc mx-auto max-w-2xl text-start" data-lang="ar" dir="rtl" lang="ar">

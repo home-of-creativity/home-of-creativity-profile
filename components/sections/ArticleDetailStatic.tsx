@@ -4,7 +4,7 @@ import { pagePath } from "@/lib/base-path";
 import { serviceLinksForArticle } from "@/lib/article-services";
 import { articlesPage } from "@/lib/content";
 import { serviceDetailLabels } from "@/lib/service-details";
-import { PageTitle } from "@/components/PageTitle";
+import { LangHeading } from "@/components/LangHeading";
 
 function formatDate(value: string | null | undefined, locale: "en" | "ar") {
   if (!value) return "";
@@ -77,7 +77,7 @@ export function ArticleDetailStatic({ article }: { article: Article }) {
           </Link>
           <header className="article-detail-head">
             {dateAr ? <time className="article-card-date">{dateAr}</time> : null}
-            <PageTitle lang="ar" className="article-detail-title">{article.title_ar}</PageTitle>
+            <LangHeading lang="ar" className="article-detail-title">{article.title_ar}</LangHeading>
           </header>
           <article
             className="article-body mx-auto max-w-3xl"
@@ -93,7 +93,7 @@ export function ArticleDetailStatic({ article }: { article: Article }) {
           </Link>
           <header className="article-detail-head">
             {dateEn ? <time className="article-card-date">{dateEn}</time> : null}
-            <PageTitle lang="en" className="article-detail-title">{article.title_en}</PageTitle>
+            <LangHeading lang="en" className="article-detail-title">{article.title_en}</LangHeading>
           </header>
           <article
             className="article-body mx-auto max-w-3xl"

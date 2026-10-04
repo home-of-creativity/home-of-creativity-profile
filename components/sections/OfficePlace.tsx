@@ -5,7 +5,7 @@ import { contact, officePages } from "@/lib/content";
 import { officeMapUrl, officeName, officePath, offices, phoneHref, phoneLabels, type Office } from "@/lib/offices";
 import { serviceDetails } from "@/lib/service-details";
 import { whatsappHref } from "@/lib/whatsapp";
-import { PageTitle } from "@/components/PageTitle";
+import { LangHeading } from "@/components/LangHeading";
 
 type OfficeSlug = keyof Omit<typeof officePages, "labels">;
 
@@ -63,9 +63,9 @@ function PlaceCopy({ office, lang }: { office: Office; lang: "ar" | "en" }) {
       </nav>
 
       <header className="mx-auto mb-10 max-w-2xl text-center">
-        <PageTitle lang={lang} className="font-display m-0 text-[clamp(2rem,5vw,3.6rem)] font-semibold leading-[1.05] text-[var(--brand-ink)]">
+        <LangHeading lang={lang} className="font-display m-0 text-[clamp(2rem,5vw,3.6rem)] font-semibold leading-[1.05] text-[var(--brand-ink)]">
           {copy.title[lang]}
-        </PageTitle>
+        </LangHeading>
         <p className="mt-6 text-[1.05rem] leading-[1.75] text-[var(--brand-ink)]/80">{copy.lead[lang]}</p>
       </header>
 

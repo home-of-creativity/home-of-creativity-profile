@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Article } from "@/lib/articles-api";
 import { pagePath } from "@/lib/base-path";
 import { articlesPage } from "@/lib/content";
-import { PageTitle } from "@/components/PageTitle";
+import { LangHeading } from "@/components/LangHeading";
 
 function excerpt(article: Article, locale: "ar" | "en") {
   const raw = locale === "ar" ? article.excerpt_ar : article.excerpt_en;
@@ -37,12 +37,12 @@ export function ArticlesIndexStatic({ articles }: { articles: Article[] }) {
           <p className="text-[0.78rem] font-semibold tracking-[0.16em] text-[var(--brand-orange-ink)] uppercase" data-lang="en">
             {articlesPage.kicker.en}
           </p>
-          <PageTitle lang="ar" tagged className="font-display mt-3 text-[2rem] font-semibold text-[var(--brand-ink)] md:text-[2.6rem]">
+          <LangHeading lang="ar" tagged className="font-display mt-3 text-[2rem] font-semibold text-[var(--brand-ink)] md:text-[2.6rem]">
             {articlesPage.title.ar}
-          </PageTitle>
-          <PageTitle lang="en" tagged className="font-display mt-3 text-[2rem] font-semibold text-[var(--brand-ink)] md:text-[2.6rem]">
+          </LangHeading>
+          <LangHeading lang="en" tagged className="font-display mt-3 text-[2rem] font-semibold text-[var(--brand-ink)] md:text-[2.6rem]">
             {articlesPage.title.en}
-          </PageTitle>
+          </LangHeading>
           <p className="mt-5 text-[0.98rem] leading-[1.7] text-[var(--brand-ink)]/75" data-lang="ar">
             {articlesPage.lead.ar}
           </p>

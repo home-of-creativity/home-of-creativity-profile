@@ -6,7 +6,7 @@ import { serviceDetailLabels } from "@/lib/service-details";
 import { whatsappHref } from "@/lib/whatsapp";
 import { FaqList } from "./Faq";
 import type { ServiceArticleLink } from "./ServiceDetailPage";
-import { PageTitle } from "@/components/PageTitle";
+import { LangHeading } from "@/components/LangHeading";
 
 /**
  * Bilingual category page. Both languages are in the static HTML;
@@ -50,25 +50,25 @@ function TopicLocale({
 
       <header className="mx-auto mb-10 max-w-2xl text-center">
         <span aria-hidden className="mx-auto mb-3 block h-px w-9 bg-[var(--brand-orange)]" />
-        <PageTitle lang={lang} className="font-display m-0 text-[clamp(2rem,5vw,3.6rem)] font-semibold leading-[1.05] text-[var(--brand-ink)]">
+        <LangHeading lang={lang} className="font-display m-0 text-[clamp(2rem,5vw,3.6rem)] font-semibold leading-[1.05] text-[var(--brand-ink)]">
           {copy.title[lang]}
-        </PageTitle>
+        </LangHeading>
         <p className="mt-6 text-[1.05rem] leading-[1.75] text-[var(--brand-ink)]/80">{copy.lead[lang]}</p>
       </header>
 
       <div className="mx-auto grid max-w-2xl gap-8">
         {copy.sections.map((section) => (
           <section key={section.heading.en}>
-            <h2 className="font-display m-0 text-[1.4rem] font-semibold text-[var(--brand-ink)]">{section.heading[lang]}</h2>
+            <LangHeading lang={lang} level={2} className="font-display m-0 text-[1.4rem] font-semibold text-[var(--brand-ink)]">{section.heading[lang]}</LangHeading>
             <p className="mt-3 text-[0.98rem] leading-[1.75] text-[var(--brand-ink)]/75">{section.body[lang]}</p>
           </section>
         ))}
 
         {copy.faqs.length ? (
           <section>
-            <h2 className="font-display m-0 text-[1.4rem] font-semibold text-[var(--brand-ink)]">
+            <LangHeading lang={lang} level={2} className="font-display m-0 text-[1.4rem] font-semibold text-[var(--brand-ink)]">
               {lang === "ar" ? "أسئلة شائعة" : "FAQ"}
-            </h2>
+            </LangHeading>
             <FaqList
               name={`topic-faq-${lang}`}
               items={copy.faqs.map((item) => ({
@@ -96,9 +96,9 @@ function TopicLocale({
 
         {articles.length ? (
           <nav aria-label={serviceDetailLabels.articles[lang]}>
-            <h2 className="font-display m-0 text-[1.1rem] font-semibold text-[var(--brand-ink)]">
+            <LangHeading lang={lang} level={2} className="font-display m-0 text-[1.1rem] font-semibold text-[var(--brand-ink)]">
               {serviceDetailLabels.articles[lang]}
-            </h2>
+            </LangHeading>
             <ul className="mt-3 flex flex-wrap gap-3 p-0">
               {articles.map((article) => (
                 <li key={article.slug} className="list-none">
@@ -116,9 +116,9 @@ function TopicLocale({
 
         {copy.links.length ? (
           <nav aria-label={lang === "ar" ? "صفحات ذات صلة" : "Related pages"}>
-            <h2 className="font-display m-0 text-[1.1rem] font-semibold text-[var(--brand-ink)]">
+            <LangHeading lang={lang} level={2} className="font-display m-0 text-[1.1rem] font-semibold text-[var(--brand-ink)]">
               {lang === "ar" ? "صفحات ذات صلة" : "Related pages"}
-            </h2>
+            </LangHeading>
             <ul className="mt-3 flex flex-wrap gap-3 p-0">
               {copy.links.map((link) => (
                 <li key={link.href} className="list-none">
