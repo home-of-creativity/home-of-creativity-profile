@@ -35,7 +35,10 @@ export function LoadingLottie({
           aria-hidden
         />
       )}
-      {label ? <span className="loading-lottie__label">{label}</span> : null}
+      {/* The label is the status's accessible name. As visible text it would sit in the static
+          HTML («جارٍ التحميل…» three times on the home page), so it only shows when reduced
+          motion replaces the animation, which is known after mount. */}
+      {reduce && label ? <span className="loading-lottie__label">{label}</span> : null}
     </div>
   );
 }
