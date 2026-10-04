@@ -315,13 +315,16 @@ export function Projects({ initialProjects }: { initialProjects?: PortfolioProje
             allPreview && "projects-grid-all",
           )}
         >
-          {visible.map((project) => {
+          {/* Every project is in the static HTML so each /projects/{id}/ page has a link from
+              the home page; cards past the preview stay hidden until "view all". */}
+          {filtered.map((project, index) => {
             const title = projectTitle(project, locale);
             const category = categoryLabel(project.category, locale);
 
             return (
               <Link
                 key={project.id}
+                hidden={!expanded && index >= FILTER_PREVIEW}
                 href={pagePath(`projects/${project.id}`)}
                 className="project-card group text-start focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-orange)]"
               >

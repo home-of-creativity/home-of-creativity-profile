@@ -34,7 +34,7 @@ export async function generateStaticParams() {
     .map((project) => ({ id: String(project.id) }));
 }
 
-const RELATED_FALLBACK = 4;
+const RELATED_FALLBACK = 6;
 
 /**
  * Projects without related ones picked in the dashboard show other published projects:
