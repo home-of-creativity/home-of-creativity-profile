@@ -1,5 +1,6 @@
 # Marketing site (Next.js static export)
 
+Last updated: 5 October 2026 (a project page lists only the related projects chosen in the dashboard; an empty choice shows no related row)
 Last updated: 4 October 2026 (project detail contact row shows each project's social link with its SVG icon)
 Last updated: 4 October 2026 (journey stages: desktop `journey-launch.webp` and `journey-build.webp` 1672×941, mobile copies 1280×720; the last stage is `journey-handoff.gif` (960×540) on every screen, `?v=20261004e`; brand-identity H1 names Damascus and Riyadh; reel loading label is not in the first HTML)
 Last updated: 3 October 2026 (about-cover numerals stay visible in dark mode)

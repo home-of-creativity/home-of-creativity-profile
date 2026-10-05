@@ -10,7 +10,8 @@ function isStaleBundle(error: unknown): boolean {
     error.name === "ChunkLoadError" ||
     message.includes("Loading chunk") ||
     message.includes("Failed to fetch dynamically imported module") ||
-    (message.includes("reading 'call'") && /_next\/static\/chunks|webpack/.test(error.stack ?? ""))
+    message.includes("reading 'call'") ||
+    message.includes('reading "call"')
   );
 }
 
@@ -35,7 +36,7 @@ if (dsn) {
   Sentry.init({
     dsn,
     tracesSampleRate: 0,
-    ignoreErrors: [/navrix\.art/i, /selnor\.fun/i, /cloudfront\.net/i, /CacheStorage/i],
+    ignoreErrors: [/navrix\.art/i, /selnor\.fun/i, /cloudfront\.net/i, /CacheStorage/i, /^Failed to fetch$/, /reading 'call'/],
     beforeSend(event, hint) {
       const original = hint?.originalException;
       if (typeof Event !== "undefined" && original instanceof Event) return null;

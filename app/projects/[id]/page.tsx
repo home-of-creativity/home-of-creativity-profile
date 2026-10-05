@@ -3,12 +3,7 @@ import { notFound } from "next/navigation";
 import { Footer, Nav } from "@/components/chrome";
 import { ProjectDetailView } from "@/components/sections/ProjectDetailView";
 import { publicApiUrl } from "@/lib/public-api";
-import {
-  fetchPortfolioProject,
-  fetchPortfolioProjects,
-  type PortfolioProject,
-  type PortfolioRelatedProject,
-} from "@/lib/portfolio-api";
+import { fetchPortfolioProject, fetchPortfolioProjects } from "@/lib/portfolio-api";
 import { projectJsonLd } from "@/lib/seo";
 import { brandedTitle, brandedTitleEn, clampDescription, pageMetadata, pageSeo } from "@/lib/page-meta";
 import { OG_IMAGE_PATH } from "@/lib/site";
@@ -32,31 +27,6 @@ export async function generateStaticParams() {
   return projects
     .filter((project) => project.id < 1 || project.id > 6)
     .map((project) => ({ id: String(project.id) }));
-}
-
-const RELATED_FALLBACK = 6;
-
-/**
- * Projects without related ones picked in the dashboard show other published projects:
- * the same category first, then the newest. Every project page then links on, so no project
- * is reachable from the sitemap alone.
- */
-function fallbackRelated(project: PortfolioProject, all: PortfolioProject[]): PortfolioRelatedProject[] {
-  const others = all
-    .filter((item) => item.id !== project.id && (item.id < 1 || item.id > 6))
-    .sort((a, b) => b.id - a.id);
-  const sameCategory = others.filter((item) => item.category?.slug && item.category.slug === project.category?.slug);
-  const rest = others.filter((item) => !sameCategory.includes(item));
-  return [...sameCategory, ...rest].slice(0, RELATED_FALLBACK).map((item) => ({
-    id: item.id,
-    title_en: item.title_en,
-    title_ar: item.title_ar,
-    summary_en: item.summary_en,
-    summary_ar: item.summary_ar,
-    image_url: item.image_url,
-    category: item.category ?? null,
-    updated_at: item.updated_at,
-  }));
 }
 
 export async function generateMetadata({
@@ -90,17 +60,16 @@ export default async function ProjectDetailPage({
   const listed = all.find((item) => String(item.id) === id) ?? null;
   const found = (await fetchPortfolioProject(id)) ?? listed;
   if (!found) notFound();
-  const project = found.related?.length ? found : { ...found, related: fallbackRelated(found, all) };
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(projectJsonLd(project)) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(projectJsonLd(found)) }}
       />
       <Nav />
       <main id="top">
-        <ProjectDetailView project={project} />
+        <ProjectDetailView project={found} />
       </main>
       <Footer />
     </>
