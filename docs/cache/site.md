@@ -1,5 +1,6 @@
 # Marketing site (Next.js static export)
 
+Last updated: 6 October 2026 (the site assistant offers a call and WhatsApp on both 0968862822 and 0954187154; chat links open on click; answers keep Arabic and English on separate runs)
 Last updated: 5 October 2026 (a project page lists only the related projects chosen in the dashboard; an empty choice shows no related row)
 Last updated: 4 October 2026 (project detail contact row shows each project's social link with its SVG icon)
 Last updated: 4 October 2026 (journey stages: desktop `journey-launch.webp` and `journey-build.webp` 1672×941, mobile copies 1280×720; the last stage is `journey-handoff.gif` (960×540) on every screen, `?v=20261004e`; brand-identity H1 names Damascus and Riyadh; reel loading label is not in the first HTML)
@@ -31,7 +32,7 @@ Live (VPS): https://hoc.agency/ — API https://api.hoc.agency/api
 
 ```
 app/                 # App Router: page, about, services (+3 detail pages), pricing, articles/[slug], projects/[id], not-found
-components/          # sections/, chrome, motion, CacheWorker
+components/          # sections/, chrome, motion, CacheWorker, SiteAssistant (hummingbird button → POST /api/site/ask)
 lib/                 # content.ts, i18n, *-api.ts, whatsapp, visit-cache
 public/sw.js         # Cache API hoc-design-v17 (same-origin images/fonts only; /_next chunks, /generated/clients, video, and cross-origin API/CDN are not intercepted). Vision and mission images use ?v=20260930 so a replaced file is not stuck behind the 30-day cache. Client logos use the live CMS URL plus updated_at.
 e2e/                 # Playwright

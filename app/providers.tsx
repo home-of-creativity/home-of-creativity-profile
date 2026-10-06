@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { CacheWorker } from "@/components/CacheWorker";
+import { SiteAssistant } from "@/components/SiteAssistant";
 import { LanguageProvider, useLanguage } from "@/lib/i18n";
 import { TITLE_EN_META } from "@/lib/page-meta";
 import { ThemeProvider } from "@/lib/theme";
@@ -67,6 +68,7 @@ export function Providers({ children }: { children: ReactNode }) {
         <LocaleFlash />
         <DocumentTitleSync />
         {children}
+        <SiteAssistant />
       </ThemeProvider>
     </LanguageProvider>
   );
