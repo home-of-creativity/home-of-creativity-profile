@@ -129,6 +129,16 @@ export const aboutPage = {
     en: "Founding year, team roster, awards, and an industries-served list",
     ar: "سنة التأسيس، فريق العمل، الجوائز، وقائمة الصناعات المخدومة",
   },
+  finder: {
+    q: {
+      en: "Where can I find an advertising company in Syria?",
+      ar: "أين أجد شركة دعاية وإعلان في سوريا؟",
+    },
+    a: {
+      en: "Home of Creativity (HOC) — بيت الإبداع — is a creative and advertising agency in Syria. Its published Syrian office is in Damascus, Al Hamra. It also works from Riyadh, Al Murabaa, for clients in Saudi Arabia. Published services include marketing, paid ads, social media, and visual identity. Work starts with a quotation on WhatsApp. The UAE office is named; its city and street are not published.",
+      ar: "بيت الإبداع (Home of Creativity — HOC) وكالة دعاية وإعلان وهوية في سوريا. مكتبه المنشور في سوريا في دمشق، الحمراء. ويعمل أيضاً من الرياض، المربّع، لعملاء السعودية. من خدماته المنشورة التسويق والحملات الممولة والسوشال ميديا والهوية البصرية. يبدأ العمل بعرض سعر عبر واتساب. مكتب الإمارات مذكور بالاسم، ومدينته وشارعه غير منشورين.",
+    },
+  },
 };
 
 export const services = {
@@ -442,6 +452,16 @@ export const officePages = {
       ar: "لبيت الإبداع (Home of Creativity — HOC) مكتب في الحمراء بدمشق، سوريا. ينطلق من هذا المكتب عمل الهوية والهوية البصرية، إلى جانب مكتبينا في الرياض (المربّع) والإمارات العربية المتحدة.",
     },
     servicesLabel: { en: "Services from Damascus", ar: "خدمات من دمشق" },
+    finder: {
+      q: {
+        en: "Where can I find an advertising company in Damascus?",
+        ar: "أين أجد شركة دعاية وإعلان في دمشق؟",
+      },
+      a: {
+        en: "Home of Creativity (HOC) — بيت الإبداع — is a creative and advertising agency in Damascus. The office is in Al Hamra. Published services include marketing, paid ads, social media, visual identity, and booth design. Work starts with a quotation on WhatsApp.",
+        ar: "بيت الإبداع (Home of Creativity — HOC) وكالة دعاية وإعلان وهوية في دمشق، ومكتبها في الحمراء. من خدماتها المنشورة التسويق والحملات الممولة والسوشال ميديا والهوية البصرية وتصميم البوثات. يبدأ العمل بعرض سعر عبر واتساب.",
+      },
+    },
   },
   riyadh: {
     title: { en: "Home of Creativity in Riyadh", ar: "بيت الإبداع في الرياض" },
@@ -456,6 +476,16 @@ export const officePages = {
       ar: "لبيت الإبداع (Home of Creativity — HOC) مكتب في المربّع بالرياض، السعودية، إلى جانب مكتبينا في دمشق (الحمراء) والإمارات العربية المتحدة. يمكن لعملائنا في السعودية التواصل مع المكتب على الأرقام أدناه.",
     },
     servicesLabel: { en: "Our services", ar: "خدماتنا" },
+    finder: {
+      q: {
+        en: "Where can I find an advertising company in Riyadh or Saudi Arabia?",
+        ar: "أين أجد شركة دعاية وإعلان في الرياض أو السعودية؟",
+      },
+      a: {
+        en: "Home of Creativity (HOC) — بيت الإبداع — is a creative and advertising agency for clients in Saudi Arabia. The office is in Riyadh, Al Murabaa. Published services include marketing, paid ads, social media, visual identity, and booth design. Work starts with a quotation on WhatsApp.",
+        ar: "بيت الإبداع (Home of Creativity — HOC) وكالة دعاية وإعلان وهوية لعملاء السعودية، ومكتبها في الرياض في المربّع. من خدماتها المنشورة التسويق والحملات الممولة والسوشال ميديا والهوية البصرية وتصميم البوثات. يبدأ العمل بعرض سعر عبر واتساب.",
+      },
+    },
   },
   labels: {
     contact: { en: "Contact", ar: "التواصل" },

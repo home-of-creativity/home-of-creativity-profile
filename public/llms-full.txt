@@ -49,8 +49,8 @@ Home of Creativity sends a quotation. Payment details are confirmed on WhatsApp 
 - https://hoc.agency/services/websites-ecommerce/ — company sites and online stores
 - https://hoc.agency/services/app-design/ — app UX, UI, and prototypes
 - https://hoc.agency/services/financial-analysis/ — financial data into dashboards and decision support
-- https://hoc.agency/locations/damascus/ — Damascus, Al Hamra
-- https://hoc.agency/locations/riyadh/ — Riyadh, Al Murabaa
+- https://hoc.agency/locations/damascus/ — advertising and creative agency in Damascus, Al Hamra
+- https://hoc.agency/locations/riyadh/ — advertising and creative agency in Riyadh, Al Murabaa, for clients in Saudi Arabia
 - https://hoc.agency/articles/ — dashboard articles only; each article is at /articles/{slug}/
 
 Each service page states scope areas in general terms. A one-off project's exact deliverables and timeline are confirmed in the quotation.

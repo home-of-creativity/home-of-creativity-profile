@@ -211,6 +211,25 @@ export function locationsPageJsonLd(title: string, description: string) {
 }
 
 /** `/locations/{slug}/` — one office page; the office node itself is in the site graph. */
+function officeFinderFaq(url: string, slug: string | null) {
+  const finder = slug === "damascus" || slug === "riyadh" ? officePages[slug].finder : undefined;
+  if (!finder) return [];
+  return [
+    {
+      "@type": "FAQPage",
+      "@id": `${url}#faq`,
+      inLanguage: "ar",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: finder.q.ar,
+          acceptedAnswer: { "@type": "Answer", text: finder.a.ar },
+        },
+      ],
+    },
+  ];
+}
+
 export function officePageJsonLd(office: Office, title: string, description: string) {
   const url = `${SITE_URL}/locations/${office.slug}/`;
   const pageTitle = officePages[office.slug as "damascus" | "riyadh"]?.title.en ?? office.city?.en ?? office.country.en;
@@ -233,6 +252,7 @@ export function officePageJsonLd(office: Office, title: string, description: str
         { name: "Locations", path: "/locations/" },
         { name: pageTitle, path: `/locations/${office.slug}/` },
       ]),
+      ...officeFinderFaq(url, office.slug),
     ],
   };
 }
@@ -282,6 +302,18 @@ export function aboutPageJsonLd(title: string) {
         isPartOf: { "@id": WEBSITE_ID },
         about: { "@id": ORG_ID },
         mainEntity: { "@id": ORG_ID },
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${url}#faq`,
+        inLanguage: "ar",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: aboutPage.finder.q.ar,
+            acceptedAnswer: { "@type": "Answer", text: aboutPage.finder.a.ar },
+          },
+        ],
       },
     ],
   };

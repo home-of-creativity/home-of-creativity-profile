@@ -67,6 +67,8 @@ function PlaceCopy({ office, lang }: { office: Office; lang: "ar" | "en" }) {
           {copy.title[lang]}
         </LangHeading>
         <p className="mt-6 text-[1.05rem] leading-[1.75] text-[var(--brand-ink)]/80">{copy.lead[lang]}</p>
+        <h2 className="font-display m-0 mt-8 text-[clamp(1.35rem,3vw,1.8rem)] font-semibold text-[var(--brand-ink)]">{copy.finder.q[lang]}</h2>
+        <p className="mt-3 text-[1.02rem] leading-[1.8] text-[var(--brand-ink)]/80">{copy.finder.a[lang]}</p>
       </header>
 
       <div className="mx-auto mb-10 grid max-w-2xl gap-8">

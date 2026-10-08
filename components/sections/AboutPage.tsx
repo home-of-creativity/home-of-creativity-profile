@@ -31,6 +31,17 @@ export function AboutPage() {
           <p className="mt-6 text-[1.05rem] leading-[1.75] text-[var(--brand-ink)]/80">{t(aboutPage.lead)}</p>
         </Reveal>
 
+        <div className="mx-auto mb-8 max-w-2xl text-start">
+          <div data-lang="ar" lang="ar" dir="rtl">
+            <h2 className="font-display m-0 text-[clamp(1.35rem,3vw,1.8rem)] font-semibold">{aboutPage.finder.q.ar}</h2>
+            <p className="mt-3 text-[1.02rem] leading-[1.8] text-[var(--brand-ink)]/80">{aboutPage.finder.a.ar}</p>
+          </div>
+          <div data-lang="en" lang="en" dir="ltr">
+            <h2 className="font-display m-0 text-[clamp(1.35rem,3vw,1.8rem)] font-semibold">{aboutPage.finder.q.en}</h2>
+            <p className="mt-3 text-[1.02rem] leading-[1.8] text-[var(--brand-ink)]/80">{aboutPage.finder.a.en}</p>
+          </div>
+        </div>
+
         <Reveal className="mx-auto max-w-2xl text-start">
           <p className="text-[1rem] leading-[1.85] text-[var(--brand-ink)]/75">{t(aboutPage.body)}</p>
         </Reveal>
