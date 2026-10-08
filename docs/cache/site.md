@@ -1,6 +1,7 @@
 # Marketing site (Next.js static export)
 
-Last updated: 6 October 2026 (the site assistant offers a call and WhatsApp on both 0968862822 and 0954187154; chat links open on click; answers keep Arabic and English on separate runs)
+Last updated: 8 October 2026 (booth page first paragraph and visible bilingual answers match Search Console queries تصميم بوثات / تصميم بوثات الرياض; FAQ JSON-LD includes those answers)
+Last updated: 7 October 2026 (home `#answers` prints each published FAQ in the first HTML, outside closed details and noscript, in Arabic and English)
 Last updated: 5 October 2026 (a project page lists only the related projects chosen in the dashboard; an empty choice shows no related row)
 Last updated: 4 October 2026 (project detail contact row shows each project's social link with its SVG icon)
 Last updated: 4 October 2026 (journey stages: desktop `journey-launch.webp` and `journey-build.webp` 1672×941, mobile copies 1280×720; the last stage is `journey-handoff.gif` (960×540) on every screen, `?v=20261004e`; brand-identity H1 names Damascus and Riyadh; reel loading label is not in the first HTML)

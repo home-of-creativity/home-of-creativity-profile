@@ -23,11 +23,14 @@ test.describe("SEO and geo", () => {
     expect(JSON.stringify(payloads)).not.toMatch(/aggregateRating|ratingValue/);
     await expect(page.locator("#faq")).toBeVisible();
     await expect(page.getByRole("heading", { level: 2, name: /أسئلة شائعة|Questions/ })).toBeVisible();
-    const firstQuestion = page.getByRole("heading", { level: 3, name: /ماذا يفعل بيت الإبداع\؟/ });
-    await expect(firstQuestion).toBeVisible();
-    await expect(page.getByText(/بيت الإبداع وكالة هوية بصرية وهندسة علامات في الحمراء بدمشق/)).toBeHidden();
-    await firstQuestion.click();
-    await expect(page.getByText(/بيت الإبداع وكالة هوية بصرية وهندسة علامات في الحمراء بدمشق/)).toBeVisible();
+    const answer = "بيت الإبداع وكالة هوية بصرية وهندسة علامات، مكاتبها في دمشق (الحمراء) والرياض (المربّع) والإمارات العربية المتحدة.";
+    await expect(page.locator("#answers")).toBeVisible();
+    await expect(page.locator("#answers").getByText(answer)).toBeVisible();
+    const html = await page.content();
+    const withoutScripts = html.replace(/<script[\s\S]*?<\/script>/gi, "").replace(/<noscript[\s\S]*?<\/noscript>/gi, "");
+    expect(withoutScripts).toContain(answer);
+    expect(withoutScripts).toContain("هل يعمل بيت الإبداع مع عملاء في السعودية؟");
+    expect(withoutScripts).toContain("hoc.agency/pricing/");
     const sameAs = graph.flatMap((node) => {
       const value = (node as { sameAs?: string[] }).sameAs;
       return Array.isArray(value) ? value : [];

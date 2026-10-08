@@ -66,14 +66,15 @@ export function ServiceDetailPage({ slug, articles = [] }: { slug: string; artic
                 {detail.heading.ar}
               </LangHeading>
               <p className="mt-5 text-[1.15rem] font-semibold text-[var(--brand-orange)]">{detail.tagline.ar}</p>
+              <p className="mx-auto mt-6 max-w-2xl text-[1.05rem] leading-[1.85] text-white/78">{detail.definition.ar}</p>
             </div>
             <div data-lang="en" lang="en" dir="ltr">
               <LangHeading lang="en" className="font-display m-0 text-[clamp(2.1rem,5.5vw,3.8rem)] font-semibold leading-[1.1]">
                 {detail.heading.en}
               </LangHeading>
               <p className="mt-5 text-[1.15rem] font-semibold text-[var(--brand-orange)]">{detail.tagline.en}</p>
+              <p className="mx-auto mt-6 max-w-2xl text-[1.05rem] leading-[1.85] text-white/78">{detail.definition.en}</p>
             </div>
-            <p className="mx-auto mt-6 max-w-2xl text-[1.05rem] leading-[1.85] text-white/78">{t(detail.definition)}</p>
             <div className="mt-9 flex flex-wrap justify-center gap-3">
               {ctaNumbers.map((cta) => (
                 <a
@@ -97,6 +98,22 @@ export function ServiceDetailPage({ slug, articles = [] }: { slug: string; artic
 
       <section className="bg-[var(--brand-off-white)] py-16 text-[var(--brand-ink)] md:py-20">
         <Shell>
+          {(detail.leadAnswers ?? []).length > 0 ? (
+            <div id="faq" className="mx-auto mb-14 max-w-3xl">
+              {(detail.leadAnswers ?? []).map((item) => (
+                <div key={item.q.en} className="mb-8 text-center last:mb-0">
+                  <div data-lang="ar" lang="ar" dir="rtl">
+                    <h2 className="font-display m-0 text-[clamp(1.45rem,3vw,1.9rem)] font-semibold">{item.q.ar}</h2>
+                    <p className="mt-3 text-[1.02rem] leading-[1.8] text-[var(--brand-ink)]/80">{item.a.ar}</p>
+                  </div>
+                  <div data-lang="en" lang="en" dir="ltr">
+                    <h2 className="font-display m-0 text-[clamp(1.45rem,3vw,1.9rem)] font-semibold">{item.q.en}</h2>
+                    <p className="mt-3 text-[1.02rem] leading-[1.8] text-[var(--brand-ink)]/80">{item.a.en}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : null}
           <Reveal className="mx-auto mb-10 max-w-2xl text-center">
             <h2 className="font-display m-0 text-[clamp(1.6rem,3vw,2.2rem)] font-semibold">{t(labels.covers)}</h2>
             <p className="mt-3 text-[0.92rem] text-[var(--brand-ink)]/70">
@@ -140,7 +157,7 @@ export function ServiceDetailPage({ slug, articles = [] }: { slug: string; artic
           </div>
 
           <Reveal className="mx-auto mt-14 max-w-3xl">
-            <h2 id="faq" className="font-display m-0 text-center text-[clamp(1.5rem,3vw,2rem)] font-semibold">
+            <h2 className="font-display m-0 text-center text-[clamp(1.5rem,3vw,2rem)] font-semibold">
               {t(labels.faq)}
             </h2>
             <FaqList

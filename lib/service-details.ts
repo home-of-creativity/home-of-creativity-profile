@@ -16,6 +16,8 @@ export type ServiceDetail = {
   covers: Copy[];
   audience: Copy;
   faqs: ServiceFaq[];
+  /** Question headings rendered in the HTML, outside the accordion, for queries Search Console already shows. */
+  leadAnswers?: ServiceFaq[];
   related: string[];
 };
 
@@ -519,8 +521,8 @@ export const serviceDetails: ServiceDetail[] = [
       en: "A small space with a big presence.",
     },
     definition: {
-      ar: "البوث هو واجهة علامتك وسط عشرات المنافسين في المعرض. نصممه بتصور ثلاثي الأبعاد يوزع المساحة بذكاء بين العرض والاستقبال والحوار، ويطبق هويتك بطريقة تلفت الانتباه من بعيد وتدعو الزائر للاقتراب.",
-      en: "A booth is your brand's storefront among dozens of competitors at an exhibition. We design it in 3D, splitting the space smartly between display, reception, and conversation, and applying your identity in a way that catches attention from afar and invites visitors closer.",
+      ar: "تصميم البوثات في بيت الإبداع هو تصميم جناح المعرض للشركات في دمشق (الحمراء) والرياض (المربّع). نوزّع المساحة بتصور ثلاثي الأبعاد بين العرض والاستقبال والحوار، ونطبّق هوية العلامة، ثم نجهّز ملفات التنفيذ وننسّق مع المنفذين. يبدأ العمل بعد عرض السعر وتأكيد الدفع على واتساب.",
+      en: "Booth design at Home of Creativity is exhibition stand design for companies in Damascus (Al Hamra) and Riyadh (Al Murabaa). We plan the space in 3D between display, reception, and conversation, apply the brand identity, then prepare production files and coordinate with the builders. Work starts after the quotation and payment confirmation on WhatsApp.",
     },
     covers: [
       { ar: "فكرة البوث وتوزيع المساحة", en: "Booth concept and space planning" },
@@ -532,6 +534,22 @@ export const serviceDetails: ServiceDetail[] = [
       ar: "شركات تشارك في معارض محلية أو إقليمية وتريد جناحاً احترافياً يمثلها.",
       en: "Companies taking part in local or regional exhibitions that want a professional stand representing them.",
     },
+    leadAnswers: [
+      {
+        q: { ar: "هل تصممون بوثات في الرياض؟", en: "Do you design booths in Riyadh?" },
+        a: {
+          ar: "نعم. تصميم البوثات متاح من مكتب الرياض في المربّع ومن مكتب دمشق في الحمراء. نطاق الجناح وملفات التنفيذ يُحدَّدان في عرض السعر قبل الدفع.",
+          en: "Yes. Booth design is available from the Riyadh office in Al Murabaa and the Damascus office in Al Hamra. The stand scope and production files are set in the quotation before payment.",
+        },
+      },
+      {
+        q: { ar: "ماذا يشمل تصميم البوثات؟", en: "What does booth design include?" },
+        a: {
+          ar: "يشمل فكرة البوث وتوزيع المساحة والتصميم ثلاثي الأبعاد وتطبيق الهوية وملفات التنفيذ والتنسيق مع المنفذين. مدة كل مشروع تُكتب في عرض السعر.",
+          en: "It includes the booth concept, space planning, 3D design, identity application, production files, and coordination with the builders. Each project's timeline is written in the quotation.",
+        },
+      },
+    ],
     faqs: [
       {
         q: { ar: "هل ترسلون تصوراً قبل التنفيذ؟", en: "Do you share a visualization before production?" },
@@ -540,8 +558,6 @@ export const serviceDetails: ServiceDetail[] = [
           en: "Yes. The 3D design is approved with you before production files are prepared.",
         },
       },
-      scopeFaq(booths),
-      ksaFaq(booths),
     ],
     related: ["exhibitions-conferences", "event-management", "promo-gifts", "visual-identity"],
   },

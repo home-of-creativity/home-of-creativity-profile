@@ -372,7 +372,7 @@ export function serviceDetailJsonLd(slug: string) {
         { name: servicesPage.title.en, path: "/services/" },
         { name: detail.title.en, path: `/services/${detail.slug}/` },
       ]),
-      faqNode(url, detail.faqs),
+      faqNode(url, [...(detail.leadAnswers ?? []), ...detail.faqs]),
     ],
   };
 }
