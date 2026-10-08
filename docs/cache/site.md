@@ -1,6 +1,6 @@
 # Marketing site (Next.js static export)
 
-Last updated: 8 October 2026 (home `#answers` sits after the finance section, one language visible via `data-lang`; the hero is the first screen. Journey GIF is lazy. Client logos use low fetch priority)
+Last updated: 8 October 2026 (the published-facts block is not on the landing page; those answers live in `llms-full.txt`. The `#faq` accordion stays. Hero video plays on phones via `hero-bg-mobile.mp4`)
 Last updated: 8 October 2026 (sitemap lastmod is a real content date; build time is no longer stamped on every URL)
 Last updated: 8 October 2026 (booth page first paragraph and visible bilingual answers match Search Console queries تصميم بوثات / تصميم بوثات الرياض; FAQ JSON-LD includes those answers)
 Last updated: 7 October 2026 (home `#answers` prints each published FAQ in the first HTML, outside closed details and noscript, in Arabic and English)
@@ -98,7 +98,7 @@ Contact form posts to `POST /api/contact/messages` (no mailto). Interest «مش�
 - Looping motion (hero Ken Burns, hummingbird) pauses off-screen. Client logos stay painted while scrolling: no `contain: paint`, no `will-change` toggle, images are not lazy. The marquee only pauses its transform when the row is a full viewport away, and resumes before it re-enters so scroll-back does not wait on a repaint. Arabic reverses the loop. It also pauses on hover. Nav scroll listeners are rAF-throttled and do not use `backdrop-filter`.
 - Contact channel cards (`#contact`) swing right → left → center once when they enter the viewport on scroll-down (GSAP transform only; skipped under `prefers-reduced-motion`).
 - `#social` phone screens are dark (`#0c0c10` / ivory type): bezel, feed, Instagram and Facebook profile chrome, and iframe background. Unselected posts/reels tabs use the secondary orange (`--brand-orange`); the selected tab stays ivory with an orange underline. The section behind them stays deep purple.
-- `components/CacheWorker.tsx` + `public/sw.js` cache `hoc-design-v13` (same-origin images/fonts only; cache-first). Cross-origin `api.hoc.agency/storage` logos, Facebook/Instagram/Google CDNs, and video never go through the worker (CORS/opaque mismatch). Only the hero poster that matches the viewport is cached (CacheWorker), never both. The hero video (`hero-bg.mp4`, viewports from 800px only; phones keep the poster) starts after load and idle, with `preload="none"` until then, and pauses offscreen. Reduced motion keeps the poster. Maps loads with `loading=async` + Advanced Marker.
+- `components/CacheWorker.tsx` + `public/sw.js` cache `hoc-design-v13` (same-origin images/fonts only; cache-first). Cross-origin `api.hoc.agency/storage` logos, Facebook/Instagram/Google CDNs, and video never go through the worker (CORS/opaque mismatch). Only the hero poster that matches the viewport is cached (CacheWorker), never both. The hero video starts after load and idle, with `preload="none"` until then, and pauses offscreen. Phones use `hero-bg-mobile.mp4`; viewports from 800px use `hero-bg.mp4`. Reduced motion keeps the poster. Maps loads with `loading=async` + Advanced Marker.
 
 ## Env (`.env.example`)
 

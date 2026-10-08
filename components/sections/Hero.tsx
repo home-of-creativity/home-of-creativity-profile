@@ -12,6 +12,7 @@ import {
   HERO_POSTER_DESKTOP,
   HERO_POSTER_MOBILE,
   HERO_VIDEO_DESKTOP,
+  HERO_VIDEO_MOBILE,
 } from "@/lib/hero-media";
 import { shouldSkipMotion } from "@/lib/visit-cache";
 
@@ -19,20 +20,21 @@ export function Hero() {
   const { t, locale, ready } = useLanguage();
   const rootRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [allowVideo, setAllowVideo] = useState(false);
+  const [videoSrc, setVideoSrc] = useState<string | null>(null);
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-    // Phones keep the poster: the mobile clip alone was 2.7 MB of the home page.
     const desktop = window.matchMedia("(min-width: 800px)");
     let idle = 0;
     let timer = 0;
     let cancelled = false;
 
+    const choose = () => (desktop.matches ? HERO_VIDEO_DESKTOP : HERO_VIDEO_MOBILE);
+
     const start = () => {
-      if (cancelled || reduce.matches || !desktop.matches) return;
+      if (cancelled || reduce.matches) return;
       const arm = () => {
-        if (!cancelled && !reduce.matches && desktop.matches) setAllowVideo(true);
+        if (!cancelled && !reduce.matches) setVideoSrc(choose());
       };
       if (typeof window.requestIdleCallback === "function") {
         idle = window.requestIdleCallback(arm, { timeout: 2000 });
@@ -45,11 +47,11 @@ export function Hero() {
     else window.addEventListener("load", start, { once: true });
 
     const onChange = () => {
-      if (reduce.matches || !desktop.matches) {
-        setAllowVideo(false);
+      if (reduce.matches) {
+        setVideoSrc(null);
         return;
       }
-      start();
+      setVideoSrc(choose());
     };
     reduce.addEventListener("change", onChange);
     desktop.addEventListener("change", onChange);
@@ -62,6 +64,12 @@ export function Hero() {
       if (timer) window.clearTimeout(timer);
     };
   }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !videoSrc) return;
+    void video.play().catch(() => undefined);
+  }, [videoSrc]);
 
   useGsapScope(
     ({ gsap, ScrollTrigger }) => {
@@ -191,8 +199,9 @@ export function Hero() {
               )}
             />
           </picture>
-          {allowVideo ? (
+          {videoSrc ? (
             <video
+              key={videoSrc}
               ref={videoRef}
               className={cn(
                 "hero-bg-media object-cover object-[50%_42%]",
@@ -203,9 +212,8 @@ export function Hero() {
               loop
               playsInline
               preload="none"
-            >
-              <source src={withBasePath(HERO_VIDEO_DESKTOP)} type="video/mp4" />
-            </video>
+              src={withBasePath(videoSrc)}
+            />
           ) : null}
         </div>
       </div>

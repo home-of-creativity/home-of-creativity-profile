@@ -48,12 +48,10 @@ export function HomeView({
   clients,
   projects,
   reels,
-  facts,
 }: {
   clients: ShowcaseClient[];
   projects: PortfolioProject[];
   reels: LandingReel[];
-  facts?: ReactNode;
 }) {
   return (
     <>
@@ -81,7 +79,6 @@ export function HomeView({
         </AfterPaint>
         <Projects initialProjects={projects} />
         <Finance />
-        {facts}
         <Faq />
         <Contact />
       </main>

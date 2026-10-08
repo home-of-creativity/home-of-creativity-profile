@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { HomeView } from "@/components/HomeView";
 import { JsonLd } from "@/components/JsonLd";
 import { SeoCrawlerCopy } from "@/components/SeoCrawlerCopy";
-import { VisibleFacts } from "@/components/VisibleFacts";
 import { withOptimizedLogos } from "@/lib/client-logos";
 import { pageMetadata, pageSeo } from "@/lib/page-meta";
 import { fetchPortfolioProjects, fetchShowcaseClients } from "@/lib/portfolio-api";
@@ -39,12 +38,7 @@ export default async function HomePage() {
       />
       <JsonLd data={homeJsonLd()} />
       <SeoCrawlerCopy />
-      <HomeView
-        clients={withOptimizedLogos(clients)}
-        projects={projects}
-        reels={reels}
-        facts={<VisibleFacts />}
-      />
+      <HomeView clients={withOptimizedLogos(clients)} projects={projects} reels={reels} />
     </>
   );
 }

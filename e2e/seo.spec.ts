@@ -22,10 +22,9 @@ test.describe("SEO and geo", () => {
     expect(types).toEqual(expect.arrayContaining(["Organization", "LocalBusiness", "WebSite", "FAQPage"]));
     expect(JSON.stringify(payloads)).not.toMatch(/aggregateRating|ratingValue/);
     await expect(page.locator("#faq")).toBeVisible();
+    await expect(page.locator("#answers")).toHaveCount(0);
     await expect(page.getByRole("heading", { level: 2, name: /أسئلة شائعة|Questions/ })).toBeVisible();
     const answer = "بيت الإبداع وكالة هوية بصرية وهندسة علامات، مكاتبها في دمشق (الحمراء) والرياض (المربّع) والإمارات العربية المتحدة.";
-    await expect(page.locator("#answers")).toBeVisible();
-    await expect(page.locator("#answers").getByText(answer)).toBeVisible();
     const html = await page.content();
     const withoutScripts = html.replace(/<script[\s\S]*?<\/script>/gi, "").replace(/<noscript[\s\S]*?<\/noscript>/gi, "");
     expect(withoutScripts).toContain(answer);
@@ -74,7 +73,9 @@ test.describe("SEO and geo", () => {
 
     const llmsFull = await request.get(`${origin}/llms-full.txt`);
     expect(llmsFull.ok()).toBeTruthy();
-    expect(await llmsFull.text()).toMatch(/FAQ/);
+    const llmsFullBody = await llmsFull.text();
+    expect(llmsFullBody).toMatch(/FAQ/);
+    expect(llmsFullBody).toContain("هل يقدم بيت الإبداع تصميم الهوية التجارية؟");
 
     const sitemap = await request.get(`${origin}/sitemap.xml`);
     expect(sitemap.ok()).toBeTruthy();
