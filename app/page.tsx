@@ -39,8 +39,12 @@ export default async function HomePage() {
       />
       <JsonLd data={homeJsonLd()} />
       <SeoCrawlerCopy />
-      <VisibleFacts />
-      <HomeView clients={withOptimizedLogos(clients)} projects={projects} reels={reels} />
+      <HomeView
+        clients={withOptimizedLogos(clients)}
+        projects={projects}
+        reels={reels}
+        facts={<VisibleFacts />}
+      />
     </>
   );
 }

@@ -145,7 +145,8 @@ export function ClientJourney() {
                     width={1672}
                     height={941}
                     sizes="(max-width: 899px) 100vw, 100vw"
-                    loading={step.image.includes(".gif") ? "eager" : "lazy"}
+                    loading="lazy"
+                    fetchPriority={step.image.includes(".gif") ? "low" : undefined}
                     decoding="async"
                     className="h-full w-full object-cover object-[center_42%]"
                     draggable={false}

@@ -43,6 +43,7 @@ function ClientLogoDisc({
       height={80}
       draggable={false}
       decoding="async"
+      fetchPriority="low"
       className="client-logo-disc-image"
     />
   ) : (
