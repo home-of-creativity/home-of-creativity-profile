@@ -14,68 +14,73 @@ function projectHasBody(project: PortfolioProject): boolean {
   return text.length >= 80;
 }
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const now = new Date();
+/** A real content date. Build time is not a content date: stamping every URL as "now" makes Google ignore lastmod. */
+function contentDate(value?: string | null): Date | undefined {
+  if (!value) return undefined;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? undefined : date;
+}
 
+function latestDate(dates: Array<Date | undefined>): Date | undefined {
+  const valid = dates.filter((date): date is Date => date !== undefined);
+  if (valid.length === 0) return undefined;
+  return new Date(Math.max(...valid.map((date) => date.getTime())));
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const articles = await fetchArticles();
   // Demo/static deploys with no real backend get zero project rows here —
   // real, canonical URLs only, not one per demo fallback project.
   const projects = (publicApiUrl() ? await fetchPortfolioProjects() : [])
     .filter((project) => project.id < 1 || project.id > 6)
     .filter(projectHasBody);
+  const newestArticle = latestDate(
+    articles.map((article) => contentDate(article.updated_at) ?? contentDate(article.published_at) ?? contentDate(article.created_at)),
+  );
 
   return [
     {
       url: `${SITE_URL}/`,
-      lastModified: now,
       changeFrequency: "weekly",
       priority: 1,
     },
     {
       url: `${SITE_URL}/about/`,
-      lastModified: now,
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${SITE_URL}/services/`,
-      lastModified: now,
       changeFrequency: "monthly",
       priority: 0.8,
     },
     ...serviceDetails.map((detail) => ({
       url: `${SITE_URL}/services/${detail.slug}/`,
-      lastModified: now,
       changeFrequency: "monthly" as const,
       priority: 0.7,
     })),
     {
       url: `${SITE_URL}/services/branding/`,
-      lastModified: now,
       changeFrequency: "monthly",
       priority: 0.9,
     },
     {
       url: `${SITE_URL}/services/brand-identity/`,
-      lastModified: now,
       changeFrequency: "monthly",
       priority: 0.8,
     },
     {
       url: `${SITE_URL}/pricing/`,
-      lastModified: now,
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
       url: `${SITE_URL}/social/`,
-      lastModified: now,
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
       url: `${SITE_URL}/locations/`,
-      lastModified: now,
       changeFrequency: "monthly",
       priority: 0.8,
     },
@@ -84,7 +89,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       return path
         ? [{
             url: `${SITE_URL}${path}`,
-            lastModified: now,
             changeFrequency: "monthly" as const,
             priority: 0.85,
           }]
@@ -92,39 +96,42 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }),
     {
       url: `${SITE_URL}/client-story/`,
-      lastModified: now,
       changeFrequency: "monthly",
       priority: 0.65,
     },
     {
       url: `${SITE_URL}/articles/`,
-      lastModified: now,
+      ...(newestArticle ? { lastModified: newestArticle } : {}),
       changeFrequency: "weekly",
       priority: 0.75,
     },
-    ...articles.map((article) => ({
-      url: `${SITE_URL}/articles/${article.slug}/`,
-      lastModified: article.published_at ? new Date(article.published_at) : now,
-      changeFrequency: "monthly" as const,
-      priority: 0.65,
-    })),
+    ...articles.map((article) => {
+      const lastModified = contentDate(article.updated_at) ?? contentDate(article.published_at) ?? contentDate(article.created_at);
+      return {
+        url: `${SITE_URL}/articles/${article.slug}/`,
+        ...(lastModified ? { lastModified } : {}),
+        changeFrequency: "monthly" as const,
+        priority: 0.65,
+      };
+    }),
     {
       url: `${SITE_URL}/privacy/`,
-      lastModified: now,
       changeFrequency: "yearly",
       priority: 0.4,
     },
     {
       url: `${SITE_URL}/terms/`,
-      lastModified: now,
       changeFrequency: "yearly",
       priority: 0.4,
     },
-    ...projects.map((project) => ({
-      url: `${SITE_URL}/projects/${project.id}/`,
-      lastModified: now,
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
-    })),
+    ...projects.map((project) => {
+      const lastModified = contentDate(project.updated_at);
+      return {
+        url: `${SITE_URL}/projects/${project.id}/`,
+        ...(lastModified ? { lastModified } : {}),
+        changeFrequency: "monthly" as const,
+        priority: 0.6,
+      };
+    }),
   ];
 }

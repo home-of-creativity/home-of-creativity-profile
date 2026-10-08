@@ -1,5 +1,6 @@
 # Marketing site (Next.js static export)
 
+Last updated: 8 October 2026 (sitemap lastmod is a real content date; build time is no longer stamped on every URL)
 Last updated: 8 October 2026 (booth page first paragraph and visible bilingual answers match Search Console queries تصميم بوثات / تصميم بوثات الرياض; FAQ JSON-LD includes those answers)
 Last updated: 7 October 2026 (home `#answers` prints each published FAQ in the first HTML, outside closed details and noscript, in Arabic and English)
 Last updated: 5 October 2026 (a project page lists only the related projects chosen in the dashboard; an empty choice shows no related row)
